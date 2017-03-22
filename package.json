@@ -1,0 +1,25 @@
+{
+  "name": "web-sdk",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": {},
+  "license": "MIT",
+  "scripts": {
+    "dev": "webpack-dev-server",
+    "build": "webpack -p --config ./webpack.prod.config.js"
+  },
+  "devDependencies": {
+    "optimize-js-plugin": "^0.0.4",
+    "source-map-loader": "^0.2.0",
+    "strip-loader": "^0.1.2",
+    "ts-loader": "^2.0.2",
+    "typescript": "^2.2.1",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.4.2"
+  },
+  "dependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/node": "^7.0.8",
+    "axios": "^0.15.3"
+  }
+}
