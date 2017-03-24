@@ -6,13 +6,20 @@
   "license": "MIT",
   "scripts": {
     "dev": "webpack-dev-server",
-    "build": "webpack -p --config ./webpack.prod.config.js"
+    "build": "webpack -p --config ./webpack.prod.config.js",
+    "test": "mocha-webpack --watch --webpack-config webpack.config.js \"src/**/*.test.ts\""
   },
   "devDependencies": {
+    "@types/chai": "^3.4.35",
+    "@types/mocha": "^2.2.40",
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "mocha-webpack": "next",
     "optimize-js-plugin": "^0.0.4",
     "source-map-loader": "^0.2.0",
     "strip-loader": "^0.1.2",
     "ts-loader": "^2.0.2",
+    "ts-node": "^3.0.2",
     "typescript": "^2.2.1",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.2"

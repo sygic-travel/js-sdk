@@ -32,7 +32,7 @@ export interface Media {
 
 }
 
-function filterToQueryString(filter: PlacesFilter): string {
+export function filterToQueryString(filter: PlacesFilter): string {
 	let urlComponents: string[] = [];
 
 	if (filter.query) {
