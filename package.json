@@ -11,11 +11,15 @@
   },
   "devDependencies": {
     "@types/chai": "^3.4.35",
+    "@types/chai-as-promised": "^0.0.30",
     "@types/mocha": "^2.2.40",
+    "@types/sinon": "^1.16.36",
     "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
     "mocha": "^3.2.0",
     "mocha-webpack": "next",
     "optimize-js-plugin": "^0.0.4",
+    "sinon": "^2.1.0",
     "source-map-loader": "^0.2.0",
     "strip-loader": "^0.1.2",
     "ts-loader": "^2.0.2",
@@ -25,8 +29,8 @@
     "webpack-dev-server": "^2.4.2"
   },
   "dependencies": {
-    "@types/axios": "^0.14.0",
+    "@types/axios": "*",
     "@types/node": "^7.0.8",
-    "axios": "^0.15.3"
+    "axios": "*"
   }
 }

@@ -1,8 +1,4 @@
-import Settings from "./Settings/";
-
-const setEnvironment = Settings.setEnvironment;
-
-export { setEnvironment };
+export { setEnvironment } from './Settings';
 export { getPlaces, getPlaceDetailed, getPlaceMedia } from './Places/Places';
 
 

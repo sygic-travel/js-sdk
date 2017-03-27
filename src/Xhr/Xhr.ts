@@ -1,6 +1,6 @@
 import axios, {AxiosInstance} from 'axios';
 import {ApiResponse} from "./ApiResponse";
-import Settings from "../Settings";
+import { getApiUrl, getClientKey } from "../Settings";
 
 const axiosInstance: AxiosInstance = axios.create();
 
@@ -16,21 +16,20 @@ axiosInstance.interceptors.request.use((config) => {
 	return config;
 });
 
-export function get(url: string): Promise<ApiResponse> {
-	return axiosInstance.get(url, {
-		baseURL: Settings.getApiUrl(),
+export async function get(url: string): Promise<ApiResponse> {
+	const response = await axiosInstance.get(url, {
+		baseURL: getApiUrl(),
 		headers: {
-			'x-api-key': Settings.getClientKey()
+			'x-api-key': getClientKey()
 		}
-	})
-	.then((result) => {
-		return new ApiResponse(
-			result.data.status,
-			result.data.status_code,
-			result.data.status_message,
-			result.data.data
-		);
-	})
+	});
+
+	return new ApiResponse(
+		response.data.status,
+		response.data.status_code,
+		response.data.status_message,
+		response.data.data
+	);
 }
 
 

@@ -87,7 +87,7 @@ export function getPlaceDetailed(guid: string): Promise<PlaceDetailed> {
 	return get('place-details/' + guid)
 		.then((apiResponse) => {
 			if (!apiResponse.data.hasOwnProperty('place')) {
-				throw 'Wrong API response'
+				throw 'Wrong API response';
 			}
 			return apiResponse.data.place as PlaceDetailed;
 		})
