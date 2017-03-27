@@ -1,0 +1,10 @@
+{
+  "extends": "tslint:latest",
+  "rules": {
+    "quotemark": [true, "single"],
+    "indent": [true, "tabs"],
+    "trailing-comma": false,
+    "variable-name": [true, "allow-leading-underscore"]
+  },
+  "rulesDirectory": []
+}

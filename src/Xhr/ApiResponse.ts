@@ -4,7 +4,7 @@ export class ApiResponse {
 	private _statusMessage: string;
 	private _data: any;
 
-	constructor(status: string, statusCode: number, statusMessage: string, data: Object) {
+	constructor(status: string, statusCode: number, statusMessage: string, data: object) {
 		this._status = status;
 		this._statusCode = statusCode;
 		this._statusMessage = statusMessage;

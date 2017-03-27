@@ -1,16 +1,16 @@
 import axios, {AxiosInstance} from 'axios';
-import {ApiResponse} from "./ApiResponse";
-import { getApiUrl, getClientKey } from "../Settings";
+import { getApiUrl, getClientKey } from '../Settings';
+import { ApiResponse } from './ApiResponse';
 
 const axiosInstance: AxiosInstance = axios.create();
 
 axiosInstance.interceptors.request.use((config) => {
 	if (!config.baseURL) {
-		throw 'API Url not set';
+		throw new Error('API Url not set');
 	}
 
 	if (!config.headers['x-api-key']) {
-		throw 'Client key not set';
+		throw new Error('Client key not set');
 	}
 
 	return config;
@@ -31,6 +31,3 @@ export async function get(url: string): Promise<ApiResponse> {
 		response.data.data
 	);
 }
-
-
-

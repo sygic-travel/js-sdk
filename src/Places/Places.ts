@@ -1,4 +1,4 @@
-import { get } from "../Xhr";
+import { get } from '../Xhr';
 import PlacesFilter from './PlacesFilter';
 
 interface Location {
@@ -33,7 +33,7 @@ export interface Media {
 }
 
 export function filterToQueryString(filter: PlacesFilter): string {
-	let urlComponents: string[] = [];
+	const urlComponents: string[] = [];
 
 	if (filter.query) {
 		urlComponents.push('query=' + filter.query);
@@ -74,42 +74,42 @@ export function getPlaces(filter: PlacesFilter): Promise<Place[]> {
 	return get('places' + filterToQueryString(filter))
 		.then((apiResponse) => {
 			if (!apiResponse.data.hasOwnProperty('places')) {
-				throw 'Wrong API response'
+				throw new Error('Wrong API response');
 			}
 			return apiResponse.data.places.map((place) => place as Place);
 		})
 		.catch((e) => {
 			console.error(e);
-		})
+		});
 }
 
 export function getPlaceDetailed(guid: string): Promise<PlaceDetailed> {
 	return get('place-details/' + guid)
 		.then((apiResponse) => {
 			if (!apiResponse.data.hasOwnProperty('place')) {
-				throw 'Wrong API response';
+				throw new Error('Wrong API response');
 			}
 			return apiResponse.data.place as PlaceDetailed;
 		})
 		.catch((e) => {
 			console.error(e);
-		})
+		});
 }
 
 export function getPlaceMedia(guid: string): Promise<Media[]> {
 	return get('places/' + guid + '/media')
 		.then((apiResponse) => {
 			if (!apiResponse.data.hasOwnProperty('media')) {
-				throw 'Wrong API response'
+				throw new Error('Wrong API response');
 			}
 
 			return apiResponse.data.media.map((media) => media as Media);
 		})
 		.catch((e) => {
 			console.error(e);
-		})
+		});
 }
 
 export function dummyFunction() {
-	console.log('Dummy');
+	return 'dummy';
 }
