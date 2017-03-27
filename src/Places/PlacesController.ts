@@ -42,44 +42,31 @@ export function filterToQueryString(filter: PlacesFilter): string {
 	return '?' + urlComponents.join('&');
 }
 
-export function getPlaces(filter: PlacesFilter): Promise<Place[]> {
-	return get('places' + filterToQueryString(filter))
-		.then((apiResponse) => {
-			if (!apiResponse.data.hasOwnProperty('places')) {
-				throw new Error('Wrong API response');
-			}
-			return apiResponse.data.places.map((place) => place as Place);
-		})
-		.catch((e) => {
-			console.error(e);
-		});
 }
 
-export function getPlaceDetailed(guid: string): Promise<PlaceDetailed> {
-	return get('place-details/' + guid)
-		.then((apiResponse) => {
-			if (!apiResponse.data.hasOwnProperty('place')) {
-				throw new Error('Wrong API response');
-			}
-			return apiResponse.data.place as PlaceDetailed;
-		})
-		.catch((e) => {
-			console.error(e);
-		});
+export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
+	const apiResponse = await get('places' + filterToQueryString(filter));
+	if (!apiResponse.data.hasOwnProperty('places')) {
+		throw new Error('Wrong API response');
+	}
+	return apiResponse.data.places.map((place) => place as Place);
 }
 
-export function getPlaceMedia(guid: string): Promise<Media[]> {
-	return get('places/' + guid + '/media')
-		.then((apiResponse) => {
-			if (!apiResponse.data.hasOwnProperty('media')) {
-				throw new Error('Wrong API response');
-			}
+export async function getPlaceDetailed(guid: string): Promise<PlaceDetailed> {
+	const apiResponse = await get('place-details/' + guid);
+	if (!apiResponse.data.hasOwnProperty('place')) {
+		throw new Error('Wrong API response');
+	}
+	return mapPlainPlaceDetailed(apiResponse.data.place);
+}
 
-			return apiResponse.data.media.map((media) => media as Media);
-		})
-		.catch((e) => {
-			console.error(e);
-		});
+export async function getPlaceMedia(guid: string): Promise<Media[]> {
+	const apiResponse = await get('places/' + guid + '/media');
+	if (!apiResponse.data.hasOwnProperty('media')) {
+		throw new Error('Wrong API response');
+	}
+
+	return apiResponse.data.media.map((media) => media as Media);
 }
 
 export function dummyFunction() {
