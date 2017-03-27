@@ -1,7 +1,8 @@
 import { get } from '../Xhr';
-import { Media } from './Media';
+import { mapMainMediaToMedia } from '../Media/Mapper';
+import {MainMedia, Media} from '../Media/Media';
 import { Place } from './Place';
-import { PlaceDetailed } from './PlaceDetailed';
+import {PlaceDetailed, PlaceDetailedWithMainMedia } from './PlaceDetailed';
 import PlacesFilter from './PlacesFilter';
 
 export function filterToQueryString(filter: PlacesFilter): string {
@@ -42,6 +43,15 @@ export function filterToQueryString(filter: PlacesFilter): string {
 	return '?' + urlComponents.join('&');
 }
 
+function mapPlainPlaceDetailed(placeDetailedWithMainMedia: PlaceDetailedWithMainMedia): PlaceDetailed {
+	const mainMedia: MainMedia = placeDetailedWithMainMedia.mainMedia;
+	delete placeDetailedWithMainMedia.mainMedia;
+	const placeDetailed: PlaceDetailed = placeDetailedWithMainMedia as PlaceDetailed;
+
+	if (mainMedia) {
+		placeDetailed.media = mapMainMediaToMedia(mainMedia);
+	}
+	return placeDetailed;
 }
 
 export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
@@ -57,7 +67,7 @@ export async function getPlaceDetailed(guid: string): Promise<PlaceDetailed> {
 	if (!apiResponse.data.hasOwnProperty('place')) {
 		throw new Error('Wrong API response');
 	}
-	return mapPlainPlaceDetailed(apiResponse.data.place);
+	return mapPlainPlaceDetailed(apiResponse.data.place as PlaceDetailedWithMainMedia);
 }
 
 export async function getPlaceMedia(guid: string): Promise<Media[]> {
