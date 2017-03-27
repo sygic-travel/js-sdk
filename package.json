@@ -32,7 +32,9 @@
   },
   "dependencies": {
     "@types/axios": "*",
+    "@types/humps": "^1.1.2",
     "@types/node": "^7.0.8",
-    "axios": "*"
+    "axios": "*",
+    "humps": "^2.0.0"
   }
 }

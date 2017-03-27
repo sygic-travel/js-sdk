@@ -1,11 +1,12 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
+import * as rewire from 'rewire';
 import * as sinon from 'sinon';
 import { setEnvironment } from '../Settings';
 import * as Xhr from '../Xhr';
-import { ApiResponse } from '../Xhr/ApiResponse';
 
-import { filterToQueryString, getPlaces } from './Places';
+import { ApiResponse } from '../Xhr/ApiResponse';
+import { filterToQueryString, getPlaces } from './PlacesController';
 import PlacesFilter from './PlacesFilter';
 
 chai.use(chaiAsPromised);

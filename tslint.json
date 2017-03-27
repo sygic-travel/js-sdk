@@ -4,7 +4,8 @@
     "quotemark": [true, "single"],
     "indent": [true, "tabs"],
     "trailing-comma": false,
-    "variable-name": [true, "allow-leading-underscore"]
+    "variable-name": [true, "allow-leading-underscore"],
+    "interface-name": false
   },
   "rulesDirectory": []
 }

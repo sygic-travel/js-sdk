@@ -1,1 +1,1 @@
-export { dummyFunction } from './Places/Places';
+export { dummyFunction } from './Places/PlacesController';

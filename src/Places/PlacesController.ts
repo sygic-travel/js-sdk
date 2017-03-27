@@ -1,36 +1,8 @@
 import { get } from '../Xhr';
+import { Media } from './Media';
+import { Place } from './Place';
+import { PlaceDetailed } from './PlaceDetailed';
 import PlacesFilter from './PlacesFilter';
-
-interface Location {
-	lat: number;
-	lng: number;
-}
-
-export interface Place {
-	guid: string;
-	level: string;
-	rating: number;
-	quadkey: string;
-	location: Location;
-	bounding_box?: any;
-	name: string;
-	name_suffix: string;
-	url: string;
-	price?: any;
-	marker: string;
-	categories: string[];
-	parent_guids: string[];
-	perex: string;
-	thumbnail_url: string;
-}
-
-export interface PlaceDetailed {
-
-}
-
-export interface Media {
-
-}
 
 export function filterToQueryString(filter: PlacesFilter): string {
 	const urlComponents: string[] = [];
