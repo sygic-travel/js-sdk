@@ -43,13 +43,13 @@ export function filterToQueryString(filter: PlacesFilter): string {
 	return '?' + urlComponents.join('&');
 }
 
-function mapPlainPlaceDetailed(placeDetailedWithMainMedia: PlaceDetailedWithMainMedia): PlaceDetailed {
+function mapPlaceDetailedWithMainMedia(placeDetailedWithMainMedia: PlaceDetailedWithMainMedia, photoSize: string): PlaceDetailed {
 	const mainMedia: MainMedia = placeDetailedWithMainMedia.mainMedia;
 	delete placeDetailedWithMainMedia.mainMedia;
 	const placeDetailed: PlaceDetailed = placeDetailedWithMainMedia as PlaceDetailed;
 
 	if (mainMedia) {
-		placeDetailed.media = mapMainMediaToMedia(mainMedia);
+		placeDetailed.media = mapMainMediaToMedia(mainMedia, photoSize);
 	}
 	return placeDetailed;
 }
@@ -62,12 +62,15 @@ export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
 	return apiResponse.data.places.map((place) => place as Place);
 }
 
-export async function getPlaceDetailed(guid: string): Promise<PlaceDetailed> {
+export async function getPlaceDetailed(guid: string, photoSize: string): Promise<PlaceDetailed> {
 	const apiResponse = await get('place-details/' + guid);
 	if (!apiResponse.data.hasOwnProperty('place')) {
 		throw new Error('Wrong API response');
 	}
-	return mapPlainPlaceDetailed(apiResponse.data.place as PlaceDetailedWithMainMedia);
+	return mapPlaceDetailedWithMainMedia(
+		apiResponse.data.place as PlaceDetailedWithMainMedia,
+		photoSize
+	);
 }
 
 export async function getPlaceMedia(guid: string): Promise<Media[]> {
