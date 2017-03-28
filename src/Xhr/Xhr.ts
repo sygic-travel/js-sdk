@@ -3,7 +3,7 @@ import { getApiUrl, getClientKey } from '../Settings';
 import { fromUnderscoreToCamelCase } from '../Util/index';
 import { ApiResponse } from './ApiResponse';
 
-const axiosInstance: AxiosInstance = axios.create();
+export const axiosInstance: AxiosInstance = axios.create();
 
 axiosInstance.interceptors.request.use((config) => {
 	if (!config.baseURL) {
