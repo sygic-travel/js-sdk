@@ -1,2 +1,5 @@
-export { setEnvironment } from './Settings';
-export { getPlaces, getPlaceDetailed, getPlaceMedia } from './Places/PlacesController';
+import SdkBrowser from './SdkBrowser';
+
+export function create(apiUrl: string, clientKey: string) {
+	return new SdkBrowser(apiUrl, clientKey);
+}

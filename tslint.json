@@ -5,7 +5,8 @@
     "indent": [true, "tabs"],
     "trailing-comma": false,
     "variable-name": [true, "allow-leading-underscore"],
-    "interface-name": false
+    "interface-name": false,
+    "member-ordering": false
   },
   "rulesDirectory": []
 }

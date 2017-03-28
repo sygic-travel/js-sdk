@@ -1,8 +1,7 @@
+import { Media } from '../Media/Media';
 import { get } from '../Xhr';
-import { mapMainMediaToMedia } from '../Media/Mapper';
-import {MainMedia, Media} from '../Media/Media';
 import { Place } from './Place';
-import {PlaceDetailed, PlaceDetailedWithMainMedia } from './PlaceDetailed';
+import { PlaceDetailed, PlaceDetailedResponse } from './PlaceDetailed';
 import PlacesFilter from './PlacesFilter';
 
 export function filterToQueryString(filter: PlacesFilter): string {
@@ -43,17 +42,6 @@ export function filterToQueryString(filter: PlacesFilter): string {
 	return '?' + urlComponents.join('&');
 }
 
-function mapPlaceDetailedWithMainMedia(placeDetailedWithMainMedia: PlaceDetailedWithMainMedia, photoSize: string): PlaceDetailed {
-	const mainMedia: MainMedia = placeDetailedWithMainMedia.mainMedia;
-	delete placeDetailedWithMainMedia.mainMedia;
-	const placeDetailed: PlaceDetailed = placeDetailedWithMainMedia as PlaceDetailed;
-
-	if (mainMedia) {
-		placeDetailed.media = mapMainMediaToMedia(mainMedia, photoSize);
-	}
-	return placeDetailed;
-}
-
 export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
 	const apiResponse = await get('places' + filterToQueryString(filter));
 	if (!apiResponse.data.hasOwnProperty('places')) {
@@ -67,10 +55,8 @@ export async function getPlaceDetailed(guid: string, photoSize: string): Promise
 	if (!apiResponse.data.hasOwnProperty('place')) {
 		throw new Error('Wrong API response');
 	}
-	return mapPlaceDetailedWithMainMedia(
-		apiResponse.data.place as PlaceDetailedWithMainMedia,
-		photoSize
-	);
+
+	return new PlaceDetailed(apiResponse.data.place as PlaceDetailedResponse, photoSize);
 }
 
 export async function getPlaceMedia(guid: string): Promise<Media[]> {
