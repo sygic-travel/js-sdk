@@ -1,4 +1,4 @@
-import { Location } from '../Location/Location';
+import { Location } from '../Geo/Location';
 import { MainMedia, Media } from '../Media/Media';
 
 export interface PlaceDetailedResponse {

@@ -1,4 +1,4 @@
-import { Location } from '../Location/Location';
+import { Location } from '../Geo/Location';
 
 export interface Place {
 	guid: string;

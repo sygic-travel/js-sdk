@@ -1,49 +1,11 @@
 import { Media } from '../Media/Media';
 import { get } from '../Xhr';
+import { PlacesFilter } from './Filter';
 import { Place } from './Place';
 import { PlaceDetailed, PlaceDetailedResponse } from './PlaceDetailed';
-import PlacesFilter from './PlacesFilter';
-
-export function filterToQueryString(filter: PlacesFilter): string {
-	const urlComponents: string[] = [];
-
-	if (filter.query) {
-		urlComponents.push('query=' + filter.query);
-	}
-
-	if (filter.mapTile) {
-		urlComponents.push('map_tile=' + filter.mapTile);
-	}
-
-	if (filter.mapSpread) {
-		urlComponents.push('map_spread=' + filter.mapSpread);
-	}
-
-	if (filter.categories && filter.categories.length > 0) {
-		urlComponents.push('categories=' + filter.categories.join('|'));
-	}
-
-	if (filter.tags && filter.tags.length > 0) {
-		urlComponents.push('tags=' + filter.tags.join('|'));
-	}
-
-	if (filter.parent) {
-		urlComponents.push('parent=' + filter.parent);
-	}
-
-	if (filter.level) {
-		urlComponents.push('level=' + filter.level);
-	}
-
-	if (filter.limit) {
-		urlComponents.push('limit=' + filter.limit);
-	}
-
-	return '?' + urlComponents.join('&');
-}
 
 export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
-	const apiResponse = await get('places' + filterToQueryString(filter));
+	const apiResponse = await get('places' + filter.toQueryString());
 	if (!apiResponse.data.hasOwnProperty('places')) {
 		throw new Error('Wrong API response');
 	}
