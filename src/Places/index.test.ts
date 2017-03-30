@@ -5,7 +5,7 @@ import * as sinon from 'sinon';
 import { setEnvironment } from '../Settings';
 import * as Xhr from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
-import { getPlaces } from './Controller';
+import { getPlaces } from './index';
 import { PlacesFilter, PlacesFilterJSON } from './Filter';
 
 chai.use(chaiAsPromised);

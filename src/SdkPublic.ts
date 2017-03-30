@@ -1,4 +1,4 @@
-import { dummyFunction } from './Places/Controller';
+import { dummyFunction } from './Places';
 import { SdkBase } from './SdkBase';
 
 export default class SdkPublic extends SdkBase {

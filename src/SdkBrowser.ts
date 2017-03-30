@@ -1,8 +1,8 @@
 import {Media} from './Media/Media';
+import { getPlaceDetailed, getPlaceMedia, getPlaces } from './Places';
 import {PlacesFilter, PlacesFilterJSON} from './Places/Filter';
 import {Place} from './Places/Place';
 import {PlaceDetailed} from './Places/PlaceDetailed';
-import { getPlaceDetailed, getPlaceMedia, getPlaces } from './Places/Controller';
 import {SdkBase} from './SdkBase';
 
 export default class SdkBrowser extends SdkBase {

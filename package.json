@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "webpack-dev-server",
     "build": "webpack -p --config ./webpack.prod.config.js",
-    "test": "mocha-webpack --watch --webpack-config webpack.config.js \"src/**/*.test.ts\" --reporter \"list\""
+    "test": "mocha-webpack --webpack-config webpack.config.js \"src/**/*.test.ts\" --reporter \"list\"",
+    "test-watch": "mocha-webpack --watch --webpack-config webpack.config.js \"src/**/*.test.ts\" --reporter \"list\""
   },
   "devDependencies": {
     "@types/chai": "^3.4.35",
