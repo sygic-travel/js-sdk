@@ -91,16 +91,18 @@ export class PlaceDetailed {
 
 	private mapMainMediaToMedia(mainMedia: MainMedia, photoSize: string): Media {
 		const mappedMedia = {};
-		Object.keys(mainMedia.usage).forEach((key) => {
-			const mediaGuid = mainMedia.usage[key];
-			mappedMedia[key] = mainMedia.media.reduce((acc, item) => {
-				if (item.guid === mediaGuid) {
-					item.urlTemplate = item.urlTemplate.replace(/{size}/i, photoSize || this._defaultPhotoSize);
-					return item;
-				}
-				return acc;
-			}, null);
-		});
+		if (mainMedia) {
+			Object.keys(mainMedia.usage).forEach((key) => {
+				const mediaGuid = mainMedia.usage[key];
+				mappedMedia[key] = mainMedia.media.reduce((acc, item) => {
+					if (item.guid === mediaGuid) {
+						item.urlTemplate = item.urlTemplate.replace(/{size}/i, photoSize || this._defaultPhotoSize);
+						return item;
+					}
+					return acc;
+				}, null);
+			});
+		}
 
 		return mappedMedia as Media;
 	}
