@@ -1,6 +1,6 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### VisualStudioCode template
-.vscode/*
+.vscode
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
@@ -126,3 +126,4 @@ GitHub.sublime-settings
 
 .tmp
 doc
+dist

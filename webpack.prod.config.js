@@ -6,11 +6,11 @@ var OptimizeJsPlugin = require('optimize-js-plugin');
 module.exports = {
 	entry: {
 		sdk: './src/sdk.ts',
-		sdk2: './src/sdk2.ts'
+		//sdk2: './src/sdk2.ts'
 	},
 	output: {
 		filename: '[name].js',
-		path: __dirname + '/build',
+		path: __dirname + '/dist',
 		library: 'sdk',
 		libraryTarget: 'umd',
 		umdNamedDefine: true
@@ -30,7 +30,7 @@ module.exports = {
 	devtool: 'source-map',
 	plugins: [
 		new OptimizeJsPlugin({
-			sourceMap: false
+			sourceMap: true
 		}),
 		new webpack.LoaderOptionsPlugin({
 			minimize: true,
