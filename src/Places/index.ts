@@ -5,7 +5,7 @@ import { Place } from './Place';
 import { PlaceDetailed, PlaceDetailedResponse } from './PlaceDetailed';
 
 export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
-	const apiResponse = await get('places' + filter.toQueryString());
+	const apiResponse = await get('places' + '?' + filter.toQueryString());
 	if (!apiResponse.data.hasOwnProperty('places')) {
 		throw new Error('Wrong API response');
 	}

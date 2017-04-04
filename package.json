@@ -37,6 +37,7 @@
     "@types/humps": "^1.1.2",
     "@types/node": "^7.0.8",
     "axios": "*",
-    "humps": "^2.0.0"
+    "humps": "^2.0.0",
+    "query-string": "^4.3.2"
   }
 }

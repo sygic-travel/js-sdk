@@ -51,6 +51,6 @@ module.exports = {
 	devServer: {
 		hot: true,
 		inline: false,
-		contentBase: './dist'
+		contentBase: './build'
 	}
 };

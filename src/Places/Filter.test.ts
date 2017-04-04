@@ -12,14 +12,14 @@ describe('PlacesFilter', () => {
 				mapSpread: null,
 				mapTile: null,
 				parent: 'city:1',
-				query: null,
+				query: '&ahoj=test?foo$bar',
 				tags: []
 			};
 
 			const placesFilter = new PlacesFilter(placesFilterJSON);
-			const expectedQuerystring = '?categories=eating&parent=city:1&limit=20';
+			const expectedQuerystring = 'query=%26ahoj%3Dtest%3Ffoo%24bar&categories=eating&parent=city%3A1&limit=20';
 
-			chai.expect(expectedQuerystring).to.equal(placesFilter.toQueryString());
+			chai.expect(placesFilter.toQueryString()).to.equal(expectedQuerystring);
 
 			done();
 		});

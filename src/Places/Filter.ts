@@ -1,9 +1,22 @@
+import * as queryString from 'querystring';
+
 export interface PlacesFilterJSON {
 	query?: string;
 	mapTile?: string;
 	mapSpread?: number;
 	categories?: string[];
 	tags?: string[];
+	parent?: string;
+	level?: string;
+	limit?: number;
+}
+
+interface PlacesFilterQuery {
+	query?: string;
+	map_tile?: string;
+	map_spread?: number;
+	categories?: string;
+	tags?: string;
 	parent?: string;
 	level?: string;
 	limit?: number;
@@ -31,40 +44,40 @@ export class PlacesFilter {
 	}
 
 	public toQueryString(): string {
-		const urlComponents: string[] = [];
+		const query: PlacesFilterQuery = {};
 
 		if (this.query) {
-			urlComponents.push('query=' + this.query);
+			query.query = this.query;
 		}
 
 		if (this.mapTile) {
-			urlComponents.push('map_tile=' + this.mapTile);
+			query.map_tile = this.mapTile;
 		}
 
 		if (this.mapSpread) {
-			urlComponents.push('map_spread=' + this.mapSpread);
+			query.map_spread = this.mapSpread;
 		}
 
 		if (this.categories && this.categories.length > 0) {
-			urlComponents.push('categories=' + this.categories.join('|'));
+			query.categories = this.categories.join('|');
 		}
 
 		if (this.tags && this.tags.length > 0) {
-			urlComponents.push('tags=' + this.tags.join('|'));
+			query.tags = this.tags.join('|');
 		}
 
 		if (this.parent) {
-			urlComponents.push('parent=' + this.parent);
+			query.parent = this.parent;
 		}
 
 		if (this.level) {
-			urlComponents.push('level=' + this.level);
+			query.level = this.level;
 		}
 
 		if (this.limit) {
-			urlComponents.push('limit=' + this.limit);
+			query.limit = this.limit;
 		}
 
-		return '?' + urlComponents.join('&');
+		return queryString.stringify(query);
 	}
-};
+}
