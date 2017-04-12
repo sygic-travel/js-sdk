@@ -15,5 +15,5 @@ export interface Place {
 	categories: string[];
 	parentGuids: string[];
 	perex: string;
-	thumbnailUrl: string;
+	thumbnailUrl?: string;
 }
