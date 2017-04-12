@@ -15,4 +15,4 @@
 
 ## priority
 - ~~unit tests~~
-- ~~places functionality and~~ spread
+- ~~places functionality and spread~~
