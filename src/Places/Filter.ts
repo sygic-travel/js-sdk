@@ -1,4 +1,5 @@
 import * as queryString from 'querystring';
+import { Bounds } from '../Geo/Bounds';
 
 export interface PlacesFilterJSON {
 	query?: string;
@@ -9,6 +10,8 @@ export interface PlacesFilterJSON {
 	parent?: string;
 	level?: string;
 	limit?: number;
+	bounds?: Bounds;
+	zoom?: number;
 }
 
 interface PlacesFilterQuery {
@@ -20,64 +23,115 @@ interface PlacesFilterQuery {
 	parent?: string;
 	level?: string;
 	limit?: number;
+	bounds?: string;
 }
 
 export class PlacesFilter {
-	private query?: string;
-	private mapTile?: string;
-	private mapSpread?: number;
-	private categories?: string[];
-	private tags?: string[];
-	private parent?: string;
-	private level?: string;
-	private limit?: number;
+	private _query?: string;
+	private _mapTile?: string;
+	private _mapSpread?: number;
+	private _categories?: string[];
+	private _tags?: string[];
+	private _parent?: string;
+	private _level?: string;
+	private _limit?: number;
+	private _bounds?: Bounds;
+	private _zoom?: number;
 
 	constructor(placesFilter: PlacesFilterJSON) {
-		this.query = placesFilter.query;
-		this.mapTile = placesFilter.mapTile;
-		this.mapSpread = placesFilter.mapSpread;
-		this.categories = placesFilter.categories;
-		this.tags = placesFilter.tags;
-		this.parent = placesFilter.parent;
-		this.level = placesFilter.level;
-		this.limit = placesFilter.limit;
+		this._query = placesFilter.query;
+		this._mapTile = placesFilter.mapTile;
+		this._mapSpread = placesFilter.mapSpread;
+		this._categories = placesFilter.categories;
+		this._tags = placesFilter.tags;
+		this._parent = placesFilter.parent;
+		this._level = placesFilter.level;
+		this._limit = placesFilter.limit;
+		this._bounds = placesFilter.bounds;
+		this._zoom = placesFilter.zoom;
+		this.validate();
+	}
+
+	get mapSpread(): number {
+		return this._mapSpread;
+	}
+
+	get bounds(): Bounds {
+		return this._bounds;
+	}
+
+	public cloneSetBounds(value: Bounds): PlacesFilter {
+		const that = Object.create(this);
+		return Object.assign(that, this, {_bounds: value});
+	}
+
+	public cloneSetLimit(value: number): PlacesFilter {
+		const that = Object.create(this);
+		return Object.assign(that, this, {_limit: value});
+	}
+
+	public cloneSetMapTile(value: string): PlacesFilter {
+		const that = Object.create(this);
+		return Object.assign(that, this, {_mapTile: value});
+	}
+
+	get zoom(): number {
+		return this._zoom;
 	}
 
 	public toQueryString(): string {
 		const query: PlacesFilterQuery = {};
 
-		if (this.query) {
-			query.query = this.query;
+		if (this._query) {
+			query.query = this._query;
 		}
 
-		if (this.mapTile) {
-			query.map_tile = this.mapTile;
+		if (this._mapTile) {
+			query.map_tile = this._mapTile;
 		}
 
-		if (this.mapSpread) {
-			query.map_spread = this.mapSpread;
+		if (this._mapSpread) {
+			query.map_spread = this._mapSpread;
 		}
 
-		if (this.categories && this.categories.length > 0) {
-			query.categories = this.categories.join('|');
+		if (this._categories && this._categories.length > 0) {
+			query.categories = this._categories.join('|');
 		}
 
-		if (this.tags && this.tags.length > 0) {
-			query.tags = this.tags.join('|');
+		if (this._tags && this._tags.length > 0) {
+			query.tags = this._tags.join('|');
 		}
 
-		if (this.parent) {
-			query.parent = this.parent;
+		if (this._parent) {
+			query.parent = this._parent;
 		}
 
-		if (this.level) {
-			query.level = this.level;
+		if (this._level) {
+			query.level = this._level;
 		}
 
-		if (this.limit) {
-			query.limit = this.limit;
+		if (this._limit) {
+			query.limit = this._limit;
+		}
+
+		if (this._bounds) {
+			query.bounds = this._bounds.south + ',' + this._bounds.west + ',' + this._bounds.north + ',' + this._bounds.east;
 		}
 
 		return queryString.stringify(query);
+	}
+
+	private validate(): void {
+		if (this._mapSpread) {
+			if (this._limit) {
+				throw new Error('Do not use limit with mapSpread.');
+			}
+			if (!this._bounds) {
+				throw new Error('Bounds must be specified when calling with mapSpread.');
+			}
+			if (!this._zoom) {
+				throw new Error('Zoom must be specified when calling with mapSpread.');
+			}
+		}
 	}
 }

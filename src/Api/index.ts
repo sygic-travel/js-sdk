@@ -1,0 +1,1 @@
+export { getPlaces } from './Api';

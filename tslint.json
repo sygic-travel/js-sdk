@@ -6,7 +6,10 @@
     "trailing-comma": false,
     "variable-name": [true, "allow-leading-underscore"],
     "interface-name": false,
-    "member-ordering": false
+    "member-ordering": false,
+    "object-literal-sort-keys": false,
+    "array-type": [true, "array"],
+    "no-bitwise": false
   },
   "rulesDirectory": []
 }
