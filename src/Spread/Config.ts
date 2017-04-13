@@ -1,4 +1,4 @@
-export interface SpreadConfigSize {
+export interface SpreadSizeConfig {
 	radius: number;
 	margin: number;
 	name: string;

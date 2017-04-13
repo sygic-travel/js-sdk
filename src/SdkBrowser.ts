@@ -5,7 +5,7 @@ import { PlacesFilter, PlacesFilterJSON } from './Places/Filter';
 import { Place } from './Places/Place';
 import { PlaceDetailed  } from './Places/PlaceDetailed';
 import { SdkBase } from './SdkBase';
-import { CanvasSize, spread, SpreadConfigSize } from './Spread';
+import { CanvasSize, spread, SpreadSizeConfig } from './Spread';
 
 export default class SdkBrowser extends SdkBase {
 	public getPlaces(filter: PlacesFilterJSON): Promise<Place[]> {
@@ -20,7 +20,7 @@ export default class SdkBrowser extends SdkBase {
 		return getPlaceMedia(guid);
 	}
 
-	public spreadPlacesOnMap(places: Place[], markerSizes: SpreadConfigSize[], bounds: Bounds, canvas: CanvasSize) {
+	public spreadPlacesOnMap(places: Place[], markerSizes: SpreadSizeConfig[], bounds: Bounds, canvas: CanvasSize) {
 		return spread(places, markerSizes, bounds, canvas);
 	}
 }

@@ -1,11 +1,11 @@
 import { Bounds, Coordinate, locationToCanvasCoordinate } from '../Geo';
 import { Place } from '../Places/Place';
 import { CanvasSize } from './Canvas';
-import { SpreadConfigSize } from './Config';
+import { SpreadSizeConfig } from './Config';
 
 export function spread(
 	places: Place[],
-	markerSizes: SpreadConfigSize[],
+	markerSizes: SpreadSizeConfig[],
 	bounds: Bounds,
 	canvas: CanvasSize
 ): SpreadResult {
@@ -20,7 +20,7 @@ export function spread(
 const detectRenderSize = (
 	result: SpreadResult,
 	place: Place,
-	markerSizes: SpreadConfigSize[],
+	markerSizes: SpreadSizeConfig[],
 	bounds: Bounds,
 	canvas: CanvasSize
 ): SpreadResult => {
@@ -55,7 +55,7 @@ const detectRenderSize = (
 	return result;
 };
 
-const intersects = (size: SpreadConfigSize, coordinate: Coordinate, spreadedPlaces: SpreadedPlace[]): boolean => {
+const intersects = (size: SpreadSizeConfig, coordinate: Coordinate, spreadedPlaces: SpreadedPlace[]): boolean => {
 	let radius2: number;
 	let intersection: boolean;
 	const radius1 = size.radius + size.margin;
@@ -78,5 +78,5 @@ interface SpreadResult {
 interface SpreadedPlace {
 	place: Place;
 	coordinate: Coordinate;
-	size: SpreadConfigSize;
+	size: SpreadSizeConfig;
 }

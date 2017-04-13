@@ -1,3 +1,3 @@
 export { spread } from './Spreader';
-export { SpreadConfigSize } from './Config';
+export { SpreadSizeConfig } from './Config';
 export { CanvasSize } from './Canvas';

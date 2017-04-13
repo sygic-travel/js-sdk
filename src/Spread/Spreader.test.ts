@@ -1,5 +1,5 @@
 import * as chai from 'chai';
-import { CanvasSize, spread, SpreadConfigSize } from '.';
+import { CanvasSize, spread, SpreadSizeConfig } from '.';
 import { Bounds } from '../Geo';
 import { Place } from '../Places/Place';
 
@@ -34,7 +34,7 @@ const place: Place = {
 describe('Spreader', () => {
 	describe('#spread', () => {
 		it('should spread one items correctly', () => {
-			const sizes: SpreadConfigSize[] = [
+			const sizes: SpreadSizeConfig[] = [
 				{
 					radius: 5,
 					margin: 5,
@@ -55,7 +55,7 @@ describe('Spreader', () => {
 
 	it('should hide items correctly', () => {
 		// No image
-		let sizes: SpreadConfigSize[] = [
+		let sizes: SpreadSizeConfig[] = [
 			{
 				radius: 5,
 				margin: 5,
@@ -110,7 +110,7 @@ describe('Spreader', () => {
 	});
 
 	it('should use smaller size correctly', () => {
-		const sizes: SpreadConfigSize[] = [
+		const sizes: SpreadSizeConfig[] = [
 			{
 				radius: 5,
 				margin: 5,
