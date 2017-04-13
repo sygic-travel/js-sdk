@@ -30,10 +30,6 @@ const detectRenderSize = (
 	}
 
 	const coordinate = locationToCanvasCoordinate(place.location, bounds, canvas);
-	if (coordinate.x < 0 || coordinate.y < 0 || coordinate.x > canvas.width || coordinate.y > canvas.height) {
-		result.hidden.push(place);
-		return result;
-	}
 
 	for (const size of markerSizes) {
 		if (size.photoRequired && !place.thumbnailUrl) {

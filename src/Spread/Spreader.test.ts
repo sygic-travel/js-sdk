@@ -46,9 +46,12 @@ describe('Spreader', () => {
 					name: 'small'
 				}
 			];
-			const spreaded = spread([place], sizes, bounds, canvas);
+			// Place out of canvas
+			const place2 = Object.assign({}, place);
+			place2.location = {lat: -0.3, lng: 10.3};
+			const spreaded = spread([place, place2], sizes, bounds, canvas);
 			chai.expect(spreaded.hidden.length).to.equal(0);
-			chai.expect(spreaded.visible.length).to.equal(1);
+			chai.expect(spreaded.visible.length).to.equal(2);
 			chai.expect(spreaded.visible[0].size.name).to.equal('big');
 		});
 	});
@@ -93,20 +96,6 @@ describe('Spreader', () => {
 		spreaded = spread([place, place], sizes, bounds, canvas);
 		chai.expect(spreaded.hidden.length).to.equal(1);
 		chai.expect(spreaded.visible.length).to.equal(1);
-
-		// Place out of canvas
-		sizes = [
-			{
-				radius: 5,
-				margin: 5,
-				name: 'big'
-			}
-		];
-		const place2 = Object.assign({}, place);
-		place2.location = {lat: -0.3, lng: 10.3};
-		spreaded = spread([place2], sizes, bounds, canvas);
-		chai.expect(spreaded.hidden.length).to.equal(1);
-		chai.expect(spreaded.visible.length).to.equal(0);
 	});
 
 	it('should use smaller size correctly', () => {
