@@ -54,11 +54,12 @@ const detectRenderSize = (
 const intersects = (size: SpreadSizeConfig, coordinate: Coordinate, spreadedPlaces: SpreadedPlace[]): boolean => {
 	let radius2: number;
 	let intersection: boolean;
-	const radius1 = size.radius + size.margin;
+	const radius1 = size.radius;
 	for (const spreadedPlace of spreadedPlaces) {
-		radius2 = spreadedPlace.size.radius + spreadedPlace.size.margin;
+		const biggerMargin = size.margin > spreadedPlace.size.margin ? size.margin : spreadedPlace.size.margin;
+		radius2 = spreadedPlace.size.radius;
 		intersection =  (Math.pow(coordinate.x - spreadedPlace.coordinate.x, 2) +
-			Math.pow(coordinate.y - spreadedPlace.coordinate.y, 2)) <= Math.pow(radius1 + radius2, 2);
+			Math.pow(coordinate.y - spreadedPlace.coordinate.y, 2)) <= Math.pow(radius1 + radius2 + biggerMargin, 2);
 		if (intersection) {
 			return true;
 		}
