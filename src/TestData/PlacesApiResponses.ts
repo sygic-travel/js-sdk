@@ -1,5 +1,5 @@
 /* tslint:disable */
-export const placeDetailedWithNoMediaResponse = {
+export const placeDetailedEiffelTowerWithoutMedia = {
 	"place": {
 		"guid": "poi:530",
 		"level": "poi",
@@ -201,7 +201,7 @@ export const placeDetailMedia = {
 	]
 };
 
-export const placesResponse = {
+export const places = {
 	places: [
 		{
 			"guid": "poi:345430",
