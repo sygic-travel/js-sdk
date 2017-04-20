@@ -52,7 +52,7 @@ describe('PlacesController', () => {
 	});
 
 	describe('#getPlaceDetailed', () => {
-		it('should correctly map to PlaceDetaled when response has no media', (done) => {
+		it('should correctly map to PlaceDetailed when response has no media', (done) => {
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse('200', 200, '', TestData.placeDetailedWithNoMediaResponse));
 			}));

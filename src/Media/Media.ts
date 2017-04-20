@@ -1,3 +1,10 @@
+export interface PlaceDetailMedia {
+	square?: Media;
+	videoPreview?: Media;
+	portrait?: Media;
+	landscape?: Media;
+}
+
 export interface MainMedia {
 	usage: Usage;
 	media: Media[];
@@ -7,7 +14,7 @@ export interface Media {
 	original: Original;
 	suitability: string[];
 	urlTemplate: string;
-	createdAt: Date;
+	createdAt: string;
 	source: Source;
 	type: string;
 	createdBy: string;

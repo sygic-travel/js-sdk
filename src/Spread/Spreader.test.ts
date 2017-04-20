@@ -26,7 +26,7 @@ const place: Place = {
 	price: 0,
 	marker: 'resataurant',
 	categories: [],
-	parentGuids: [],
+	parents: [],
 	perex: '',
 	thumbnailUrl: 'http://example.com'
 };

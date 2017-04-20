@@ -3,7 +3,6 @@ import { Media } from './Media/Media';
 import { getPlaceDetailed, getPlaceMedia, getPlaces } from './Places';
 import { PlacesFilter, PlacesFilterJSON } from './Places/Filter';
 import { Place } from './Places/Place';
-import { PlaceDetailed  } from './Places/PlaceDetailed';
 import { SdkBase } from './SdkBase';
 import { CanvasSize, spread, SpreadSizeConfig } from './Spread';
 
@@ -12,7 +11,7 @@ export default class SdkBrowser extends SdkBase {
 		return getPlaces(new PlacesFilter(filter));
 	}
 
-	public getPlaceDetailed(guid: string, photoSize: string): Promise<PlaceDetailed> {
+	public getPlaceDetailed(guid: string, photoSize: string): Promise<Place> {
 		return getPlaceDetailed(guid, photoSize);
 	}
 
