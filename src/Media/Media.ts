@@ -1,8 +1,10 @@
+import { Location } from '../Geo';
+
 export interface PlaceDetailMedia {
-	square?: Media;
+	square: Media;
 	videoPreview?: Media;
-	portrait?: Media;
-	landscape?: Media;
+	portrait: Media;
+	landscape: Media;
 }
 
 export interface MainMedia {
@@ -19,16 +21,16 @@ export interface Media {
 	type: string;
 	createdBy: string;
 	url: string;
-	quadkey?: any;
+	quadkey: string;
 	attribution: Attribution;
 	guid: string;
-	location?: any;
+	location: Location;
 }
 
 export interface Attribution {
 	titleUrl: string;
 	license: string;
-	other?: any;
+	other: string;
 	authorUrl: string;
 	author: string;
 	title: string;
@@ -49,7 +51,7 @@ export interface Original {
 
 export interface Usage {
 	square: string;
-	videoPreview?: any;
+	videoPreview?: string;
 	portrait: string;
 	landscape: string;
 }

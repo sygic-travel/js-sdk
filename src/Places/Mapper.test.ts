@@ -8,8 +8,8 @@ import * as Media from '../Media/Media';
 import * as TestData from '../TestData/Places';
 import { ApiResponse } from '../Xhr/ApiResponse';
 import * as Mapper from './Mapper';
-import { Place } from './Place';
-import { Description, PlaceDetail, Reference, Tag } from './PlaceDetailed';
+import { Place, Price } from './Place';
+import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
 
 chai.use(chaiAsPromised);
 
@@ -45,7 +45,7 @@ describe('PlacesMapper', () => {
 				perex: 'This 14-century bridge connects the Old Town with Lesser Town and the Prague Castle. With its length of 621 meters, solid Gothic stone…',
 				url: 'https://alpha.travel.sygic.com/go/poi:345430',
 				thumbnailUrl: 'https://alpha-media-cdn.sygictraveldata.com/media/poi:345430',
-				price: null,
+				price: null as Price,
 				marker: 'sightseeing:art:artwork',
 				categories: ['sightseeing'],
 				parents: ['city:5', 'region:26009', 'region:26011', 'country:5', 'continent:1'],

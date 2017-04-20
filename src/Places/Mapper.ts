@@ -2,10 +2,10 @@ import { camelizeKeys } from 'humps';
 
 import { Location } from '../Geo';
 import { Bounds } from '../Geo/Bounds';
-import { MainMedia, Media, PlaceDetailMedia } from '../Media/Media';
+import { MainMedia, PlaceDetailMedia } from '../Media/Media';
 import { ApiResponse } from '../Xhr/ApiResponse';
-import { Place } from './Place';
-import { Description, PlaceDetail, Reference, Tag } from './PlaceDetailed';
+import { Place, Price } from './Place';
+import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
 
 export const mapPlaceApiResponseToPlaces = (apiResponse: ApiResponse): Place[] => {
 	return apiResponse.data.places.map((place) => {
@@ -32,7 +32,7 @@ const mapPlace = (place, detail: PlaceDetail) => {
 		perex: place.perex,
 		url: place.url,
 		thumbnailUrl: place.thumbnail_url,
-		price: place.price,
+		price: place.price as Price,
 		marker: place.marker,
 		categories: place.categories,
 		parents: place.parent_guids,

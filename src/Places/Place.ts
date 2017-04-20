@@ -1,6 +1,6 @@
 import { Location } from '../Geo';
 import { Bounds } from '../Geo/Bounds';
-import { PlaceDetail} from './PlaceDetailed';
+import { PlaceDetail} from './PlaceDetail';
 
 export interface Place {
 	guid: string;
@@ -10,13 +10,18 @@ export interface Place {
 	quadkey: string;
 	name: string;
 	nameSuffix: string;
-	boundingBox?: Bounds;
+	boundingBox: Bounds;
 	perex: string;
 	url: string;
-	thumbnailUrl?: string;
-	price?: any;
+	thumbnailUrl: string;
+	price: Price;
 	marker: string;
 	categories: string[];
 	parents: string[];
-	detail?: PlaceDetail;
+	detail: PlaceDetail;
+}
+
+export interface Price {
+	value: number;
+	savings: number;
 }

@@ -19,13 +19,11 @@ export interface Reference {
 	type: string;
 	languageId: string;
 	url: string;
-	offlineFile?: any;
 	supplier: string;
 	priority: number;
-	isPremium: boolean;
 	currency: string;
-	price?: number;
-	flags: any[];
+	price: number;
+	flags: string[];
 }
 
 export interface Tag {
@@ -36,6 +34,5 @@ export interface Tag {
 export interface Description {
 	text: string;
 	provider: string;
-	translationProvider?: string;
-	url?: string;
+	translationProvider: string;
 }
