@@ -1,46 +1,236 @@
+/* tslint:disable */
 export const placeDetailedWithNoMediaResponse = {
-	place: {
-		guid: 'region:1984787',
-		level: 'island',
-		rating: 0.001,
-		quadkey: '031313131122012031',
-		location: {
-			lat: 51.4453071,
-			lng: -0.3247743
+	"place": {
+		"guid": "poi:530",
+		"level": "poi",
+		"rating": 7.9110977331847,
+		"quadkey": "120220011012000332",
+		"location": {
+			"lat": 48.858262,
+			"lng": 2.2944955
 		},
-		bounding_box: {
-			east: -0.3208077,
-			north: 51.4462398,
-			south: 51.4439649,
-			west: -0.3281206
+		"bounding_box": null,
+		"name": "Eiffel Tower",
+		"name_suffix": "Paris, France",
+		"url": "https://travel.sygic.com/go/poi:530",
+		"price": null,
+		"marker": "sightseeing:tower:lookout:observation",
+		"categories": [
+			"sightseeing"
+		],
+		"parent_guids": [
+			"city:14",
+			"region:303",
+			"country:14",
+			"continent:1"
+		],
+		"perex": "Built by Gustave Eiffel for the 1889 World’s Fair, Eiffel Tower became the world's tallest man-made structure until the Chrysler Building…",
+		"thumbnail_url": "https://media-cdn.sygictraveldata.com/media/poi:530",
+		"tags": [
+			{
+				"key": "Fodor's",
+				"name": "Fodor's"
+			},
+			{
+				"key": "World's Fair Architecture",
+				"name": "World's Fair Architecture"
+			},
+			{
+				"key": "Historical",
+				"name": "Historical"
+			}
+		],
+		"address": "Champ de Mars, 5 Avenue Anatole France, 75007 Paris, France",
+		"admission": "Lift entrance ticket* / to the top / by stairs*\nAdults: €11 / €17 / €7 \nYouth (12 - 24): €8.50 / €14.50 / €5\nChildren (4 - 11), disabled: €4 / €8 / €3\n*valid to 2nd floor\n\nThe access waiting time to the monument is likely to be over 2 hours unless you book online.\n\nAn extra ticket for the top floor may be purchased on the 2nd floor, depending on weather conditions.",
+		"duration": 3600,
+		"email": null,
+		"opening_hours": "Open daily:\nMid-June - early Sep: 9 a.m. - 12:45 a.m. \nLast lift at midnight (11 p.m. to the top).\nStairs: 9 a.m. - 12:45 a.m. \n(Last admission at midnight.)\n\nRest of the year: 9:30 a.m. - 11:45 p.m. \nLast lift at 11 p.m. (10:30 p.m. to the top).\nStairs: 9:30 a.m. - 6:30 p.m. \n(Last admission at 6 p.m.)",
+		"is_deleted": false,
+		"phone": "+33 892 70 12 39",
+		"description": {
+			"text": "Built by Gustave Eiffel for the 1889 World’s Fair, Eiffel Tower became the world's tallest man-made structure until the Chrysler Building in New York was finished in 1930. Although it is one of the world's most visited tourist attractions now, it was not accepted well by the French at the time. Also, it was supposed to be taken down after 20 years since it was meant to be only a temporary exhibit. Fortunately, Gustave Eiffel convinced the government to keep the construction and use it as a radiotelegraph station.\n\nThere are 1,665 steps leading to the top, but you can take the stairs only to the second floor. A lift takes you to the top floor. Originally, only the second floor was open to the public, but now all three levels are accessible and boast award-winning restaurants. In the evening, Eiffel Tower is illuminated with 20,000 light bulbs.\n\nPlease note that there are no locker rooms, so do not bring large baggage or pushchairs if you cannot fold them.",
+			"provider": null,
+			"translation_provider": null,
+			"link": null,
+			"is_translated": true
 		},
-		name: 'Eel Pie Island',
-		name_suffix: 'London, United Kingdom',
-		url: 'https://travel.sygic.com/go/region:1984787',
-		price: null,
-		marker: 'destination:island',
-		categories: [],
-		parent_guids: [],
-		perex: '...',
-		thumbnail_url: null,
-		tags: [],
-		address: null,
-		admission: null,
-		duration: null,
-		email: null,
-		opening_hours: null,
-		is_deleted: false,
-		phone: null,
-		description: {
-			is_translated: true,
-			link: 'https://en.wikipedia.org/wiki/Eel_Pie_Island',
-			provider: 'wikipedia',
-			/* tslint:disable */
-			text: "Eel Pie Island is an island in the River Thames at Twickenham in the Borough of Richmond upon Thames, London. It is situated on the Tideway and can be reached only by footbridge or boat. The island was known as a major jazz and blues venue in the 1960s.\n\nEel Pie Island was earlier called Twickenham Ait and, before that, The Parish Ait; even earlier the island was three separate aits. A bridge to the island was proposed in 1889, but it was not until 1957 that one was completed. Today, the island has about 50 houses with 120 inhabitants, a couple of boatyards and some small businesses and artists' studios. It has nature reserves at either end, but there is no public access to these.",
-			/* tslint:enable */
-			translation_provider: null
-		},
-		main_media: null,
-		references: []
+		"main_media": null,
+		"references": [
+			{
+				"id": 1470551,
+				"title": "Wikipedia",
+				"type": "wiki",
+				"language_id": "en",
+				"url": "https://en.wikipedia.org/wiki/Eiffel_Tower",
+				"offline_file": null,
+				"supplier": "wiki",
+				"priority": 0,
+				"is_premium": false,
+				"currency": null,
+				"price": null,
+				"flags": []
+			},
+			{
+				"id": 1303032,
+				"title": "Eiffel Tower Dinner and Seine River Cruise",
+				"type": "tour:vehicle:boat",
+				"language_id": "en",
+				"url": "http://www.partner.viator.com/en/13008/tours/Paris/Eiffel-Tower-Dinner-and-Seine-River-Cruise/d479-2050TEC",
+				"offline_file": null,
+				"supplier": "viator",
+				"priority": 1000,
+				"is_premium": false,
+				"currency": "USD",
+				"price": 182.88,
+				"flags": []
+			}
+		]
 	}
 };
+
+export const placeDetailMedia = {
+	"usage": {
+		"square": "m:62951",
+		"video_preview": null,
+		"portrait": "m:36593397",
+		"landscape": "m:2420002"
+	},
+	"media": [
+		{
+			"original": {
+				"size": 9511064,
+				"width": 4114,
+				"height": 4235
+			},
+			"suitability": [
+				"square"
+			],
+			"url_template": "https://media-cdn.sygictraveldata.com/media/{size}/612664395a40232133447d33247d383632393531",
+			"created_at": "2015-03-17T14:48:02+0000",
+			"source": {
+				"provider": "wikipedia",
+				"name": "Wikimedia Commons",
+				"external_id": "File:Paris - Eiffelturm und Marsfeld2.jpg"
+			},
+			"type": "photo",
+			"created_by": null,
+			"url": "https://media-cdn.sygictraveldata.com/media/612664395a40232133447d33247d383632393531.jpg",
+			"quadkey": null,
+			"attribution": {
+				"title_url": "http://commons.wikimedia.org/wiki/File:Paris_-_Eiffelturm_und_Marsfeld2.jpg",
+				"license": "CC BY 3.0",
+				"other": null,
+				"author_url": "http://commons.wikimedia.org/wiki/User:Taxiarchos228",
+				"author": "Wladyslaw",
+				"title": "Paris: The Eiffel Tower and the Champ de Mars",
+				"license_url": "http://creativecommons.org/licenses/by/3.0"
+			},
+			"guid": "m:62951",
+			"location": null
+		},
+		{
+			"original": {
+				"size": 676805,
+				"width": 2048,
+				"height": 1536
+			},
+			"suitability": [
+				"landscape"
+			],
+			"url_template": "https://media-cdn.sygictraveldata.com/media/{size}/612664395a40232133447d33247d3832343230303032",
+			"created_at": "1970-01-01T00:00:00+0000",
+			"source": {
+				"provider": "wikipedia",
+				"name": "Wikimedia Commons",
+				"external_id": "File:Tour Eiffel, Paris.JPG"
+			},
+			"type": "photo",
+			"created_by": "53d8a9428f8ff",
+			"url": "https://media-cdn.sygictraveldata.com/media/612664395a40232133447d33247d3832343230303032.jpg",
+			"quadkey": "120220011012000332",
+			"attribution": {
+				"title_url": "http://commons.wikimedia.org/wiki/File:Tour_Eiffel,_Paris.JPG",
+				"license": "CC BY-SA 3.0",
+				"other": null,
+				"author_url": "http://commons.wikimedia.org/wiki/User:Amarena7",
+				"author": "Amarena7",
+				"title": "Tour Eiffel",
+				"license_url": "http://creativecommons.org/licenses/by-sa/3.0"
+			},
+			"guid": "m:2420002",
+			"location": {
+				"lat": 48.858333,
+				"lng": 2.294444
+			}
+		},
+		{
+			"original": {
+				"size": 872649,
+				"width": 2048,
+				"height": 3072
+			},
+			"suitability": [
+				"portrait"
+			],
+			"url_template": "https://media-cdn.sygictraveldata.com/media/{size}/612664395a40232133447d33247d383336353933333937",
+			"created_at": "2017-04-19T12:00:34+0000",
+			"source": {
+				"provider": "wikipedia",
+				"name": "Wikimedia Commons",
+				"external_id": "File:Tour Eiffel - 20150801 13h38 (10610).jpg"
+			},
+			"type": "photo",
+			"created_by": "53d8a9428f8ff",
+			"url": "https://media-cdn.sygictraveldata.com/media/612664395a40232133447d33247d383336353933333937.jpg",
+			"quadkey": "120220011012003000",
+			"attribution": {
+				"title_url": "https://commons.wikimedia.org/wiki/File:Tour_Eiffel_-_20150801_13h38_(10610).jpg",
+				"license": "CC BY-SA 4.0",
+				"other": null,
+				"author_url": "http://commons.wikimedia.org/wiki/User:Medium69",
+				"author": "Medium69",
+				"title": "Southeast face of the Eiffel Tower in Paris.",
+				"license_url": "http://creativecommons.org/licenses/by-sa/4.0"
+			},
+			"guid": "m:36593397",
+			"location": {
+				"lat": 48.856733,
+				"lng": 2.297
+			}
+		}
+	]
+};
+
+export const placesResponse = {
+	places: [
+		{
+			"guid": "poi:345430",
+			"level": "poi",
+			"rating": 10.004,
+			"quadkey": "120212302033311321",
+			"location": {
+				"lat": 50.0866003,
+				"lng": 14.4105518
+			},
+			"bounding_box": null,
+			"name": "Charles Bridge",
+			"name_suffix": "Prague, Czech Republic",
+			"url": "https://alpha.travel.sygic.com/go/poi:345430",
+			"price": null,
+			"marker": "sightseeing:art:artwork",
+			"categories": [
+				"sightseeing"
+			],
+			"parent_guids": [
+				"city:5",
+				"region:26009",
+				"region:26011",
+				"country:5",
+				"continent:1"
+			],
+			"perex": "This 14-century bridge connects the Old Town with Lesser Town and the Prague Castle. With its length of 621 meters, solid Gothic stone…",
+			"thumbnail_url": "https://alpha-media-cdn.sygictraveldata.com/media/poi:345430"
+		}
+	]
+};
+/* tslint:enable */
