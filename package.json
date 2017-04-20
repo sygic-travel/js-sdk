@@ -28,12 +28,11 @@
     "ts-node": "^3.0.2",
     "tslint": "^4.5.1",
     "tslint-loader": "^3.4.3",
-    "typescript": "^2.2.1",
+    "typescript": "^2.3.0",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.2"
   },
   "dependencies": {
-    "@types/axios": "*",
     "@types/humps": "^1.1.2",
     "@types/node": "^7.0.8",
     "axios": "*",
