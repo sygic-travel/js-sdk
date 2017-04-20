@@ -56,7 +56,7 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 			videoPreview: null,
 			portrait: null,
 			landscape: null,
-		} as Media.PlaceDetailMedia,
+		} as Media.MainMedia,
 		references: [{
 			id: 1470551,
 			title: 'Wikipedia',
@@ -139,7 +139,7 @@ export const mappedMedia = {
 		} as Media.Attribution,
 		guid: 'm:62951',
 		location: null
-	} as Media.Media,
+	} as Media.Medium,
 	portrait: {
 		original: {
 			size: 872649,
@@ -172,7 +172,7 @@ export const mappedMedia = {
 			lat: 48.856733,
 			lng: 2.297
 		} as Location
-	} as Media.Media,
+	} as Media.Medium,
 	landscape: {
 		original: {
 			size: 676805,
@@ -205,7 +205,7 @@ export const mappedMedia = {
 			lat: 48.858333,
 			lng: 2.294444
 		} as Location
-	} as Media.Media,
+	} as Media.Medium,
 	videoPreview: null
-} as Media.PlaceDetailMedia;
+} as Media.MainMedia;
 /* tslint:enable */

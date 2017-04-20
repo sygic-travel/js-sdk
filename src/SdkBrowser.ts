@@ -1,5 +1,5 @@
 import { Bounds } from './Geo';
-import { Media } from './Media/Media';
+import { Medium } from './Media/Media';
 import { getPlaceDetailed, getPlaceMedia, getPlaces } from './Places';
 import { PlacesFilter, PlacesFilterJSON } from './Places/Filter';
 import { Place } from './Places/Place';
@@ -15,7 +15,7 @@ export default class SdkBrowser extends SdkBase {
 		return getPlaceDetailed(guid, photoSize);
 	}
 
-	public getPlaceMedia(guid: string): Promise<Media[]> {
+	public getPlaceMedia(guid: string): Promise<Medium[]> {
 		return getPlaceMedia(guid);
 	}
 

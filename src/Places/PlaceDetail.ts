@@ -1,4 +1,4 @@
-import { PlaceDetailMedia } from '../Media/Media';
+import { MainMedia } from '../Media/Media';
 
 export interface PlaceDetail {
 	tags: Tag[];
@@ -9,7 +9,7 @@ export interface PlaceDetail {
 	duration: number;
 	openingHours: string;
 	phone: string;
-	media: PlaceDetailMedia;
+	media: MainMedia;
 	references: Reference[];
 }
 

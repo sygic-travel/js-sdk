@@ -1,5 +1,5 @@
 import * as api from '../Api';
-import { Media } from '../Media/Media';
+import { Medium } from '../Media/Media';
 import { get } from '../Xhr';
 import { PlacesFilter } from './Filter';
 import { mapPlaceApiResponseToPlaces, mapPlaceDetailedApiResponseToPlace } from './Mapper';
@@ -21,10 +21,10 @@ export async function getPlaceDetailed(guid: string, photoSize: string): Promise
 	return mapPlaceDetailedApiResponseToPlace(apiResponse, photoSize);
 }
 
-export async function getPlaceMedia(guid: string): Promise<Media[]> {
+export async function getPlaceMedia(guid: string): Promise<Medium[]> {
 	const apiResponse = await get('places/' + guid + '/media');
 	if (!apiResponse.data.hasOwnProperty('media')) {
 		throw new Error('Wrong API response');
 	}
-	return apiResponse.data.media.map((media) => media as Media);
+	return apiResponse.data.media.map((media) => media as Medium);
 }

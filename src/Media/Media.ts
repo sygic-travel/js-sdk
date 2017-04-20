@@ -1,18 +1,13 @@
 import { Location } from '../Geo';
 
-export interface PlaceDetailMedia {
-	square: Media;
-	videoPreview?: Media;
-	portrait: Media;
-	landscape: Media;
-}
-
 export interface MainMedia {
-	usage: Usage;
-	media: Media[];
+	square: Medium;
+	videoPreview?: Medium;
+	portrait: Medium;
+	landscape: Medium;
 }
 
-export interface Media {
+export interface Medium {
 	original: Original;
 	suitability: string[];
 	urlTemplate: string;

@@ -2,7 +2,7 @@ import { camelizeKeys } from 'humps';
 
 import { Location } from '../Geo';
 import { Bounds } from '../Geo/Bounds';
-import { MainMedia, PlaceDetailMedia } from '../Media/Media';
+import { MainMedia } from '../Media/Media';
 import { ApiResponse } from '../Xhr/ApiResponse';
 import { Place, Price } from './Place';
 import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
@@ -53,13 +53,13 @@ const mapPlaceDetail = (place, photoSize): PlaceDetail => {
 		duration: place.duration,
 		openingHours: place.opening_hours,
 		phone: place.phone,
-		media: mapMainMediaToMedia(camelizeKeys(place.main_media) as MainMedia, photoSize),
+		media: mapMainMediaToMedia(camelizeKeys(place.main_media), photoSize),
 		references
 	} as PlaceDetail;
 };
 
-export const mapMainMediaToMedia = (mainMedia: MainMedia, photoSize: string): PlaceDetailMedia => {
-	const mappedMedia: PlaceDetailMedia = {
+export const mapMainMediaToMedia = (mainMedia, photoSize: string): MainMedia => {
+	const mappedMedia: MainMedia = {
 		square: null,
 		videoPreview: null,
 		portrait: null,
@@ -78,5 +78,5 @@ export const mapMainMediaToMedia = (mainMedia: MainMedia, photoSize: string): Pl
 		});
 	}
 
-	return mappedMedia as PlaceDetailMedia;
+	return mappedMedia as MainMedia;
 };
