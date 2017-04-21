@@ -7,6 +7,8 @@ import { ApiResponse } from '../Xhr/ApiResponse';
 import { Place, Price } from './Place';
 import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
 
+const defaultPhotoSize = '300x300';
+
 export const mapPlaceApiResponseToPlaces = (apiResponse: ApiResponse): Place[] => {
 	return apiResponse.data.places.map((place) => {
 		return mapPlace(place, null);
@@ -70,7 +72,7 @@ export const mapMainMediaToMedia = (mainMedia, photoSize: string): MainMedia => 
 			const mediaGuid = mainMedia.usage[key];
 			mappedMedia[key] = mainMedia.media.reduce((acc, item) => {
 				if (item.guid === mediaGuid) {
-					item.urlTemplate = item.urlTemplate.replace(/{size}/i, photoSize || this._defaultPhotoSize);
+					item.urlTemplate = item.urlTemplate.replace(/{size}/i, photoSize || defaultPhotoSize);
 					return item;
 				}
 				return acc;
