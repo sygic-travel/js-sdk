@@ -1,19 +1,27 @@
-import { Location } from '../Geo/Location';
+import { Location } from '../Geo';
+import { Bounds } from '../Geo/Bounds';
+import { PlaceDetail} from './PlaceDetail';
 
 export interface Place {
 	guid: string;
 	level: string;
 	rating: number;
-	quadkey: string;
 	location: Location;
-	boundingBox?: any;
+	quadkey: string;
 	name: string;
 	nameSuffix: string;
+	boundingBox: Bounds;
+	perex: string;
 	url: string;
-	price?: any;
+	thumbnailUrl: string;
+	price: Price;
 	marker: string;
 	categories: string[];
-	parentGuids: string[];
-	perex: string;
-	thumbnailUrl?: string;
+	parents: string[];
+	detail: PlaceDetail;
+}
+
+export interface Price {
+	value: number;
+	savings: number;
 }

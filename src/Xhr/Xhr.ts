@@ -1,6 +1,5 @@
 import axios, {AxiosInstance} from 'axios';
 import { getApiUrl, getClientKey } from '../Settings';
-import { fromUnderscoreToCamelCase } from '../Util/index';
 import { ApiResponse } from './ApiResponse';
 
 export const axiosInstance: AxiosInstance = axios.create();
@@ -29,6 +28,6 @@ export async function get(url: string): Promise<ApiResponse> {
 		response.data.status,
 		response.data.status_code,
 		response.data.status_message,
-		fromUnderscoreToCamelCase(response.data.data)
+		response.data.data
 	);
 }

@@ -1,27 +1,31 @@
+import { Location } from '../Geo';
+
 export interface MainMedia {
-	usage: Usage;
-	media: Media[];
+	square: Medium;
+	videoPreview?: Medium;
+	portrait: Medium;
+	landscape: Medium;
 }
 
-export interface Media {
+export interface Medium {
 	original: Original;
 	suitability: string[];
 	urlTemplate: string;
-	createdAt: Date;
+	createdAt: string;
 	source: Source;
 	type: string;
 	createdBy: string;
 	url: string;
-	quadkey?: any;
+	quadkey: string;
 	attribution: Attribution;
 	guid: string;
-	location?: any;
+	location: Location;
 }
 
 export interface Attribution {
 	titleUrl: string;
 	license: string;
-	other?: any;
+	other: string;
 	authorUrl: string;
 	author: string;
 	title: string;
@@ -42,7 +46,7 @@ export interface Original {
 
 export interface Usage {
 	square: string;
-	videoPreview?: any;
+	videoPreview?: string;
 	portrait: string;
 	landscape: string;
 }
