@@ -1,15 +1,13 @@
 var webpack = require('webpack');
-var stripLoader = require('strip-loader');
 var path = require("path");
 var OptimizeJsPlugin = require('optimize-js-plugin');
 
 module.exports = {
 	entry: {
-		sdk: './src/sdk.ts',
-		//sdk2: './src/sdk2.ts'
+		sdk: './src/sdk.ts'
 	},
 	output: {
-		filename: '[name].js',
+		filename: 'web-sdk.js',
 		path: __dirname + '/dist',
 		library: 'sdk',
 		libraryTarget: 'umd',
@@ -27,10 +25,9 @@ module.exports = {
 	resolve: {
 		extensions: [".tsx", ".ts", ".js"]
 	},
-	devtool: 'source-map',
 	plugins: [
 		new OptimizeJsPlugin({
-			sourceMap: true
+			sourceMap: false
 		}),
 		new webpack.LoaderOptionsPlugin({
 			minimize: true,
@@ -56,7 +53,7 @@ module.exports = {
 				negate_iife: false
 			},
 			comments: false,
-			sourceMap: true
+			sourceMap: false
 		})
 	]
 };
