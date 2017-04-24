@@ -43,10 +43,3 @@ export interface Original {
 	width: number;
 	height: number;
 }
-
-export interface Usage {
-	square: string;
-	videoPreview?: string;
-	portrait: string;
-	landscape: string;
-}

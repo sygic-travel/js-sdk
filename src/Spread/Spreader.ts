@@ -67,12 +67,12 @@ const intersects = (size: SpreadSizeConfig, coordinate: Coordinate, spreadedPlac
 	return false;
 };
 
-interface SpreadResult {
+export interface SpreadResult {
 	visible: SpreadedPlace[];
 	hidden: Place[];
 }
 
-interface SpreadedPlace {
+export interface SpreadedPlace {
 	place: Place;
 	coordinate: Coordinate;
 	size: SpreadSizeConfig;
