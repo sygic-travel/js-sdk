@@ -20,7 +20,7 @@ dependencies:
 compile:
   override:
     - yarn build
-    - typedoc --out ./doc --excludeExternals --exclude "**/*+(.test).ts"
+    - yarn doc
 
 test:
   override:
