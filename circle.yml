@@ -20,6 +20,7 @@ dependencies:
 compile:
   override:
     - yarn build
+    - typedoc --out ./doc --excludeExternals --exclude "**/*+(.test).ts"
 
 test:
   override:
@@ -31,9 +32,11 @@ deployment:
     commands:
       - mkdir -p package && rsync -av ./ ./package --exclude='package' --exclude='node_modules/' --exclude='.git' && tar -zcvf ./dist/build.tgz package && rm -rf package
       - aws s3 sync ./dist s3://tripomatic-assets/web-sdk/${CIRCLE_TAG} --delete --acl public-read
+      - aws s3 sync ./doc s3://docs.sygictravelapi.com/web-sdk/doc/${CIRCLE_TAG} --delete --acl public-read
   master:
     branch: master
     owner: sygic-travel
     commands:
       - mkdir -p package && rsync -av ./ ./package --exclude='package' --exclude='node_modules/' --exclude='.git' && tar -zcvf ./dist/build.tgz package && rm -rf package
       - aws s3 sync ./dist s3://tripomatic-assets/web-sdk/master --delete --acl public-read
+      - aws s3 sync ./doc s3://docs.sygictravelapi.com/web-sdk/doc/master --delete --acl public-read
