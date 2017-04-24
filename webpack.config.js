@@ -7,9 +7,9 @@ module.exports = {
 		'./src/sdk.ts'
 	],
 	output: {
-		filename: 'sdk.js',
+		filename: 'SygicTravelSDK.js',
 		path: __dirname + '/dist',
-		library: 'sdk',
+		library: 'SygicTravelSDK',
 		libraryTarget: 'umd',
 		umdNamedDefine: true
 	},

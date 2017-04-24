@@ -1,6 +1,6 @@
-export function create(apiUrl: string, clientKey: string): SdkBrowser;
+export function create(apiUrl: string, clientKey: string): StSDK;
 
-export interface SdkBrowser {
+export interface StSDK {
 	getPlaces(filter: Places.PlacesFilterJSON): Promise<Places.Place[]>;
 	getPlaceDetailed(guid: string, photoSize: string): Promise<Places.Place>;
 	getPlaceMedia(guid: string): Promise<Media.Medium[]>;
