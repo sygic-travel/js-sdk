@@ -1,11 +1,8 @@
 import { BaseSDK } from './BaseSDK';
 import { Bounds } from './Geo';
-import { Medium } from './Media/Media';
-import { getPlaceDetailed, getPlaceMedia, getPlaces } from './Places';
-import { PlacesFilter, PlacesFilterJSON } from './Places/Filter';
-import { Place } from './Places/Place';
-import { CanvasSize, spread, SpreadSizeConfig } from './Spread';
-import { SpreadResult } from './Spread/Spreader';
+import { Medium } from './Media';
+import { getPlaceDetailed, getPlaceMedia, getPlaces, Place, PlacesFilter, PlacesFilterJSON } from './Places';
+import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from './Spread';
 
 export default class StSDK extends BaseSDK {
 	public getPlaces(filter: PlacesFilterJSON): Promise<Place[]> {

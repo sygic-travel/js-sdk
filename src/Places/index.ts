@@ -1,9 +1,21 @@
 import * as api from '../Api';
 import { Medium } from '../Media/Media';
 import { get } from '../Xhr';
-import { PlacesFilter } from './Filter';
+import { PlacesFilter, PlacesFilterJSON } from './Filter';
 import { mapPlaceApiResponseToPlaces, mapPlaceDetailedApiResponseToPlace } from './Mapper';
-import { Place } from './Place';
+import { Place, Price } from './Place';
+import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
+
+export {
+	PlacesFilter,
+	Place,
+	PlacesFilterJSON,
+	Price,
+	PlaceDetail,
+	Reference,
+	Tag,
+	Description,
+}
 
 export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
 	const apiResponse = await api.getPlaces(filter);
@@ -28,3 +40,4 @@ export async function getPlaceMedia(guid: string): Promise<Medium[]> {
 	}
 	return apiResponse.data.media.map((media) => media as Medium);
 }
+
