@@ -7,10 +7,7 @@ describe('PlacesFilter', () => {
 		it('should build querystring from paramteres', (done) => {
 			const placesFilterJSON: PlacesFilterJSON = {
 				categories: ['eating'],
-				level: null,
 				limit: 20,
-				mapSpread: null,
-				mapTile: null,
 				parent: 'city:1',
 				query: '&ahoj=test?foo$bar',
 				tags: []
@@ -39,7 +36,7 @@ describe('PlacesFilter', () => {
 			const modifiedFilter = filter.cloneSetBounds(bounds);
 			chai.expect(modifiedFilter.bounds).to.be.deep.equal(bounds);
 			chai.expect(modifiedFilter.zoom).to.be.equal(1);
-			chai.expect(filter.bounds).to.be.undefined;
+			chai.expect(filter.bounds).to.be.null;
 		});
 	});
 

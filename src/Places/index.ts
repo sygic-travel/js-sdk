@@ -38,6 +38,5 @@ export async function getPlaceMedia(guid: string): Promise<Medium[]> {
 	if (!apiResponse.data.hasOwnProperty('media')) {
 		throw new Error('Wrong API response');
 	}
-	return apiResponse.data.media.map((media) => media as Medium);
+	return apiResponse.data.media.map((media: any) => media as Medium);
 }
-

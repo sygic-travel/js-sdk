@@ -10,15 +10,15 @@ export interface Place {
 	quadkey: string;
 	name: string;
 	nameSuffix: string;
-	boundingBox: Bounds;
-	perex: string;
+	boundingBox: Bounds | null;
+	perex: string | null;
 	url: string;
-	thumbnailUrl: string;
-	price: Price;
+	thumbnailUrl: string | null;
+	price: Price | null;
 	marker: string;
 	categories: string[];
 	parents: string[];
-	detail: PlaceDetail;
+	detail: PlaceDetail | null;
 }
 
 export interface Price {

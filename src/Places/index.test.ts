@@ -51,12 +51,8 @@ describe('PlacesController', () => {
 
 			const placesFilterJSON: PlacesFilterJSON = {
 				categories: ['eating'],
-				level: null,
 				limit: 20,
-				mapSpread: null,
-				mapTile: null,
 				parent: 'city:1',
-				query: null,
 				tags: []
 			};
 
@@ -70,12 +66,8 @@ describe('PlacesController', () => {
 
 			const placesFilterJSON: PlacesFilterJSON = {
 				categories: ['eating'],
-				level: null,
 				limit: 20,
-				mapSpread: null,
-				mapTile: null,
 				parent: 'city:1',
-				query: null,
 				tags: []
 			};
 
@@ -90,12 +82,8 @@ describe('PlacesController', () => {
 
 			const placesFilterJSON: PlacesFilterJSON = {
 				categories: ['eating'],
-				level: null,
 				limit: 20,
-				mapSpread: null,
-				mapTile: null,
 				parent: 'city:1',
-				query: null,
 				tags: []
 			};
 

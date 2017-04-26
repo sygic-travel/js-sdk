@@ -21,7 +21,7 @@ export const mapPlaceDetailedApiResponseToPlace = (apiResponse: ApiResponse, pho
 	return mapPlace(place, detail);
 };
 
-const mapPlace = (place, detail: PlaceDetail) => {
+const mapPlace = (place, detail: PlaceDetail | null) => {
 	return {
 		guid: place.guid,
 		level: place.level,
@@ -44,7 +44,7 @@ const mapPlace = (place, detail: PlaceDetail) => {
 
 const mapPlaceDetail = (place, photoSize): PlaceDetail => {
 	const tags: Tag[] = place.tags.map((tag) => (camelizeKeys(tag) as Tag));
-	const description: Description = place.description ? camelizeKeys(place.description) as Description : null;
+	const description: Description | null = place.description ? camelizeKeys(place.description) as Description : null;
 	const references: Reference[] = place.references.map((reference) => camelizeKeys(reference));
 	return {
 		tags,

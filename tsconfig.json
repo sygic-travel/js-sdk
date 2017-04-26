@@ -4,7 +4,15 @@
     "target": "es5",
     "sourceMap": true,
     "outDir": "./dist",
-    "lib": ["es6", "dom"]
+    "lib": ["es6", "dom"],
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
+    "allowSyntheticDefaultImports": true
   },
   "exclude": [
     "node_modules",

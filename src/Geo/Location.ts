@@ -6,7 +6,7 @@ export interface Location {
 	lng: number;
 }
 
-export function locationToTileCoordinate(location: Location, zoom): Coordinate {
+export function locationToTileCoordinate(location: Location, zoom: number): Coordinate {
 	const tileSize = 256;
 	const x = (location.lng + 180) / 360;
 	const sinLat = Math.sin(location.lat * Math.PI / 180);
