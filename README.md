@@ -1,34 +1,36 @@
 
-# Sygic Travel SDK for Javascript
-A set of client-side functions for accessing and processing data provided by Sygic Travel APIs.
-## Introduction
-This introduction will show you how to setup the SDK and make some basic calls.
 
-The Sygic Travel SDK for JavaScript provides a set of client-side functionality that:
+# Sygic Travel SDK for Javascript · [![CircleCI](https://circleci.com/gh/sygic-travel/js-sdk/tree/master.svg?style=shield&circle-token=ade273efccfc9edfabdc76b77acf8746ac45e94d)](https://circleci.com/gh/sygic-travel/js-sdk/tree/master) [![GitHub release](https://img.shields.io/github/release/sygic-travel/js-sdk.svg)](https://github.com/sygic-travel/js-sdk)
+
+A set of client-side functions for accessing and processing data provided by Sygic Travel APIs.
+
+## Introduction
+
+The Sygic Travel SDK for JavaScript provides a set of client-side functionality which:
 - Enables you to get and filter a list of places
 - Enables you to get a detailed place information with references (links and related products)
 - Enables you to get media (photos and videos) for a place
 - Spreads places on a map according to your configuration
 
-You can also check out our [API Documentation](http://docs.sygictravelapi.com/js-sdk/doc/master/).
+You can also check out our [API Documentation](http://docs.sygictravelapi.com/js-sdk/master/).
 
 ## Installation
-You can get the UMD build from CDN that you can include to your document
+You can get the UMD build from the CDN, which you can include to your document,
 ```
-<script src=“cdn-proxy.travel.sygic.com/web-sdk/master/SygicTravelSDK.js”></script>
+<script src=“cdn.travel.sygic.com/js-sdk/v0.1.0/SygicTravelSDK.js”></script>
 ```
 or install it using Yarn or NPM (Typescript types included).
 ```
-yarn add cdn-proxy.travel.sygic.com/web-sdk/master/SygicTravel.tgz
+yarn add git@github.com:sygic-travel/js-sdk.git#0.1.0
 ```
 ## Initialization
-#### [`create`](http://docs.sygictravelapi.com/web-sdk/doc/master/modules/_sdk_.html#create)
-Creates an instance of [Sygic Travel SDK](http://docs.sygictravelapi.com/web-sdk/doc/master/classes/_stsdk_.stsdk.html)
+#### [`create`](http://docs.sygictravelapi.com/js-sdk/master/modules/_sdk_.html#create)
+Creates an instance of [Sygic Travel SDK](http://docs.sygictravelapi.com/js-sdk/master/classes/_stsdk_.stsdk.html)
 ##### Arguments:
 - `apiUrl: string`
 - `clientKey: string`
 ##### Returns:
-- [`StSDK`](http://docs.sygictravelapi.com/web-sdk/doc/master/classes/_stsdk_.stsdk.html)
+- [`StSDK`](http://docs.sygictravelapi.com/js-sdk/master/classes/_stsdk_.stsdk.html)
 ```
 import * as SygicTravelSDK from ‘sygic-travel-js-sdk’;
 const apiUrl: string = ‘https://api.sygictravelapi.com/0.1/en/';
@@ -37,13 +39,13 @@ const stSDK: SygicTravelSDK.StSDK = SygicTravelSDK.create(apiUrl, clientKey);
 ```
 
 ## Instance methods
-### [`getPlaces`](http://docs.sygictravelapi.com/web-sdk/doc/master/classes/_stsdk_.stsdk.html#getplaces)
-Fetches list of places according to applied filter.
+### [`getPlaces`](http://docs.sygictravelapi.com/js-sdk/master/classes/_stsdk_.stsdk.html#getplaces)
+Fetches a list of places according to the applied filter.
 
 ##### Arguments:
-- [`filter: Places.PlacesFilterJSON`](http://docs.sygictravelapi.com/web-sdk/doc/master/interfaces/_places_filter_.placesfilterjson.html)
+- [`filter: Places.PlacesFilterJSON`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_places_filter_.placesfilterjson.html)
 ##### Returns:
-- [`Promise<Places.Place[]>`](http://docs.sygictravelapi.com/web-sdk/doc/master/interfaces/_places_place_.place.html)
+- [`Promise<Places.Place[]>`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_places_place_.place.html)
 
 ```
 const placeFilter: SygicTravelSDK.Places.PlacesFilterJSON = {
@@ -69,33 +71,33 @@ stSDK.getPlaces(placeFilter).then((places: SygicTravelSDK.Places.Place[]) => {
 
 ---
 
-### [`getPlaceDetailed`](http://docs.sygictravelapi.com/web-sdk/doc/master/classes/_stsdk_.stsdk.html#getplacedetailed)
-Returns a single place with populated [`detail`](http://docs.sygictravelapi.com/web-sdk/doc/master/interfaces/_places_place_.place.html#detail) property.
+### [`getPlaceDetailed`](http://docs.sygictravelapi.com/js-sdk/master/classes/_stsdk_.stsdk.html#getplacedetailed)
+Returns a single place with populated [`detail`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_places_place_.place.html#detail) property.
 ##### Arguments:
 - `guid: string`
 - `photoSize: string`
 ##### Returns:
-- [`Promise<Places.Place>`](http://docs.sygictravelapi.com/web-sdk/doc/master/interfaces/_places_place_.place.html)
+- [`Promise<Places.Place>`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_places_place_.place.html)
 
 ---
 
-### [`getPlaceMedia`](http://docs.sygictravelapi.com/web-sdk/doc/master/classes/_stsdk_.stsdk.html#getplacemedia)
+### [`getPlaceMedia`](http://docs.sygictravelapi.com/js-sdk/master/classes/_stsdk_.stsdk.html#getplacemedia)
 Fetches media for place.
 #### Arguments:
 - `guid: string`
 #### Returns:
-- [`Promise<Media.Medium[]>`](http://docs.sygictravelapi.com/web-sdk/doc/master/interfaces/_media_media_.medium.html)
+- [`Promise<Media.Medium[]>`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_media_media_.medium.html)
 ---
-### [`spreadPlaces`](http://docs.sygictravelapi.com/web-sdk/doc/master/classes/_stsdk_.stsdk.html#spreadplacesonmap)
+### [`spreadPlaces`](http://docs.sygictravelapi.com/js-sdk/master/classes/_stsdk_.stsdk.html#spreadplacesonmap)
 Will calculate positions of places (map markers) according to spread configuration.
 
 #### Arguments:
-- [`places: Places.Place[]`](http://docs.sygictravelapi.com/web-sdk/doc/master/interfaces/_places_place_.place.html)
-- [`markerSizes: Spread.SpreadSizeConfig[]`](http://docs.sygictravelapi.com/web-sdk/doc/master/interfaces/_spread_config_.spreadsizeconfig.html)
-- [`bounds: Geo.Bounds`](http://docs.sygictravelapi.com/web-sdk/doc/master/interfaces/_geo_bounds_.bounds.html)
-- [`canvas: Spread.CanvasSize`](http://docs.sygictravelapi.com/web-sdk/doc/master/interfaces/_spread_canvas_.canvassize.html)
+- [`places: Places.Place[]`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_places_place_.place.html)
+- [`markerSizes: Spread.SpreadSizeConfig[]`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_spread_config_.spreadsizeconfig.html)
+- [`bounds: Geo.Bounds`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_geo_bounds_.bounds.html)
+- [`canvas: Spread.CanvasSize`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_spread_canvas_.canvassize.html)
 #### Returns:
-- [`Spread.SpreadResult`](http://docs.sygictravelapi.com/web-sdk/doc/master/interfaces/_spread_spreader_.spreadresult.html)
+- [`Spread.SpreadResult`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_spread_spreader_.spreadresult.html)
 
 ```
 const placeFilter: SygicTravelSDK.Places.PlacesFilterJSON = {
