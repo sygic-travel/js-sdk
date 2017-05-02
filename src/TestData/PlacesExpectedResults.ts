@@ -125,7 +125,7 @@ export const mappedMedia = {
 			externalId: 'File:Paris - Eiffelturm und Marsfeld2.jpg'
 		} as Media.Source,
 		type: 'photo',
-		createdBy: null,
+		createdBy: 'x',
 		url: 'https://media-cdn.sygictraveldata.com/media/612664395a40232133447d33247d383632393531.jpg',
 		quadkey: null,
 		attribution: {

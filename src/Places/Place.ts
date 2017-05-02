@@ -5,18 +5,18 @@ import { PlaceDetail} from './PlaceDetail';
 export interface Place {
 	guid: string;
 	level: string;
+	categories: string[];
 	rating: number;
-	location: Location;
 	quadkey: string;
-	name: string;
-	nameSuffix: string;
+	location: Location;
 	boundingBox: Bounds | null;
+	name: string;
+	nameSuffix: string | null;
 	perex: string | null;
 	url: string;
 	thumbnailUrl: string | null;
 	price: Price | null;
 	marker: string;
-	categories: string[];
 	parents: string[];
 	detail: PlaceDetail | null;
 }

@@ -4,9 +4,9 @@ export interface PlaceDetail {
 	tags: Tag[];
 	address: string | null;
 	admission: string | null;
-	description: Description;
-	email: string | null;
 	duration: number | null;
+	description: Description | null;
+	email: string | null;
 	openingHours: string | null;
 	phone: string | null;
 	media: MainMedia;

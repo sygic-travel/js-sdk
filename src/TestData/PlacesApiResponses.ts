@@ -113,7 +113,7 @@ export const placeDetailMedia = {
 				"external_id": "File:Paris - Eiffelturm und Marsfeld2.jpg"
 			},
 			"type": "photo",
-			"created_by": null,
+			"created_by": 'x',
 			"url": "https://media-cdn.sygictraveldata.com/media/612664395a40232133447d33247d383632393531.jpg",
 			"quadkey": null,
 			"attribution": {
