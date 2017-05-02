@@ -21,7 +21,7 @@ You can get the UMD build from the CDN, which you can include to your document,
 ```
 or install it using Yarn or NPM (Typescript types included).
 ```
-yarn add git@github.com:sygic-travel/js-sdk.git#0.1.0
+yarn add sygic-travel/js-sdk.git#v0.1.0
 ```
 ## Initialization
 #### [`create`](http://docs.sygictravelapi.com/js-sdk/master/modules/_sdk_.html#create)
