@@ -1,45 +1,57 @@
 import { Location } from '../Geo';
 
+export type mediaType =
+	'photo' |
+	'photo360' |
+	'video' |
+	'video360';
+
+export type mediaSuitability =
+	'portrait' |
+	'landscape' |
+	'square' |
+	'video_preview';
+
 export interface MainMedia {
-	square: Medium;
-	videoPreview?: Medium;
-	portrait: Medium;
-	landscape: Medium;
+	square: Medium | null;
+	videoPreview: Medium | null;
+	portrait: Medium | null;
+	landscape: Medium | null;
 }
 
 export interface Medium {
 	original: Original;
-	suitability: string[];
+	suitability: mediaSuitability[];
 	urlTemplate: string;
 	createdAt: string;
 	source: Source;
-	type: string;
+	type: mediaType;
 	createdBy: string;
 	url: string;
-	quadkey: string;
+	quadkey: string | null;
 	attribution: Attribution;
 	guid: string;
-	location: Location;
+	location: Location | null;
 }
 
 export interface Attribution {
-	titleUrl: string;
-	license: string;
-	other: string;
-	authorUrl: string;
-	author: string;
-	title: string;
-	licenseUrl: string;
+	titleUrl: string | null;
+	license: string | null;
+	other: string | null;
+	authorUrl: string | null;
+	author: string | null;
+	title: string | null;
+	licenseUrl: string | null;
 }
 
 export interface Source {
 	provider: string;
-	name: string;
-	externalId: string;
+	name: string | null;
+	externalId: string | null;
 }
 
 export interface Original {
-	size: number;
-	width: number;
-	height: number;
+	size: number | null;
+	width: number | null;
+	height: number | null;
 }

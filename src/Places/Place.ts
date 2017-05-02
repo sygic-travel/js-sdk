@@ -5,20 +5,20 @@ import { PlaceDetail} from './PlaceDetail';
 export interface Place {
 	guid: string;
 	level: string;
-	rating: number;
-	location: Location;
-	quadkey: string;
-	name: string;
-	nameSuffix: string;
-	boundingBox: Bounds;
-	perex: string;
-	url: string;
-	thumbnailUrl: string;
-	price: Price;
-	marker: string;
 	categories: string[];
+	rating: number;
+	quadkey: string;
+	location: Location;
+	boundingBox: Bounds | null;
+	name: string;
+	nameSuffix: string | null;
+	perex: string | null;
+	url: string;
+	thumbnailUrl: string | null;
+	price: Price | null;
+	marker: string;
 	parents: string[];
-	detail: PlaceDetail;
+	detail: PlaceDetail | null;
 }
 
 export interface Price {

@@ -52,15 +52,15 @@ export class PlacesFilter {
 		this.validate();
 	}
 
-	get mapSpread(): number {
-		return this._mapSpread;
+	get mapSpread(): number | null {
+		return this._mapSpread || null;
 	}
 
-	get bounds(): Bounds {
-		return this._bounds;
+	get bounds(): Bounds | null  {
+		return this._bounds || null;
 	}
 
-	public cloneSetBounds(value: Bounds): PlacesFilter {
+	public cloneSetBounds(value: Bounds | null): PlacesFilter {
 		const that = Object.create(this);
 		return Object.assign(that, this, {_bounds: value});
 	}
@@ -75,8 +75,8 @@ export class PlacesFilter {
 		return Object.assign(that, this, {_mapTile: value});
 	}
 
-	get zoom(): number {
-		return this._zoom;
+	get zoom(): number | null  {
+		return this._zoom || null ;
 	}
 
 	public toQueryString(): string {

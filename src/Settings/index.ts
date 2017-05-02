@@ -1,5 +1,5 @@
-let apiUrl = null;
-let clientKey = null;
+let apiUrl: string;
+let clientKey: string;
 
 export function setEnvironment(url: string, key: string): void {
 	apiUrl = url;

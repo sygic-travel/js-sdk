@@ -2,13 +2,13 @@ import { MainMedia } from '../Media/Media';
 
 export interface PlaceDetail {
 	tags: Tag[];
-	address: string;
-	admission: string;
-	description: Description;
-	email: string;
-	duration: number;
-	openingHours: string;
-	phone: string;
+	address: string | null;
+	admission: string | null;
+	duration: number | null;
+	description: Description | null;
+	email: string | null;
+	openingHours: string | null;
+	phone: string | null;
 	media: MainMedia;
 	references: Reference[];
 }
@@ -17,12 +17,12 @@ export interface Reference {
 	id: number;
 	title: string;
 	type: string;
-	languageId: string;
+	languageId: string | null;
 	url: string;
-	supplier: string;
+	supplier: string | null;
 	priority: number;
-	currency: string;
-	price: number;
+	currency: string | null;
+	price: number | null;
 	flags: string[];
 }
 
@@ -33,6 +33,8 @@ export interface Tag {
 
 export interface Description {
 	text: string;
-	provider: string;
-	translationProvider: string;
+	provider: string | null;
+	translationProvider: string | null;
+	link: null | null;
+	isTranslated: boolean;
 }

@@ -1,4 +1,5 @@
 import { boundsToMapTileKeys } from '../Geo';
+import { Bounds } from '../Geo/Bounds';
 import { PlacesFilter } from '../Places/Filter';
 import { ApiResponse, get as xhrGet} from '../Xhr';
 
@@ -11,9 +12,9 @@ export function getPlaces(filter: PlacesFilter): Promise<ApiResponse> {
 
 const getPlacesWitMapSpread = async (filter: PlacesFilter): Promise<ApiResponse>  => {
 
-	const mapTiles: string[] = boundsToMapTileKeys(filter.bounds, filter.zoom);
+	const mapTiles: string[] = boundsToMapTileKeys(filter.bounds as Bounds, filter.zoom as number);
 
-	const apiResults = [];
+	const apiResults: Promise<ApiResponse>[] = [];
 
 	for (const mapTile of mapTiles) {
 		let apiFilter = filter.cloneSetBounds(null);

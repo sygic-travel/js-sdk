@@ -1,6 +1,7 @@
 import { Bounds, locationToTileCoordinate, normalizeLng } from '.';
+import { Coordinate } from './Coordinate';
 
-export function boundsToMapTileKeys(bounds: Bounds, zoom: number): string[] {
+export function boundsToMapTileKeys(bounds: Bounds , zoom: number): string[] {
 	bounds = Object.assign({}, bounds);
 	bounds.west = normalizeLng(bounds.west);
 	bounds.east = normalizeLng(bounds.east);
@@ -21,9 +22,9 @@ export function boundsToMapTileKeys(bounds: Bounds, zoom: number): string[] {
 	}
 
 	const startTile = locationToTileCoordinate({lat: bounds.north, lng: bounds.east}, zoom);
-	const endTile = locationToTileCoordinate({lat: bounds.south, lng: bounds.west}, zoom);
+	const endTile: Coordinate = locationToTileCoordinate({lat: bounds.south, lng: bounds.west}, zoom);
 	const processedTile = {x: startTile.x, y: startTile.y};
-	const quadkeys = [];
+	const quadkeys: string[] = [];
 	while (processedTile.y <= endTile.y) {
 		while (processedTile.x >= endTile.x) {
 			let quadkey = '';

@@ -1,6 +1,6 @@
 import { Location } from '../Geo';
 import * as Media from '../Media/Media';
-import { Place, Price } from '../Places/Place';
+import { Place } from '../Places/Place';
 import { Description, PlaceDetail, Reference, Tag } from '../Places/PlaceDetail';
 
 /* tslint:disable */
@@ -102,7 +102,7 @@ export const places = [{
 	perex: 'This 14-century bridge connects the Old Town with Lesser Town and the Prague Castle. With its length of 621 meters, solid Gothic stone…',
 	url: 'https://alpha.travel.sygic.com/go/poi:345430',
 	thumbnailUrl: 'https://alpha-media-cdn.sygictraveldata.com/media/poi:345430',
-	price: null as Price,
+	price: null,
 	marker: 'sightseeing:art:artwork',
 	categories: ['sightseeing'],
 	parents: ['city:5', 'region:26009', 'region:26011', 'country:5', 'continent:1'],
@@ -125,7 +125,7 @@ export const mappedMedia = {
 			externalId: 'File:Paris - Eiffelturm und Marsfeld2.jpg'
 		} as Media.Source,
 		type: 'photo',
-		createdBy: null,
+		createdBy: 'x',
 		url: 'https://media-cdn.sygictraveldata.com/media/612664395a40232133447d33247d383632393531.jpg',
 		quadkey: null,
 		attribution: {

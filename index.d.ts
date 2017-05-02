@@ -1,180 +1,49 @@
-export function create(apiUrl: string, clientKey: string): SdkBrowser;
+import * as _Geo from './src/Geo';
+import * as _Media from './src/Media/Media';
+import * as _Place from './src/Places';
+import * as _Spread from './src/Spread';
 
-export interface SdkBrowser {
-	getPlaces(filter: Places.PlacesFilterJSON): Promise<Places.Place[]>;
-	getPlaceDetailed(guid: string, photoSize: string): Promise<Places.Place>;
-	getPlaceMedia(guid: string): Promise<Media.Medium[]>;
-	spreadPlacesOnMap(
-		places: Places.Place[],
-		markerSizes: Spread.SpreadSizeConfig[],
-		bounds: Geo.Bounds,
-		canvas: Spread.CanvasSize
-	): Spread.SpreadResult;
+export function create(apiUrl: string, clientKey: string): StSDK;
+
+export class StSDK {
+	public getPlaces(filter: _Place.PlacesFilterJSON): Promise<_Place.Place[]>;
+	public getPlaceDetailed(guid: string, photoSize: string): Promise<_Place.Place>;
+	public getPlaceMedia(guid: string): Promise<_Media.Medium[]>;
+	public spreadPlacesOnMap(
+		places: _Place.Place[],
+		markerSizes: _Spread.SpreadSizeConfig[],
+		bounds: _Geo.Bounds,
+		canvas: _Spread.CanvasSize
+	): _Spread.SpreadResult;
 }
 
 export namespace Places {
-	export interface PlacesFilterJSON {
-		query?: string;
-		mapTile?: string;
-		mapSpread?: number;
-		categories?: string[];
-		tags?: string[];
-		parent?: string;
-		level?: string;
-		limit?: number;
-		bounds?: Geo.Bounds;
-		zoom?: number;
-	}
-
-	export interface Place {
-		guid: string;
-		level: string;
-		rating: number;
-		location: Geo.Location;
-		quadkey: string;
-		name: string;
-		nameSuffix: string;
-		boundingBox: Geo.Bounds;
-		perex: string;
-		url: string;
-		thumbnailUrl: string;
-		price: Price;
-		marker: string;
-		categories: string[];
-		parents: string[];
-		detail: PlaceDetail;
-	}
-
-	export interface Price {
-		value: number;
-		savings: number;
-	}
-
-	export interface PlaceDetail {
-		tags: Tag[];
-		address: string;
-		admission: string;
-		description: Description;
-		email: string;
-		duration: number;
-		openingHours: string;
-		phone: string;
-		media: Media.MainMedia;
-		references: Reference[];
-	}
-
-	export interface Reference {
-		id: number;
-		title: string;
-		type: string;
-		languageId: string;
-		url: string;
-		supplier: string;
-		priority: number;
-		currency: string;
-		price: number;
-		flags: string[];
-	}
-
-	export interface Tag {
-		key: string;
-		name: string;
-	}
-
-	export interface Description {
-		text: string;
-		provider: string;
-		translationProvider: string;
-	}
+	export import Place = _Place.Place;
+	export import PlacesFilterJSON = _Place.PlacesFilterJSON;
+	export import Price = _Place.Price;
+	export import PlaceDetail = _Place.PlaceDetail;
+	export import Reference = _Place.Reference;
+	export import Tag = _Place.Tag;
+	export import Description = _Place.Description;
 }
 
 export namespace Geo {
-	export interface Bounds {
-		south: number;
-		west: number;
-		north: number;
-		east: number;
-	}
-
-	export interface Location {
-		lat: number;
-		lng: number;
-	}
-
-	export interface Coordinate {
-		x: number;
-		y: number;
-	}
+	export import Bounds = _Geo.Bounds;
+	export import Location = _Geo.Location;
+	export import Coordinate = _Geo.Coordinate;
 }
 
 export namespace Media {
-	export interface MainMedia {
-		square: Medium;
-		videoPreview?: Medium;
-		portrait: Medium;
-		landscape: Medium;
-	}
-
-	export interface Medium {
-		original: Original;
-		suitability: string[];
-		urlTemplate: string;
-		createdAt: string;
-		source: Source;
-		type: string;
-		createdBy: string;
-		url: string;
-		quadkey: string;
-		attribution: Attribution;
-		guid: string;
-		location: Geo.Location;
-	}
-
-	export interface Attribution {
-		titleUrl: string;
-		license: string;
-		other: string;
-		authorUrl: string;
-		author: string;
-		title: string;
-		licenseUrl: string;
-	}
-
-	export interface Source {
-		provider: string;
-		name: string;
-		externalId: string;
-	}
-
-	export interface Original {
-		size: number;
-		width: number;
-		height: number;
-	}
+	export import MainMedia = _Media.MainMedia;
+	export import Medium = _Media.Medium;
+	export import Attribution = _Media.Attribution;
+	export import Source = _Media.Source;
+	export import Original = _Media.Original;
 }
 
 export namespace Spread {
-	export interface SpreadSizeConfig {
-		radius: number;
-		margin: number;
-		name: string;
-		photoRequired?: boolean;
-		minimalRating?: number;
-	}
-
-	export interface CanvasSize {
-		width: number;
-		height: number;
-	}
-
-	export interface SpreadResult {
-		visible: SpreadedPlace[];
-		hidden: Places.Place[];
-	}
-
-	interface SpreadedPlace {
-		place: Places.Place;
-		coordinate: Geo.Coordinate;
-		size: SpreadSizeConfig;
-	}
+	export import SpreadSizeConfig = _Spread.SpreadSizeConfig;
+	export import CanvasSize = _Spread.CanvasSize;
+	export import SpreadResult = _Spread.SpreadResult;
+	export import SpreadedPlace = _Spread.SpreadedPlace;
 }

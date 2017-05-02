@@ -1,5 +1,5 @@
 import * as chai from 'chai';
-import { Location, locationToCanvasCoordinate, locationToTileCoordinate, normalizeLng } from './Location';
+import { locationToCanvasCoordinate, locationToTileCoordinate, normalizeLng } from './Location';
 
 describe('Location', () => {
 	describe('#locationToTileCoordinate', () => {

@@ -1,1 +1,1 @@
-module.exports = require('./dist/web-sdk');
+module.exports = require('./dist/SygicTravelSDK');

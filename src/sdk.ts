@@ -1,5 +1,5 @@
-import SdkBrowser from './SdkBrowser';
+import StSDK from './StSDK';
 
-export function create(apiUrl: string, clientKey: string): SdkBrowser {
-	return new SdkBrowser(apiUrl, clientKey);
+export function create(apiUrl: string, clientKey: string): StSDK {
+	return new StSDK(apiUrl, clientKey);
 }
