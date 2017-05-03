@@ -3,6 +3,7 @@ import { Bounds } from './Geo';
 import { Medium } from './Media';
 import { getPlaceDetailed, getPlaceMedia, getPlaces, Place, PlacesFilter, PlacesFilterJSON } from './Places';
 import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from './Spread';
+import { getTripDetailed, getTrips, Trip } from './Trip';
 
 export default class StSDK extends BaseSDK {
 	public getPlaces(filter: PlacesFilterJSON): Promise<Place[]> {
@@ -24,5 +25,13 @@ export default class StSDK extends BaseSDK {
 		canvas: CanvasSize
 	): SpreadResult {
 		return spread(places, markerSizes, bounds, canvas);
+	}
+
+	public getTrips(dateFrom: string, dateTo: string): Promise<Trip[]> {
+		return getTrips(dateFrom, dateTo);
+	}
+
+	public getTripDetailed(id: string): Promise<Trip> {
+		return getTripDetailed(id);
 	}
 }
