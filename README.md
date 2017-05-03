@@ -16,7 +16,7 @@ You can also check out our [API Documentation](http://docs.sygictravelapi.com/js
 
 ## Installation
 You can get the UMD build from the CDN, which you can include to your document,
-```
+```html
 <script src=“cdn.travel.sygic.com/js-sdk/v0.1.0/SygicTravelSDK.js”></script>
 ```
 or install it using Yarn or NPM (Typescript types included).
@@ -47,7 +47,7 @@ Fetches a list of places according to the applied filter.
 ##### Returns:
 - [`Promise<Places.Place[]>`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_places_place_.place.html)
 
-```
+```ts
 const placeFilter: SygicTravelSDK.Places.PlacesFilterJSON = {
     query: null, // text query, for example from a search input field
     mapTile: null,
@@ -64,6 +64,7 @@ const placeFilter: SygicTravelSDK.Places.PlacesFilterJSON = {
     level: null,
     limit: 20
 };
+
 stSDK.getPlaces(placeFilter).then((places: SygicTravelSDK.Places.Place[]) => {
     console.log(places);
 });
@@ -99,7 +100,7 @@ Will calculate positions of places (map markers) according to spread configurati
 #### Returns:
 - [`Spread.SpreadResult`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_spread_spreader_.spreadresult.html)
 
-```
+```ts
 const placeFilter: SygicTravelSDK.Places.PlacesFilterJSON = {
     query: null,
     mapTile: null,
@@ -109,6 +110,7 @@ const placeFilter: SygicTravelSDK.Places.PlacesFilterJSON = {
     parent: ‘city:1’,
     level: null
 };
+
 const markerSizes: Spread.SpreadSizeConfig[] = [{
     name: ‘popular’, // name of group that will be spread in result
     radius: 30, // radius around the place that won’t be crossed with another place
@@ -132,12 +134,14 @@ const markerSizes: Spread.SpreadSizeConfig[] = [{
     margin: 5,
     photoRequired: false
 }];
+
 const bounds: SygicTravelSDK.Geo.Bounds = {
     south: 51.44705,
     west: -0.25817,
     north: 51.56736,
     east: 0.071411
 }
+
 // map canvas size
 const canvasSize: SygicTravelSDK.Spread.CanvasSize = {
     width: 1024,
