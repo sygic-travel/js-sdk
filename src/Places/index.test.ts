@@ -1,19 +1,19 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
+import { SinonSandbox } from 'sinon';
 import * as sinon from 'sinon';
 
 import { setEnvironment } from '../Settings';
-import * as ExpectedResults from '../TestData/PlacesExpectedResults';
 import * as Xhr from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
 import { PlacesFilter, PlacesFilterJSON } from './Filter';
 import * as PlacesController from './index';
 
 import * as TestData from '../TestData/PlacesApiResponses';
+import * as ExpectedResults from '../TestData/PlacesExpectedResults';
 
+let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
-
-let sandbox;
 
 describe('PlacesController', () => {
 	before((done) => {
