@@ -13,22 +13,22 @@ axiosInstance.interceptors.request.use((config) => {
 
 export async function get(url: string): Promise<ApiResponse> {
 	const response = await axiosInstance.get(url, {
-		baseURL: buildBaseUrl(),
+		baseURL: buildBaseUrl(url),
 		headers: buildHeaders()
 	});
 
 	return new ApiResponse(
-		response.data.status,
 		response.data.status_code,
-		response.data.status_message,
 		response.data.data
 	);
 }
 
-function buildBaseUrl(): string {
+function buildBaseUrl(url: string): string {
 	let baseUrl: string = getApiUrl();
 	const apiKey: string | null = getApiKey();
-	if (apiKey) {
+
+	// TODO Revert these changes
+	if (apiKey && url.indexOf('places') < 0) {
 		baseUrl = baseUrl + apiKey;
 	}
 	return baseUrl;
