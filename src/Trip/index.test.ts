@@ -64,39 +64,27 @@ describe('TripController', () => {
 		it('should correctly map api response', () => {
 			const stub = sandbox.stub(Xhr, 'get');
 
-			stub.onCall(0).returns(new Promise<ApiResponse>((resolve) => {
+			stub.onFirstCall().returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, TripTestData.tripDetail));
 			}));
 
-			stub.onCall(1).returns(new Promise<ApiResponse>((resolve) => {
+			stub.onSecondCall().returns(new Promise<ApiResponse>((resolve) => {
 				const responsePlace1 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				responsePlace1.guid = 'poi:51098';
-				resolve(new ApiResponse('200', 200, '', {
-					place: responsePlace1
-				}));
-			}));
-
-			stub.onCall(2).returns(new Promise<ApiResponse>((resolve) => {
 				const responsePlace2 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				responsePlace2.guid = 'poi:48056';
-				resolve(new ApiResponse('200', 200, '', {
-					place: responsePlace2
-				}));
-			}));
-
-			stub.onCall(3).returns(new Promise<ApiResponse>((resolve) => {
 				const responsePlace3 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				responsePlace3.guid = 'poi:48015';
-				resolve(new ApiResponse('200', 200, '', {
-					place: responsePlace3
-				}));
-			}));
-
-			stub.onCall(4).returns(new Promise<ApiResponse>((resolve) => {
 				const responsePlace4 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				responsePlace4.guid = 'poi:48071';
-				resolve(new ApiResponse('200', 200, '', {
-					place: responsePlace4
+				responsePlace1.id = 'poi:51098';
+				responsePlace2.id = 'poi:48056';
+				responsePlace3.id = 'poi:48015';
+				responsePlace4.id = 'poi:48071';
+
+				resolve(new ApiResponse(200, {
+					places: [
+						responsePlace1,
+						responsePlace2,
+						responsePlace3,
+						responsePlace4
+					]
 				}));
 			}));
 

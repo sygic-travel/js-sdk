@@ -43,6 +43,28 @@ describe('PlacesController', () => {
 		});
 	});
 
+	describe('#getPlaceDetailedBatch', () => {
+		it('should correctly map api response', () => {
+			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, {
+					places: [
+						TestData.placeDetailedEiffelTowerWithoutMedia.place,
+						TestData.placeDetailedEiffelTowerWithoutMedia.place
+					]
+				}));
+			}));
+
+			const guid = 'region:1948650';
+			const photoSize = '150x150';
+
+			return chai.expect(PlacesController.getPlaceDetailedBatch([guid, guid], photoSize))
+				.to.eventually.deep.equal([
+					ExpectedResults.placeDetailedEiffelTowerWithoutMedia,
+					ExpectedResults.placeDetailedEiffelTowerWithoutMedia
+				]);
+		});
+	});
+
 	describe('#getPlaces', () => {
 		it('should throw and exception when response without places came', () => {
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {

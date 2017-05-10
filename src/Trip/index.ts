@@ -1,9 +1,12 @@
 import { stringify } from 'query-string';
 
-import { getPlaceDetailed } from '../Places/index';
+import { getPlaceDetailedBatch } from '../Places/index';
 import { Place } from '../Places/Place';
 import { get } from '../Xhr';
-import { mapTripDetailedApiResponseToTrip, mapTripListApiResponseToTripsList } from './Mapper';
+import {
+	mapTripDetailedApiResponseToTrip,
+	mapTripListApiResponseToTripsList
+} from './Mapper';
 import { Day, ItineraryItem, Trip } from './Trip';
 
 export {
@@ -37,14 +40,7 @@ export async function getTripDetailed(id: string): Promise<Trip> {
 
 async function addPlacesToTrip(tripWithoutPlaces: Trip): Promise<Trip> {
 	const placesGuids: string[] = getPlacesGuidsFromTrip(tripWithoutPlaces);
-	const placeDetailedCalls: Promise<Place>[] = [];
-
-	for (const placeGuid of placesGuids) {
-		placeDetailedCalls.push(getPlaceDetailed(placeGuid, '300x300'));
-	}
-
-	const mappedPlaces: Place[] = await Promise.all(placeDetailedCalls);
-	return putPlacesToTrip(tripWithoutPlaces, mappedPlaces);
+	return putPlacesToTrip(tripWithoutPlaces, await getPlaceDetailedBatch(placesGuids, '300x300'));
 }
 
 export function getPlacesGuidsFromTrip(trip: Trip): string[] {

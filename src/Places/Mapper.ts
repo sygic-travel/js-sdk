@@ -21,6 +21,14 @@ export const mapPlaceDetailedApiResponseToPlace = (apiResponse: ApiResponse, pho
 	return mapPlace(place, detail);
 };
 
+export const mapPlaceDetailedBatchApiResponseToPlaces = (apiResponse: ApiResponse, photoSize): Place[] => {
+	const places = apiResponse.data.places;
+	return places.map((place) => {
+		const detail = mapPlaceDetail(place, photoSize);
+		return mapPlace(place, detail);
+	});
+};
+
 const mapPlace = (place, detail: PlaceDetail | null) => {
 	return {
 		id: place.id,
