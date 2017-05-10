@@ -30,7 +30,7 @@ export interface Medium {
 	url: string;
 	quadkey: string | null;
 	attribution: Attribution;
-	guid: string;
+	id: string;
 	location: Location | null;
 }
 

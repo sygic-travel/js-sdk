@@ -25,8 +25,8 @@ export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
 	return mapPlaceApiResponseToPlaces(apiResponse);
 }
 
-export async function getPlaceDetailed(guid: string, photoSize: string): Promise<Place> {
-	const apiResponse = await get('place-details/' + guid);
+export async function getPlaceDetailed(id: string, photoSize: string): Promise<Place> {
+	const apiResponse = await get('places/' + id);
 	if (!apiResponse.data.hasOwnProperty('place')) {
 		throw new Error('Wrong API response');
 	}

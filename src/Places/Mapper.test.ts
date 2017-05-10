@@ -25,7 +25,7 @@ describe('PlacesMapper', () => {
 	describe('#mapPlaceApiResponseToPlaces', () => {
 
 		it('should correctly map api response to array of Places', () => {
-			const apiResponse: ApiResponse = new ApiResponse('200', 200, '', ApiResponses.places);
+			const apiResponse: ApiResponse = new ApiResponse(200, ApiResponses.places);
 
 			return chai.expect(Mapper.mapPlaceApiResponseToPlaces(apiResponse)).to.deep.equal(ExpectedResults.places);
 		});
@@ -33,7 +33,7 @@ describe('PlacesMapper', () => {
 
 	describe('#mapPlaceDetailedApiResponseToPlace', () => {
 		it('should correctly map api response to single Place with PlaceDetail', () => {
-			const apiResponse: ApiResponse = new ApiResponse('200', 200, '', ApiResponses.placeDetailedEiffelTowerWithoutMedia);
+			const apiResponse: ApiResponse = new ApiResponse(200, ApiResponses.placeDetailedEiffelTowerWithoutMedia);
 
 			return chai.expect(Mapper.mapPlaceDetailedApiResponseToPlace(apiResponse, '400x400'))
 				.to.deep.equal(ExpectedResults.placeDetailedEiffelTowerWithoutMedia);

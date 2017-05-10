@@ -1,7 +1,7 @@
 /* tslint:disable */
 export const placeDetailedEiffelTowerWithoutMedia = {
 	"place": {
-		"guid": "poi:530",
+		"id": "poi:530",
 		"level": "poi",
 		"rating": 7.9110977331847,
 		"quadkey": "120220011012000332",
@@ -18,7 +18,7 @@ export const placeDetailedEiffelTowerWithoutMedia = {
 		"categories": [
 			"sightseeing"
 		],
-		"parent_guids": [
+		"parent_ids": [
 			"city:14",
 			"region:303",
 			"country:14",
@@ -125,7 +125,7 @@ export const placeDetailMedia = {
 				"title": "Paris: The Eiffel Tower and the Champ de Mars",
 				"license_url": "http://creativecommons.org/licenses/by/3.0"
 			},
-			"guid": "m:62951",
+			"id": "m:62951",
 			"location": null
 		},
 		{
@@ -157,7 +157,7 @@ export const placeDetailMedia = {
 				"title": "Tour Eiffel",
 				"license_url": "http://creativecommons.org/licenses/by-sa/3.0"
 			},
-			"guid": "m:2420002",
+			"id": "m:2420002",
 			"location": {
 				"lat": 48.858333,
 				"lng": 2.294444
@@ -192,7 +192,7 @@ export const placeDetailMedia = {
 				"title": "Southeast face of the Eiffel Tower in Paris.",
 				"license_url": "http://creativecommons.org/licenses/by-sa/4.0"
 			},
-			"guid": "m:36593397",
+			"id": "m:36593397",
 			"location": {
 				"lat": 48.856733,
 				"lng": 2.297
@@ -204,7 +204,7 @@ export const placeDetailMedia = {
 export const places = {
 	places: [
 		{
-			"guid": "poi:345430",
+			"id": "poi:345430",
 			"level": "poi",
 			"rating": 10.004,
 			"quadkey": "120212302033311321",
@@ -221,7 +221,7 @@ export const places = {
 			"categories": [
 				"sightseeing"
 			],
-			"parent_guids": [
+			"parent_ids": [
 				"city:5",
 				"region:26009",
 				"region:26011",

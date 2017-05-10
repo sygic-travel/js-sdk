@@ -32,7 +32,7 @@ describe('PlacesController', () => {
 	describe('#getPlaceDetailed', () => {
 		it('should correctly map api response', () => {
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
-				resolve(new ApiResponse('200', 200, '', TestData.placeDetailedEiffelTowerWithoutMedia));
+				resolve(new ApiResponse(200, TestData.placeDetailedEiffelTowerWithoutMedia));
 			}));
 
 			const guid = 'region:1948650';
@@ -46,7 +46,7 @@ describe('PlacesController', () => {
 	describe('#getPlaces', () => {
 		it('should throw and exception when response without places came', () => {
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
-				resolve(new ApiResponse('200', 200, '', {}));
+				resolve(new ApiResponse(200, {}));
 			}));
 
 			const placesFilterJSON: PlacesFilterJSON = {
@@ -61,7 +61,7 @@ describe('PlacesController', () => {
 
 		it('should return array of places', () => {
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
-				resolve(new ApiResponse('200', 200, '', TestData.places));
+				resolve(new ApiResponse(200, TestData.places));
 			}));
 
 			const placesFilterJSON: PlacesFilterJSON = {
@@ -77,7 +77,7 @@ describe('PlacesController', () => {
 
 		it('should correctly map api response', () => {
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
-				resolve(new ApiResponse('200', 200, '', TestData.places));
+				resolve(new ApiResponse(200, TestData.places));
 			}));
 
 			const placesFilterJSON: PlacesFilterJSON = {

@@ -31,10 +31,10 @@ const itineraryPlace1 = Object.assign({}, placeDetailedEiffelTowerWithoutMedia);
 const itineraryPlace2 = Object.assign({}, placeDetailedEiffelTowerWithoutMedia);
 const itineraryPlace3 = Object.assign({}, placeDetailedEiffelTowerWithoutMedia);
 const itineraryPlace4 = Object.assign({}, placeDetailedEiffelTowerWithoutMedia);
-itineraryPlace1.guid = 'poi:51098';
-itineraryPlace2.guid = 'poi:48056';
-itineraryPlace3.guid = 'poi:48015';
-itineraryPlace4.guid = 'poi:48071';
+itineraryPlace1.id = 'poi:51098';
+itineraryPlace2.id = 'poi:48056';
+itineraryPlace3.id = 'poi:48015';
+itineraryPlace4.id = 'poi:48071';
 
 export const tripDetailed = {
 	id: '58c6bce821287',

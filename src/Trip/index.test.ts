@@ -32,21 +32,21 @@ describe('TripController', () => {
 	describe('#getTrips', () => {
 		it('should throw an exception when response without trips came', () => {
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
-				resolve(new ApiResponse('200', 200, '', {}));
+				resolve(new ApiResponse(200, {}));
 			}));
 			return chai.expect(TripController.getTrips('2017-04-23', '2017-04-24')).to.be.rejected;
 		});
 
 		it('should return array of trips', () => {
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
-				resolve(new ApiResponse('200', 200, '', TripTestData.tripsList));
+				resolve(new ApiResponse(200, TripTestData.tripsList));
 			}));
 			return chai.expect(TripController.getTrips('2017-04-23', '2017-04-24')).to.eventually.have.lengthOf(1);
 		});
 
 		it('should correctly map api response', () => {
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
-				resolve(new ApiResponse('200', 200, '', TripTestData.tripsList));
+				resolve(new ApiResponse(200, TripTestData.tripsList));
 			}));
 			return chai.expect(TripController.getTrips('2017-04-23', '2017-04-24'))
 				.to.eventually.deep.equal(TripExpectedResults.tripList);
@@ -56,7 +56,7 @@ describe('TripController', () => {
 	describe('#getTripDetailed', () => {
 		it('should throw an exception when response without trip came', () => {
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
-				resolve(new ApiResponse('200', 200, '', {}));
+				resolve(new ApiResponse(200, {}));
 			}));
 			return chai.expect(TripController.getTripDetailed('1234567890')).to.be.rejected;
 		});
@@ -65,7 +65,7 @@ describe('TripController', () => {
 			const stub = sandbox.stub(Xhr, 'get');
 
 			stub.onCall(0).returns(new Promise<ApiResponse>((resolve) => {
-				resolve(new ApiResponse('200', 200, '', TripTestData.tripDetail));
+				resolve(new ApiResponse(200, TripTestData.tripDetail));
 			}));
 
 			stub.onCall(1).returns(new Promise<ApiResponse>((resolve) => {

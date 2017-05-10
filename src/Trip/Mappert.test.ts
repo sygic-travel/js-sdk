@@ -11,7 +11,7 @@ chai.use(chaiAsPromised);
 describe('TripMapper', () => {
 	describe('#mapTripListApiResponseToTripsList', () => {
 		it('should correctly map api response to array of Trips', () => {
-			const apiResponse: ApiResponse = new ApiResponse('200', 200, '', ApiResponses.tripsList);
+			const apiResponse: ApiResponse = new ApiResponse(200, ApiResponses.tripsList);
 			return chai.expect(Mapper.mapTripListApiResponseToTripsList(apiResponse)).to.deep.equal(ExpectedResults.tripList);
 		});
 	});

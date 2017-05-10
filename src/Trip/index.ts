@@ -62,7 +62,7 @@ export function getPlacesGuidsFromTrip(trip: Trip): string[] {
 function putPlacesToTrip(trip: Trip, places: Place[]): Trip {
 	if (trip.days) {
 		trip.days.forEach((day: Day) => day.itinerary.forEach((itineraryItem: ItineraryItem) => {
-			const filteredPlaces: Place[] = places.filter((place: Place) => (place.guid === itineraryItem.placeId));
+			const filteredPlaces: Place[] = places.filter((place: Place) => (place.id === itineraryItem.placeId));
 			if (filteredPlaces.length > 0) {
 				itineraryItem.place = filteredPlaces[0];
 			}

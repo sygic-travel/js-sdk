@@ -5,7 +5,7 @@ import { Description, PlaceDetail, Reference, Tag } from '../Places/PlaceDetail'
 
 /* tslint:disable */
 export const placeDetailedEiffelTowerWithoutMedia: Place = {
-	guid: 'poi:530',
+	id: 'poi:530',
 	level: 'poi',
 	marker: 'sightseeing:tower:lookout:observation',
 	rating: 7.9110977331847,
@@ -88,7 +88,7 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 };
 
 export const places = [{
-	guid: 'poi:345430',
+	id: 'poi:345430',
 	level: 'poi',
 	rating: 10.004,
 	location: {
@@ -137,7 +137,7 @@ export const mappedMedia = {
 			title: 'Paris: The Eiffel Tower and the Champ de Mars',
 			licenseUrl: 'http://creativecommons.org/licenses/by/3.0'
 		} as Media.Attribution,
-		guid: 'm:62951',
+		id: 'm:62951',
 		location: null
 	} as Media.Medium,
 	portrait: {
@@ -167,7 +167,7 @@ export const mappedMedia = {
 			title: 'Southeast face of the Eiffel Tower in Paris.',
 			licenseUrl: 'http://creativecommons.org/licenses/by-sa/4.0'
 		} as Media.Attribution,
-		guid: 'm:36593397',
+		id: 'm:36593397',
 		location: {
 			lat: 48.856733,
 			lng: 2.297
@@ -200,7 +200,7 @@ export const mappedMedia = {
 			title: 'Tour Eiffel',
 			licenseUrl: 'http://creativecommons.org/licenses/by-sa/3.0'
 		} as Media.Attribution,
-		guid: 'm:2420002',
+		id: 'm:2420002',
 		location: {
 			lat: 48.858333,
 			lng: 2.294444

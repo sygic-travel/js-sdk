@@ -14,7 +14,7 @@ const canvas: CanvasSize = {
 	height: 50
 };
 const place: Place = {
-	guid: 'poi:1',
+	id: 'poi:1',
 	level: 'poi',
 	rating: 10,
 	quadkey: '0123',
@@ -117,7 +117,7 @@ describe('Spreader', () => {
 		];
 		const place2 = Object.assign({}, place);
 		place2.location = {lat: 0.3, lng: 0.3};
-		place2.guid = 'poi:2';
+		place2.id = 'poi:2';
 		const spreaded = spread([place, place2], sizes, bounds, canvas);
 		chai.expect(spreaded.hidden.length).to.equal(0);
 		chai.expect(spreaded.visible.length).to.equal(2);

@@ -7,7 +7,7 @@ export function getPlaces(filter: PlacesFilter): Promise<ApiResponse> {
 	if (filter.mapSpread) {
 		return getPlacesWitMapSpread(filter);
 	}
-	return xhrGet('places?' + filter.toQueryString());
+	return xhrGet('places/list?' + filter.toQueryString());
 }
 
 const getPlacesWitMapSpread = async (filter: PlacesFilter): Promise<ApiResponse>  => {
@@ -22,9 +22,9 @@ const getPlacesWitMapSpread = async (filter: PlacesFilter): Promise<ApiResponse>
 		apiFilter = apiFilter.cloneSetMapTile(mapTile);
 		const promise = new Promise(async (success) => {
 			try {
-				success(await xhrGet('places?' + apiFilter.toQueryString()));
+				success(await xhrGet('places/list?' + apiFilter.toQueryString()));
 			} catch (error) {
-				success(new ApiResponse('', 200, '', {places: []}));
+				success(new ApiResponse( 200, {places: []}));
 			}
 		});
 		apiResults.push(promise);
@@ -32,11 +32,10 @@ const getPlacesWitMapSpread = async (filter: PlacesFilter): Promise<ApiResponse>
 
 	const responses = await Promise.all(apiResults);
 	const finalResponse: ApiResponse = responses.reduce((result: ApiResponse, response: ApiResponse): ApiResponse => {
-		result.statusMessage = response.statusMessage;
 		result.statusCode = response.statusCode;
 		result.data.places = result.data.places.concat(response.data.places);
 		return result;
-	}, new ApiResponse('', 200, '', {places: []}));
+	}, new ApiResponse(200, {places: []}));
 
 	finalResponse.data.places = finalResponse.data.places.sort((a, b) => {
 		if (a.rating > b.rating) { return -1; }
