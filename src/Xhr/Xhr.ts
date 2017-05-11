@@ -4,7 +4,7 @@ import { ApiResponse } from './ApiResponse';
 
 export const axiosInstance: AxiosInstance = axios.create();
 
-axiosInstance.interceptors.request.use((config) => {
+axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
 	if (!config.baseURL) {
 		throw new Error('API Url not set');
 	}
@@ -17,7 +17,7 @@ export async function get(url: string): Promise<ApiResponse> {
 }
 
 export async function post(url: string, requestData): Promise<ApiResponse> {
-	const response = await axiosInstance.post(url, buildRequestConfig(url, requestData));
+	const response = await axiosInstance.post(url, requestData, buildRequestConfig(url));
 	return buildApiResponse(response);
 }
 
