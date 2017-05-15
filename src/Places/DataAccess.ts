@@ -1,7 +1,17 @@
 import { stringify } from 'query-string';
 
+import * as api from '../Api';
 import { placesDetailedCache as cache } from '../Cache';
 import { get } from '../Xhr';
+import { PlacesFilter } from './Filter';
+
+export async function getPlaces(filter: PlacesFilter): Promise<any> {
+	const apiResponse = await api.getPlaces(filter);
+	if (!apiResponse.data.hasOwnProperty('places')) {
+		throw new Error('Wrong API response');
+	}
+	return apiResponse.data.places;
+}
 
 export async function getPlaceDetailed(id: string): Promise<any> {
 	let result = null;
@@ -64,4 +74,12 @@ export async function getPlaceDetailedBatch(ids: string[]): Promise<any[]> {
 
 		return fromApi[0];
 	});
+}
+
+export async function getPlaceMedia(id: string): Promise<any[]> {
+	const apiResponse = await get('places/' + id + '/media');
+	if (!apiResponse.data.hasOwnProperty('media')) {
+		throw new Error('Wrong API response');
+	}
+	return apiResponse.data.media;
 }

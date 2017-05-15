@@ -9,6 +9,7 @@ import * as TestData from '../TestData/PlacesApiResponses';
 import * as Xhr from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
 import * as Dao from './DataAccess';
+import { PlacesFilter, PlacesFilterJSON } from './Filter';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
@@ -26,6 +27,24 @@ describe('PlacesDataAccess', () => {
 
 	afterEach(() => {
 		sandbox.restore();
+	});
+
+	describe('#getPlaces', () => {
+		it('should just recall api and return places', () => {
+			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, TestData.places));
+			}));
+
+			const placesFilterJSON: PlacesFilterJSON = {
+				categories: ['eating'],
+				limit: 20,
+				parent: 'city:1',
+				tags: []
+			};
+
+			return chai.expect(Dao.getPlaces(new PlacesFilter(placesFilterJSON)))
+				.to.eventually.deep.equal(TestData.places.places);
+		});
 	});
 
 	describe('#getPlaceDetailed', () => {
@@ -122,6 +141,19 @@ describe('PlacesDataAccess', () => {
 				place3,
 				place4
 			]);
+		});
+	});
+
+	describe('#getPlaceMedia', () => {
+		it('should just recall api and return media', () => {
+			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, {
+					media: TestData.placeDetailMedia.media
+				}));
+			}));
+
+			return chai.expect(Dao.getPlaceMedia('poi:530'))
+				.to.eventually.deep.equal(TestData.placeDetailMedia.media);
 		});
 	});
 });

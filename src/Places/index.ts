@@ -1,7 +1,5 @@
-import * as api from '../Api';
 import { Medium } from '../Media/Media';
 import * as Dao from './DataAccess';
-import { get } from '../Xhr';
 import { PlacesFilter, PlacesFilterJSON } from './Filter';
 import {
 	mapPlaceApiResponseToPlaces, mapPlaceDetailedApiResponseToPlace,
@@ -22,11 +20,8 @@ export {
 }
 
 export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
-	const apiResponse = await api.getPlaces(filter);
-	if (!apiResponse.data.hasOwnProperty('places')) {
-		throw new Error('Wrong API response');
-	}
-	return mapPlaceApiResponseToPlaces(apiResponse.data.places);
+	const places: any[] = await Dao.getPlaces(filter);
+	return mapPlaceApiResponseToPlaces(places);
 }
 
 export async function getPlaceDetailed(id: string, photoSize: string): Promise<Place> {
@@ -40,9 +35,6 @@ export async function getPlaceDetailedBatch(ids: string[], photoSize: string): P
 }
 
 export async function getPlaceMedia(id: string): Promise<Medium[]> {
-	const apiResponse = await get('places/' + id + '/media');
-	if (!apiResponse.data.hasOwnProperty('media')) {
-		throw new Error('Wrong API response');
-	}
-	return apiResponse.data.media.map((media: any) => media as Medium);
+	const media: any[] = await Dao.getPlaceMedia(id);
+	return media.map((mediaItem: any) => mediaItem as Medium);
 }
