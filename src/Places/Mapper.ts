@@ -3,26 +3,23 @@ import { camelizeKeys } from 'humps';
 import { Location } from '../Geo';
 import { Bounds } from '../Geo/Bounds';
 import { MainMedia } from '../Media/Media';
-import { ApiResponse } from '../Xhr/ApiResponse';
 import { Place, Price } from './Place';
 import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
 
 const defaultPhotoSize = '300x300';
 
-export const mapPlaceApiResponseToPlaces = (apiResponse: ApiResponse): Place[] => {
-	return apiResponse.data.places.map((place) => {
+export const mapPlaceApiResponseToPlaces = (places: any): Place[] => {
+	return places.map((place) => {
 		return mapPlace(place, null);
 	});
 };
 
-export const mapPlaceDetailedApiResponseToPlace = (apiResponse: ApiResponse, photoSize): Place => {
-	const place = apiResponse.data.place;
+export const mapPlaceDetailedApiResponseToPlace = (place: any, photoSize: string): Place => {
 	const detail = mapPlaceDetail(place, photoSize);
 	return mapPlace(place, detail);
 };
 
-export const mapPlaceDetailedBatchApiResponseToPlaces = (apiResponse: ApiResponse, photoSize): Place[] => {
-	const places = apiResponse.data.places;
+export const mapPlaceDetailedBatchApiResponseToPlaces = (places: any, photoSize: string): Place[] => {
 	return places.map((place) => {
 		const detail = mapPlaceDetail(place, photoSize);
 		return mapPlace(place, detail);

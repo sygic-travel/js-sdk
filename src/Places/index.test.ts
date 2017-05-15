@@ -45,23 +45,25 @@ describe('PlacesController', () => {
 
 	describe('#getPlaceDetailedBatch', () => {
 		it('should correctly map api response', () => {
+
+			const place1 = Object.assign({}, TestData.placeDetailedEiffelTowerWithoutMedia.place);
+			const place2 = Object.assign({}, TestData.placeDetailedEiffelTowerWithoutMedia.place);
+			place1.id = 'poi:1';
+			place2.id = 'poi:2';
+
+			const expectedResult1 = Object.assign({}, ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			const expectedResult2 = Object.assign({}, ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			expectedResult1.id = 'poi:1';
+			expectedResult2.id = 'poi:2';
+
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
-					places: [
-						TestData.placeDetailedEiffelTowerWithoutMedia.place,
-						TestData.placeDetailedEiffelTowerWithoutMedia.place
-					]
+					places: [place1, place2]
 				}));
 			}));
 
-			const guid = 'region:1948650';
-			const photoSize = '150x150';
-
-			return chai.expect(PlacesController.getPlaceDetailedBatch([guid, guid], photoSize))
-				.to.eventually.deep.equal([
-					ExpectedResults.placeDetailedEiffelTowerWithoutMedia,
-					ExpectedResults.placeDetailedEiffelTowerWithoutMedia
-				]);
+			return chai.expect(PlacesController.getPlaceDetailedBatch(['poi:1', 'poi:2'], '150x150'))
+				.to.eventually.deep.equal([expectedResult1, expectedResult2]);
 		});
 	});
 

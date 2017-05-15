@@ -1,7 +1,6 @@
-import { stringify } from 'query-string';
-
 import * as api from '../Api';
 import { Medium } from '../Media/Media';
+import * as Dao from './DataAccess';
 import { get } from '../Xhr';
 import { PlacesFilter, PlacesFilterJSON } from './Filter';
 import {
@@ -27,25 +26,17 @@ export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
 	if (!apiResponse.data.hasOwnProperty('places')) {
 		throw new Error('Wrong API response');
 	}
-	return mapPlaceApiResponseToPlaces(apiResponse);
+	return mapPlaceApiResponseToPlaces(apiResponse.data.places);
 }
 
 export async function getPlaceDetailed(id: string, photoSize: string): Promise<Place> {
-	const apiResponse = await get('places/' + id);
-	if (!apiResponse.data.hasOwnProperty('place')) {
-		throw new Error('Wrong API response');
-	}
-	return mapPlaceDetailedApiResponseToPlace(apiResponse, photoSize);
+	const place: any = await Dao.getPlaceDetailed(id);
+	return mapPlaceDetailedApiResponseToPlace(place, photoSize);
 }
 
 export async function getPlaceDetailedBatch(ids: string[], photoSize: string): Promise<Place[]> {
-	const apiResponse = await get('places/list?' + stringify({
-		ids: ids.join('|')
-	}));
-	if (!apiResponse.data.hasOwnProperty('places')) {
-		throw new Error('Wrong API response');
-	}
-	return mapPlaceDetailedBatchApiResponseToPlaces(apiResponse, photoSize);
+	const placeDetailedBatch: any[] = await Dao.getPlaceDetailedBatch(ids);
+	return mapPlaceDetailedBatchApiResponseToPlaces(placeDetailedBatch, photoSize);
 }
 
 export async function getPlaceMedia(id: string): Promise<Medium[]> {
