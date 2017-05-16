@@ -1,22 +1,10 @@
 export class ApiResponse {
-	private _status: string;
 	private _statusCode: number;
-	private _statusMessage: string;
 	private _data: any;
 
-	constructor(status: string, statusCode: number, statusMessage: string, data: object) {
-		this._status = status;
+	constructor(statusCode: number, data: object) {
 		this._statusCode = statusCode;
-		this._statusMessage = statusMessage;
 		this._data = data;
-	}
-
-	get status(): string {
-		return this._status;
-	}
-
-	set status(value: string) {
-		this._status = value;
 	}
 
 	get statusCode(): number {
@@ -25,14 +13,6 @@ export class ApiResponse {
 
 	set statusCode(value: number) {
 		this._statusCode = value;
-	}
-
-	get statusMessage(): string {
-		return this._statusMessage;
-	}
-
-	set statusMessage(value: string) {
-		this._statusMessage = value;
 	}
 
 	get data(): any {

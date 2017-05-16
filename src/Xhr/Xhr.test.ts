@@ -1,11 +1,14 @@
 import * as chai from 'chai';
 import * as Moxios from 'moxios';
 
-import { setEnvironment } from '../Settings';
+import { setEnvironment, setUserSession } from '../Settings';
 import { axiosInstance, get } from './Xhr';
 
 const testApiURL = 'https://test.api';
 const testClientKey = '987654321';
+
+const apiKey = '1234567890';
+const accessToken = '0987654321';
 
 describe('Xhr', () => {
 	before((done) => {
@@ -38,6 +41,31 @@ describe('Xhr', () => {
 				chai.expect(request.headers['x-api-key']).to.equal(testClientKey);
 				done();
 			});
+		});
+
+		it('should correctly set api key and call api with it', (done) => {
+			setUserSession(apiKey, null);
+			get('/');
+			Moxios.wait(() => {
+				const request = Moxios.requests.mostRecent();
+				chai.expect(request.url).to.equal(testApiURL + apiKey + '/');
+				done();
+			});
+		});
+
+		it('should correctly set access token and call api with it', (done) => {
+			setUserSession(null, accessToken);
+			get('/');
+			Moxios.wait(() => {
+				const request = Moxios.requests.mostRecent();
+				chai.expect(request.headers['Authorization']).to.equal('Bearer ' + accessToken);
+				done();
+			});
+		});
+
+		it('should throw error when api key and access token set passed together', () => {
+			return chai.expect(() => setUserSession(apiKey, accessToken))
+				.to.throw('Can\'t set session with both key and token.');
 		});
 	});
 });

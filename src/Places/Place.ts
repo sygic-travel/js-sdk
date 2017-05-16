@@ -3,7 +3,7 @@ import { Bounds } from '../Geo/Bounds';
 import { PlaceDetail} from './PlaceDetail';
 
 export interface Place {
-	guid: string;
+	id: string;
 	level: string;
 	categories: string[];
 	rating: number;

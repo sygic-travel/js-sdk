@@ -1,3 +1,2 @@
-import { get } from './Xhr';
-export { get };
+export { get } from './Xhr';
 export { ApiResponse } from './ApiResponse';

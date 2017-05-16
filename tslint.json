@@ -10,7 +10,8 @@
     "object-literal-sort-keys": false,
     "array-type": [true, "array"],
     "no-bitwise": false,
-    "no-namespace": false
+    "no-namespace": false,
+    "no-string-literal": false
   },
   "rulesDirectory": []
 }

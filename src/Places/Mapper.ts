@@ -21,9 +21,17 @@ export const mapPlaceDetailedApiResponseToPlace = (apiResponse: ApiResponse, pho
 	return mapPlace(place, detail);
 };
 
+export const mapPlaceDetailedBatchApiResponseToPlaces = (apiResponse: ApiResponse, photoSize): Place[] => {
+	const places = apiResponse.data.places;
+	return places.map((place) => {
+		const detail = mapPlaceDetail(place, photoSize);
+		return mapPlace(place, detail);
+	});
+};
+
 const mapPlace = (place, detail: PlaceDetail | null) => {
 	return {
-		guid: place.guid,
+		id: place.id,
 		level: place.level,
 		rating: place.rating,
 		location: place.location as Location,
@@ -37,7 +45,7 @@ const mapPlace = (place, detail: PlaceDetail | null) => {
 		price: place.price as Price,
 		marker: place.marker,
 		categories: place.categories,
-		parents: place.parent_guids,
+		parents: place.parent_ids,
 		detail
 	} as Place;
 };
@@ -69,9 +77,9 @@ export const mapMainMediaToMedia = (mainMedia, photoSize: string): MainMedia => 
 	};
 	if (mainMedia) {
 		Object.keys(mainMedia.usage).forEach((key) => {
-			const mediaGuid = mainMedia.usage[key];
+			const mediaId = mainMedia.usage[key];
 			mappedMedia[key] = mainMedia.media.reduce((acc, item) => {
-				if (item.guid === mediaGuid) {
+				if (item.id === mediaId) {
 					item.urlTemplate = item.urlTemplate.replace(/{size}/i, photoSize || defaultPhotoSize);
 					return item;
 				}

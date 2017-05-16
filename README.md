@@ -75,7 +75,7 @@ stSDK.getPlaces(placeFilter).then((places: SygicTravelSDK.Places.Place[]) => {
 ### [`getPlaceDetailed`](http://docs.sygictravelapi.com/js-sdk/master/classes/_stsdk_.stsdk.html#getplacedetailed)
 Returns a single place with populated [`detail`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_places_place_.place.html#detail) property.
 ##### Arguments:
-- `guid: string`
+- `id: string`
 - `photoSize: string`
 ##### Returns:
 - [`Promise<Places.Place>`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_places_place_.place.html)
@@ -85,7 +85,7 @@ Returns a single place with populated [`detail`](http://docs.sygictravelapi.com/
 ### [`getPlaceMedia`](http://docs.sygictravelapi.com/js-sdk/master/classes/_stsdk_.stsdk.html#getplacemedia)
 Fetches media for place.
 #### Arguments:
-- `guid: string`
+- `id: string`
 #### Returns:
 - [`Promise<Media.Medium[]>`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_media_media_.medium.html)
 ---

@@ -23,7 +23,7 @@ describe('Api', () => {
 	describe('#getPlaces', () => {
 		it('should call per tiles when map spread is required', (done) => {
 			const stub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
-				resolve(new ApiResponse('200', 200, '', { places: [] }));
+				resolve(new ApiResponse(200, { places: [] }));
 			}));
 			const filter = new PlacesFilter({
 				bounds: {
