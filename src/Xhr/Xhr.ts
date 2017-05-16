@@ -27,7 +27,6 @@ function buildBaseUrl(url: string): string {
 	let baseUrl: string = getApiUrl();
 	const apiKey: string | null = getApiKey();
 
-	// TODO Revert these changes
 	if (apiKey && url.indexOf('places') < 0) {
 		baseUrl = baseUrl + apiKey;
 	}

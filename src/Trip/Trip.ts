@@ -1,6 +1,5 @@
-// import { Place } from '../Places/Place';
-import { Location } from '../Geo/Location';
-import { Place } from '../Places/Place';
+import { Location } from '../Geo';
+import { Place } from '../Places';
 
 type TransportMode =
 	'car' |
@@ -60,8 +59,6 @@ export interface Day {
 export interface ItineraryItem {
 	place: Place | null;
 	placeId: string;
-	name?: string | null;
-	location?: Location;
 	startTime: number | null; // Number of seconds from midnight.
 	duration: number | null; // Time in seconds planned to spend visiting place.
 	note: string | null;

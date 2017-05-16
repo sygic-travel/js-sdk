@@ -1,11 +1,11 @@
 import { stringify } from 'query-string';
 
 import { getPlaceDetailedBatch } from '../Places/index';
-import { Place } from '../Places/Place';
 import { get } from '../Xhr';
 import {
 	mapTripDetailedApiResponseToTrip,
-	mapTripListApiResponseToTripsList
+	mapTripListApiResponseToTripsList,
+	putPlacesToTrip
 } from './Mapper';
 import { Day, ItineraryItem, Trip } from './Trip';
 
@@ -53,16 +53,4 @@ export function getPlacesGuidsFromTrip(trip: Trip): string[] {
 		...acc,
 		...day.itinerary.map((itineraryItem: ItineraryItem): string => (itineraryItem.placeId))
 	]), initAcc);
-}
-
-function putPlacesToTrip(trip: Trip, places: Place[]): Trip {
-	if (trip.days) {
-		trip.days.forEach((day: Day) => day.itinerary.forEach((itineraryItem: ItineraryItem) => {
-			const filteredPlaces: Place[] = places.filter((place: Place) => (place.id === itineraryItem.placeId));
-			if (filteredPlaces.length > 0) {
-				itineraryItem.place = filteredPlaces[0];
-			}
-		}));
-	}
-	return trip;
 }
