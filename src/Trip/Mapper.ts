@@ -2,7 +2,7 @@ import { camelizeKeys } from 'humps';
 
 import { Place } from '../Places';
 import { ApiResponse } from '../Xhr/ApiResponse';
-import { Day, ItineraryItem, Trip, TripMedia } from './Trip';
+import { Day, ItineraryItem, Trip, TripMedia, TripPrivileges } from './Trip';
 
 export const mapTripListApiResponseToTripsList = (apiResponse: ApiResponse): Trip[] => {
 	return apiResponse.data.trips.map((trip) => {
@@ -17,13 +17,18 @@ export const mapTripDetailedApiResponseToTrip = (apiResponse: ApiResponse): Trip
 export const mapTrip = (trip, days: Day[] | null): Trip => {
 	return {
 		id: trip.id,
+		ownerId: trip.owner_id,
+		privacyLevel: trip.privacy_level,
 		name: trip.name,
 		version: trip.version,
 		startsOn: trip.starts_on,
+		updatedAt: trip.updated_at,
+		isDeleted: trip.is_deleted,
 		endsOn: trip.ends_on,
 		url: trip.url,
 		days,
-		media: camelizeKeys(trip.media) as TripMedia
+		media: camelizeKeys(trip.media) as TripMedia,
+		privileges: camelizeKeys(trip.privileges) as TripPrivileges
 	} as Trip;
 };
 

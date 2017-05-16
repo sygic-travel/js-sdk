@@ -23,13 +23,18 @@ type TransportAvoid =
 
 export interface Trip {
 	id: string;
+	ownerId: string;
+	privacyLevel: string;
 	name: string | null;
 	version: number;
 	startsOn: string | null;
+	updatedAt: string;
+	isDeleted: boolean;
 	endsOn: string | null;
 	url: string;
 	days: Day[] | null;
 	media: TripMedia;
+	privileges: TripPrivileges;
 }
 
 export interface TripMedia {
@@ -72,4 +77,10 @@ export interface ItineraryItem {
 		waypoints: Location[]
 	} | null;
 
+}
+
+export interface TripPrivileges {
+	edit: boolean;
+	manage: boolean;
+	delete: boolean;
 }

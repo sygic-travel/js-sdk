@@ -1,15 +1,24 @@
-import { Day, ItineraryItem, Trip, TripMedia } from '../Trip/Trip';
+import { Day, ItineraryItem, Trip, TripMedia, TripPrivileges } from '../Trip/Trip';
 import { placeDetailedEiffelTowerWithoutMedia } from './PlacesExpectedResults';
 
 /* tslint:disable */
 export const tripList = [{
 	id: '58c6bce821287',
+	ownerId: '5759530f6e5f6',
 	name: 'Výlet do Amsterdam',
 	version: 33,
+	privacyLevel: 'shareable',
 	url: 'https://alpha.travel.sygic.com/go/trip:58c6bce821287',
 	startsOn: '2017-04-08',
 	endsOn: '2017-04-10',
+	updatedAt: '2017-04-09T06:42:25+00:00',
 	days: null,
+	isDeleted: false,
+	privileges: {
+		delete: true,
+		edit: true,
+		manage: true
+	} as TripPrivileges,
 	media: {
 		square: {
 			id: 'm:29619755',
@@ -38,18 +47,18 @@ itineraryPlace4.id = 'poi:48071';
 
 export const tripDetailed = {
 	id: '58c6bce821287',
-	//ownerId: '5759530f6e5f6',
+	ownerId: '5759530f6e5f6',
 	name: 'Výlet do Amsterdam',
 	version: 33,
 	url: 'https://alpha.travel.sygic.com/go/trip:58c6bce821287',
-	//updatedAt: '2017-04-09T06:42:25+00:00',
-	//isDeleted: false,
-	//privacyLevel: 'shareable',
-	// privileges: {
-	// 	edit: true,
-	// 	manage: true,
-	// 	delete: true
-	// },
+	updatedAt: '2017-04-09T06:42:25+00:00',
+	isDeleted: false,
+	privacyLevel: 'shareable',
+	privileges: {
+		edit: true,
+		manage: true,
+		delete: true
+	} as TripPrivileges,
 	startsOn: "2017-04-08",
 	endsOn: "2017-04-10",
 	days: [

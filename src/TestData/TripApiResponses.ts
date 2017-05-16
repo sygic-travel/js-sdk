@@ -3,11 +3,20 @@ export const tripsList = {
 	"trips": [
 		{
 			"id": "58c6bce821287",
+			"owner_id": "5759530f6e5f6",
 			"name": "Výlet do Amsterdam",
 			"version": 33,
 			"url": "https://alpha.travel.sygic.com/go/trip:58c6bce821287",
 			"starts_on": "2017-04-08",
+			"updated_at": "2017-04-09T06:42:25+00:00",
 			"ends_on": "2017-04-10",
+			"is_deleted": false,
+			"privacy_level": "shareable",
+			"privileges": {
+				"edit": true,
+				"manage": true,
+				"delete": true
+			},
 			"media": {
 				"square": {
 					"id": "m:29619755",
