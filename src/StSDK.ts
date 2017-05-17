@@ -1,5 +1,5 @@
 import { BaseSDK } from './BaseSDK';
-import { addCustomPlaceToFavorites, addPlaceToFavorites, getFavorites, removePlaceFromFavorites } from './Favorites';
+import { addCustomPlaceToFavorites, addPlaceToFavorites, getFavoritesIds, removePlaceFromFavorites } from './Favorites';
 import { Bounds } from './Geo';
 import { Location } from './Geo';
 import { Medium } from './Media';
@@ -42,19 +42,19 @@ export default class StSDK extends BaseSDK {
 		return getTripDetailed(id);
 	}
 
-	public addPlaceToFavorites(id: string): Promise<boolean> {
+	public addPlaceToFavorites(id: string): Promise<void> {
 		return addPlaceToFavorites(id);
 	}
 
-	public addCustomPlaceToFavorites(name: string, location: Location, address: string): Promise<boolean | string> {
+	public addCustomPlaceToFavorites(name: string, location: Location, address: string): Promise<string> {
 		return addCustomPlaceToFavorites(name, location, address);
 	}
 
-	public getFavorites(photoSize: string): Promise<Place[]> {
-		return getFavorites(photoSize);
+	public getFavoritesIds(): Promise<string[]> {
+		return getFavoritesIds();
 	}
 
-	public removePlaceFromFavorites(id: string): Promise<boolean> {
+	public removePlaceFromFavorites(id: string): Promise<void> {
 		return removePlaceFromFavorites(id);
 	}
 }

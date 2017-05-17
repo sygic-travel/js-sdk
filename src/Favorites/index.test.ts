@@ -1,20 +1,16 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-import { SinonSandbox, SinonStub } from 'sinon';
+import { SinonSandbox } from 'sinon';
 import * as sinon from 'sinon';
 
 import * as FavoritesController from '../Favorites';
 import { Location } from '../Geo';
 import { setEnvironment } from '../Settings/index';
-import * as TestData from '../TestData/PlacesApiResponses';
-import * as ExpectedResults from '../TestData/PlacesExpectedResults';
 import * as Xhr from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
-
-const photoSize: string = '100x100';
 
 describe('FavoritesController', () => {
 	before((done) => {
@@ -30,47 +26,39 @@ describe('FavoritesController', () => {
 		sandbox.restore();
 	});
 
-	describe('#getFavorites', () => {
+	describe('#getFavoritesIds', () => {
 		it('should throw and exception when response without favorites came', () => {
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
-			return chai.expect(FavoritesController.getFavorites(photoSize)).to.be.rejected;
+			return chai.expect(FavoritesController.getFavoritesIds()).to.be.rejected;
 		});
 
-		it('should correctly map api response', () => {
-			const stub: SinonStub = sandbox.stub(Xhr, 'get');
-
-			stub.onFirstCall().returns(new Promise<ApiResponse>((resolve) => {
+		it('should correctly get data from api response', () => {
+			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
 					favorites: [{
 						place_id: 'poi:530'
+					}, {
+						place_id: 'poi:531'
 					}]
 				}));
 			}));
 
-			stub.onSecondCall().returns(new Promise<ApiResponse>((resolve) => {
-				resolve(new ApiResponse(200, {
-					places: [
-						TestData.placeDetailedEiffelTowerWithoutMedia.place
-					]
-				}));
-			}));
-
-			return chai.expect(FavoritesController.getFavorites(photoSize)).to.eventually.deep.equal([
-				ExpectedResults.placeDetailedEiffelTowerWithoutMedia
-			]);
+			return chai.expect(FavoritesController.getFavoritesIds()).to.eventually.deep.equal(['poi:530', 'poi:531']);
 		});
 	});
 
 	describe('#addPlaceToFavorites', () => {
-		it('should add place -> call api and return true', () => {
-			sandbox.stub(Xhr, 'post'). returns(new Promise<ApiResponse>((resolve) => {
+		it('should add place -> call api', (done) => {
+			const stub = sandbox.stub(Xhr, 'post'). returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
-			return chai.expect(FavoritesController.addPlaceToFavorites('poi:530')).to.eventually.equal(true);
+			FavoritesController.addPlaceToFavorites('poi:530');
+			sinon.assert.calledOnce(stub);
+			done();
 		});
 	});
 
@@ -92,12 +80,14 @@ describe('FavoritesController', () => {
 	});
 
 	describe('#removePlaceFromFavorites', () => {
-		it('should remove place -> call api and return true', () => {
-			sandbox.stub(Xhr, 'delete_'). returns(new Promise<ApiResponse>((resolve) => {
+		it('should remove place -> call api', (done) => {
+			const stub = sandbox.stub(Xhr, 'delete_'). returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
-			return chai.expect(FavoritesController.removePlaceFromFavorites('poi:530')).to.eventually.equal(true);
+			FavoritesController.removePlaceFromFavorites('poi:530');
+			sinon.assert.calledOnce(stub);
+			done();
 		});
 	});
 });
