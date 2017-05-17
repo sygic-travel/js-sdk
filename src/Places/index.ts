@@ -1,8 +1,5 @@
-import { stringify } from 'query-string';
-
-import * as api from '../Api';
 import { Medium } from '../Media/Media';
-import { get } from '../Xhr';
+import * as Dao from './DataAccess';
 import { PlacesFilter, PlacesFilterJSON } from './Filter';
 import {
 	mapPlaceApiResponseToPlaces, mapPlaceDetailedApiResponseToPlace,
@@ -23,35 +20,21 @@ export {
 }
 
 export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
-	const apiResponse = await api.getPlaces(filter);
-	if (!apiResponse.data.hasOwnProperty('places')) {
-		throw new Error('Wrong API response');
-	}
-	return mapPlaceApiResponseToPlaces(apiResponse);
+	const places: any[] = await Dao.getPlaces(filter);
+	return mapPlaceApiResponseToPlaces(places);
 }
 
 export async function getPlaceDetailed(id: string, photoSize: string): Promise<Place> {
-	const apiResponse = await get('places/' + id);
-	if (!apiResponse.data.hasOwnProperty('place')) {
-		throw new Error('Wrong API response');
-	}
-	return mapPlaceDetailedApiResponseToPlace(apiResponse, photoSize);
+	const place: any = await Dao.getPlaceDetailed(id);
+	return mapPlaceDetailedApiResponseToPlace(place, photoSize);
 }
 
 export async function getPlaceDetailedBatch(ids: string[], photoSize: string): Promise<Place[]> {
-	const apiResponse = await get('places/list?' + stringify({
-		ids: ids.join('|')
-	}));
-	if (!apiResponse.data.hasOwnProperty('places')) {
-		throw new Error('Wrong API response');
-	}
-	return mapPlaceDetailedBatchApiResponseToPlaces(apiResponse, photoSize);
+	const placeDetailedBatch: any[] = await Dao.getPlaceDetailedBatch(ids);
+	return mapPlaceDetailedBatchApiResponseToPlaces(placeDetailedBatch, photoSize);
 }
 
 export async function getPlaceMedia(id: string): Promise<Medium[]> {
-	const apiResponse = await get('places/' + id + '/media');
-	if (!apiResponse.data.hasOwnProperty('media')) {
-		throw new Error('Wrong API response');
-	}
-	return apiResponse.data.media.map((media: any) => media as Medium);
+	const media: any[] = await Dao.getPlaceMedia(id);
+	return media.map((mediaItem: any) => mediaItem as Medium);
 }

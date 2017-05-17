@@ -6,7 +6,6 @@ import * as sinon from 'sinon';
 import * as Media from '../Media/Media';
 import * as ApiResponses from '../TestData/PlacesApiResponses';
 import * as ExpectedResults from '../TestData/PlacesExpectedResults';
-import { ApiResponse } from '../Xhr/ApiResponse';
 import * as Mapper from './Mapper';
 
 chai.use(chaiAsPromised);
@@ -25,17 +24,15 @@ describe('PlacesMapper', () => {
 	describe('#mapPlaceApiResponseToPlaces', () => {
 
 		it('should correctly map api response to array of Places', () => {
-			const apiResponse: ApiResponse = new ApiResponse(200, ApiResponses.places);
-
-			return chai.expect(Mapper.mapPlaceApiResponseToPlaces(apiResponse)).to.deep.equal(ExpectedResults.places);
+			return chai.expect(Mapper.mapPlaceApiResponseToPlaces(ApiResponses.places.places))
+				.to.deep.equal(ExpectedResults.places);
 		});
 	});
 
 	describe('#mapPlaceDetailedApiResponseToPlace', () => {
 		it('should correctly map api response to single Place with PlaceDetail', () => {
-			const apiResponse: ApiResponse = new ApiResponse(200, ApiResponses.placeDetailedEiffelTowerWithoutMedia);
-
-			return chai.expect(Mapper.mapPlaceDetailedApiResponseToPlace(apiResponse, '400x400'))
+			return chai.expect(Mapper.mapPlaceDetailedApiResponseToPlace(
+				ApiResponses.placeDetailedEiffelTowerWithoutMedia.place, '400x400'))
 				.to.deep.equal(ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
 		});
 	});
