@@ -15,6 +15,10 @@ export class StSDK {
 		bounds: _Geo.Bounds,
 		canvas: _Spread.CanvasSize
 	): _Spread.SpreadResult;
+	public addPlaceToFavorites(id: string): Promise<void>;
+	public addCustomPlaceToFavorites(name: string, location: _Geo.Location, address: string): Promise<string>;
+	public getFavoritesIds(): Promise<string[]>;
+	public removePlaceFromFavorites(id: string): Promise<void>
 }
 
 export namespace Places {
