@@ -1,7 +1,5 @@
-import { stringify } from 'query-string';
-
 import { getPlaceDetailedBatch } from '../Places/index';
-import { get } from '../Xhr';
+import * as Dao from './DataAccess';
 import {
 	mapTripDetailedApiResponseToTrip,
 	mapTripListApiResponseToTripsList,
@@ -14,27 +12,16 @@ export {
 };
 
 export async function getTrips(dateFrom: string, dateTo: string): Promise<Trip[]> {
-	const apiResponse = await get('trips/list?' + stringify({
-		date_from: dateFrom,
-		date_to: dateTo
-	}));
-	if (!apiResponse.data.hasOwnProperty('trips')) {
-		throw new Error('Wrong API response');
-	}
-	return mapTripListApiResponseToTripsList(apiResponse);
+	const trips: any = await Dao.getTrips(dateTo, dateFrom);
+	return mapTripListApiResponseToTripsList(trips);
 }
 
 export async function getTripDetailed(id: string): Promise<Trip> {
-	const apiResponse = await get('trips/' + id);
-	if (!apiResponse.data.hasOwnProperty('trip')) {
-		throw new Error('Wrong API response');
-	}
-	const tripWithoutPlaces: Trip = mapTripDetailedApiResponseToTrip(apiResponse);
-
+	const tripDetailed: any = await Dao.getTripDetailed(id);
+	const tripWithoutPlaces: Trip = mapTripDetailedApiResponseToTrip(tripDetailed);
 	if (tripWithoutPlaces.days) {
 		return await addPlacesToTrip(tripWithoutPlaces);
 	}
-
 	return tripWithoutPlaces;
 }
 

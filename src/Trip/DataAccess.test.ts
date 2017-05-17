@@ -5,15 +5,10 @@ import * as sinon from 'sinon';
 
 import { placesDetailedCache as Cache, tripsDetailedCache } from '../Cache';
 import { setEnvironment } from '../Settings';
+import * as TripTestData from '../TestData/TripApiResponses';
 import * as Xhr from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
 import * as Dao from './DataAccess';
-
-// import * as TripTestData from '../TestData/TripApiResponses';
-// import * as PlaceTestData from '../TestData/PlacesApiResponses';
-import * as TripTestData from '../TestData/TripApiResponses';
-// import { Trip } from './Trip';
-// import * as TripExpectedResults from '../TestData/TripExpectedResults';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);

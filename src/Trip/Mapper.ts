@@ -1,17 +1,16 @@
 import { camelizeKeys } from 'humps';
 
 import { Place } from '../Places';
-import { ApiResponse } from '../Xhr/ApiResponse';
 import { Day, ItineraryItem, Trip, TripMedia, TripPrivileges } from './Trip';
 
-export const mapTripListApiResponseToTripsList = (apiResponse: ApiResponse): Trip[] => {
-	return apiResponse.data.trips.map((trip) => {
+export const mapTripListApiResponseToTripsList = (trips: any): Trip[] => {
+	return trips.map((trip) => {
 		return mapTrip(trip, null);
 	});
 };
 
-export const mapTripDetailedApiResponseToTrip = (apiResponse: ApiResponse): Trip => {
-	return mapTrip(apiResponse.data.trip, mapTripDays(apiResponse.data.trip));
+export const mapTripDetailedApiResponseToTrip = (tripDetailed: any): Trip => {
+	return mapTrip(tripDetailed, mapTripDays(tripDetailed));
 };
 
 export const mapTrip = (trip, days: Day[] | null): Trip => {
