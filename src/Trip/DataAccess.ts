@@ -2,8 +2,10 @@ import { stringify } from 'query-string';
 
 import { tripsDetailedCache as tripsDetailedCache } from '../Cache';
 import { get } from '../Xhr';
+import { mapTripDetailedApiResponseToTrip, mapTripListApiResponseToTripsList } from './Mapper';
+import { Trip } from './Trip';
 
-export async function getTrips(dateFrom: string, dateTo: string): Promise<any[]> {
+export async function getTrips(dateFrom: string, dateTo: string): Promise<Trip[]> {
 	const apiResponse = await get('trips/list?' + stringify({
 		date_from: dateFrom,
 		date_to: dateTo
@@ -13,10 +15,10 @@ export async function getTrips(dateFrom: string, dateTo: string): Promise<any[]>
 		throw new Error('Wrong API response');
 	}
 
-	return apiResponse.data.trips;
+	return mapTripListApiResponseToTripsList(apiResponse.data.trips);
 }
 
-export async function getTripDetailed(id: string): Promise<any> {
+export async function getTripDetailed(id: string): Promise<Trip> {
 	let result: any = null;
 	const fromCache: any = tripsDetailedCache.get(id);
 
@@ -32,5 +34,5 @@ export async function getTripDetailed(id: string): Promise<any> {
 		result = fromCache;
 	}
 
-	return result;
+	return mapTripDetailedApiResponseToTrip(result);
 }

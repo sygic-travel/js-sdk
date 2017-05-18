@@ -89,13 +89,13 @@ describe('TripController', () => {
 			}));
 
 			return chai.expect(TripController.getTripDetailed('1234567890'))
-				.to.eventually.deep.equal(TripExpectedResults.tripDetailed);
+				.to.eventually.deep.equal(Object.assign({}, TripExpectedResults.tripDetailed));
 		});
 	});
 
 	describe('#getPlacesGuidsFromTrip', () => {
 		it('should get places guids from mapped trip', () => {
-			return chai.expect(TripController.getPlacesGuidsFromTrip(TripExpectedResults.tripDetailed)).to.deep.equal([
+			return chai.expect(TripController.getPlacesIdsFromTrip(TripExpectedResults.tripDetailed)).to.deep.equal([
 				'poi:51098', 'poi:48056', 'poi:48015', 'poi:48071'
 			]);
 		});
