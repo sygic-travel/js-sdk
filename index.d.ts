@@ -2,6 +2,7 @@ import * as _Geo from './src/Geo';
 import * as _Media from './src/Media/Media';
 import * as _Place from './src/Places';
 import * as _Spread from './src/Spread';
+import * as _Trip from './src/Trip';
 
 export function create(apiUrl: string, clientKey: string): StSDK;
 
@@ -19,6 +20,8 @@ export class StSDK {
 	public addCustomPlaceToFavorites(name: string, location: _Geo.Location, address: string): Promise<string>;
 	public getFavoritesIds(): Promise<string[]>;
 	public removePlaceFromFavorites(id: string): Promise<void>
+	public getTrips(dateFrom: string, dateTo: string): Promise<_Trip.Trip[]>;
+	public getTripDetailed(id: string): Promise<_Trip.Trip>;
 }
 
 export namespace Places {
@@ -50,4 +53,12 @@ export namespace Spread {
 	export import CanvasSize = _Spread.CanvasSize;
 	export import SpreadResult = _Spread.SpreadResult;
 	export import SpreadedPlace = _Spread.SpreadedPlace;
+}
+
+export namespace Trips {
+	export import Trip = _Trip.Trip;
+	export import Day = _Trip.Day;
+	export import ItineraryItem = _Trip.ItineraryItem;
+	export import TripPrivileges = _Trip.TripPrivileges;
+	export import TripMedia = _Trip.TripMedia;
 }

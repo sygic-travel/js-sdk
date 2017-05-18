@@ -3,11 +3,9 @@ import * as Dao from './DataAccess';
 import {
 	putPlacesToTrip
 } from './Mapper';
-import { Day, ItineraryItem, Trip } from './Trip';
+import { Day, ItineraryItem, Trip, TripMedia, TripPrivileges } from './Trip';
 
-export {
-	Trip
-};
+export { Trip, Day, ItineraryItem, TripPrivileges, TripMedia };
 
 export async function getTrips(dateFrom: string, dateTo: string): Promise<Trip[]> {
 	return await Dao.getTrips(dateTo, dateFrom);
