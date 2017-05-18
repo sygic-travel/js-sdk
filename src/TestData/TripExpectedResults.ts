@@ -15,7 +15,7 @@ export const tripList = [{
 	days: null,
 	isDeleted: false,
 	privileges: {
-		delete: true,
+		'delete': true,
 		edit: true,
 		manage: true
 	} as TripPrivileges,
@@ -57,7 +57,7 @@ export const tripDetailed = {
 	privileges: {
 		edit: true,
 		manage: true,
-		delete: true
+		'delete': true
 	} as TripPrivileges,
 	startsOn: "2017-04-08",
 	endsOn: "2017-04-10",
