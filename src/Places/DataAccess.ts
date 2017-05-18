@@ -2,18 +2,24 @@ import { stringify } from 'query-string';
 
 import * as api from '../Api';
 import { placesDetailedCache as cache } from '../Cache';
+import { Medium } from '../Media/Media';
 import { get } from '../Xhr';
 import { PlacesFilter } from './Filter';
+import {
+mapPlaceApiResponseToPlaces, mapPlaceDetailedApiResponseToPlace,
+mapPlaceDetailedBatchApiResponseToPlaces
+} from './Mapper';
+import { Place } from './Place';
 
-export async function getPlaces(filter: PlacesFilter): Promise<any> {
+export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
 	const apiResponse = await api.getPlaces(filter);
 	if (!apiResponse.data.hasOwnProperty('places')) {
 		throw new Error('Wrong API response');
 	}
-	return apiResponse.data.places;
+	return mapPlaceApiResponseToPlaces(apiResponse.data.places);
 }
 
-export async function getPlaceDetailed(id: string): Promise<any> {
+export async function getPlaceDetailed(id: string, photoSize: string): Promise<any> {
 	let result = null;
 	const fromCache = cache.get(id);
 
@@ -27,10 +33,10 @@ export async function getPlaceDetailed(id: string): Promise<any> {
 	} else {
 		result = fromCache;
 	}
-	return result;
+	return mapPlaceDetailedApiResponseToPlace(result, photoSize);
 }
 
-export async function getPlaceDetailedBatch(ids: string[]): Promise<any[]> {
+export async function getPlaceDetailedBatch(ids: string[], photoSize: string): Promise<Place[]> {
 	const placesFromCache: any[] = [];
 	let placesFromApi: any[] = [];
 	const toBeFetchedFromAPI: string[] = [];
@@ -59,7 +65,7 @@ export async function getPlaceDetailedBatch(ids: string[]): Promise<any[]> {
 		});
 	}
 
-	return ids.map((id: string) => {
+	const batch: Place[] = ids.map((id: string) => {
 		const fromCache = placesFromCache.filter((place: any) => {
 			return place.id === id;
 		});
@@ -74,12 +80,14 @@ export async function getPlaceDetailedBatch(ids: string[]): Promise<any[]> {
 
 		return fromApi[0];
 	});
+
+	return mapPlaceDetailedBatchApiResponseToPlaces(batch, photoSize);
 }
 
-export async function getPlaceMedia(id: string): Promise<any[]> {
+export async function getPlaceMedia(id: string): Promise<Medium[]> {
 	const apiResponse = await get('places/' + id + '/media');
 	if (!apiResponse.data.hasOwnProperty('media')) {
 		throw new Error('Wrong API response');
 	}
-	return apiResponse.data.media;
+	return apiResponse.data.media.map((mediaItem: any) => mediaItem as Medium);
 }
