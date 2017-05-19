@@ -63,9 +63,11 @@ describe('TripDataAccess', () => {
 			const stub: SinonStub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, { trip: trip1FromApi }));
 			}));
-			const result = Dao.getTripDetailed('111');
-			sinon.assert.calledOnce(stub);
-			return chai.expect(result).to.eventually.deep.equal(trip1Expected);
+
+			return Dao.getTripDetailed('111').then((result) => {
+				sinon.assert.calledOnce(stub);
+				return chai.expect(result).to.deep.equal(trip1Expected);
+			});
 		});
 
 		it('should get trip response from cache if it is already in cache', () => {
@@ -75,17 +77,20 @@ describe('TripDataAccess', () => {
 
 			tripsDetailedCache.set('111', trip1FromApi);
 
-			const result = Dao.getTripDetailed('111');
-			sinon.assert.notCalled(stub);
-			return chai.expect(result).to.eventually.deep.equal(trip1Expected);
+			return Dao.getTripDetailed('111').then((result) => {
+				sinon.assert.notCalled(stub);
+				return chai.expect(result).to.deep.equal(trip1Expected);
+			});
+
 		});
 	});
 
 	describe('#updateTrip', () => {
 		it('should put updated trip to cache', () => {
-			Dao.updateTrip(TripExpectedResults.tripDetailed);
-			return chai.expect(tripsDetailedCache.get(TripExpectedResults.tripDetailed.id))
-				.to.be.deep.equal(TripTestData.tripDetail.trip);
+			Dao.updateTrip(TripExpectedResults.tripDetailed).then(() => {
+				return chai.expect(tripsDetailedCache.get(TripExpectedResults.tripDetailed.id))
+					.to.be.eventually.deep.equal(TripTestData.tripDetail.trip);
+			});
 		});
 
 		it.skip('should call post on api once', () => true);

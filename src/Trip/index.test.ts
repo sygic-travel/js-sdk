@@ -4,13 +4,13 @@ import * as sinon from 'sinon';
 import { SinonSandbox } from 'sinon';
 
 import { tripsDetailedCache } from '../Cache';
-import * as TripController from './index';
 import { setEnvironment } from '../Settings';
 import * as PlaceTestData from '../TestData/PlacesApiResponses';
 import * as TripTestData from '../TestData/TripApiResponses';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
 import * as Xhr from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
+import * as TripController from './index';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);

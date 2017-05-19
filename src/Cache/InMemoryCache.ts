@@ -3,12 +3,11 @@ import { ICache } from './ICache';
 export class InMemoryCache implements ICache {
 	private cache = {};
 
-	public set(key: string, value: any): any {
-		this.cache[key] = value;
-		return value !== null && typeof value === 'object' ? Object.assign({}, value) : value;
+	public async set(key: string, value: any): Promise<void> {
+		this.cache[key] = value !== null && typeof value === 'object' ? Object.assign({}, value) : value;
 	}
 
-	public get(key: string): any {
+	public async get(key: string): Promise<any> {
 		const value = this.cache[key];
 		if (!value) {
 			return null;
@@ -16,15 +15,15 @@ export class InMemoryCache implements ICache {
 		return typeof value === 'object' ? Object.assign({}, value) : value;
 	}
 
-	public getBatch(keys: string[]): any[] {
+	public async getBatch(keys: string[]): Promise<any[]> {
 		return keys.map((key: string) => this.get(key));
 	}
 
-	public remove(key: string): void {
+	public async remove(key: string): Promise<void> {
 		delete this.cache[key];
 	}
 
-	public reset(): void {
+	public async reset(): Promise<void> {
 		this.cache = {};
 	}
 }

@@ -57,11 +57,11 @@ describe('PlacesDataAccess', () => {
 				resolve(new ApiResponse(200, TestData.placeDetailedEiffelTowerWithoutMedia));
 			}));
 			const guid = 'region:1948650';
-			Dao.getPlaceDetailed(guid, photoSize);
 
-			sinon.assert.calledOnce(stub);
-			return chai.expect(Dao.getPlaceDetailed(guid, photoSize))
-				.to.eventually.deep.equal(ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			return Dao.getPlaceDetailed(guid, photoSize).then((result) => {
+				sinon.assert.calledOnce(stub);
+				return chai.expect(result).to.deep.equal(ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			});
 		});
 
 		it('should get place detailed response from Cache if it is in Cache', () => {
@@ -98,9 +98,10 @@ describe('PlacesDataAccess', () => {
 				}));
 			}));
 
-			const result = Dao.getPlaceDetailedBatch(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize);
-			sinon.assert.calledOnce(stub);
-			return chai.expect(result).to.eventually.deep.equal(expectedPlaces);
+			return Dao.getPlaceDetailedBatch(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
+				sinon.assert.calledOnce(stub);
+				return chai.expect(result).to.deep.equal(expectedPlaces);
+			});
 		});
 
 		it('should get all place responses from Cache if they are in Cache', () => {
@@ -111,10 +112,10 @@ describe('PlacesDataAccess', () => {
 
 			const stub = sandbox.stub(Xhr, 'get');
 
-			const result = Dao.getPlaceDetailedBatch(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize);
-
-			sinon.assert.notCalled(stub);
-			return chai.expect(result).to.eventually.deep.equal(expectedPlaces);
+			return Dao.getPlaceDetailedBatch(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
+				sinon.assert.notCalled(stub);
+				return chai.expect(result).to.deep.equal(expectedPlaces);
+			});
 		});
 
 		it('should get places that are not in Cache from api', () => {
@@ -127,10 +128,10 @@ describe('PlacesDataAccess', () => {
 				}));
 			}));
 
-			const result = Dao.getPlaceDetailedBatch(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize);
-
-			sinon.assert.calledOnce(stub);
-			return chai.expect(result).to.eventually.deep.equal(expectedPlaces);
+			return Dao.getPlaceDetailedBatch(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
+				sinon.assert.calledOnce(stub);
+				return chai.expect(result).to.deep.equal(expectedPlaces);
+			});
 		});
 	});
 

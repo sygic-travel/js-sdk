@@ -21,7 +21,7 @@ export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
 
 export async function getPlaceDetailed(id: string, photoSize: string): Promise<any> {
 	let result = null;
-	const fromCache = cache.get(id);
+	const fromCache = await cache.get(id);
 
 	if (!fromCache) {
 		const apiResponse = await get('places/' + id);
@@ -29,7 +29,7 @@ export async function getPlaceDetailed(id: string, photoSize: string): Promise<a
 			throw new Error('Wrong API response');
 		}
 		result = apiResponse.data.place;
-		cache.set(id, result);
+		await cache.set(id, result);
 	} else {
 		result = fromCache;
 	}
@@ -41,28 +41,20 @@ export async function getPlaceDetailedBatch(ids: string[], photoSize: string): P
 	let placesFromApi: any[] = [];
 	const toBeFetchedFromAPI: string[] = [];
 
-	ids.forEach((id: string) => {
-		const placeFromCachce = cache.get(id);
+	await Promise.all(ids.map(async (id: string) => {
+		const placeFromCachce = await cache.get(id);
 		if (placeFromCachce) {
 			placesFromCache.push(placeFromCachce);
 		} else {
 			toBeFetchedFromAPI.push(id);
 		}
-	});
+	}));
 
 	if (toBeFetchedFromAPI.length > 0) {
-		const apiResponse = await get('places/list?' + stringify({
-			ids: toBeFetchedFromAPI.join('|')
+		placesFromApi = await getFromApi(toBeFetchedFromAPI);
+		await Promise.all(placesFromApi.map(async (place: any) => {
+			await cache.set(place.id, place);
 		}));
-
-		if (!apiResponse.data.hasOwnProperty('places')) {
-			throw new Error('Wrong API response');
-		}
-
-		placesFromApi = apiResponse.data.places;
-		placesFromApi.forEach((place: any) => {
-			cache.set(place.id, place);
-		});
 	}
 
 	const batch: Place[] = ids.map((id: string) => {
@@ -90,4 +82,16 @@ export async function getPlaceMedia(id: string): Promise<Medium[]> {
 		throw new Error('Wrong API response');
 	}
 	return apiResponse.data.media.map((mediaItem: any) => mediaItem as Medium);
+}
+
+async function getFromApi(toBeFetchedFromAPI: string[]): Promise<any> {
+	const apiResponse = await get('places/list?' + stringify({
+		ids: toBeFetchedFromAPI.join('|')
+	}));
+
+	if (!apiResponse.data.hasOwnProperty('places')) {
+		throw new Error('Wrong API response');
+	}
+
+	return apiResponse.data.places;
 }

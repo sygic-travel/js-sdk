@@ -24,7 +24,7 @@ export async function getTrips(dateFrom: string, dateTo: string): Promise<Trip[]
 
 export async function getTripDetailed(id: string): Promise<Trip> {
 	let result: any = null;
-	const fromCache: any = tripsDetailedCache.get(id);
+	const fromCache: any = await tripsDetailedCache.get(id);
 
 	if (!fromCache) {
 		const apiResponse = await get('trips/' + id);
@@ -43,7 +43,7 @@ export async function getTripDetailed(id: string): Promise<Trip> {
 
 export async function updateTrip(tripToBeUpdated: Trip): Promise<Trip> {
 	const tripRequestData = mapTripToApiResponse(tripToBeUpdated);
-	tripsDetailedCache.set(tripToBeUpdated.id, tripRequestData);
+	await tripsDetailedCache.set(tripToBeUpdated.id, tripRequestData);
 	// save to api somewhere here
 	return tripToBeUpdated;
 }
