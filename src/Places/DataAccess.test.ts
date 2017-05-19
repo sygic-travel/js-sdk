@@ -6,13 +6,17 @@ import * as sinon from 'sinon';
 import { placesDetailedCache as Cache } from '../Cache';
 import { setEnvironment } from '../Settings';
 import * as TestData from '../TestData/PlacesApiResponses';
+import * as ExpectedResults from '../TestData/PlacesExpectedResults';
 import * as Xhr from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
 import * as Dao from './DataAccess';
 import { PlacesFilter, PlacesFilterJSON } from './Filter';
+import { Place } from './Place';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
+
+const photoSize = '300x300';
 
 describe('PlacesDataAccess', () => {
 	before((done) => {
@@ -43,7 +47,7 @@ describe('PlacesDataAccess', () => {
 			};
 
 			return chai.expect(Dao.getPlaces(new PlacesFilter(placesFilterJSON)))
-				.to.eventually.deep.equal(TestData.places.places);
+				.to.eventually.deep.equal(ExpectedResults.places);
 		});
 	});
 
@@ -53,11 +57,11 @@ describe('PlacesDataAccess', () => {
 				resolve(new ApiResponse(200, TestData.placeDetailedEiffelTowerWithoutMedia));
 			}));
 			const guid = 'region:1948650';
-			Dao.getPlaceDetailed(guid);
 
-			sinon.assert.calledOnce(stub);
-			return chai.expect(Dao.getPlaceDetailed(guid))
-				.to.eventually.deep.equal(TestData.placeDetailedEiffelTowerWithoutMedia.place);
+			return Dao.getPlaceDetailed(guid, photoSize).then((result) => {
+				sinon.assert.calledOnce(stub);
+				return chai.expect(result).to.deep.equal(ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			});
 		});
 
 		it('should get place detailed response from Cache if it is in Cache', () => {
@@ -69,78 +73,65 @@ describe('PlacesDataAccess', () => {
 			Cache.set(guid, TestData.placeDetailedEiffelTowerWithoutMedia.place);
 
 			sinon.assert.notCalled(stub);
-			return chai.expect(Dao.getPlaceDetailed(guid))
-				.to.eventually.deep.equal(TestData.placeDetailedEiffelTowerWithoutMedia.place);
+			return chai.expect(Dao.getPlaceDetailed(guid, photoSize))
+				.to.eventually.deep.equal(ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
 		});
 	});
 
 	describe('#getPlaceDetailedBatch', () => {
-		const place1 = Object.assign({}, TestData.placeDetailedEiffelTowerWithoutMedia.place);
-		const place2 = Object.assign({}, TestData.placeDetailedEiffelTowerWithoutMedia.place);
-		const place3 = Object.assign({}, TestData.placeDetailedEiffelTowerWithoutMedia.place);
-		const place4 = Object.assign({}, TestData.placeDetailedEiffelTowerWithoutMedia.place);
-		place1.id = 'poi:1';
-		place2.id = 'poi:2';
-		place3.id = 'poi:3';
-		place4.id = 'poi:4';
+		const placesFromApi: any[] = [];
+		const expectedPlaces: Place[] = [];
+
+		for (let i = 1; i < 5; i++) {
+			const placeFormApi = Object.assign({}, TestData.placeDetailedEiffelTowerWithoutMedia.place);
+			const expectedPlace = Object.assign({}, ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			placeFormApi.id = 'poi:' + i;
+			expectedPlace.id = 'poi:' + i;
+			placesFromApi.push(placeFormApi);
+			expectedPlaces.push(expectedPlace);
+		}
 
 		it('should get all places responses from api if they are not in Cache', () => {
 			const stub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
-					places: [place1, place2, place3, place4]
+					places: placesFromApi
 				}));
 			}));
 
-			const result = Dao.getPlaceDetailedBatch(['poi:1', 'poi:2', 'poi:3', 'poi:4']);
-			sinon.assert.calledOnce(stub);
-			return chai.expect(result).to.eventually.deep.equal([
-				place1,
-				place2,
-				place3,
-				place4
-			]);
+			return Dao.getPlaceDetailedBatch(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
+				sinon.assert.calledOnce(stub);
+				return chai.expect(result).to.deep.equal(expectedPlaces);
+			});
 		});
 
 		it('should get all place responses from Cache if they are in Cache', () => {
-			Cache.set('poi:1', place1);
-			Cache.set('poi:2', place2);
-			Cache.set('poi:3', place3);
-			Cache.set('poi:4', place4);
+			Cache.set(placesFromApi[0].id, placesFromApi[0]);
+			Cache.set(placesFromApi[1].id, placesFromApi[1]);
+			Cache.set(placesFromApi[2].id, placesFromApi[2]);
+			Cache.set(placesFromApi[3].id, placesFromApi[3]);
 
-			const stub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
-				resolve(new ApiResponse(200, {}));
-			}));
+			const stub = sandbox.stub(Xhr, 'get');
 
-			const result = Dao.getPlaceDetailedBatch(['poi:1', 'poi:2', 'poi:3', 'poi:4']);
-
-			sinon.assert.notCalled(stub);
-			return chai.expect(result).to.eventually.deep.equal([
-				place1,
-				place2,
-				place3,
-				place4
-			]);
+			return Dao.getPlaceDetailedBatch(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
+				sinon.assert.notCalled(stub);
+				return chai.expect(result).to.deep.equal(expectedPlaces);
+			});
 		});
 
 		it('should get places that are not in Cache from api', () => {
-			Cache.set('poi:1', place1);
-			Cache.set('poi:2', place2);
+			Cache.set(placesFromApi[0].id, placesFromApi[0]);
+			Cache.set(placesFromApi[1].id, placesFromApi[1]);
 
 			const stub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
-					places: [place3, place4]
+					places: [placesFromApi[2], placesFromApi[3]]
 				}));
 			}));
 
-			const result = Dao.getPlaceDetailedBatch(['poi:1', 'poi:2', 'poi:3', 'poi:4']);
-
-			sinon.assert.calledOnce(stub);
-			return chai.expect(result).to.eventually.deep.equal([
-				place1,
-				place2,
-				place3,
-				place4
-			]);
+			return Dao.getPlaceDetailedBatch(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
+				sinon.assert.calledOnce(stub);
+				return chai.expect(result).to.deep.equal(expectedPlaces);
+			});
 		});
 	});
 

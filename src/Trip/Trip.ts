@@ -84,3 +84,9 @@ export interface TripPrivileges {
 	manage: boolean;
 	delete: boolean;
 }
+
+export interface TripUpdateData {
+	name?: string;
+	startsOn?: string;
+	privacyLevel?: string;
+}

@@ -6,7 +6,7 @@ import { Medium } from './Media';
 import { getPlaceDetailed, getPlaceMedia, getPlaces, Place, PlacesFilter, PlacesFilterJSON } from './Places';
 import { setUserSession } from './Settings/index';
 import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from './Spread';
-import { getTripDetailed, getTrips, Trip } from './Trip';
+import { getTripDetailed, getTrips, Trip, TripUpdateData, updateTrip } from './Trip';
 
 export default class StSDK extends BaseSDK {
 	public setUserSession(key: string | null, token: string | null): void {
@@ -40,6 +40,10 @@ export default class StSDK extends BaseSDK {
 
 	public getTripDetailed(id: string): Promise<Trip> {
 		return getTripDetailed(id);
+	}
+
+	public updateTrip(id, dataToUpdate: TripUpdateData): Promise<Trip> {
+		return updateTrip(id, dataToUpdate);
 	}
 
 	public addPlaceToFavorites(id: string): Promise<void> {

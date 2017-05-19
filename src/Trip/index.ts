@@ -1,24 +1,18 @@
 import { getPlaceDetailedBatch } from '../Places/index';
 import * as Dao from './DataAccess';
 import {
-	mapTripDetailedApiResponseToTrip,
-	mapTripListApiResponseToTripsList,
 	putPlacesToTrip
 } from './Mapper';
-import { Day, ItineraryItem, Trip } from './Trip';
+import { Day, ItineraryItem, Trip, TripMedia, TripPrivileges, TripUpdateData } from './Trip';
 
-export {
-	Trip
-};
+export { Day, ItineraryItem, Trip, TripMedia, TripPrivileges, TripUpdateData };
 
 export async function getTrips(dateFrom: string, dateTo: string): Promise<Trip[]> {
-	const trips: any = await Dao.getTrips(dateTo, dateFrom);
-	return mapTripListApiResponseToTripsList(trips);
+	return await Dao.getTrips(dateTo, dateFrom);
 }
 
 export async function getTripDetailed(id: string): Promise<Trip> {
-	const tripDetailed: any = await Dao.getTripDetailed(id);
-	const tripWithoutPlaces: Trip = mapTripDetailedApiResponseToTrip(tripDetailed);
+	const tripWithoutPlaces: Trip = await Dao.getTripDetailed(id);
 	if (tripWithoutPlaces.days) {
 		return await addPlacesToTrip(tripWithoutPlaces);
 	}
@@ -26,11 +20,11 @@ export async function getTripDetailed(id: string): Promise<Trip> {
 }
 
 async function addPlacesToTrip(tripWithoutPlaces: Trip): Promise<Trip> {
-	const placesGuids: string[] = getPlacesGuidsFromTrip(tripWithoutPlaces);
+	const placesGuids: string[] = getPlacesIdsFromTrip(tripWithoutPlaces);
 	return putPlacesToTrip(tripWithoutPlaces, await getPlaceDetailedBatch(placesGuids, '300x300'));
 }
 
-export function getPlacesGuidsFromTrip(trip: Trip): string[] {
+export function getPlacesIdsFromTrip(trip: Trip): string[] {
 	if (!trip.days) {
 		return [];
 	}
@@ -40,4 +34,22 @@ export function getPlacesGuidsFromTrip(trip: Trip): string[] {
 		...acc,
 		...day.itinerary.map((itineraryItem: ItineraryItem): string => (itineraryItem.placeId))
 	]), initAcc);
+}
+
+export async function updateTrip(id: string, dataToUpdate: TripUpdateData): Promise<Trip> {
+	const tripToBeUpdated: Trip = await getTripDetailed(id);
+
+	if (dataToUpdate.name) {
+		tripToBeUpdated.name = dataToUpdate.name;
+	}
+
+	if (dataToUpdate.startsOn) {
+		tripToBeUpdated.startsOn = dataToUpdate.startsOn;
+	}
+
+	if (dataToUpdate.privacyLevel) {
+		tripToBeUpdated.privacyLevel = dataToUpdate.privacyLevel;
+	}
+
+	return await Dao.updateTrip(tripToBeUpdated);
 }
