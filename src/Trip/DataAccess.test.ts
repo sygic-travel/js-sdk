@@ -80,4 +80,14 @@ describe('TripDataAccess', () => {
 			return chai.expect(result).to.eventually.deep.equal(trip1Expected);
 		});
 	});
+
+	describe('#updateTrip', () => {
+		it('should put updated trip to cache', () => {
+			Dao.updateTrip(TripExpectedResults.tripDetailed);
+			return chai.expect(tripsDetailedCache.get(TripExpectedResults.tripDetailed.id))
+				.to.be.deep.equal(TripTestData.tripDetail.trip);
+		});
+
+		it.skip('should call post on api once', () => true);
+	});
 });

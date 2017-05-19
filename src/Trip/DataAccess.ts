@@ -2,7 +2,11 @@ import { stringify } from 'query-string';
 
 import { tripsDetailedCache as tripsDetailedCache } from '../Cache';
 import { get } from '../Xhr';
-import { mapTripDetailedApiResponseToTrip, mapTripListApiResponseToTripsList } from './Mapper';
+import {
+	mapTripDetailedApiResponseToTrip,
+	mapTripListApiResponseToTripsList,
+	mapTripToApiResponse
+} from './Mapper';
 import { Trip } from './Trip';
 
 export async function getTrips(dateFrom: string, dateTo: string): Promise<Trip[]> {
@@ -35,4 +39,11 @@ export async function getTripDetailed(id: string): Promise<Trip> {
 	}
 
 	return mapTripDetailedApiResponseToTrip(result);
+}
+
+export async function updateTrip(tripToBeUpdated: Trip): Promise<Trip> {
+	const tripRequestData = mapTripToApiResponse(tripToBeUpdated);
+	tripsDetailedCache.set(tripToBeUpdated.id, tripRequestData);
+	// save to api somewhere here
+	return tripToBeUpdated;
 }
