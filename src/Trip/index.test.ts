@@ -3,14 +3,14 @@ import * as chaiAsPromised from 'chai-as-promised';
 import * as sinon from 'sinon';
 import { SinonSandbox } from 'sinon';
 
-import { setEnvironment } from '../Settings';
-import * as Xhr from '../Xhr';
-import { ApiResponse } from '../Xhr/ApiResponse';
+import { tripsDetailedCache } from '../Cache';
 import * as TripController from './index';
-
+import { setEnvironment } from '../Settings';
 import * as PlaceTestData from '../TestData/PlacesApiResponses';
 import * as TripTestData from '../TestData/TripApiResponses';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
+import * as Xhr from '../Xhr';
+import { ApiResponse } from '../Xhr/ApiResponse';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
@@ -98,6 +98,42 @@ describe('TripController', () => {
 			return chai.expect(TripController.getPlacesIdsFromTrip(TripExpectedResults.tripDetailed)).to.deep.equal([
 				'poi:51098', 'poi:48056', 'poi:48015', 'poi:48071'
 			]);
+		});
+	});
+
+	describe('#updateTrip', () => {
+		it('should update trip', () => {
+			tripsDetailedCache.set(TripTestData.tripDetail.trip.id, TripTestData.tripDetail.trip);
+			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				const responsePlace1 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+				const responsePlace2 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+				const responsePlace3 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+				const responsePlace4 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+				responsePlace1.id = 'poi:51098';
+				responsePlace2.id = 'poi:48056';
+				responsePlace3.id = 'poi:48015';
+				responsePlace4.id = 'poi:48071';
+
+				resolve(new ApiResponse(200, {
+					places: [
+						responsePlace1,
+						responsePlace2,
+						responsePlace3,
+						responsePlace4
+					]
+				}));
+			}));
+
+			const expectedTrip: TripController.Trip = Object.assign({}, TripExpectedResults.tripDetailed);
+			expectedTrip.name = 'abc';
+			expectedTrip.startsOn = '123';
+			expectedTrip.privacyLevel = 'ppp';
+
+			return chai.expect(TripController.updateTrip('58c6bce821287', {
+				name: 'abc',
+				startsOn: '123',
+				privacyLevel: 'ppp'
+			} as TripController.TripUpdateData)).to.eventually.deep.equal(expectedTrip);
 		});
 	});
 });

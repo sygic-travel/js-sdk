@@ -3,9 +3,9 @@ import * as Dao from './DataAccess';
 import {
 	putPlacesToTrip
 } from './Mapper';
-import { Day, ItineraryItem, Trip, TripMedia, TripPrivileges } from './Trip';
+import { Day, ItineraryItem, Trip, TripMedia, TripPrivileges, TripUpdateData } from './Trip';
 
-export { Trip, Day, ItineraryItem, TripPrivileges, TripMedia };
+export { Day, ItineraryItem, Trip, TripMedia, TripPrivileges, TripUpdateData };
 
 export async function getTrips(dateFrom: string, dateTo: string): Promise<Trip[]> {
 	return await Dao.getTrips(dateTo, dateFrom);
@@ -34,4 +34,22 @@ export function getPlacesIdsFromTrip(trip: Trip): string[] {
 		...acc,
 		...day.itinerary.map((itineraryItem: ItineraryItem): string => (itineraryItem.placeId))
 	]), initAcc);
+}
+
+export async function updateTrip(id: string, dataToUpdate: TripUpdateData): Promise<Trip> {
+	const tripToBeUpdated: Trip = await getTripDetailed(id);
+
+	if (dataToUpdate.name) {
+		tripToBeUpdated.name = dataToUpdate.name;
+	}
+
+	if (dataToUpdate.startsOn) {
+		tripToBeUpdated.startsOn = dataToUpdate.startsOn;
+	}
+
+	if (dataToUpdate.privacyLevel) {
+		tripToBeUpdated.privacyLevel = dataToUpdate.privacyLevel;
+	}
+
+	return await Dao.updateTrip(tripToBeUpdated);
 }
