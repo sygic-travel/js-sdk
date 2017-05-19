@@ -6,8 +6,11 @@ export interface PlacesFilterJSON {
 	mapTile?: string;
 	mapSpread?: number;
 	categories?: string[];
+	categoriesOperator?: LogicalOperator;
 	tags?: string[];
-	parent?: string;
+	tagsOperator?: LogicalOperator;
+	parents?: string[];
+	parentsOperator?: LogicalOperator;
 	level?: string;
 	limit?: number;
 	bounds?: Bounds;
@@ -19,11 +22,19 @@ interface PlacesFilterQuery {
 	map_tile?: string;
 	map_spread?: number;
 	categories?: string;
+	categoriesOperator?: LogicalOperator;
 	tags?: string;
-	parent?: string;
+	tagsOperator?: LogicalOperator;
+	parents?: string;
+	parentsOperator?: LogicalOperator;
 	level?: string;
 	limit?: number;
 	bounds?: string;
+}
+
+export enum LogicalOperator {
+	AND,
+	OR
 }
 
 export class PlacesFilter {
@@ -31,8 +42,11 @@ export class PlacesFilter {
 	private _mapTile?: string;
 	private _mapSpread?: number;
 	private _categories?: string[];
+	private _categoriesOperator?: LogicalOperator;
 	private _tags?: string[];
-	private _parent?: string;
+	private _tagsOperator?: LogicalOperator;
+	private _parents?: string[];
+	private _parentsOperator?: LogicalOperator;
 	private _level?: string;
 	private _limit?: number;
 	private _bounds?: Bounds;
@@ -43,8 +57,11 @@ export class PlacesFilter {
 		this._mapTile = placesFilter.mapTile;
 		this._mapSpread = placesFilter.mapSpread;
 		this._categories = placesFilter.categories;
+		this._categoriesOperator = placesFilter.categoriesOperator ? placesFilter.categoriesOperator : LogicalOperator.AND;
 		this._tags = placesFilter.tags;
-		this._parent = placesFilter.parent;
+		this._tagsOperator = placesFilter.tagsOperator ? placesFilter.tagsOperator : LogicalOperator.AND;
+		this._parents = placesFilter.parents;
+		this._parentsOperator = placesFilter.parentsOperator ? placesFilter.parentsOperator : LogicalOperator.AND;
 		this._level = placesFilter.level;
 		this._limit = placesFilter.limit;
 		this._bounds = placesFilter.bounds;
@@ -95,15 +112,15 @@ export class PlacesFilter {
 		}
 
 		if (this._categories && this._categories.length > 0) {
-			query.categories = this._categories.join('|');
+			query.categories = this._categories.join(this._categoriesOperator === LogicalOperator.AND ? ',' : '|');
 		}
 
 		if (this._tags && this._tags.length > 0) {
-			query.tags = this._tags.join('|');
+			query.tags = this._tags.join(this._tagsOperator === LogicalOperator.AND ? ',' : '|');
 		}
 
-		if (this._parent) {
-			query.parent = this._parent;
+		if (this._parents && this._parents.length > 0) {
+			query.parents = this._parents.join(this._parentsOperator === LogicalOperator.AND ? ',' : '|');
 		}
 
 		if (this._level) {

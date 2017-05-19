@@ -38,7 +38,7 @@ describe('PlacesDataAccess', () => {
 			const placesFilterJSON: PlacesFilterJSON = {
 				categories: ['eating'],
 				limit: 20,
-				parent: 'city:1',
+				parents: ['city:1'],
 				tags: []
 			};
 
