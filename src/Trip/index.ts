@@ -79,3 +79,7 @@ export async function updateTrip(id: string, dataToUpdate: TripUpdateData): Prom
 export async function addDay(id: string): Promise<Trip> {
 	return TripManipulator.addDay(await getTripDetailed(id));
 }
+
+export async function addDayToBeginning(id: string): Promise<Trip> {
+	return TripManipulator.addDayToBeginning(await getTripDetailed(id));
+}

@@ -23,11 +23,30 @@ describe('TripController', () => {
 
 	beforeEach(() => {
 		sandbox = sinon.sandbox.create();
+		tripsDetailedCache.reset();
 	});
 
 	afterEach(() => {
 		sandbox.restore();
 	});
+
+	const responsePlace1 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+	const responsePlace2 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+	const responsePlace3 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+	const responsePlace4 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+	responsePlace1.id = 'poi:51098';
+	responsePlace2.id = 'poi:48056';
+	responsePlace3.id = 'poi:48015';
+	responsePlace4.id = 'poi:48071';
+
+	const placesResponse: any = {
+		places: [
+			responsePlace1,
+			responsePlace2,
+			responsePlace3,
+			responsePlace4
+		]
+	};
 
 	describe('#getTrips', () => {
 		it('should throw an exception when response without trips came', () => {
@@ -69,23 +88,7 @@ describe('TripController', () => {
 			}));
 
 			stub.onSecondCall().returns(new Promise<ApiResponse>((resolve) => {
-				const responsePlace1 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				const responsePlace2 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				const responsePlace3 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				const responsePlace4 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				responsePlace1.id = 'poi:51098';
-				responsePlace2.id = 'poi:48056';
-				responsePlace3.id = 'poi:48015';
-				responsePlace4.id = 'poi:48071';
-
-				resolve(new ApiResponse(200, {
-					places: [
-						responsePlace1,
-						responsePlace2,
-						responsePlace3,
-						responsePlace4
-					]
-				}));
+				resolve(new ApiResponse(200, placesResponse));
 			}));
 
 			return chai.expect(TripController.getTripDetailed('1234567890'))
@@ -105,23 +108,7 @@ describe('TripController', () => {
 		it('should update trip', () => {
 			tripsDetailedCache.set(TripTestData.tripDetail.trip.id, TripTestData.tripDetail.trip);
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
-				const responsePlace1 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				const responsePlace2 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				const responsePlace3 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				const responsePlace4 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				responsePlace1.id = 'poi:51098';
-				responsePlace2.id = 'poi:48056';
-				responsePlace3.id = 'poi:48015';
-				responsePlace4.id = 'poi:48071';
-
-				resolve(new ApiResponse(200, {
-					places: [
-						responsePlace1,
-						responsePlace2,
-						responsePlace3,
-						responsePlace4
-					]
-				}));
+				resolve(new ApiResponse(200, placesResponse));
 			}));
 
 			const expectedTrip: TripController.Trip = Object.assign({}, TripExpectedResults.tripDetailed);
@@ -141,26 +128,10 @@ describe('TripController', () => {
 		it('should add day to trip', () => {
 			tripsDetailedCache.set(TripTestData.tripDetail.trip.id, TripTestData.tripDetail.trip);
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
-				const responsePlace1 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				const responsePlace2 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				const responsePlace3 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				const responsePlace4 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				responsePlace1.id = 'poi:51098';
-				responsePlace2.id = 'poi:48056';
-				responsePlace3.id = 'poi:48015';
-				responsePlace4.id = 'poi:48071';
-
-				resolve(new ApiResponse(200, {
-					places: [
-						responsePlace1,
-						responsePlace2,
-						responsePlace3,
-						responsePlace4
-					]
-				}));
+				resolve(new ApiResponse(200, placesResponse));
 			}));
 
-			const expectedTrip: TripController.Trip = Object.assign({}, TripExpectedResults.tripDetailed);
+			const expectedTrip: TripController.Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
 			expectedTrip.endsOn =  '2017-04-11';
 
 			if (expectedTrip.days) {
@@ -171,6 +142,28 @@ describe('TripController', () => {
 			}
 
 			return chai.expect(TripController.addDay('58c6bce821287')).to.eventually.deep.equal(expectedTrip);
+		});
+	});
+
+	describe('#addDayToBeginning', () => {
+		it('should add day to the beginning of trip', () => {
+			tripsDetailedCache.set(TripTestData.tripDetail.trip.id, TripTestData.tripDetail.trip);
+			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, placesResponse));
+			}));
+
+			const expectedTrip: TripController.Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
+			expectedTrip.startsOn =  '2017-04-07';
+
+			if (expectedTrip.days) {
+				expectedTrip.days.unshift({
+					itinerary: [],
+					note: null
+				} as TripController.Day);
+			}
+
+			return chai.expect(TripController.addDayToBeginning('58c6bce821287'))
+				.to.eventually.deep.equal(expectedTrip);
 		});
 	});
 });

@@ -44,4 +44,24 @@ describe('TripManipulator', () => {
 			return chai.expect(Manipuator.addDay(inputTrip)).to.deep.equal(expectedTrip);
 		});
 	});
+
+	describe('#addDayToBeggining', () => {
+		it('should add day to the beginning of trip', () => {
+			const inputTrip: Trip = Object.assign({}, TripExpectedResults.tripDetailed);
+			inputTrip.id = '111';
+
+			const expectedTrip: Trip = Object.assign({}, TripExpectedResults.tripDetailed);
+			expectedTrip.id = '111';
+			expectedTrip.startsOn =  '2017-04-07';
+
+			if (expectedTrip.days) {
+				expectedTrip.days.unshift({
+					itinerary: [],
+					note: null
+				} as Day);
+			}
+
+			return chai.expect(Manipuator.addDayToBeginning(inputTrip)).to.deep.equal(expectedTrip);
+		});
+	});
 });
