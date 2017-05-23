@@ -34,23 +34,35 @@ export function addDayToBeginning(tripToBeUpdated: Trip): Trip {
 	return tripToBeUpdated;
 }
 
-// export async function removeDay(tripToBeUpdated: Trip, dayIndex: number): Trip {
-// 	if (tripToBeUpdated.days) {
-// 		tripToBeUpdated.days.splice(dayIndex, 1);
-//
-// 		if (dayIndex === 0) {
-//
-// 		}
-//
-// 		if (dayIndex === )
-// 	}
-//
-// 	return tripToBeUpdated;
-// }
-//
-// export async function swapdays(tripId: string, firstDayIndex: string, secondDayIndex: string): Promise<Trip> {
-//
-// }
+export function removeDay(tripToBeUpdated: Trip, dayIndex: number): Trip {
+	if (tripToBeUpdated.days) {
+		if (tripToBeUpdated.days.length < dayIndex) {
+			throw new Error('Invalid dayIndex');
+		}
+
+		if (dayIndex === 0 && tripToBeUpdated.startsOn) {
+			const newStartDate: moment.Moment = moment(tripToBeUpdated.startsOn);
+			tripToBeUpdated.startsOn = newStartDate.add(1, 'days').format('YYYY-MM-DD');
+		}
+
+		if (dayIndex + 1 === tripToBeUpdated.days.length  && tripToBeUpdated.endsOn) {
+			const newEndDate: moment.Moment = moment(tripToBeUpdated.endsOn);
+			tripToBeUpdated.endsOn = newEndDate.subtract(1, 'days').format('YYYY-MM-DD');
+		}
+
+		tripToBeUpdated.days.splice(dayIndex, 1);
+	}
+
+	return tripToBeUpdated;
+}
+
+export function swapdays(tripToBeUpdated: Trip, firstDayIndex: number, secondDayIndex: number): Trip {
+	if (tripToBeUpdated.days) {
+
+	}
+
+	return tripToBeUpdated;
+}
 //
 // // Item methods
 // export async function addItem(
