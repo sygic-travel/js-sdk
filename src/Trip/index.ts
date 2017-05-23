@@ -2,7 +2,7 @@ import { getPlaceDetailedBatch } from '../Places/index';
 import * as Dao from './DataAccess';
 import * as TripManipulator from './Manipulator';
 import {
-putPlacesToTrip
+	putPlacesToTrip
 } from './Mapper';
 import {
 	Day,
@@ -36,14 +36,10 @@ export async function getTrips(dateFrom: string, dateTo: string): Promise<Trip[]
 export async function getTripDetailed(id: string): Promise<Trip> {
 	const tripWithoutPlaces: Trip = await Dao.getTripDetailed(id);
 	if (tripWithoutPlaces.days) {
-		return await addPlacesToTrip(tripWithoutPlaces);
+		const placesGuids: string[] = getPlacesIdsFromTrip(tripWithoutPlaces);
+		return putPlacesToTrip(tripWithoutPlaces, await getPlaceDetailedBatch(placesGuids, '300x300'));
 	}
 	return tripWithoutPlaces;
-}
-
-async function addPlacesToTrip(tripWithoutPlaces: Trip): Promise<Trip> {
-	const placesGuids: string[] = getPlacesIdsFromTrip(tripWithoutPlaces);
-	return putPlacesToTrip(tripWithoutPlaces, await getPlaceDetailedBatch(placesGuids, '300x300'));
 }
 
 export function getPlacesIdsFromTrip(trip: Trip): string[] {
