@@ -45,7 +45,7 @@ export function removeDay(tripToBeUpdated: Trip, dayIndex: number): Trip {
 			tripToBeUpdated.startsOn = newStartDate.add(1, 'days').format('YYYY-MM-DD');
 		}
 
-		if (dayIndex + 1 === tripToBeUpdated.days.length  && tripToBeUpdated.endsOn) {
+		if (dayIndex + 1 === tripToBeUpdated.days.length && tripToBeUpdated.endsOn) {
 			const newEndDate: moment.Moment = moment(tripToBeUpdated.endsOn);
 			tripToBeUpdated.endsOn = newEndDate.subtract(1, 'days').format('YYYY-MM-DD');
 		}
@@ -56,9 +56,21 @@ export function removeDay(tripToBeUpdated: Trip, dayIndex: number): Trip {
 	return tripToBeUpdated;
 }
 
-export function swapdays(tripToBeUpdated: Trip, firstDayIndex: number, secondDayIndex: number): Trip {
+export function swapDays(tripToBeUpdated: Trip, firstDayIndex: number, secondDayIndex: number): Trip {
 	if (tripToBeUpdated.days) {
+		if (!tripToBeUpdated.days[firstDayIndex]) {
+			throw new Error('Invalid firstDayIndex');
+		}
 
+		if (!tripToBeUpdated.days[secondDayIndex]) {
+			throw new Error('Invalid secondDayIndex');
+		}
+
+		const firstDay: Day = tripToBeUpdated.days[firstDayIndex];
+		const secondDay: Day = tripToBeUpdated.days[secondDayIndex];
+
+		tripToBeUpdated.days[firstDayIndex] = secondDay;
+		tripToBeUpdated.days[secondDayIndex] = firstDay;
 	}
 
 	return tripToBeUpdated;

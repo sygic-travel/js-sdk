@@ -83,3 +83,7 @@ export async function addDayToBeginning(id: string): Promise<Trip> {
 export async function removeDay(id: string, dayIndex: number): Promise<Trip> {
 	return TripManipulator.removeDay(await getTripDetailed(id), dayIndex);
 }
+
+export async function swapDays(id: string, firstDayIndex: number, secondDayIndex: number) {
+	return TripManipulator.swapDays(await getTripDetailed(id), firstDayIndex, secondDayIndex);
+}

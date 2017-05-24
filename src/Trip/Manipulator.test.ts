@@ -132,4 +132,31 @@ describe('TripManipulator', () => {
 			return chai.expect(Manipuator.removeDay(inputTrip, indexToBeRemoved)).to.deep.equal(expectedTrip);
 		});
 	});
+
+	describe('#swapDays', () => {
+		it.skip('should throw error an error when invalid firstDayIndex is passed', () => {
+			const inputTrip: Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
+			return chai.expect(Manipuator.swapDays(inputTrip, 999, 1)).to.throw();
+		});
+
+		it.skip('should throw error an error when invalid secondDayIndex is passed', () => {
+			const inputTrip: Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
+			return chai.expect(Manipuator.swapDays(inputTrip, 0, 999)).to.throw();
+		});
+
+		it('should swap two days', () => {
+			const inputTrip: Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
+			const expectedTrip: Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
+
+			if (inputTrip.days) {
+				inputTrip.days.push(emptyDay);
+			}
+
+			if (expectedTrip.days) {
+				expectedTrip.days.unshift(emptyDay);
+			}
+
+			return chai.expect(Manipuator.swapDays(inputTrip, 0, 1)).to.deep.equal(expectedTrip);
+		});
+	});
 });

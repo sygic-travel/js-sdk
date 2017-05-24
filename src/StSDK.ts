@@ -15,6 +15,7 @@ import {
 	removeDay,
 	Trip,
 	TripUpdateData,
+	swapDays,
 	updateTrip
 } from './Trip';
 
@@ -89,5 +90,9 @@ export default class StSDK extends BaseSDK {
 
 	public removeDay(id: string, dayIndex: number): Promise<Trip> {
 		return removeDay(id, dayIndex);
+	}
+
+	public swapDays(id: string, firstDayIndex: number, secondDayIndex: number): Promise<Trip> {
+		return swapDays(id, firstDayIndex, secondDayIndex);
 	}
 }
