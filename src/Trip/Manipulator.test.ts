@@ -66,10 +66,10 @@ describe('TripManipulator', () => {
 	});
 
 	describe('#removeDay', () => {
-		it.skip('should throw an error when invalid index is passed', () => {
+		it('should throw an error when invalid index is passed', () => {
 			const indexToBeRemoved = 999;
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			return chai.expect(Manipuator.removeDay(inputTrip, indexToBeRemoved)).to.throw(new Error('Invalid index'));
+			return chai.expect(() => Manipuator.removeDay(inputTrip, indexToBeRemoved)).to.throw(Error, 'Invalid dayIndex');
 		});
 
 		it('should remove day from middle of days array and should not change dates', () => {
@@ -135,14 +135,14 @@ describe('TripManipulator', () => {
 	});
 
 	describe('#swapDays', () => {
-		it.skip('should throw error an error when invalid firstDayIndex is passed', () => {
+		it('should throw error an error when invalid firstDayIndex is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			return chai.expect(Manipuator.swapDays(inputTrip, 999, 1)).to.throw();
+			return chai.expect(() => Manipuator.swapDays(inputTrip, 999, 1)).to.throw(Error, 'Invalid firstDayIndex');
 		});
 
-		it.skip('should throw error an error when invalid secondDayIndex is passed', () => {
+		it('should throw error an error when invalid secondDayIndex is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			return chai.expect(Manipuator.swapDays(inputTrip, 0, 999)).to.throw();
+			return chai.expect(() => Manipuator.swapDays(inputTrip, 0, 999)).to.throw(Error, 'Invalid secondDayIndex');
 		});
 
 		it('should swap two days', () => {
