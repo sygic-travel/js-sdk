@@ -11,8 +11,8 @@ import { Trip } from './Trip';
 
 export async function getTrips(dateFrom: string, dateTo: string): Promise<Trip[]> {
 	const apiResponse = await get('trips/list?' + stringify({
-		date_from: dateFrom,
-		date_to: dateTo
+		from: dateFrom,
+		to: dateTo
 	}));
 
 	if (!apiResponse.data.hasOwnProperty('trips')) {
