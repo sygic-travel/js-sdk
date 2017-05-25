@@ -84,6 +84,14 @@ export async function removeDay(id: string, dayIndex: number): Promise<Trip> {
 	return TripManipulator.removeDay(await getTripDetailed(id), dayIndex);
 }
 
-export async function swapDays(id: string, firstDayIndex: number, secondDayIndex: number) {
+export async function swapDays(id: string, firstDayIndex: number, secondDayIndex: number): Promise<Trip>  {
 	return TripManipulator.swapDays(await getTripDetailed(id), firstDayIndex, secondDayIndex);
+}
+
+export async function movePlaceInDay(
+	id: string,
+	dayIndex: number,
+	positionFrom: number,
+	positionTo: number): Promise<Trip> {
+	return TripManipulator.movePlaceInDay(await getTripDetailed(id), dayIndex, positionFrom, positionTo);
 }

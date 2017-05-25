@@ -1,6 +1,19 @@
 import { format } from 'fecha';
 
 import { Day, Trip } from './index';
+import { ItineraryItem } from './Trip';
+
+function addDayToDate(date: string): string {
+	const d = new Date(date);
+	d.setDate(d.getDate() + 1);
+	return format(d, 'YYYY-MM-DD');
+}
+
+function subtractDayToDate(date: string): string {
+	const d = new Date(date);
+	d.setDate(d.getDate() - 1);
+	return format(d, 'YYYY-MM-DD');
+}
 
 // Day methods
 export function addDay(tripToBeUpdated: Trip): Trip {
@@ -72,37 +85,45 @@ export function swapDays(tripToBeUpdated: Trip, firstDayIndex: number, secondDay
 
 	return tripToBeUpdated;
 }
-//
-// // Item methods
-// export async function addItem(
-// 	tripId: string,
-// 	itemGuid: string,
+
+// Item methods
+// export async function addPlaceToDay(
+// 	tripToBeUpdated: Trip,
+// 	placeToBeAdded: Place,
 // 	dayIndex: number,
-// 	positionInDay?: number): Promise<Trip> {
+// 	positionInDay?: number): Trip {
 //
 // }
-// export async function moveItem(
-// 	tripId: string,
-// 	dayIndex: number,
-// 	positionFrom: number,
-// 	positionTo: number): Promise<Trip> {
-//
-// }
+
+export function movePlaceInDay(
+	tripToBeUpdated: Trip,
+	dayIndex: number,
+	positionFrom: number,
+	positionTo: number): Trip {
+	if (tripToBeUpdated.days) {
+		if (!tripToBeUpdated.days[dayIndex]) {
+			throw new Error('Invalid dayIndex');
+		}
+
+		if (!tripToBeUpdated.days[dayIndex].itinerary[positionFrom]) {
+			throw new Error('Invalid positionFrom');
+		}
+
+		if (!tripToBeUpdated.days[dayIndex].itinerary[positionTo]) {
+			throw new Error('Invalid positionTo');
+		}
+
+		const firstItineraryItem: ItineraryItem = tripToBeUpdated.days[0].itinerary[0];
+		const secondItineraryItem: ItineraryItem = tripToBeUpdated.days[0].itinerary[1];
+		tripToBeUpdated.days[0].itinerary[0] = secondItineraryItem;
+		tripToBeUpdated.days[0].itinerary[1] = firstItineraryItem;
+	}
+
+	return tripToBeUpdated;
+}
 // export async function removeItem(
 // 	tripId: string,
 // 	dayIndex: number,
 // 	positionInDay: number): Promise<Trip> {
 //
 // }
-
-function addDayToDate(date: string): string {
-	const d = new Date(date);
-	d.setDate(d.getDate() + 1);
-	return format(d, 'YYYY-MM-DD');
-}
-
-function subtractDayToDate(date: string): string {
-	const d = new Date(date);
-	d.setDate(d.getDate() - 1);
-	return format(d, 'YYYY-MM-DD');
-}

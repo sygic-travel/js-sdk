@@ -7,7 +7,7 @@ import { SinonSandbox } from 'sinon';
 import { setEnvironment } from '../Settings';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
 import * as Manipuator from './Manipulator';
-import { Day, Trip } from './Trip';
+import { Day, ItineraryItem, Trip } from './Trip';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
@@ -69,7 +69,8 @@ describe('TripManipulator', () => {
 		it('should throw an error when invalid index is passed', () => {
 			const indexToBeRemoved = 999;
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			return chai.expect(() => Manipuator.removeDay(inputTrip, indexToBeRemoved)).to.throw(Error, 'Invalid dayIndex');
+			return chai.expect(() => Manipuator.removeDay(inputTrip, indexToBeRemoved))
+				.to.throw(Error, 'Invalid dayIndex');
 		});
 
 		it('should remove day from middle of days array and should not change dates', () => {
@@ -135,12 +136,12 @@ describe('TripManipulator', () => {
 	});
 
 	describe('#swapDays', () => {
-		it('should throw error an error when invalid firstDayIndex is passed', () => {
+		it('should throw an error when invalid firstDayIndex is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			return chai.expect(() => Manipuator.swapDays(inputTrip, 999, 1)).to.throw(Error, 'Invalid firstDayIndex');
 		});
 
-		it('should throw error an error when invalid secondDayIndex is passed', () => {
+		it('should throw an error when invalid secondDayIndex is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			return chai.expect(() => Manipuator.swapDays(inputTrip, 0, 999)).to.throw(Error, 'Invalid secondDayIndex');
 		});
@@ -158,6 +159,40 @@ describe('TripManipulator', () => {
 			}
 
 			return chai.expect(Manipuator.swapDays(inputTrip, 0, 1)).to.deep.equal(expectedTrip);
+		});
+	});
+
+	describe('#movePlaceInDay', () => {
+		it('should throw an error when invalid dayIndex is passed', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			return chai.expect(() => Manipuator.movePlaceInDay(inputTrip, 999, 0, 1))
+				.to.throw(Error, 'Invalid dayIndex');
+		});
+
+		it('should throw an error when invalid positionFrom is passed', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			return chai.expect(() => Manipuator.movePlaceInDay(inputTrip, 0, 999, 1))
+				.to.throw(Error, 'Invalid positionFrom');
+		});
+
+		it('should throw an error when invalid positionTo is passed', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			return chai.expect(() => Manipuator.movePlaceInDay(inputTrip, 0, 0, 999))
+				.to.throw(Error, 'Invalid positionTo');
+		});
+
+		it('should move place in a day', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+
+			if (expectedTrip.days) {
+				const firstItineraryItem: ItineraryItem = expectedTrip.days[0].itinerary[0];
+				const secondItineraryItem: ItineraryItem = expectedTrip.days[0].itinerary[1];
+				expectedTrip.days[0].itinerary[0] = secondItineraryItem;
+				expectedTrip.days[0].itinerary[1] = firstItineraryItem;
+			}
+
+			return chai.expect(Manipuator.movePlaceInDay(inputTrip, 0, 0, 1)).to.deep.equal(expectedTrip);
 		});
 	});
 });

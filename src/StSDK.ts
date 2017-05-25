@@ -12,10 +12,11 @@ import {
 	addDayToBeginning,
 	getTripDetailed,
 	getTrips,
+	movePlaceInDay,
 	removeDay,
+	swapDays,
 	Trip,
 	TripUpdateData,
-	swapDays,
 	updateTrip
 } from './Trip';
 
@@ -94,5 +95,9 @@ export default class StSDK extends BaseSDK {
 
 	public swapDays(id: string, firstDayIndex: number, secondDayIndex: number): Promise<Trip> {
 		return swapDays(id, firstDayIndex, secondDayIndex);
+	}
+
+	public movePlaceInDay(id: string, dayIndex: number, positionFrom: number, positionTo: number): Promise<Trip> {
+		return movePlaceInDay(id, dayIndex, positionFrom, positionTo);
 	}
 }
