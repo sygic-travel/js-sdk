@@ -4,7 +4,9 @@ import * as cloneDeep from 'lodash.clonedeep';
 import * as sinon from 'sinon';
 import { SinonSandbox } from 'sinon';
 
+import { Place } from '../Places';
 import { setEnvironment } from '../Settings';
+import * as PlaceExpectedResults from '../TestData/PlacesExpectedResults';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
 import * as Manipuator from './Manipulator';
 import { Day, ItineraryItem, Trip } from './Trip';
@@ -220,6 +222,65 @@ describe('TripManipulator', () => {
 
 			const result = Manipuator.removePlaceInDay(inputTrip, 0, positionInDay);
 			return chai.expect(result).to.deep.equal(expectedTrip);
+		});
+	});
+
+	describe('#addPlaceToDay', () => {
+		it('should throw an error when invalid dayIndex is passed', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const inputPlace: Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+
+			return chai.expect(() => Manipuator.addPlaceToDay(inputTrip, inputPlace, 999))
+				.to.throw(Error, 'Invalid dayIndex');
+		});
+
+		it('should throw an error when invalid positionInDay set', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const inputPlace: Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+
+			return chai.expect(() => Manipuator.addPlaceToDay(inputTrip, inputPlace, 0, 999))
+				.to.throw(Error, 'Invalid positionInDay');
+		});
+
+		it('should correctly add place to the end of the day when positionInDay is not set', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const inputPlace: Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+
+			if (expectedTrip.days) {
+				expectedTrip.days[0].itinerary.push({
+					place: inputPlace,
+					placeId: 'poi:530',
+					startTime: null,
+					duration: null,
+					note: null,
+					transportFromPrevious: null
+				} as ItineraryItem);
+			}
+
+			return chai.expect(Manipuator.addPlaceToDay(inputTrip, inputPlace, 0)).to.deep.equal(expectedTrip);
+		});
+
+		it('should correctly add place to to right position in day when positionInDay is set', () => {
+			const positionInDay = 1;
+
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const inputPlace: Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+
+			if (expectedTrip.days) {
+				expectedTrip.days[0].itinerary.splice(positionInDay, 0, {
+					place: inputPlace,
+					placeId: 'poi:530',
+					startTime: null,
+					duration: null,
+					note: null,
+					transportFromPrevious: null
+				} as ItineraryItem);
+			}
+
+			return chai.expect(Manipuator.addPlaceToDay(inputTrip, inputPlace, 0, positionInDay))
+				.to.deep.equal(expectedTrip);
 		});
 	});
 });

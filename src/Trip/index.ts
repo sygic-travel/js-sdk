@@ -1,4 +1,4 @@
-import { getPlaceDetailedBatch } from '../Places/index';
+import { getPlaceDetailed, getPlaceDetailedBatch } from '../Places/index';
 import * as Dao from './DataAccess';
 import * as TripManipulator from './Manipulator';
 import { putPlacesToTrip } from './Mapper';
@@ -97,3 +97,16 @@ export async function movePlaceInDay(
 export async function removePlaceInDay(id: string, dayIndex: number, positionInDay: number): Promise<Trip> {
 	return TripManipulator.removePlaceInDay(await getTripDetailed(id), dayIndex, positionInDay);
 }
+
+export async function addPlaceToDay(
+	tripId: string,
+	placeId: string,
+	dayIndex: number,
+	positionInDay?: number): Promise<Trip> {
+	return TripManipulator.addPlaceToDay(
+		await getTripDetailed(tripId),
+		await getPlaceDetailed(placeId, '300x300'),
+		dayIndex,
+		positionInDay
+	);
+};

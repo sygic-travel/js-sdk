@@ -1,5 +1,6 @@
 import { format } from 'fecha';
 
+import { Place } from '../Places';
 import { Day, Trip } from './index';
 import { ItineraryItem } from './Trip';
 
@@ -87,13 +88,38 @@ export function swapDays(tripToBeUpdated: Trip, firstDayIndex: number, secondDay
 }
 
 // Item methods
-// export async function addPlaceToDay(
-// 	tripToBeUpdated: Trip,
-// 	placeToBeAdded: Place,
-// 	dayIndex: number,
-// 	positionInDay?: number): Trip {
-//
-// }
+export function addPlaceToDay(
+	tripToBeUpdated: Trip,
+	placeToBeAdded: Place,
+	dayIndex: number,
+	positionInDay?: number): Trip {
+	if (tripToBeUpdated.days) {
+		if (!tripToBeUpdated.days[dayIndex]) {
+			throw new Error('Invalid dayIndex');
+		}
+
+		if (positionInDay && !tripToBeUpdated.days[dayIndex].itinerary[positionInDay]) {
+			throw new Error('Invalid positionInDay');
+		}
+
+		const itineraryItem: ItineraryItem = {
+			place: placeToBeAdded,
+			placeId: placeToBeAdded.id,
+			startTime: null,
+			duration: null,
+			note: null,
+			transportFromPrevious: null
+		};
+
+		if (positionInDay) {
+			tripToBeUpdated.days[dayIndex].itinerary.splice(positionInDay, 0, itineraryItem);
+		} else {
+			tripToBeUpdated.days[dayIndex].itinerary.push(itineraryItem);
+		}
+	}
+
+	return tripToBeUpdated;
+}
 
 export function movePlaceInDay(
 	tripToBeUpdated: Trip,

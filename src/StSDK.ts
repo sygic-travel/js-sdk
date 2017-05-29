@@ -10,6 +10,7 @@ import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from './Spread';
 import {
 	addDay,
 	addDayToBeginning,
+	addPlaceToDay,
 	getTripDetailed,
 	getTrips,
 	movePlaceInDay,
@@ -143,5 +144,16 @@ export default class StSDK extends BaseSDK {
 	 */
 	public removePlaceInDay(id: string, dayIndex: number, positionInDay: number): Promise<Trip> {
 		return removePlaceInDay(id, dayIndex, positionInDay);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public async addPlaceToDay(
+		tripId: string,
+		placeId: string,
+		dayIndex: number,
+		positionInDay?: number): Promise<Trip> {
+			return addPlaceToDay(tripId, placeId, dayIndex, positionInDay);
 	}
 }
