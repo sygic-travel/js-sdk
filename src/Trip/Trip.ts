@@ -1,7 +1,7 @@
 import { Location } from '../Geo';
 import { Place } from '../Places';
 
-type TransportMode =
+export type TransportMode =
 	'car' |
 	'pedestrian' |
 	'bike' |
@@ -10,12 +10,12 @@ type TransportMode =
 	'train' |
 	'boat';
 
-type TransportType =
+export type TransportType =
 	'fastest' |
 	'shortest' |
 	'economic';
 
-type TransportAvoid =
+export type TransportAvoid =
 	'tolls' |
 	'highway' |
 	'ferries' |
