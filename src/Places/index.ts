@@ -13,6 +13,7 @@ export {
 	Reference,
 	Tag,
 	Description,
+	Dao,
 }
 
 export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {

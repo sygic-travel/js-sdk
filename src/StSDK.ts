@@ -4,6 +4,7 @@ import { Bounds } from './Geo';
 import { Location } from './Geo';
 import { Medium } from './Media';
 import { getPlaceDetailed, getPlaceMedia, getPlaces, Place, PlacesFilter, PlacesFilterJSON } from './Places';
+import { getRoutesForTripDay, Route } from './Route';
 import { setUserSession } from './Settings/index';
 import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from './Spread';
 import { getTripDetailed, getTrips, Trip, TripUpdateData, updateTrip } from './Trip';
@@ -60,5 +61,12 @@ export default class StSDK extends BaseSDK {
 
 	public removePlaceFromFavorites(id: string): Promise<void> {
 		return removePlaceFromFavorites(id);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public getRoutesForTripDay(tripId: string, dayIndex: number): Promise<Route[]> {
+		return getRoutesForTripDay(tripId, dayIndex);
 	}
 }

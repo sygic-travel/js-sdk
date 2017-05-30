@@ -15,8 +15,15 @@ export class InMemoryCache implements ICache {
 		return typeof value === 'object' ? Object.assign({}, value) : value;
 	}
 
-	public async getBatch(keys: string[]): Promise<any[]> {
-		return keys.map((key: string) => this.get(key));
+	public getBatch(keys: string[]): Promise<any[]> {
+		return Promise.all(keys.map((key: string) => this.get(key)));
+	}
+
+	public async getBatchMap(keys: string[]): Promise<Map<string, any>> {
+		const data: any[] = await this.getBatch(keys);
+		return data.reduce(
+			(map: Map<string, any>, value: any, index: number) => (map.set(keys[index], value)),
+			new Map<string, any>());
 	}
 
 	public async remove(key: string): Promise<void> {

@@ -85,7 +85,7 @@ export async function getPlaceMedia(id: string): Promise<Medium[]> {
 }
 
 async function getFromApi(toBeFetchedFromAPI: string[]): Promise<any> {
-	const apiResponse = await get('places/list?' + stringify({
+	const apiResponse = await get('places?' + stringify({
 		ids: toBeFetchedFromAPI.join('|')
 	}));
 
