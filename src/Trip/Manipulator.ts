@@ -121,9 +121,22 @@ export function movePlaceInDay(
 
 	return tripToBeUpdated;
 }
-// export async function removeItem(
-// 	tripId: string,
-// 	dayIndex: number,
-// 	positionInDay: number): Promise<Trip> {
-//
-// }
+
+export function removePlaceInDay(
+	tripToBeUpdated: Trip,
+	dayIndex: number,
+	positionInDay: number): Trip {
+	if (tripToBeUpdated.days) {
+		if (!tripToBeUpdated.days[dayIndex]) {
+			throw new Error('Invalid dayIndex');
+		}
+
+		if (!tripToBeUpdated.days[dayIndex].itinerary[positionInDay]) {
+			throw new Error('Invalid positionInDay');
+		}
+
+		tripToBeUpdated.days[dayIndex].itinerary.splice(positionInDay, 1);
+	}
+
+	return tripToBeUpdated;
+}

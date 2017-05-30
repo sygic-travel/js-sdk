@@ -95,3 +95,7 @@ export async function movePlaceInDay(
 	positionTo: number): Promise<Trip> {
 	return TripManipulator.movePlaceInDay(await getTripDetailed(id), dayIndex, positionFrom, positionTo);
 }
+
+export async function removePlaceInDay(id: string, dayIndex: number, positionInDay: number): Promise<Trip> {
+	return TripManipulator.removePlaceInDay(await getTripDetailed(id), dayIndex, positionInDay);
+}

@@ -14,6 +14,7 @@ import {
 	getTrips,
 	movePlaceInDay,
 	removeDay,
+	removePlaceInDay,
 	swapDays,
 	Trip,
 	TripUpdateData,
@@ -46,34 +47,6 @@ export default class StSDK extends BaseSDK {
 		return spread(places, markerSizes, bounds, canvas);
 	}
 
-	public getTrips(dateFrom: string, dateTo: string): Promise<Trip[]> {
-		return getTrips(dateFrom, dateTo);
-	}
-
-	public getTripDetailed(id: string): Promise<Trip> {
-		return getTripDetailed(id);
-	}
-
-	public updateTrip(id, dataToUpdate: TripUpdateData): Promise<Trip> {
-		return updateTrip(id, dataToUpdate);
-	}
-
-	public addPlaceToFavorites(id: string): Promise<void> {
-		return addPlaceToFavorites(id);
-	}
-
-	public addCustomPlaceToFavorites(name: string, location: Location, address: string): Promise<string> {
-		return addCustomPlaceToFavorites(name, location, address);
-	}
-
-	public getFavoritesIds(): Promise<string[]> {
-		return getFavoritesIds();
-	}
-
-	public removePlaceFromFavorites(id: string): Promise<void> {
-		return removePlaceFromFavorites(id);
-	}
-
 	/**
 	 * @experimental
 	 */
@@ -81,23 +54,94 @@ export default class StSDK extends BaseSDK {
 		return getRoutesForTripDay(tripId, dayIndex);
 	}
 
+	/**
+	 * @experimental
+	 */
+	public getTrips(dateFrom: string, dateTo: string): Promise<Trip[]> {
+		return getTrips(dateFrom, dateTo);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public getTripDetailed(id: string): Promise<Trip> {
+		return getTripDetailed(id);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public updateTrip(id, dataToUpdate: TripUpdateData): Promise<Trip> {
+		return updateTrip(id, dataToUpdate);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public addPlaceToFavorites(id: string): Promise<void> {
+		return addPlaceToFavorites(id);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public addCustomPlaceToFavorites(name: string, location: Location, address: string): Promise<string> {
+		return addCustomPlaceToFavorites(name, location, address);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public getFavoritesIds(): Promise<string[]> {
+		return getFavoritesIds();
+	}
+
+	/**
+	 * @experimental
+	 */
+	public removePlaceFromFavorites(id: string): Promise<void> {
+		return removePlaceFromFavorites(id);
+	}
+
+	/**
+	 * @experimental
+	 */
 	public addDayToTrip(id: string): Promise<Trip> {
 		return addDay(id);
 	}
 
+	/**
+	 * @experimental
+	 */
 	public addDayToBeginning(id: string): Promise<Trip> {
 		return addDayToBeginning(id);
 	}
 
+	/**
+	 * @experimental
+	 */
 	public removeDay(id: string, dayIndex: number): Promise<Trip> {
 		return removeDay(id, dayIndex);
 	}
 
+	/**
+	 * @experimental
+	 */
 	public swapDays(id: string, firstDayIndex: number, secondDayIndex: number): Promise<Trip> {
 		return swapDays(id, firstDayIndex, secondDayIndex);
 	}
 
+	/**
+	 * @experimental
+	 */
 	public movePlaceInDay(id: string, dayIndex: number, positionFrom: number, positionTo: number): Promise<Trip> {
 		return movePlaceInDay(id, dayIndex, positionFrom, positionTo);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public removePlaceInDay(id: string, dayIndex: number, positionInDay: number): Promise<Trip> {
+		return removePlaceInDay(id, dayIndex, positionInDay);
 	}
 }
