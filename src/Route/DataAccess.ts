@@ -6,15 +6,14 @@ import { estimatePlaneDirection } from './Estimator';
 export async function getRoutes(requests: RouteRequest[]): Promise<Route[]> {
 	const keys: string[] = requests.map(createCacheKey);
 	const cached = await cache.getBatchMap(keys);
-	let routesData: any[] = keys.map((key: string) => (cached.get(key)));
+	const routesData: any[] = keys.map((key: string) => (cached.get(key)));
 	const apiData =  await getFromApi(requests.filter((request: RouteRequest, index: number) => (!routesData[index])));
-	routesData = routesData.map((routeData: object|null) => {
+	return routesData.map((routeData: object|null) => {
 		if (routeData === null) {
 			return apiData.shift();
 		}
 		return routeData;
-	});
-	return routesData.map((routeData, index) => (
+	}).map((routeData, index) => (
 		Mapper.mapRouteFromApiResponse(
 			routeData,
 			requests[index].avoid,

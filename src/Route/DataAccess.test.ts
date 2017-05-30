@@ -8,6 +8,7 @@ import { setEnvironment } from '../Settings';
 import { route } from '../TestData/DirectionsApiResponses';
 import * as xhr from '../Xhr';
 import * as dao from './DataAccess';
+import { Route } from './Route';
 
 import { routesCache } from '../Cache';
 
@@ -30,7 +31,7 @@ describe('RouteDataAccess', () => {
 	});
 
 	describe('#getRoutes', () => {
-		it('should correctly combine cached and api results with plane', (done) => {
+		it('should correctly combine cached and api results with plane', async () => {
 			const routesData = [
 				Object.assign({}, route, { origin: {lat: 1, lng: 1}}),
 				Object.assign({}, route, { origin: {lat: 2, lng: 2}}),
@@ -60,19 +61,16 @@ describe('RouteDataAccess', () => {
 				new Promise((resolve) => (resolve({data: { path: [routesData[1], routesData[3]]}})))
 			);
 
-			const loadingRoutes = dao.getRoutes(requests);
-			loadingRoutes.then((routes) => {
-				chai.expect(routes.length).to.equal(4);
-				chai.expect(routes[0].origin.lat).to.equal(1);
-				chai.expect(routes[1].origin.lat).to.equal(2);
-				chai.expect(routes[2].origin.lat).to.equal(3);
-				chai.expect(routes[3].origin.lat).to.equal(4);
-				chai.expect(routes[0].directions[2].mode).to.equal('plane');
-				chai.expect(routes[1].directions[2].mode).to.equal('plane');
-				chai.expect(routes[2].directions[2].mode).to.equal('plane');
-				chai.expect(routes[3].directions[2].mode).to.equal('plane');
-				done();
-			});
+			const routes: Route[] = await dao.getRoutes(requests);
+			chai.expect(routes.length).to.equal(4);
+			chai.expect(routes[0].origin.lat).to.equal(1);
+			chai.expect(routes[1].origin.lat).to.equal(2);
+			chai.expect(routes[2].origin.lat).to.equal(3);
+			chai.expect(routes[3].origin.lat).to.equal(4);
+			chai.expect(routes[0].directions[2].mode).to.equal('plane');
+			chai.expect(routes[1].directions[2].mode).to.equal('plane');
+			chai.expect(routes[2].directions[2].mode).to.equal('plane');
+			chai.expect(routes[3].directions[2].mode).to.equal('plane');
 		});
 	});
 });
