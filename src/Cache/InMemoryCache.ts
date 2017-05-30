@@ -1,10 +1,11 @@
+import * as cloneDeep from 'lodash.clonedeep';
 import { ICache } from './ICache';
 
 export class InMemoryCache implements ICache {
 	private cache = {};
 
 	public async set(key: string, value: any): Promise<void> {
-		this.cache[key] = value !== null && typeof value === 'object' ? deepClone(value) : value;
+		this.cache[key] = value !== null && typeof value === 'object' ? cloneDeep(value) : value;
 	}
 
 	public async get(key: string): Promise<any> {
@@ -12,7 +13,7 @@ export class InMemoryCache implements ICache {
 		if (!value) {
 			return null;
 		}
-		return typeof value === 'object' ? deepClone(value) : value;
+		return typeof value === 'object' ? cloneDeep(value) : value;
 	}
 
 	public getBatch(keys: string[]): Promise<any[]> {
@@ -35,6 +36,3 @@ export class InMemoryCache implements ICache {
 	}
 }
 
-function deepClone(value: any): any {
-	return JSON.parse(JSON.stringify(value));
-}

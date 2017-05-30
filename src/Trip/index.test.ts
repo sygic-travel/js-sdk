@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
+import * as cloneDeep from 'lodash.clonedeep';
 import * as sinon from 'sinon';
 import { SinonSandbox } from 'sinon';
 
@@ -131,7 +132,7 @@ describe('TripController', () => {
 				resolve(new ApiResponse(200, placesResponse));
 			}));
 
-			const expectedTrip: TripController.Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
+			const expectedTrip: TripController.Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			expectedTrip.endsOn =  '2017-04-11';
 
 			if (expectedTrip.days) {
@@ -152,7 +153,7 @@ describe('TripController', () => {
 				resolve(new ApiResponse(200, placesResponse));
 			}));
 
-			const expectedTrip: TripController.Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
+			const expectedTrip: TripController.Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			expectedTrip.startsOn =  '2017-04-07';
 
 			if (expectedTrip.days) {

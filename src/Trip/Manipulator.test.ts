@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
+import * as cloneDeep from 'lodash.clonedeep';
 import * as sinon from 'sinon';
 import { SinonSandbox } from 'sinon';
 
@@ -32,8 +33,8 @@ describe('TripManipulator', () => {
 
 	describe('#addDay', () => {
 		it('should add day to trip', () => {
-			const inputTrip: Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
-			const expectedTrip: Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			expectedTrip.endsOn =  '2017-04-11';
 
 			if (expectedTrip.days) {
@@ -49,8 +50,8 @@ describe('TripManipulator', () => {
 
 	describe('#addDayToBeggining', () => {
 		it('should add day to the beginning of trip', () => {
-			const inputTrip: Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
-			const expectedTrip: Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			expectedTrip.startsOn =  '2017-04-07';
 
 			if (expectedTrip.days) {
@@ -67,14 +68,14 @@ describe('TripManipulator', () => {
 	describe('#removeDay', () => {
 		it.skip('should throw an error when invalid index is passed', () => {
 			const indexToBeRemoved = 999;
-			const inputTrip: Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			return chai.expect(Manipuator.removeDay(inputTrip, indexToBeRemoved)).to.throw(new Error('Invalid index'));
 		});
 
 		it('should remove day from middle of days array and should not change dates', () => {
 			const indexToBeRemoved = 1;
-			const inputTrip: Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
-			const expectedTrip: Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 
 			if (inputTrip.days) {
 				inputTrip.days.push(emptyDay);
@@ -93,8 +94,8 @@ describe('TripManipulator', () => {
 		it('should remove day from beginning of days array and should change start date', () => {
 			const indexToBeRemoved = 0;
 
-			const inputTrip: Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
-			const expectedTrip: Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			expectedTrip.startsOn = '2017-04-09';
 
 			if (inputTrip.days) {
@@ -114,8 +115,8 @@ describe('TripManipulator', () => {
 		it('should remove day from end of days array and should change end date', () => {
 			const indexToBeRemoved = 2;
 
-			const inputTrip: Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
-			const expectedTrip: Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			expectedTrip.endsOn = '2017-04-09';
 
 			if (inputTrip.days) {
@@ -135,18 +136,18 @@ describe('TripManipulator', () => {
 
 	describe('#swapDays', () => {
 		it.skip('should throw error an error when invalid firstDayIndex is passed', () => {
-			const inputTrip: Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			return chai.expect(Manipuator.swapDays(inputTrip, 999, 1)).to.throw();
 		});
 
 		it.skip('should throw error an error when invalid secondDayIndex is passed', () => {
-			const inputTrip: Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			return chai.expect(Manipuator.swapDays(inputTrip, 0, 999)).to.throw();
 		});
 
 		it('should swap two days', () => {
-			const inputTrip: Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
-			const expectedTrip: Trip = JSON.parse(JSON.stringify(TripExpectedResults.tripDetailed));
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 
 			if (inputTrip.days) {
 				inputTrip.days.push(emptyDay);
