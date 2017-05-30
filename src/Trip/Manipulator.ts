@@ -1,20 +1,7 @@
-import { format } from 'fecha';
-
+import { Day, Trip } from '.';
 import { Place } from '../Places';
-import { Day, Trip } from './index';
+import { addDayToDate, subtractDayToDate } from '../Util';
 import { ItineraryItem } from './Trip';
-
-function addDayToDate(date: string): string {
-	const d = new Date(date);
-	d.setDate(d.getDate() + 1);
-	return format(d, 'YYYY-MM-DD');
-}
-
-function subtractDayToDate(date: string): string {
-	const d = new Date(date);
-	d.setDate(d.getDate() - 1);
-	return format(d, 'YYYY-MM-DD');
-}
 
 // Day methods
 export function addDay(tripToBeUpdated: Trip): Trip {

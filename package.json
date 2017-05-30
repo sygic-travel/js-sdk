@@ -44,7 +44,6 @@
     "@types/node": "^7.0.8",
     "@types/polyline": "^0.1.27",
     "axios": "*",
-    "fecha": "^2.3.1",
     "humps": "^2.0.0",
     "lodash.clonedeep": "^4.5.0",
     "polyline": "^0.2.0",
