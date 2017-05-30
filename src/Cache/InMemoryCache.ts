@@ -35,4 +35,3 @@ export class InMemoryCache implements ICache {
 		this.cache = {};
 	}
 }
-

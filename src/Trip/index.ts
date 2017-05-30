@@ -1,9 +1,7 @@
 import { getPlaceDetailedBatch } from '../Places/index';
 import * as Dao from './DataAccess';
 import * as TripManipulator from './Manipulator';
-import {
-	putPlacesToTrip
-} from './Mapper';
+import { putPlacesToTrip } from './Mapper';
 import {
 	Day,
 	ItineraryItem,
