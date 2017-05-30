@@ -70,20 +70,20 @@ export async function updateTrip(id: string, dataToUpdate: TripUpdateData): Prom
 	return await Dao.updateTrip(tripToBeUpdated);
 }
 
-export async function addDay(id: string): Promise<Trip> {
-	return TripManipulator.addDay(await getTripDetailed(id));
+export async function addDayToTrip(id: string): Promise<Trip> {
+	return Dao.updateTrip(TripManipulator.addDay(await getTripDetailed(id)));
 }
 
-export async function addDayToBeginning(id: string): Promise<Trip> {
-	return TripManipulator.addDayToBeginning(await getTripDetailed(id));
+export async function prependDayToTrip(id: string): Promise<Trip> {
+	return Dao.updateTrip(TripManipulator.prependDayToTrip(await getTripDetailed(id)));
 }
 
-export async function removeDay(id: string, dayIndex: number): Promise<Trip> {
-	return TripManipulator.removeDay(await getTripDetailed(id), dayIndex);
+export async function removeDayFromTrip(id: string, dayIndex: number): Promise<Trip> {
+	return Dao.updateTrip(TripManipulator.removeDayFromTrip(await getTripDetailed(id), dayIndex));
 }
 
-export async function swapDays(id: string, firstDayIndex: number, secondDayIndex: number): Promise<Trip>  {
-	return TripManipulator.swapDays(await getTripDetailed(id), firstDayIndex, secondDayIndex);
+export async function swapDaysInTrip(id: string, firstDayIndex: number, secondDayIndex: number): Promise<Trip>  {
+	return Dao.updateTrip(TripManipulator.swapDaysInTrip(await getTripDetailed(id), firstDayIndex, secondDayIndex));
 }
 
 export async function movePlaceInDay(
@@ -91,11 +91,11 @@ export async function movePlaceInDay(
 	dayIndex: number,
 	positionFrom: number,
 	positionTo: number): Promise<Trip> {
-	return TripManipulator.movePlaceInDay(await getTripDetailed(id), dayIndex, positionFrom, positionTo);
+	return Dao.updateTrip(TripManipulator.movePlaceInDay(await getTripDetailed(id), dayIndex, positionFrom, positionTo));
 }
 
 export async function removePlaceInDay(id: string, dayIndex: number, positionInDay: number): Promise<Trip> {
-	return TripManipulator.removePlaceInDay(await getTripDetailed(id), dayIndex, positionInDay);
+	return Dao.updateTrip(TripManipulator.removePlaceInDay(await getTripDetailed(id), dayIndex, positionInDay));
 }
 
 export async function addPlaceToDay(
@@ -103,10 +103,10 @@ export async function addPlaceToDay(
 	placeId: string,
 	dayIndex: number,
 	positionInDay?: number): Promise<Trip> {
-	return TripManipulator.addPlaceToDay(
+	return Dao.updateTrip(TripManipulator.addPlaceToDay(
 		await getTripDetailed(tripId),
 		await getPlaceDetailed(placeId, '300x300'),
 		dayIndex,
 		positionInDay
-	);
+	));
 };

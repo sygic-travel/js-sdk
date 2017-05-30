@@ -24,7 +24,7 @@ export function addDay(tripToBeUpdated: Trip): Trip {
 	return resultTrip;
 }
 
-export function addDayToBeginning(tripToBeUpdated: Trip): Trip {
+export function prependDayToTrip(tripToBeUpdated: Trip): Trip {
 	if (!tripToBeUpdated.days) {
 		throw new Error('days property in Trip cannot be null');
 	}
@@ -42,7 +42,7 @@ export function addDayToBeginning(tripToBeUpdated: Trip): Trip {
 	return resultTrip;
 }
 
-export function removeDay(tripToBeUpdated: Trip, dayIndex: number): Trip {
+export function removeDayFromTrip(tripToBeUpdated: Trip, dayIndex: number): Trip {
 	if (!tripToBeUpdated.days) {
 		throw new Error('days property in Trip cannot be null');
 	}
@@ -63,7 +63,7 @@ export function removeDay(tripToBeUpdated: Trip, dayIndex: number): Trip {
 	return resultTrip;
 }
 
-export function swapDays(tripToBeUpdated: Trip, firstDayIndex: number, secondDayIndex: number): Trip {
+export function swapDaysInTrip(tripToBeUpdated: Trip, firstDayIndex: number, secondDayIndex: number): Trip {
 	if (!tripToBeUpdated.days) {
 		throw new Error('days property in Trip cannot be null');
 	}

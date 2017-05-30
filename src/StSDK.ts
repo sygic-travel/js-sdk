@@ -8,15 +8,15 @@ import { getRoutesForTripDay, Route } from './Route';
 import { setUserSession } from './Settings/index';
 import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from './Spread';
 import {
-	addDay,
-	addDayToBeginning,
+	addDayToTrip,
 	addPlaceToDay,
 	getTripDetailed,
 	getTrips,
 	movePlaceInDay,
-	removeDay,
+	prependDayToTrip,
+	removeDayFromTrip,
 	removePlaceInDay,
-	swapDays,
+	swapDaysInTrip,
 	Trip,
 	TripUpdateData,
 	updateTrip
@@ -108,28 +108,28 @@ export default class StSDK extends BaseSDK {
 	 * @experimental
 	 */
 	public addDayToTrip(id: string): Promise<Trip> {
-		return addDay(id);
+		return addDayToTrip(id);
 	}
 
 	/**
 	 * @experimental
 	 */
-	public addDayToBeginning(id: string): Promise<Trip> {
-		return addDayToBeginning(id);
+	public prependDayToTrip(id: string): Promise<Trip> {
+		return prependDayToTrip(id);
 	}
 
 	/**
 	 * @experimental
 	 */
-	public removeDay(id: string, dayIndex: number): Promise<Trip> {
-		return removeDay(id, dayIndex);
+	public removeDayFromTrip(id: string, dayIndex: number): Promise<Trip> {
+		return removeDayFromTrip(id, dayIndex);
 	}
 
 	/**
 	 * @experimental
 	 */
-	public swapDays(id: string, firstDayIndex: number, secondDayIndex: number): Promise<Trip> {
-		return swapDays(id, firstDayIndex, secondDayIndex);
+	public swapDaysInTrip(id: string, firstDayIndex: number, secondDayIndex: number): Promise<Trip> {
+		return swapDaysInTrip(id, firstDayIndex, secondDayIndex);
 	}
 
 	/**

@@ -31,10 +31,10 @@ describe('TripController', () => {
 		sandbox.restore();
 	});
 
-	const responsePlace1 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-	const responsePlace2 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-	const responsePlace3 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-	const responsePlace4 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+	const responsePlace1 = cloneDeep(PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+	const responsePlace2 = cloneDeep(PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+	const responsePlace3 = cloneDeep(PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+	const responsePlace4 = cloneDeep(PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
 	responsePlace1.id = 'poi:51098';
 	responsePlace2.id = 'poi:48056';
 	responsePlace3.id = 'poi:48015';
@@ -93,7 +93,7 @@ describe('TripController', () => {
 			}));
 
 			return chai.expect(TripController.getTripDetailed('1234567890'))
-				.to.eventually.deep.equal(Object.assign({}, TripExpectedResults.tripDetailed));
+				.to.eventually.deep.equal(cloneDeep(TripExpectedResults.tripDetailed));
 		});
 	});
 
@@ -112,7 +112,7 @@ describe('TripController', () => {
 				resolve(new ApiResponse(200, placesResponse));
 			}));
 
-			const expectedTrip: TripController.Trip = Object.assign({}, TripExpectedResults.tripDetailed);
+			const expectedTrip: TripController.Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			expectedTrip.name = 'abc';
 			expectedTrip.startsOn = '123';
 			expectedTrip.privacyLevel = 'ppp';
@@ -125,7 +125,7 @@ describe('TripController', () => {
 		});
 	});
 
-	describe('#addDay', () => {
+	describe('#addDayToTrip', () => {
 		it('should add day to trip', () => {
 			tripsDetailedCache.set(TripTestData.tripDetail.trip.id, TripTestData.tripDetail.trip);
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
@@ -142,11 +142,11 @@ describe('TripController', () => {
 				} as TripController.Day);
 			}
 
-			return chai.expect(TripController.addDay('58c6bce821287')).to.eventually.deep.equal(expectedTrip);
+			return chai.expect(TripController.addDayToTrip('58c6bce821287')).to.eventually.deep.equal(expectedTrip);
 		});
 	});
 
-	describe('#addDayToBeginning', () => {
+	describe('#prependDayToTrip', () => {
 		it('should add day to the beginning of trip', () => {
 			tripsDetailedCache.set(TripTestData.tripDetail.trip.id, TripTestData.tripDetail.trip);
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
@@ -163,7 +163,7 @@ describe('TripController', () => {
 				} as TripController.Day);
 			}
 
-			return chai.expect(TripController.addDayToBeginning('58c6bce821287'))
+			return chai.expect(TripController.prependDayToTrip('58c6bce821287'))
 				.to.eventually.deep.equal(expectedTrip);
 		});
 	});
