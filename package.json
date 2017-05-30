@@ -38,8 +38,10 @@
   "dependencies": {
     "@types/humps": "^1.1.2",
     "@types/node": "^7.0.8",
+    "@types/polyline": "^0.1.27",
     "axios": "*",
     "humps": "^2.0.0",
+    "polyline": "^0.2.0",
     "query-string": "^4.3.1"
   }
 }
