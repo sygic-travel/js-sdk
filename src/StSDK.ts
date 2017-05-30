@@ -41,11 +41,11 @@ export default class StSDK extends BaseSDK {
 
 	public spreadPlacesOnMap(
 		places: Place[],
-		markerSizes: SpreadSizeConfig[],
 		bounds: Bounds,
-		canvas: CanvasSize
+		canvas: CanvasSize,
+		sizesConfig?: SpreadSizeConfig[]
 	): SpreadResult {
-		return spread(places, markerSizes, bounds, canvas);
+		return spread(places, bounds, canvas, sizesConfig);
 	}
 
 	/**
