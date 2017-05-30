@@ -55,9 +55,7 @@ export function removeDay(tripToBeUpdated: Trip, dayIndex: number): Trip {
 
 	if (dayIndex === 0 && resultTrip.startsOn) {
 		resultTrip.startsOn = addDayToDate(resultTrip.startsOn);
-	}
-
-	if (dayIndex + 1 === resultTrip.days.length && resultTrip.endsOn) {
+	} else {
 		resultTrip.endsOn = subtractDayToDate(resultTrip.endsOn);
 	}
 

@@ -75,10 +75,11 @@ describe('TripManipulator', () => {
 				.to.throw(Error, 'Invalid dayIndex');
 		});
 
-		it('should remove day from middle of days array and should not change dates', () => {
+		it('should remove day from middle of days array and should change end date', () => {
 			const indexToBeRemoved = 1;
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			expectedTrip.endsOn = '2017-04-09';
 
 			if (inputTrip.days) {
 				inputTrip.days.push(emptyDay);
