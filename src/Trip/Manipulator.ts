@@ -1,3 +1,5 @@
+import * as cloneDeep from 'lodash.clonedeep';
+
 import { Day, Trip } from '.';
 import { Place } from '../Places';
 import { addDayToDate, subtractDayToDate } from '../Util';
@@ -5,73 +7,83 @@ import { ItineraryItem } from './Trip';
 
 // Day methods
 export function addDay(tripToBeUpdated: Trip): Trip {
-	if (tripToBeUpdated.days) {
-		tripToBeUpdated.days.push({
-			itinerary: [],
-			note: null
-		} as Day);
-
-		if (tripToBeUpdated.endsOn) {
-			tripToBeUpdated.endsOn = addDayToDate(tripToBeUpdated.endsOn);
-		}
+	if (!tripToBeUpdated.days) {
+		throw new Error('days property in Trip cannot be null');
 	}
 
-	return tripToBeUpdated;
+	if (!tripToBeUpdated.endsOn) {
+		throw new Error('endsOn property in Trip cannot be null');
+	}
+
+	const resultTrip = cloneDeep(tripToBeUpdated);
+	resultTrip.days.push({
+		itinerary: [],
+		note: null
+	} as Day);
+	resultTrip.endsOn = addDayToDate(resultTrip.endsOn);
+	return resultTrip;
 }
 
 export function addDayToBeginning(tripToBeUpdated: Trip): Trip {
-	if (tripToBeUpdated.days) {
-		tripToBeUpdated.days.unshift({
-			itinerary: [],
-			note: null
-		} as Day);
-
-		if (tripToBeUpdated.startsOn) {
-			tripToBeUpdated.startsOn = subtractDayToDate(tripToBeUpdated.startsOn);
-		}
+	if (!tripToBeUpdated.days) {
+		throw new Error('days property in Trip cannot be null');
 	}
 
-	return tripToBeUpdated;
+	const resultTrip = cloneDeep(tripToBeUpdated);
+
+	resultTrip.days.unshift({
+		itinerary: [],
+		note: null
+	} as Day);
+
+	if (resultTrip.startsOn) {
+		resultTrip.startsOn = subtractDayToDate(resultTrip.startsOn);
+	}
+	return resultTrip;
 }
 
 export function removeDay(tripToBeUpdated: Trip, dayIndex: number): Trip {
-	if (tripToBeUpdated.days) {
-		if (tripToBeUpdated.days.length < dayIndex) {
-			throw new Error('Invalid dayIndex');
-		}
-
-		if (dayIndex === 0 && tripToBeUpdated.startsOn) {
-			tripToBeUpdated.startsOn = addDayToDate(tripToBeUpdated.startsOn);
-		}
-
-		if (dayIndex + 1 === tripToBeUpdated.days.length && tripToBeUpdated.endsOn) {
-			tripToBeUpdated.endsOn = subtractDayToDate(tripToBeUpdated.endsOn);
-		}
-
-		tripToBeUpdated.days.splice(dayIndex, 1);
+	if (!tripToBeUpdated.days) {
+		throw new Error('days property in Trip cannot be null');
 	}
 
-	return tripToBeUpdated;
+	if (tripToBeUpdated.days.length < dayIndex) {
+		throw new Error('Invalid dayIndex');
+	}
+
+	const resultTrip = cloneDeep(tripToBeUpdated);
+
+	if (dayIndex === 0 && resultTrip.startsOn) {
+		resultTrip.startsOn = addDayToDate(resultTrip.startsOn);
+	}
+
+	if (dayIndex + 1 === resultTrip.days.length && resultTrip.endsOn) {
+		resultTrip.endsOn = subtractDayToDate(resultTrip.endsOn);
+	}
+
+	resultTrip.days.splice(dayIndex, 1);
+	return resultTrip;
 }
 
 export function swapDays(tripToBeUpdated: Trip, firstDayIndex: number, secondDayIndex: number): Trip {
-	if (tripToBeUpdated.days) {
-		if (!tripToBeUpdated.days[firstDayIndex]) {
-			throw new Error('Invalid firstDayIndex');
-		}
-
-		if (!tripToBeUpdated.days[secondDayIndex]) {
-			throw new Error('Invalid secondDayIndex');
-		}
-
-		const firstDay: Day = tripToBeUpdated.days[firstDayIndex];
-		const secondDay: Day = tripToBeUpdated.days[secondDayIndex];
-
-		tripToBeUpdated.days[firstDayIndex] = secondDay;
-		tripToBeUpdated.days[secondDayIndex] = firstDay;
+	if (!tripToBeUpdated.days) {
+		throw new Error('days property in Trip cannot be null');
 	}
 
-	return tripToBeUpdated;
+	if (!tripToBeUpdated.days[firstDayIndex]) {
+		throw new Error('Invalid firstDayIndex');
+	}
+
+	if (!tripToBeUpdated.days[secondDayIndex]) {
+		throw new Error('Invalid secondDayIndex');
+	}
+
+	const resultTrip = cloneDeep(tripToBeUpdated);
+	const firstDay: Day = resultTrip.days[firstDayIndex];
+	const secondDay: Day = resultTrip.days[secondDayIndex];
+	resultTrip.days[firstDayIndex] = secondDay;
+	resultTrip.days[secondDayIndex] = firstDay;
+	return resultTrip;
 }
 
 // Item methods
@@ -80,32 +92,34 @@ export function addPlaceToDay(
 	placeToBeAdded: Place,
 	dayIndex: number,
 	positionInDay?: number): Trip {
-	if (tripToBeUpdated.days) {
-		if (!tripToBeUpdated.days[dayIndex]) {
-			throw new Error('Invalid dayIndex');
-		}
-
-		if (positionInDay && !tripToBeUpdated.days[dayIndex].itinerary[positionInDay]) {
-			throw new Error('Invalid positionInDay');
-		}
-
-		const itineraryItem: ItineraryItem = {
-			place: placeToBeAdded,
-			placeId: placeToBeAdded.id,
-			startTime: null,
-			duration: null,
-			note: null,
-			transportFromPrevious: null
-		};
-
-		if (positionInDay) {
-			tripToBeUpdated.days[dayIndex].itinerary.splice(positionInDay, 0, itineraryItem);
-		} else {
-			tripToBeUpdated.days[dayIndex].itinerary.push(itineraryItem);
-		}
+	if (!tripToBeUpdated.days) {
+		throw new Error('days property in Trip cannot be null');
 	}
 
-	return tripToBeUpdated;
+	if (!tripToBeUpdated.days[dayIndex]) {
+		throw new Error('Invalid dayIndex');
+	}
+
+	if (positionInDay && !tripToBeUpdated.days[dayIndex].itinerary[positionInDay]) {
+		throw new Error('Invalid positionInDay');
+	}
+
+	const resultTrip = cloneDeep(tripToBeUpdated);
+	const itineraryItem: ItineraryItem = {
+		place: placeToBeAdded,
+		placeId: placeToBeAdded.id,
+		startTime: null,
+		duration: null,
+		note: null,
+		transportFromPrevious: null
+	};
+
+	if (positionInDay) {
+		resultTrip.days[dayIndex].itinerary.splice(positionInDay, 0, itineraryItem);
+	} else {
+		resultTrip.days[dayIndex].itinerary.push(itineraryItem);
+	}
+	return resultTrip;
 }
 
 export function movePlaceInDay(
@@ -113,43 +127,47 @@ export function movePlaceInDay(
 	dayIndex: number,
 	positionFrom: number,
 	positionTo: number): Trip {
-	if (tripToBeUpdated.days) {
-		if (!tripToBeUpdated.days[dayIndex]) {
-			throw new Error('Invalid dayIndex');
-		}
-
-		if (!tripToBeUpdated.days[dayIndex].itinerary[positionFrom]) {
-			throw new Error('Invalid positionFrom');
-		}
-
-		if (!tripToBeUpdated.days[dayIndex].itinerary[positionTo]) {
-			throw new Error('Invalid positionTo');
-		}
-
-		const firstItineraryItem: ItineraryItem = tripToBeUpdated.days[0].itinerary[0];
-		const secondItineraryItem: ItineraryItem = tripToBeUpdated.days[0].itinerary[1];
-		tripToBeUpdated.days[0].itinerary[0] = secondItineraryItem;
-		tripToBeUpdated.days[0].itinerary[1] = firstItineraryItem;
+	if (!tripToBeUpdated.days) {
+		throw new Error('days property in Trip cannot be null');
 	}
 
-	return tripToBeUpdated;
+	if (!tripToBeUpdated.days[dayIndex]) {
+		throw new Error('Invalid dayIndex');
+	}
+
+	if (!tripToBeUpdated.days[dayIndex].itinerary[positionFrom]) {
+		throw new Error('Invalid positionFrom');
+	}
+
+	if (!tripToBeUpdated.days[dayIndex].itinerary[positionTo]) {
+		throw new Error('Invalid positionTo');
+	}
+
+	const resultTrip = cloneDeep(tripToBeUpdated);
+	const firstItineraryItem: ItineraryItem = resultTrip.days[0].itinerary[0];
+	const secondItineraryItem: ItineraryItem = resultTrip.days[0].itinerary[1];
+	resultTrip.days[0].itinerary[0] = secondItineraryItem;
+	resultTrip.days[0].itinerary[1] = firstItineraryItem;
+	return resultTrip;
 }
 
 export function removePlaceInDay(
 	tripToBeUpdated: Trip,
 	dayIndex: number,
 	positionInDay: number): Trip {
-	if (tripToBeUpdated.days) {
-		if (!tripToBeUpdated.days[dayIndex]) {
-			throw new Error('Invalid dayIndex');
-		}
-
-		if (!tripToBeUpdated.days[dayIndex].itinerary[positionInDay]) {
-			throw new Error('Invalid positionInDay');
-		}
-
-		tripToBeUpdated.days[dayIndex].itinerary.splice(positionInDay, 1);
+	if (!tripToBeUpdated.days) {
+		throw new Error('days property in Trip cannot be null');
 	}
 
-	return tripToBeUpdated;
+	if (!tripToBeUpdated.days[dayIndex]) {
+		throw new Error('Invalid dayIndex');
+	}
+
+	if (!tripToBeUpdated.days[dayIndex].itinerary[positionInDay]) {
+		throw new Error('Invalid positionInDay');
+	}
+
+	const resultTrip = cloneDeep(tripToBeUpdated);
+	resultTrip.days[dayIndex].itinerary.splice(positionInDay, 1);
+	return resultTrip;
 }
