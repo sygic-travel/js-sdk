@@ -1,7 +1,8 @@
 import { getPlaceDetailedBatch } from '../Places/index';
 import * as Dao from './DataAccess';
+import * as TripManipulator from './Manipulator';
 import {
-	putPlacesToTrip
+putPlacesToTrip
 } from './Mapper';
 import {
 	Day,
@@ -73,4 +74,8 @@ export async function updateTrip(id: string, dataToUpdate: TripUpdateData): Prom
 	}
 
 	return await Dao.updateTrip(tripToBeUpdated);
+}
+
+export async function addDay(id: string): Promise<Trip> {
+	return TripManipulator.addDay(await getTripDetailed(id));
 }

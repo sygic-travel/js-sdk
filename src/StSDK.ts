@@ -7,7 +7,7 @@ import { getPlaceDetailed, getPlaceMedia, getPlaces, Place, PlacesFilter, Places
 import { getRoutesForTripDay, Route } from './Route';
 import { setUserSession } from './Settings/index';
 import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from './Spread';
-import { getTripDetailed, getTrips, Trip, TripUpdateData, updateTrip } from './Trip';
+import { addDay, getTripDetailed, getTrips, Trip, TripUpdateData, updateTrip } from './Trip';
 
 export default class StSDK extends BaseSDK {
 	public setUserSession(key: string | null, token: string | null): void {
@@ -68,5 +68,9 @@ export default class StSDK extends BaseSDK {
 	 */
 	public getRoutesForTripDay(tripId: string, dayIndex: number): Promise<Route[]> {
 		return getRoutesForTripDay(tripId, dayIndex);
+	}
+
+	public addDayToTrip(id: string): Promise<Trip> {
+		return addDay(id);
 	}
 }

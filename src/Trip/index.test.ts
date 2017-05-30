@@ -136,4 +136,41 @@ describe('TripController', () => {
 			} as TripController.TripUpdateData)).to.eventually.deep.equal(expectedTrip);
 		});
 	});
+
+	describe('#addDay', () => {
+		it('should add day to trip', () => {
+			tripsDetailedCache.set(TripTestData.tripDetail.trip.id, TripTestData.tripDetail.trip);
+			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				const responsePlace1 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+				const responsePlace2 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+				const responsePlace3 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+				const responsePlace4 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+				responsePlace1.id = 'poi:51098';
+				responsePlace2.id = 'poi:48056';
+				responsePlace3.id = 'poi:48015';
+				responsePlace4.id = 'poi:48071';
+
+				resolve(new ApiResponse(200, {
+					places: [
+						responsePlace1,
+						responsePlace2,
+						responsePlace3,
+						responsePlace4
+					]
+				}));
+			}));
+
+			const expectedTrip: TripController.Trip = Object.assign({}, TripExpectedResults.tripDetailed);
+			expectedTrip.endsOn =  '2017-04-11';
+
+			if (expectedTrip.days) {
+				expectedTrip.days.push({
+					itinerary: [],
+					note: null
+				} as TripController.Day);
+			}
+
+			return chai.expect(TripController.addDay('58c6bce821287')).to.eventually.deep.equal(expectedTrip);
+		});
+	});
 });
