@@ -1,4 +1,5 @@
-import * as moment from 'moment';
+import { format } from 'fecha';
+
 import { Day, Trip } from './index';
 
 // Day methods
@@ -10,8 +11,7 @@ export function addDay(tripToBeUpdated: Trip): Trip {
 		} as Day);
 
 		if (tripToBeUpdated.endsOn) {
-			const newEndDate: moment.Moment = moment(tripToBeUpdated.endsOn);
-			tripToBeUpdated.endsOn = newEndDate.add(1, 'days').format('YYYY-MM-DD');
+			tripToBeUpdated.endsOn = addDayToDate(tripToBeUpdated.endsOn);
 		}
 	}
 
@@ -26,8 +26,7 @@ export function addDayToBeginning(tripToBeUpdated: Trip): Trip {
 		} as Day);
 
 		if (tripToBeUpdated.startsOn) {
-			const newStartDate: moment.Moment = moment(tripToBeUpdated.startsOn);
-			tripToBeUpdated.startsOn = newStartDate.subtract(1, 'days').format('YYYY-MM-DD');
+			tripToBeUpdated.startsOn = subtractDayToDate(tripToBeUpdated.startsOn);
 		}
 	}
 
@@ -41,13 +40,11 @@ export function removeDay(tripToBeUpdated: Trip, dayIndex: number): Trip {
 		}
 
 		if (dayIndex === 0 && tripToBeUpdated.startsOn) {
-			const newStartDate: moment.Moment = moment(tripToBeUpdated.startsOn);
-			tripToBeUpdated.startsOn = newStartDate.add(1, 'days').format('YYYY-MM-DD');
+			tripToBeUpdated.startsOn = addDayToDate(tripToBeUpdated.startsOn);
 		}
 
 		if (dayIndex + 1 === tripToBeUpdated.days.length && tripToBeUpdated.endsOn) {
-			const newEndDate: moment.Moment = moment(tripToBeUpdated.endsOn);
-			tripToBeUpdated.endsOn = newEndDate.subtract(1, 'days').format('YYYY-MM-DD');
+			tripToBeUpdated.endsOn = subtractDayToDate(tripToBeUpdated.endsOn);
 		}
 
 		tripToBeUpdated.days.splice(dayIndex, 1);
@@ -97,3 +94,15 @@ export function swapDays(tripToBeUpdated: Trip, firstDayIndex: number, secondDay
 // 	positionInDay: number): Promise<Trip> {
 //
 // }
+
+function addDayToDate(date: string): string {
+	const d = new Date(date);
+	d.setDate(d.getDate() + 1);
+	return format(d, 'YYYY-MM-DD');
+}
+
+function subtractDayToDate(date: string): string {
+	const d = new Date(date);
+	d.setDate(d.getDate() - 1);
+	return format(d, 'YYYY-MM-DD');
+}
