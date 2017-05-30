@@ -1,12 +1,12 @@
-export function addDayToDate(date: string): string {
+export function addDaysToDate(date: string, count: number): string {
 	const d = new Date(date);
-	d.setDate(d.getDate() + 1);
+	d.setDate(d.getDate() + count);
 	return formatDate(d);
 }
 
-export function subtractDayToDate(date: string): string {
+export function subtractDaysFromDate(date: string, count: number): string {
 	const d = new Date(date);
-	d.setDate(d.getDate() - 1);
+	d.setDate(d.getDate() - count);
 	return formatDate(d);
 }
 

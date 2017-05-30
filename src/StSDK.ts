@@ -15,7 +15,7 @@ import {
 	movePlaceInDay,
 	prependDayToTrip,
 	removeDayFromTrip,
-	removePlaceInDay,
+	removePlaceFromDay,
 	swapDaysInTrip,
 	Trip,
 	TripUpdateData,
@@ -143,7 +143,7 @@ export default class StSDK extends BaseSDK {
 	 * @experimental
 	 */
 	public removePlaceInDay(id: string, dayIndex: number, positionInDay: number): Promise<Trip> {
-		return removePlaceInDay(id, dayIndex, positionInDay);
+		return removePlaceFromDay(id, dayIndex, positionInDay);
 	}
 
 	/**

@@ -202,13 +202,13 @@ describe('TripManipulator', () => {
 	describe('#removePlaceInDay', () => {
 		it('should throw error when invalid dayIndex is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			return chai.expect(() => Manipuator.removePlaceInDay(inputTrip, 999, 0))
+			return chai.expect(() => Manipuator.removePlaceFromDay(inputTrip, 999, 0))
 				.to.throw(Error, 'Invalid dayIndex');
 		});
 
 		it('should throw error when invalid positionInDay is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			return chai.expect(() => Manipuator.removePlaceInDay(inputTrip, 0, 99))
+			return chai.expect(() => Manipuator.removePlaceFromDay(inputTrip, 0, 99))
 				.to.throw(Error, 'Invalid positionInDay');
 		});
 
@@ -221,7 +221,7 @@ describe('TripManipulator', () => {
 				expectedTrip.days[0].itinerary.splice(positionInDay, 1);
 			}
 
-			const result = Manipuator.removePlaceInDay(inputTrip, 0, positionInDay);
+			const result = Manipuator.removePlaceFromDay(inputTrip, 0, positionInDay);
 			return chai.expect(result).to.deep.equal(expectedTrip);
 		});
 	});

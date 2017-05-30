@@ -2,7 +2,7 @@ import * as cloneDeep from 'lodash.clonedeep';
 
 import { Day, Trip } from '.';
 import { Place } from '../Places';
-import { addDayToDate, subtractDayToDate } from '../Util';
+import { addDaysToDate, subtractDaysFromDate } from '../Util';
 import { ItineraryItem } from './Trip';
 
 // Day methods
@@ -20,7 +20,7 @@ export function addDay(tripToBeUpdated: Trip): Trip {
 		itinerary: [],
 		note: null
 	} as Day);
-	resultTrip.endsOn = addDayToDate(resultTrip.endsOn);
+	resultTrip.endsOn = addDaysToDate(resultTrip.endsOn, 1);
 	return resultTrip;
 }
 
@@ -37,7 +37,7 @@ export function prependDayToTrip(tripToBeUpdated: Trip): Trip {
 	} as Day);
 
 	if (resultTrip.startsOn) {
-		resultTrip.startsOn = subtractDayToDate(resultTrip.startsOn);
+		resultTrip.startsOn = subtractDaysFromDate(resultTrip.startsOn, 1);
 	}
 	return resultTrip;
 }
@@ -54,9 +54,9 @@ export function removeDayFromTrip(tripToBeUpdated: Trip, dayIndex: number): Trip
 	const resultTrip = cloneDeep(tripToBeUpdated);
 
 	if (dayIndex === 0 && resultTrip.startsOn) {
-		resultTrip.startsOn = addDayToDate(resultTrip.startsOn);
+		resultTrip.startsOn = addDaysToDate(resultTrip.startsOn, 1);
 	} else {
-		resultTrip.endsOn = subtractDayToDate(resultTrip.endsOn);
+		resultTrip.endsOn = subtractDaysFromDate(resultTrip.endsOn, 1);
 	}
 
 	resultTrip.days.splice(dayIndex, 1);
@@ -149,7 +149,7 @@ export function movePlaceInDay(
 	return resultTrip;
 }
 
-export function removePlaceInDay(
+export function removePlaceFromDay(
 	tripToBeUpdated: Trip,
 	dayIndex: number,
 	positionInDay: number): Trip {

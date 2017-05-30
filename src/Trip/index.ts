@@ -94,8 +94,8 @@ export async function movePlaceInDay(
 	return Dao.updateTrip(TripManipulator.movePlaceInDay(await getTripDetailed(id), dayIndex, positionFrom, positionTo));
 }
 
-export async function removePlaceInDay(id: string, dayIndex: number, positionInDay: number): Promise<Trip> {
-	return Dao.updateTrip(TripManipulator.removePlaceInDay(await getTripDetailed(id), dayIndex, positionInDay));
+export async function removePlaceFromDay(id: string, dayIndex: number, positionInDay: number): Promise<Trip> {
+	return Dao.updateTrip(TripManipulator.removePlaceFromDay(await getTripDetailed(id), dayIndex, positionInDay));
 }
 
 export async function addPlaceToDay(
