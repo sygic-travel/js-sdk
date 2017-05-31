@@ -3,11 +3,12 @@ import { Dao as tripsDao, Day, ItineraryItem, Trip } from '../Trip';
 import * as Dao from './DataAccess';
 import * as Mapper from './Mapper';
 import * as ModeSelector from './ModeSelector';
-import { Direction, DirectionSource, Route, RouteRequest } from './Route';
+import { Direction, DirectionSource, ModeDirections, Route, RouteRequest } from './Route';
 
 export {
 	Direction,
 	DirectionSource,
+	ModeDirections,
 	ModeSelector,
 	Route,
 	RouteRequest,

@@ -21,7 +21,10 @@ export async function getRoutes(requests: RouteRequest[]): Promise<Route[]> {
 			requests[index].type
 		)
 	)).map((route: Route): Route => {
-		route.directions.push(estimatePlaneDirection(route.origin, route.destination));
+		route.modeDirections.push({
+			mode: 'plane',
+			directions: [estimatePlaneDirection(route.origin, route.destination)]
+		});
 		return route;
 	});
 }

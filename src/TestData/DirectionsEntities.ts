@@ -20,26 +20,46 @@ export const route = {
 		source: 'lbs',
 		isoCodes: [ 'CZ', 'SK' ]
 	},
-	directions: [
+	modeDirections: [
 		{
-			distance: 530,
-			duration: 300,
-			polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvA',
 			mode: 'pedestrian',
-			source: 'osrm',
-			type: null,
-			avoid: [],
-			isoCodes: [ 'CZ', 'SK' ]
+			directions: [
+				{
+					distance: 530,
+					duration: 300,
+					polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvA',
+					mode: 'pedestrian',
+					source: 'osrm',
+					type: null,
+					avoid: [],
+					isoCodes: [ 'CZ', 'SK' ]
+				}
+			]
 		},
 		{
-			distance: 800,
-			duration: 30,
-			polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
 			mode: 'car',
-			source: 'lbs',
-			type: 'fastest',
-			avoid: [],
-			isoCodes: [ 'CZ', 'SK' ]
-		}
+			directions: [
+				{
+					distance: 800,
+					duration: 30,
+					polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
+					mode: 'car',
+					source: 'lbs',
+					type: 'fastest',
+					avoid: [],
+					isoCodes: [ 'CZ', 'SK' ]
+				},
+				{
+					distance: 700,
+					duration: 30,
+					polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
+					mode: 'car',
+					source: 'lbs',
+					type: 'shortest',
+					avoid: [],
+					isoCodes: [ 'CZ', 'SK' ]
+				}
+			]
+		},
 	]
 } as Route;
