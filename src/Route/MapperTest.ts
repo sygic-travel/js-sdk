@@ -50,7 +50,7 @@ describe('RouteMapper', () => {
 				origin,
 				destination,
 				avoid: ['highway'],
-				choosenMode: 'car',
+				chosenMode: 'car',
 				type: 'economic',
 					waypoints: [{lat: 1, lng: 1 }],
 			};
@@ -79,7 +79,7 @@ describe('RouteMapper', () => {
 				origin,
 				destination,
 				avoid: [],
-				choosenMode: 'pedestrian',
+				chosenMode: 'pedestrian',
 				type: 'fastest',
 				waypoints: [],
 			};

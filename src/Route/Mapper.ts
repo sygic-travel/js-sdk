@@ -26,7 +26,7 @@ export const mapRouteFromApiResponse = (
 		return direction as Direction;
 	});
 	const route = routeBuild as Route;
-	route.choosenDirection = chooseDirection(route.directions, transportMode, transportType);
+	route.chosenDirection = chooseDirection(route.directions, transportMode, transportType);
 	return route;
 };
 
@@ -42,7 +42,7 @@ export const createRouteRequest = (
 		waypoints: itineraryItem.transportFromPrevious ? itineraryItem.transportFromPrevious.waypoints : [],
 		avoid: itineraryItem.transportFromPrevious ? itineraryItem.transportFromPrevious.avoid : [],
 		type: itineraryItem.transportFromPrevious ? itineraryItem.transportFromPrevious.type : 'fastest',
-		choosenMode: userMode ? userMode : ModeSelector.selectOptimalMode(origin, destination),
+		chosenMode: userMode ? userMode : ModeSelector.selectOptimalMode(origin, destination),
 	} as RouteRequest;
 };
 

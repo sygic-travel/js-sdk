@@ -4,7 +4,7 @@ import { TransportAvoid, TransportMode, TransportType } from '../Trip';
 export interface Route {
 	origin: Location;
 	destination: Location;
-	choosenDirection: Direction;
+	chosenDirection: Direction;
 	directions: Direction[];
 }
 
@@ -25,7 +25,7 @@ export interface RouteRequest {
 	waypoints?: Location[];
 	avoid: TransportAvoid[];
 	type: TransportType;
-	choosenMode: TransportMode;
+	chosenMode: TransportMode;
 }
 
 export type DirectionSource =
