@@ -125,7 +125,7 @@ const canvasSize: SygicTravelSDK.Spread.CanvasSize = {
 }
 
 stSDK.getPlaces(placeFilter).then((places: SygicTravelSDK.Places.Place[]) => {
-    return stSDK.spreadPlaces(places, bounds, canvasSize);
+    return stSDK.spreadPlacesOnMap(places, bounds, canvasSize);
 }).then((spreadPlaces: SygicTravelSDK.Spread.SpreadResult) => {
     console.log(spreadPlaces);
 });
