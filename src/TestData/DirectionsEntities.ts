@@ -10,7 +10,7 @@ export const route = {
 		lat: 49.2080844,
 		lng: 16.582545
 	} as Location,
-	choosenDirection: {
+	chosenDirection: {
 		distance: 800,
 		duration: 30,
 		polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',

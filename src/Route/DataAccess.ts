@@ -17,7 +17,7 @@ export async function getRoutes(requests: RouteRequest[]): Promise<Route[]> {
 		Mapper.mapRouteFromApiResponse(
 			routeData,
 			requests[index].avoid,
-			requests[index].choosenMode,
+			requests[index].chosenMode,
 			requests[index].type
 		)
 	)).map((route: Route): Route => {
