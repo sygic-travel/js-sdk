@@ -124,47 +124,4 @@ describe('TripController', () => {
 			} as TripController.TripUpdateData)).to.eventually.deep.equal(expectedTrip);
 		});
 	});
-
-	describe('#addDayToTrip', () => {
-		it('should add day to trip', () => {
-			tripsDetailedCache.set(TripTestData.tripDetail.trip.id, TripTestData.tripDetail.trip);
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
-				resolve(new ApiResponse(200, placesResponse));
-			}));
-
-			const expectedTrip: TripController.Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			expectedTrip.endsOn =  '2017-04-11';
-
-			if (expectedTrip.days) {
-				expectedTrip.days.push({
-					itinerary: [],
-					note: null
-				} as TripController.Day);
-			}
-
-			return chai.expect(TripController.addDayToTrip('58c6bce821287')).to.eventually.deep.equal(expectedTrip);
-		});
-	});
-
-	describe('#prependDayToTrip', () => {
-		it('should add day to the beginning of trip', () => {
-			tripsDetailedCache.set(TripTestData.tripDetail.trip.id, TripTestData.tripDetail.trip);
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
-				resolve(new ApiResponse(200, placesResponse));
-			}));
-
-			const expectedTrip: TripController.Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			expectedTrip.startsOn =  '2017-04-07';
-
-			if (expectedTrip.days) {
-				expectedTrip.days.unshift({
-					itinerary: [],
-					note: null
-				} as TripController.Day);
-			}
-
-			return chai.expect(TripController.prependDayToTrip('58c6bce821287'))
-				.to.eventually.deep.equal(expectedTrip);
-		});
-	});
 });
