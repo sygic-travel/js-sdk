@@ -1,33 +1,13 @@
 import * as chai from 'chai';
-import * as chaiAsPromised from 'chai-as-promised';
 import * as cloneDeep from 'lodash.clonedeep';
-import * as sinon from 'sinon';
-import { SinonSandbox } from 'sinon';
 
 import { Place } from '../Places';
-import { setEnvironment } from '../Settings';
 import * as PlaceExpectedResults from '../TestData/PlacesExpectedResults';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
 import * as Manipuator from './Manipulator';
 import { Day, ItineraryItem, Trip } from './Trip';
 
-let sandbox: SinonSandbox;
-chai.use(chaiAsPromised);
-
 describe('TripManipulator', () => {
-	before((done) => {
-		setEnvironment('api', '987654321');
-		done();
-	});
-
-	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
-	});
-
-	afterEach(() => {
-		sandbox.restore();
-	});
-
 	const emptyDay: Day = {
 		itinerary: [],
 		note: null

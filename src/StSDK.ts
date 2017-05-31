@@ -142,7 +142,7 @@ export default class StSDK extends BaseSDK {
 	/**
 	 * @experimental
 	 */
-	public removePlaceInDay(id: string, dayIndex: number, positionInDay: number): Promise<Trip> {
+	public removePlaceFromDay(id: string, dayIndex: number, positionInDay: number): Promise<Trip> {
 		return removePlaceFromDay(id, dayIndex, positionInDay);
 	}
 
