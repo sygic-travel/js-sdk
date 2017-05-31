@@ -1,6 +1,7 @@
 import * as _Geo from './src/Geo';
 import * as _Media from './src/Media/Media';
 import * as _Place from './src/Places';
+import * as _Route from './src/Route';
 import * as _Spread from './src/Spread';
 import * as _Trip from './src/Trip';
 
@@ -16,12 +17,72 @@ export class StSDK {
 		bounds: _Geo.Bounds,
 		canvas: _Spread.CanvasSize
 	): _Spread.SpreadResult;
+
+	/**
+	 * @experimental
+	 */
 	public addPlaceToFavorites(id: string): Promise<void>;
+	/**
+	 * @experimental
+	 */
 	public addCustomPlaceToFavorites(name: string, location: _Geo.Location, address: string): Promise<string>;
+	/**
+	 * @experimental
+	 */
 	public getFavoritesIds(): Promise<string[]>;
+	/**
+	 * @experimental
+	 */
 	public removePlaceFromFavorites(id: string): Promise<void>
+	/**
+	 * @experimental
+	 */
 	public getTrips(dateFrom: string, dateTo: string): Promise<_Trip.Trip[]>;
+	/**
+	 * @experimental
+	 */
 	public getTripDetailed(id: string): Promise<_Trip.Trip>;
+	/**
+	 * @experimental
+	 */
+	public getRoutesForTripDay(tripId: string, dayIndex: number): Promise<_Route.Route[]>
+	/**
+	 * @experimental
+	 */
+	public updateTrip(id, dataToUpdate: _Trip.TripUpdateData): Promise<_Trip.Trip>
+	/**
+	 * @experimental
+	 */
+	public addDayToTrip(id: string): Promise<_Trip.Trip>
+	/**
+	 * @experimental
+	 */
+	public prependDayToTrip(id: string): Promise<_Trip.Trip>
+	/**
+	 * @experimental
+	 */
+	public removeDayFromTrip(id: string, dayIndex: number): Promise<_Trip.Trip>
+	/**
+	 * @experimental
+	 */
+	public swapDaysInTrip(id: string, firstDayIndex: number, secondDayIndex: number): Promise<_Trip.Trip>
+
+	/**
+	 * @experimental
+	 */
+	public movePlaceInDay(id: string, dayIndex: number, positionFrom: number, positionTo: number): Promise<_Trip.Trip>
+	/**
+	 * @experimental
+	 */
+	public removePlaceFromDay(id: string, dayIndex: number, positionInDay: number): Promise<_Trip.Trip>
+	/**
+	 * @experimental
+	 */
+	public addPlaceToDay(
+		tripId: string,
+		placeId: string,
+		dayIndex: number,
+		positionInDay?: number): Promise<_Trip.Trip>
 }
 
 export namespace Places {
@@ -61,4 +122,10 @@ export namespace Trips {
 	export import ItineraryItem = _Trip.ItineraryItem;
 	export import TripPrivileges = _Trip.TripPrivileges;
 	export import TripMedia = _Trip.TripMedia;
+}
+
+export namespace Route {
+	export import Direction = _Route.Direction;
+	export import DirectionSource = _Route.DirectionSource;
+	export import Route = _Route.Route;
 }
