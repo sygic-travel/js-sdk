@@ -60,7 +60,7 @@ export const tripDetailed = {
 		'delete': true
 	} as TripPrivileges,
 	startsOn: "2017-04-08",
-	endsOn: "2017-04-10",
+	endsOn: "2017-04-08",
 	days: [
 		{
 			itinerary: [{
@@ -96,7 +96,8 @@ export const tripDetailed = {
 					transportFromPrevious: null
 				} as ItineraryItem
 			],
-			note: null
+			note: null,
+			date: "2017-04-08"
 		} as Day,
 	],
 	media: {

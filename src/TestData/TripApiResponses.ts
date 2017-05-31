@@ -52,7 +52,7 @@ export const tripDetail = {
 			"delete": true
 		},
 		"starts_on": "2017-04-08",
-		"ends_on": "2017-04-10",
+		"ends_on": "2017-04-08",
 		"days": [
 			{
 				"itinerary": [
