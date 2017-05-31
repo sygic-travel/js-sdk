@@ -2,7 +2,7 @@ import { Day } from '.';
 import { addDaysToDate } from '../Util';
 
 export function decorateDaysWithDate(tripStartDate: string | null, days: Day[] | null): Day[] | null {
-	if (!tripStartDate || !days) {
+	if (!days) {
 		return null;
 	}
 
