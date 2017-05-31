@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
+import * as cloneDeep from 'lodash.clonedeep';
 import { SinonSandbox } from 'sinon';
 import * as sinon from 'sinon';
 import { RouteRequest } from '.';
@@ -33,10 +34,10 @@ describe('RouteDataAccess', () => {
 	describe('#getRoutes', () => {
 		it('should correctly combine cached and api results with plane', async () => {
 			const routesData = [
-				Object.assign({}, route, { origin: {lat: 1, lng: 1}}),
-				Object.assign({}, route, { origin: {lat: 2, lng: 2}}),
-				Object.assign({}, route, { origin: {lat: 3, lng: 3}}),
-				Object.assign({}, route, { origin: {lat: 4, lng: 4}}),
+				Object.assign(cloneDeep(route), { origin: {lat: 1, lng: 1}}),
+				Object.assign(cloneDeep(route), { origin: {lat: 2, lng: 2}}),
+				Object.assign(cloneDeep(route), { origin: {lat: 3, lng: 3}}),
+				Object.assign(cloneDeep(route), { origin: {lat: 4, lng: 4}}),
 			];
 
 			const buildRequest = (data: any): RouteRequest => ({
