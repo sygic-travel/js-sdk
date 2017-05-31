@@ -1,5 +1,6 @@
 import * as chai from 'chai';
-import { CanvasSize, spread, SpreadSizeConfig } from '.';
+import { CanvasSize, SpreadSizeConfig } from '.';
+import { spread } from './Spreader';
 import { Bounds } from '../Geo';
 import { Place, Price } from '../Places/Place';
 

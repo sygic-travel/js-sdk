@@ -94,9 +94,9 @@ Will calculate positions of places (map markers) according to spread configurati
 
 #### Arguments:
 - [`places: Places.Place[]`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_places_place_.place.html)
-- [`markerSizes: Spread.SpreadSizeConfig[]`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_spread_config_.spreadsizeconfig.html)
 - [`bounds: Geo.Bounds`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_geo_bounds_.bounds.html)
 - [`canvas: Spread.CanvasSize`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_spread_canvas_.canvassize.html)
+- [`markerSizes (optional): Spread.SpreadSizeConfig[]`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_spread_config_.spreadsizeconfig.html)
 #### Returns:
 - [`Spread.SpreadResult`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_spread_spreader_.spreadresult.html)
 
@@ -110,30 +110,6 @@ const placeFilter: SygicTravelSDK.Places.PlacesFilterJSON = {
     parent: ‘city:1’,
     level: null
 };
-
-const markerSizes: Spread.SpreadSizeConfig[] = [{
-    name: ‘popular’, // name of group that will be spread in result
-    radius: 30, // radius around the place that won’t be crossed with another place
-    margin: 10, // margin against other places
-    photoRequired: true, // places in this group must have a photo
-    minimalRating: 0.3
-}, {
-    name: ‘big’,
-    radius: 20,
-    margin: 10,
-    photoRequired: true,
-    minimalRating: 0.0001
-}, {
-    name: ‘medium’,
-    radius: 15,
-    margin: 5,
-    photoRequired: false
-}, {
-    name: ‘small’,
-    radius: 5,
-    margin: 5,
-    photoRequired: false
-}];
 
 const bounds: SygicTravelSDK.Geo.Bounds = {
     south: 51.44705,
@@ -149,7 +125,7 @@ const canvasSize: SygicTravelSDK.Spread.CanvasSize = {
 }
 
 stSDK.getPlaces(placeFilter).then((places: SygicTravelSDK.Places.Place[]) => {
-    return stSDK.spreadPlaces(places, markerSizes, bounds, canvasSize);
+    return stSDK.spreadPlaces(places, bounds, canvasSize);
 }).then((spreadPlaces: SygicTravelSDK.Spread.SpreadResult) => {
     console.log(spreadPlaces);
 });
