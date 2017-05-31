@@ -5,7 +5,7 @@ export interface Route {
 	origin: Location;
 	destination: Location;
 	chosenDirection: Direction;
-	directions: Direction[];
+	modeDirections: ModeDirections[];
 }
 
 export interface Direction {
@@ -17,6 +17,11 @@ export interface Direction {
 	avoid: TransportAvoid[];
 	source: DirectionSource;
 	isoCodes: string[];
+}
+
+export interface ModeDirections {
+	mode: TransportMode;
+	directions: Direction[];
 }
 
 export interface RouteRequest {

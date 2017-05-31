@@ -24,6 +24,15 @@ export const route = {
 			"mode": "driving",
 			"source": "lbs",
 			"iso_codes": [ 'CZ', 'SK' ]
+		},
+		{
+			"distance": 700,
+			"duration": 30,
+			"polyline": "emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe",
+			"mode": "driving",
+			"source": "lbs",
+			"type": "shortest",
+			"iso_codes": [ 'CZ', 'SK' ]
 		}
 	]
 };
