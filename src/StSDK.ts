@@ -149,7 +149,7 @@ export default class StSDK extends BaseSDK {
 	/**
 	 * @experimental
 	 */
-	public async addPlaceToDay(
+	public addPlaceToDay(
 		tripId: string,
 		placeId: string,
 		dayIndex: number,

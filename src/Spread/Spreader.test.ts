@@ -1,8 +1,8 @@
 import * as chai from 'chai';
 import { CanvasSize, SpreadSizeConfig } from '.';
-import { spread } from './Spreader';
 import { Bounds } from '../Geo';
-import { Place, Price } from '../Places/Place';
+import { Place, Price } from '../Places';
+import { spread } from './Spreader';
 
 const bounds: Bounds = {
 	south: 0,
