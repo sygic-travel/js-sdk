@@ -7,7 +7,20 @@ import { getPlaceDetailed, getPlaceMedia, getPlaces, Place, PlacesFilter, Places
 import { getRoutesForTripDay, Route } from './Route';
 import { setUserSession } from './Settings/index';
 import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from './Spread';
-import { getTripDetailed, getTrips, Trip, TripUpdateData, updateTrip } from './Trip';
+import {
+	addDayToTrip,
+	addPlaceToDay,
+	getTripDetailed,
+	getTrips,
+	movePlaceInDay,
+	prependDayToTrip,
+	removeDayFromTrip,
+	removePlaceFromDay,
+	swapDaysInTrip,
+	Trip,
+	TripUpdateData,
+	updateTrip
+} from './Trip';
 
 export default class StSDK extends BaseSDK {
 	public setUserSession(key: string | null, token: string | null): void {
@@ -35,30 +48,58 @@ export default class StSDK extends BaseSDK {
 		return spread(places, markerSizes, bounds, canvas);
 	}
 
+	/**
+	 * @experimental
+	 */
+	public getRoutesForTripDay(tripId: string, dayIndex: number): Promise<Route[]> {
+		return getRoutesForTripDay(tripId, dayIndex);
+	}
+
+	/**
+	 * @experimental
+	 */
 	public getTrips(dateFrom: string, dateTo: string): Promise<Trip[]> {
 		return getTrips(dateFrom, dateTo);
 	}
 
+	/**
+	 * @experimental
+	 */
 	public getTripDetailed(id: string): Promise<Trip> {
 		return getTripDetailed(id);
 	}
 
+	/**
+	 * @experimental
+	 */
 	public updateTrip(id, dataToUpdate: TripUpdateData): Promise<Trip> {
 		return updateTrip(id, dataToUpdate);
 	}
 
+	/**
+	 * @experimental
+	 */
 	public addPlaceToFavorites(id: string): Promise<void> {
 		return addPlaceToFavorites(id);
 	}
 
+	/**
+	 * @experimental
+	 */
 	public addCustomPlaceToFavorites(name: string, location: Location, address: string): Promise<string> {
 		return addCustomPlaceToFavorites(name, location, address);
 	}
 
+	/**
+	 * @experimental
+	 */
 	public getFavoritesIds(): Promise<string[]> {
 		return getFavoritesIds();
 	}
 
+	/**
+	 * @experimental
+	 */
 	public removePlaceFromFavorites(id: string): Promise<void> {
 		return removePlaceFromFavorites(id);
 	}
@@ -66,7 +107,53 @@ export default class StSDK extends BaseSDK {
 	/**
 	 * @experimental
 	 */
-	public getRoutesForTripDay(tripId: string, dayIndex: number): Promise<Route[]> {
-		return getRoutesForTripDay(tripId, dayIndex);
+	public addDayToTrip(id: string): Promise<Trip> {
+		return addDayToTrip(id);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public prependDayToTrip(id: string): Promise<Trip> {
+		return prependDayToTrip(id);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public removeDayFromTrip(id: string, dayIndex: number): Promise<Trip> {
+		return removeDayFromTrip(id, dayIndex);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public swapDaysInTrip(id: string, firstDayIndex: number, secondDayIndex: number): Promise<Trip> {
+		return swapDaysInTrip(id, firstDayIndex, secondDayIndex);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public movePlaceInDay(id: string, dayIndex: number, positionFrom: number, positionTo: number): Promise<Trip> {
+		return movePlaceInDay(id, dayIndex, positionFrom, positionTo);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public removePlaceFromDay(id: string, dayIndex: number, positionInDay: number): Promise<Trip> {
+		return removePlaceFromDay(id, dayIndex, positionInDay);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public async addPlaceToDay(
+		tripId: string,
+		placeId: string,
+		dayIndex: number,
+		positionInDay?: number): Promise<Trip> {
+			return addPlaceToDay(tripId, placeId, dayIndex, positionInDay);
 	}
 }

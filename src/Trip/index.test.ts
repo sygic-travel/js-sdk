@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
+import * as cloneDeep from 'lodash.clonedeep';
 import * as sinon from 'sinon';
 import { SinonSandbox } from 'sinon';
 
@@ -23,11 +24,30 @@ describe('TripController', () => {
 
 	beforeEach(() => {
 		sandbox = sinon.sandbox.create();
+		tripsDetailedCache.reset();
 	});
 
 	afterEach(() => {
 		sandbox.restore();
 	});
+
+	const responsePlace1 = cloneDeep(PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+	const responsePlace2 = cloneDeep(PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+	const responsePlace3 = cloneDeep(PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+	const responsePlace4 = cloneDeep(PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+	responsePlace1.id = 'poi:51098';
+	responsePlace2.id = 'poi:48056';
+	responsePlace3.id = 'poi:48015';
+	responsePlace4.id = 'poi:48071';
+
+	const placesResponse: any = {
+		places: [
+			responsePlace1,
+			responsePlace2,
+			responsePlace3,
+			responsePlace4
+		]
+	};
 
 	describe('#getTrips', () => {
 		it('should throw an exception when response without trips came', () => {
@@ -69,27 +89,11 @@ describe('TripController', () => {
 			}));
 
 			stub.onSecondCall().returns(new Promise<ApiResponse>((resolve) => {
-				const responsePlace1 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				const responsePlace2 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				const responsePlace3 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				const responsePlace4 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				responsePlace1.id = 'poi:51098';
-				responsePlace2.id = 'poi:48056';
-				responsePlace3.id = 'poi:48015';
-				responsePlace4.id = 'poi:48071';
-
-				resolve(new ApiResponse(200, {
-					places: [
-						responsePlace1,
-						responsePlace2,
-						responsePlace3,
-						responsePlace4
-					]
-				}));
+				resolve(new ApiResponse(200, placesResponse));
 			}));
 
 			return chai.expect(TripController.getTripDetailed('1234567890'))
-				.to.eventually.deep.equal(Object.assign({}, TripExpectedResults.tripDetailed));
+				.to.eventually.deep.equal(cloneDeep(TripExpectedResults.tripDetailed));
 		});
 	});
 
@@ -105,26 +109,10 @@ describe('TripController', () => {
 		it('should update trip', () => {
 			tripsDetailedCache.set(TripTestData.tripDetail.trip.id, TripTestData.tripDetail.trip);
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
-				const responsePlace1 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				const responsePlace2 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				const responsePlace3 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				const responsePlace4 = Object.assign({}, PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-				responsePlace1.id = 'poi:51098';
-				responsePlace2.id = 'poi:48056';
-				responsePlace3.id = 'poi:48015';
-				responsePlace4.id = 'poi:48071';
-
-				resolve(new ApiResponse(200, {
-					places: [
-						responsePlace1,
-						responsePlace2,
-						responsePlace3,
-						responsePlace4
-					]
-				}));
+				resolve(new ApiResponse(200, placesResponse));
 			}));
 
-			const expectedTrip: TripController.Trip = Object.assign({}, TripExpectedResults.tripDetailed);
+			const expectedTrip: TripController.Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			expectedTrip.name = 'abc';
 			expectedTrip.startsOn = '123';
 			expectedTrip.privacyLevel = 'ppp';
@@ -134,6 +122,49 @@ describe('TripController', () => {
 				startsOn: '123',
 				privacyLevel: 'ppp'
 			} as TripController.TripUpdateData)).to.eventually.deep.equal(expectedTrip);
+		});
+	});
+
+	describe('#addDayToTrip', () => {
+		it('should add day to trip', () => {
+			tripsDetailedCache.set(TripTestData.tripDetail.trip.id, TripTestData.tripDetail.trip);
+			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, placesResponse));
+			}));
+
+			const expectedTrip: TripController.Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			expectedTrip.endsOn =  '2017-04-11';
+
+			if (expectedTrip.days) {
+				expectedTrip.days.push({
+					itinerary: [],
+					note: null
+				} as TripController.Day);
+			}
+
+			return chai.expect(TripController.addDayToTrip('58c6bce821287')).to.eventually.deep.equal(expectedTrip);
+		});
+	});
+
+	describe('#prependDayToTrip', () => {
+		it('should add day to the beginning of trip', () => {
+			tripsDetailedCache.set(TripTestData.tripDetail.trip.id, TripTestData.tripDetail.trip);
+			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, placesResponse));
+			}));
+
+			const expectedTrip: TripController.Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			expectedTrip.startsOn =  '2017-04-07';
+
+			if (expectedTrip.days) {
+				expectedTrip.days.unshift({
+					itinerary: [],
+					note: null
+				} as TripController.Day);
+			}
+
+			return chai.expect(TripController.prependDayToTrip('58c6bce821287'))
+				.to.eventually.deep.equal(expectedTrip);
 		});
 	});
 });
