@@ -59,6 +59,7 @@ export interface TripMedia {
 export interface Day {
 	note: string | null;
 	itinerary: ItineraryItem[];
+	date: string | null;
 }
 
 export interface ItineraryItem {

@@ -4,6 +4,7 @@ import { Day, Trip } from '.';
 import { Place } from '../Places';
 import { addDaysToDate, subtractDaysFromDate } from '../Util';
 import { ItineraryItem } from './Trip';
+import { decorateDaysWithDate } from './Utility';
 
 // Day methods
 export function addDay(tripToBeUpdated: Trip): Trip {
@@ -18,9 +19,11 @@ export function addDay(tripToBeUpdated: Trip): Trip {
 	const resultTrip = cloneDeep(tripToBeUpdated);
 	resultTrip.days.push({
 		itinerary: [],
-		note: null
+		note: null,
+		date: null
 	} as Day);
-	resultTrip.endsOn = addDaysToDate(resultTrip.endsOn, 1);
+	resultTrip.endsOn = resultTrip.endsOn ? addDaysToDate(resultTrip.endsOn, 1) : resultTrip.endsOn;
+	resultTrip.days = decorateDaysWithDate(resultTrip.startsOn, resultTrip.days);
 	return resultTrip;
 }
 
@@ -33,12 +36,11 @@ export function prependDayToTrip(tripToBeUpdated: Trip): Trip {
 
 	resultTrip.days.unshift({
 		itinerary: [],
-		note: null
+		note: null,
+		date: null
 	} as Day);
-
-	if (resultTrip.startsOn) {
-		resultTrip.startsOn = subtractDaysFromDate(resultTrip.startsOn, 1);
-	}
+	resultTrip.startsOn = subtractDaysFromDate(resultTrip.startsOn, 1);
+	resultTrip.days = decorateDaysWithDate(resultTrip.startsOn, resultTrip.days);
 	return resultTrip;
 }
 
@@ -60,6 +62,7 @@ export function removeDayFromTrip(tripToBeUpdated: Trip, dayIndex: number): Trip
 	}
 
 	resultTrip.days.splice(dayIndex, 1);
+	resultTrip.days = decorateDaysWithDate(resultTrip.startsOn, resultTrip.days);
 	return resultTrip;
 }
 

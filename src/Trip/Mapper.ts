@@ -2,6 +2,7 @@ import { camelizeKeys, decamelizeKeys } from 'humps';
 
 import { Place } from '../Places';
 import { Day, ItineraryItem, Trip, TripMedia, TripPrivileges } from './Trip';
+import { decorateDaysWithDate } from './Utility';
 
 export const mapTripListApiResponseToTripsList = (trips: any): Trip[] => {
 	return trips.map((trip) => {
@@ -14,7 +15,7 @@ export const mapTripDetailedApiResponseToTrip = (tripDetailed: any): Trip => {
 };
 
 export const mapTrip = (trip, days: Day[] | null): Trip => {
-	return {
+	const resultTrip = {
 		id: trip.id,
 		ownerId: trip.owner_id,
 		privacyLevel: trip.privacy_level,
@@ -27,12 +28,15 @@ export const mapTrip = (trip, days: Day[] | null): Trip => {
 		url: trip.url,
 		media: camelizeKeys(trip.media) as TripMedia,
 		privileges: camelizeKeys(trip.privileges) as TripPrivileges,
-		days
+		days: decorateDaysWithDate(trip.starts_on, days)
 	} as Trip;
+
+	return resultTrip;
 };
 
 const mapTripDays = (trip): Day[] => trip.days.map((day) => ({
 	note: day.note,
+	date: null,
 	itinerary: day.itinerary.map((itineraryItem) => ({
 		placeId: itineraryItem.place_id,
 		startTime: itineraryItem.start_time,
