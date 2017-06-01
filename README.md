@@ -17,11 +17,11 @@ You can also check out our [API Documentation](http://docs.sygictravelapi.com/js
 ## Installation
 You can get the UMD build from the CDN, which you can include to your document,
 ```html
-<script src=“cdn.travel.sygic.com/js-sdk/v0.2.0/SygicTravelSDK.js”></script>
+<script src=“cdn.travel.sygic.com/js-sdk/v0.2.0-beta/SygicTravelSDK.js”></script>
 ```
 or install it using Yarn or NPM (Typescript types included).
 ```
-yarn add sygic-travel/js-sdk.git#v0.2.0
+yarn add sygic-travel/js-sdk.git#v0.2.0-beta
 ```
 ## Initialization
 #### [`create`](http://docs.sygictravelapi.com/js-sdk/master/modules/_sdk_.html#create)
