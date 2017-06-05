@@ -4,8 +4,8 @@ import * as cloneDeep from 'lodash.clonedeep';
 import { Place } from '../Places';
 import * as PlaceExpectedResults from '../TestData/PlacesExpectedResults';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
-import * as Manipuator from './Manipulator';
-import { Day, ItineraryItem, Trip } from './Trip';
+import * as Manipulator from './Manipulator';
+import { Day, ItineraryItem, TransportSettings, Trip } from './Trip';
 
 describe('TripManipulator', () => {
 	const emptyDay: Day = {
@@ -28,7 +28,7 @@ describe('TripManipulator', () => {
 				} as Day);
 			}
 
-			return chai.expect(Manipuator.addDay(inputTrip)).to.deep.equal(expectedTrip);
+			return chai.expect(Manipulator.addDay(inputTrip)).to.deep.equal(expectedTrip);
 		});
 	});
 
@@ -46,7 +46,7 @@ describe('TripManipulator', () => {
 				} as Day);
 			}
 
-			return chai.expect(Manipuator.prependDayToTrip(inputTrip)).to.deep.equal(expectedTrip);
+			return chai.expect(Manipulator.prependDayToTrip(inputTrip)).to.deep.equal(expectedTrip);
 		});
 	});
 
@@ -54,7 +54,7 @@ describe('TripManipulator', () => {
 		it('should throw an error when invalid index is passed', () => {
 			const indexToBeRemoved = 999;
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			return chai.expect(() => Manipuator.removeDayFromTrip(inputTrip, indexToBeRemoved))
+			return chai.expect(() => Manipulator.removeDayFromTrip(inputTrip, indexToBeRemoved))
 				.to.throw(Error, 'Invalid dayIndex');
 		});
 
@@ -86,7 +86,7 @@ describe('TripManipulator', () => {
 				});
 			}
 
-			return chai.expect(Manipuator.removeDayFromTrip(inputTrip, indexToBeRemoved)).to.deep.equal(expectedTrip);
+			return chai.expect(Manipulator.removeDayFromTrip(inputTrip, indexToBeRemoved)).to.deep.equal(expectedTrip);
 		});
 
 		it('should remove day from beginning of days array and should change start date', () => {
@@ -123,7 +123,7 @@ describe('TripManipulator', () => {
 				expectedTrip.days.splice(indexToBeRemoved, 1);
 			}
 
-			return chai.expect(Manipuator.removeDayFromTrip(inputTrip, indexToBeRemoved)).to.deep.equal(expectedTrip);
+			return chai.expect(Manipulator.removeDayFromTrip(inputTrip, indexToBeRemoved)).to.deep.equal(expectedTrip);
 		});
 
 		it('should remove day from end of days array and should change end date', () => {
@@ -155,19 +155,19 @@ describe('TripManipulator', () => {
 				});
 			}
 
-			return chai.expect(Manipuator.removeDayFromTrip(inputTrip, indexToBeRemoved)).to.deep.equal(expectedTrip);
+			return chai.expect(Manipulator.removeDayFromTrip(inputTrip, indexToBeRemoved)).to.deep.equal(expectedTrip);
 		});
 	});
 
 	describe('#swapDaysInTrip', () => {
 		it('should throw an error when invalid firstDayIndex is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			return chai.expect(() => Manipuator.swapDaysInTrip(inputTrip, 999, 1)).to.throw(Error, 'Invalid firstDayIndex');
+			return chai.expect(() => Manipulator.swapDaysInTrip(inputTrip, 999, 1)).to.throw(Error, 'Invalid firstDayIndex');
 		});
 
 		it('should throw an error when invalid secondDayIndex is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			return chai.expect(() => Manipuator.swapDaysInTrip(inputTrip, 0, 999)).to.throw(Error, 'Invalid secondDayIndex');
+			return chai.expect(() => Manipulator.swapDaysInTrip(inputTrip, 0, 999)).to.throw(Error, 'Invalid secondDayIndex');
 		});
 
 		it('should swap two days', () => {
@@ -182,26 +182,26 @@ describe('TripManipulator', () => {
 				expectedTrip.days.unshift(emptyDay);
 			}
 
-			return chai.expect(Manipuator.swapDaysInTrip(inputTrip, 0, 1)).to.deep.equal(expectedTrip);
+			return chai.expect(Manipulator.swapDaysInTrip(inputTrip, 0, 1)).to.deep.equal(expectedTrip);
 		});
 	});
 
 	describe('#movePlaceInDay', () => {
 		it('should throw an error when invalid dayIndex is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			return chai.expect(() => Manipuator.movePlaceInDay(inputTrip, 999, 0, 1))
+			return chai.expect(() => Manipulator.movePlaceInDay(inputTrip, 999, 0, 1))
 				.to.throw(Error, 'Invalid dayIndex');
 		});
 
 		it('should throw an error when invalid positionFrom is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			return chai.expect(() => Manipuator.movePlaceInDay(inputTrip, 0, 999, 1))
+			return chai.expect(() => Manipulator.movePlaceInDay(inputTrip, 0, 999, 1))
 				.to.throw(Error, 'Invalid positionFrom');
 		});
 
 		it('should throw an error when invalid positionTo is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			return chai.expect(() => Manipuator.movePlaceInDay(inputTrip, 0, 0, 999))
+			return chai.expect(() => Manipulator.movePlaceInDay(inputTrip, 0, 0, 999))
 				.to.throw(Error, 'Invalid positionTo');
 		});
 
@@ -224,7 +224,7 @@ describe('TripManipulator', () => {
 				expectedTrip.days[0].itinerary[3] = secondItineraryItem;
 			}
 
-			return chai.expect(Manipuator.movePlaceInDay(inputTrip, 0, positionFrom, positionTo))
+			return chai.expect(Manipulator.movePlaceInDay(inputTrip, 0, positionFrom, positionTo))
 				.to.deep.equal(expectedTrip);
 		});
 
@@ -255,13 +255,13 @@ describe('TripManipulator', () => {
 	describe('#removePlaceFromDay', () => {
 		it('should throw error when invalid dayIndex is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			return chai.expect(() => Manipuator.removePlaceFromDay(inputTrip, 999, 0))
+			return chai.expect(() => Manipulator.removePlaceFromDay(inputTrip, 999, 0))
 				.to.throw(Error, 'Invalid dayIndex');
 		});
 
 		it('should throw error when invalid positionInDay is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			return chai.expect(() => Manipuator.removePlaceFromDay(inputTrip, 0, 99))
+			return chai.expect(() => Manipulator.removePlaceFromDay(inputTrip, 0, 99))
 				.to.throw(Error, 'Invalid positionInDay');
 		});
 
@@ -274,7 +274,7 @@ describe('TripManipulator', () => {
 				expectedTrip.days[0].itinerary.splice(positionInDay, 1);
 			}
 
-			const result = Manipuator.removePlaceFromDay(inputTrip, 0, positionInDay);
+			const result = Manipulator.removePlaceFromDay(inputTrip, 0, positionInDay);
 			return chai.expect(result).to.deep.equal(expectedTrip);
 		});
 	});
@@ -284,7 +284,7 @@ describe('TripManipulator', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			const inputPlace: Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
 
-			return chai.expect(() => Manipuator.addPlaceToDay(inputTrip, inputPlace, 999))
+			return chai.expect(() => Manipulator.addPlaceToDay(inputTrip, inputPlace, 999))
 				.to.throw(Error, 'Invalid dayIndex');
 		});
 
@@ -292,7 +292,7 @@ describe('TripManipulator', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			const inputPlace: Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
 
-			return chai.expect(() => Manipuator.addPlaceToDay(inputTrip, inputPlace, 0, 999))
+			return chai.expect(() => Manipulator.addPlaceToDay(inputTrip, inputPlace, 0, 999))
 				.to.throw(Error, 'Invalid positionInDay');
 		});
 
@@ -312,7 +312,7 @@ describe('TripManipulator', () => {
 				} as ItineraryItem);
 			}
 
-			return chai.expect(Manipuator.addPlaceToDay(inputTrip, inputPlace, 0)).to.deep.equal(expectedTrip);
+			return chai.expect(Manipulator.addPlaceToDay(inputTrip, inputPlace, 0)).to.deep.equal(expectedTrip);
 		});
 
 		it('should correctly add place to to right position in day when positionInDay is set', () => {
@@ -333,8 +333,50 @@ describe('TripManipulator', () => {
 				} as ItineraryItem);
 			}
 
-			return chai.expect(Manipuator.addPlaceToDay(inputTrip, inputPlace, 0, positionInDay))
+			return chai.expect(Manipulator.addPlaceToDay(inputTrip, inputPlace, 0, positionInDay))
 				.to.deep.equal(expectedTrip);
 		});
+	});
+
+	describe('#setTransport', () => {
+		it('should throw an error when invalid dayIndex is passed', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+
+			return chai.expect(() => Manipulator.setTransport(inputTrip, 100, 999, null))
+				.to.throw(Error, 'Invalid dayIndex');
+		});
+
+		it('should throw an error when invalid itemIndex is passed', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+
+			return chai.expect(() => Manipulator.setTransport(inputTrip, 0, 999, null))
+				.to.throw(Error, 'Invalid itemIndex');
+		});
+
+		it('should immutably set correct transport', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const transportSettings: TransportSettings = {
+				mode: 'car',
+				type: 'fastest',
+				avoid: ['tolls'],
+				startTime: 7200,
+				duration: 3600,
+				note: 'Run Forest Run',
+				waypoints: [{lat: 1, lng: 1}],
+			};
+			const resultTrip =  Manipulator.setTransport(inputTrip, 0, 1, transportSettings);
+			chai.expect(
+				resultTrip.days && resultTrip.days[0].itinerary[1].transportFromPrevious
+			).to.deep.equal(transportSettings);
+			chai.expect(
+				inputTrip.days && inputTrip.days[0].itinerary[1].transportFromPrevious
+			).to.be.null;
+
+			const resultNulled =  Manipulator.setTransport(resultTrip, 0, 1, null);
+			chai.expect(
+				resultNulled.days && resultNulled.days[0].itinerary[1].transportFromPrevious
+			).to.be.null;
+		});
+
 	});
 });

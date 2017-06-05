@@ -68,16 +68,18 @@ export interface ItineraryItem {
 	startTime: number | null; // Number of seconds from midnight.
 	duration: number | null; // Time in seconds planned to spend visiting place.
 	note: string | null;
-	transportFromPrevious: {
-		mode: TransportMode,
-		type: TransportType,
-		avoid: TransportAvoid[]
-		startTime: number | null // Number of seconds from midnight.
-		duration: number | null // Time in seconds spent on the transport.
-		note: string | null
-		waypoints: Location[]
-	} | null;
+	transportFromPrevious: TransportSettings | null;
 
+}
+
+export interface TransportSettings {
+	mode: TransportMode;
+	type: TransportType;
+	avoid: TransportAvoid[];
+	startTime: number | null; // Number of seconds from midnight.
+	duration: number | null; // Time in seconds spent on the transport.
+	note: string | null;
+	waypoints: Location[];
 }
 
 export interface TripPrivileges {

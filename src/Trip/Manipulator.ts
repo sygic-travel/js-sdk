@@ -3,7 +3,7 @@ import * as cloneDeep from 'lodash.clonedeep';
 import { Day, Trip } from '.';
 import { Place } from '../Places';
 import { addDaysToDate, subtractDaysFromDate } from '../Util';
-import { ItineraryItem } from './Trip';
+import { ItineraryItem, TransportSettings } from './Trip';
 import { decorateDaysWithDate } from './Utility';
 
 // Day methods
@@ -84,6 +84,24 @@ export function swapDaysInTrip(tripToBeUpdated: Trip, firstDayIndex: number, sec
 	const secondDay: Day = resultTrip.days[secondDayIndex];
 	resultTrip.days[firstDayIndex] = secondDay;
 	resultTrip.days[secondDayIndex] = firstDay;
+	return resultTrip;
+}
+
+export function setTransport(trip: Trip, dayIndex: number, itemIndex: number, settings: TransportSettings|null): Trip {
+	if (!trip.days) {
+		throw new Error('days property in Trip cannot be null');
+	}
+
+	if (!trip.days[dayIndex]) {
+		throw new Error('Invalid dayIndex');
+	}
+
+	if (itemIndex && !trip.days[dayIndex].itinerary[itemIndex]) {
+		throw new Error('Invalid itemIndex');
+	}
+
+	const resultTrip = cloneDeep(trip);
+	resultTrip.days[dayIndex].itinerary[itemIndex].transportFromPrevious = settings;
 	return resultTrip;
 }
 
