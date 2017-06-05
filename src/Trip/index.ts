@@ -4,6 +4,9 @@ import * as TripManipulator from './Manipulator';
 import { putPlacesToTrip } from './Mapper';
 import {
 	Day,
+	isTransportAvoid,
+	isTransportMode,
+	isTransportType,
 	ItineraryItem,
 	TransportAvoid,
 	TransportMode,
@@ -19,6 +22,9 @@ export {
 	Day,
 	Dao,
 	ItineraryItem,
+	isTransportAvoid,
+	isTransportMode,
+	isTransportType,
 	TransportAvoid,
 	TransportMode,
 	TransportSettings,

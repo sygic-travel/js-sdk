@@ -247,7 +247,7 @@ describe('TripManipulator', () => {
 				expectedTrip.days[0].itinerary[3] = thirdItineraryItem;
 			}
 
-			return chai.expect(Manipuator.movePlaceInDay(inputTrip, 0, positionFrom, positionTo))
+			return chai.expect(Manipulator.movePlaceInDay(inputTrip, 0, positionFrom, positionTo))
 				.to.deep.equal(expectedTrip);
 		});
 	});
