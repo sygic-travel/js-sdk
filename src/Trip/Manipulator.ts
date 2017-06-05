@@ -143,12 +143,10 @@ export function movePlaceInDay(
 	if (!tripToBeUpdated.days[dayIndex].itinerary[positionTo]) {
 		throw new Error('Invalid positionTo');
 	}
-
 	const resultTrip = cloneDeep(tripToBeUpdated);
-	const firstItineraryItem: ItineraryItem = resultTrip.days[0].itinerary[0];
-	const secondItineraryItem: ItineraryItem = resultTrip.days[0].itinerary[1];
-	resultTrip.days[0].itinerary[0] = secondItineraryItem;
-	resultTrip.days[0].itinerary[1] = firstItineraryItem;
+	const itemToBeMoved: ItineraryItem = resultTrip.days[dayIndex].itinerary[positionFrom];
+	resultTrip.days[dayIndex].itinerary.splice(positionFrom, 1);
+	resultTrip.days[dayIndex].itinerary.splice(positionTo, 0, itemToBeMoved);
 	return resultTrip;
 }
 

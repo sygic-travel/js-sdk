@@ -205,18 +205,50 @@ describe('TripManipulator', () => {
 				.to.throw(Error, 'Invalid positionTo');
 		});
 
-		it('should move place in a day', () => {
+		it('should move place in a day when positionFrom is smaller than positionTo', () => {
+			const positionFrom: number = 1;
+			const positionTo: number = 3;
+
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 
 			if (expectedTrip.days) {
 				const firstItineraryItem: ItineraryItem = expectedTrip.days[0].itinerary[0];
 				const secondItineraryItem: ItineraryItem = expectedTrip.days[0].itinerary[1];
-				expectedTrip.days[0].itinerary[0] = secondItineraryItem;
-				expectedTrip.days[0].itinerary[1] = firstItineraryItem;
+				const thirdItineraryItem: ItineraryItem = expectedTrip.days[0].itinerary[2];
+				const fourthItineraryItem: ItineraryItem = expectedTrip.days[0].itinerary[3];
+
+				expectedTrip.days[0].itinerary[0] = firstItineraryItem;
+				expectedTrip.days[0].itinerary[1] = thirdItineraryItem;
+				expectedTrip.days[0].itinerary[2] = fourthItineraryItem;
+				expectedTrip.days[0].itinerary[3] = secondItineraryItem;
 			}
 
-			return chai.expect(Manipuator.movePlaceInDay(inputTrip, 0, 0, 1)).to.deep.equal(expectedTrip);
+			return chai.expect(Manipuator.movePlaceInDay(inputTrip, 0, positionFrom, positionTo))
+				.to.deep.equal(expectedTrip);
+		});
+
+		it('should move place in a day when positionTo is smaller than positionFrom', () => {
+			const positionFrom: number = 3;
+			const positionTo: number = 1;
+
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+
+			if (expectedTrip.days) {
+				const firstItineraryItem: ItineraryItem = expectedTrip.days[0].itinerary[0];
+				const secondItineraryItem: ItineraryItem = expectedTrip.days[0].itinerary[1];
+				const thirdItineraryItem: ItineraryItem = expectedTrip.days[0].itinerary[2];
+				const fourthItineraryItem: ItineraryItem = expectedTrip.days[0].itinerary[3];
+
+				expectedTrip.days[0].itinerary[0] = firstItineraryItem;
+				expectedTrip.days[0].itinerary[1] = fourthItineraryItem;
+				expectedTrip.days[0].itinerary[2] = secondItineraryItem;
+				expectedTrip.days[0].itinerary[3] = thirdItineraryItem;
+			}
+
+			return chai.expect(Manipuator.movePlaceInDay(inputTrip, 0, positionFrom, positionTo))
+				.to.deep.equal(expectedTrip);
 		});
 	});
 
