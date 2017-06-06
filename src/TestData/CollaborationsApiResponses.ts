@@ -1,6 +1,3 @@
-/**
- * Created by radovanfekec on 6.6.17.
- */
 /* tslint:disable */
 export const collaborations = {
 	collaborations: [

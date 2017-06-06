@@ -1,3 +1,4 @@
+import * as _Collaboration from './src/Collaboration';
 import * as _Geo from './src/Geo';
 import * as _Media from './src/Media/Media';
 import * as _Place from './src/Places';
@@ -83,6 +84,34 @@ export class StSDK {
 		placeId: string,
 		dayIndex: number,
 		positionInDay?: number): Promise<_Trip.Trip>
+	/**
+	 * @experimental
+	 */
+	public followTrip(tripId: string): Promise<void>
+	/**
+	 * @experimental
+	 */
+	public unfollowTrip(tripId: string): Promise<void>
+	/**
+	 * @experimental
+	 */
+	public addTripCollaboration(tripId: string, userEmail: string, accessLevel: string): Promise<void>
+	/**
+	 * @experimental
+	 */
+	public getTripCollaborations(tripId: string): Promise<_Collaboration.Collaboration[]>
+	/**
+	 * @experimental
+	 */
+	public removeTripCollaboration(collaborationId: string): Promise<void>
+	/**
+	 * @experimental
+	 */
+	public acceptTripCollaboration(collaborationId: string, hash: string): Promise<void>
+	/**
+	 * @experimental
+	 */
+	public resendInvitation(collaborationId: string): Promise<void>
 }
 
 export namespace Places {
@@ -122,6 +151,7 @@ export namespace Trips {
 	export import ItineraryItem = _Trip.ItineraryItem;
 	export import TripPrivileges = _Trip.TripPrivileges;
 	export import TripMedia = _Trip.TripMedia;
+	export import Collaboration = _Collaboration.Collaboration;
 }
 
 export namespace Route {
