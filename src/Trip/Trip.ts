@@ -1,25 +1,44 @@
 import { Location } from '../Geo';
 import { Place } from '../Places';
+import { listToEnum } from '../Util';
 
-export type TransportMode =
-	'car' |
-	'pedestrian' |
-	'bike' |
-	'plane' |
-	'bus' |
-	'train' |
-	'boat';
+const transportModeValues = listToEnum([
+	'car',
+	'pedestrian',
+	'bike',
+	'plane',
+	'bus',
+	'train',
+	'boat'
+]);
+export function isTransportMode(val: any): val is TransportMode {
+	return typeof val === 'string' && transportModeValues[val] === val;
+}
+export type TransportMode = keyof typeof transportModeValues;
 
-export type TransportType =
-	'fastest' |
-	'shortest' |
-	'economic';
+const transportTypeValues = listToEnum([
+	'fastest',
+	'shortest',
+	'economic'
+]);
+export type TransportType = keyof typeof transportTypeValues;
 
-export type TransportAvoid =
-	'tolls' |
-	'highway' |
-	'ferries' |
-	'unpaved';
+export function isTransportType(val: any): val is TransportType {
+	return typeof val === 'string' && transportTypeValues[val] === val;
+}
+
+const transportAvoidValues = listToEnum([
+	'tolls',
+	'highway',
+	'ferries',
+	'unpaved'
+]);
+
+export type TransportAvoid = keyof typeof transportAvoidValues;
+
+export function isTransportAvoid(val: any): val is TransportAvoid {
+	return typeof val === 'string' && transportAvoidValues[val] === val;
+}
 
 export interface Trip {
 	id: string;
@@ -68,16 +87,18 @@ export interface ItineraryItem {
 	startTime: number | null; // Number of seconds from midnight.
 	duration: number | null; // Time in seconds planned to spend visiting place.
 	note: string | null;
-	transportFromPrevious: {
-		mode: TransportMode,
-		type: TransportType,
-		avoid: TransportAvoid[]
-		startTime: number | null // Number of seconds from midnight.
-		duration: number | null // Time in seconds spent on the transport.
-		note: string | null
-		waypoints: Location[]
-	} | null;
+	transportFromPrevious: TransportSettings | null;
 
+}
+
+export interface TransportSettings {
+	mode: TransportMode;
+	type: TransportType;
+	avoid: TransportAvoid[];
+	startTime: number | null; // Number of seconds from midnight.
+	duration: number | null; // Time in seconds spent on the transport.
+	note: string | null;
+	waypoints: Location[];
 }
 
 export interface TripPrivileges {

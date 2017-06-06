@@ -16,7 +16,9 @@ import {
 	prependDayToTrip,
 	removeDayFromTrip,
 	removePlaceFromDay,
+	setTransport,
 	swapDaysInTrip,
+	TransportSettings,
 	Trip,
 	TripUpdateData,
 	updateTrip
@@ -155,5 +157,12 @@ export default class StSDK extends BaseSDK {
 		dayIndex: number,
 		positionInDay?: number): Promise<Trip> {
 			return addPlaceToDay(tripId, placeId, dayIndex, positionInDay);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public setTransport(id: string, dayIndex: number, itemIndex: number, settings: TransportSettings): Promise<Trip> {
+		return setTransport(id, dayIndex, itemIndex, settings);
 	}
 }

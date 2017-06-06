@@ -4,9 +4,13 @@ import * as TripManipulator from './Manipulator';
 import { putPlacesToTrip } from './Mapper';
 import {
 	Day,
+	isTransportAvoid,
+	isTransportMode,
+	isTransportType,
 	ItineraryItem,
 	TransportAvoid,
 	TransportMode,
+	TransportSettings,
 	TransportType,
 	Trip,
 	TripMedia,
@@ -18,8 +22,12 @@ export {
 	Day,
 	Dao,
 	ItineraryItem,
+	isTransportAvoid,
+	isTransportMode,
+	isTransportType,
 	TransportAvoid,
 	TransportMode,
+	TransportSettings,
 	TransportType,
 	Trip,
 	TripMedia,
@@ -84,6 +92,14 @@ export async function removeDayFromTrip(id: string, dayIndex: number): Promise<T
 
 export async function swapDaysInTrip(id: string, firstDayIndex: number, secondDayIndex: number): Promise<Trip>  {
 	return Dao.updateTrip(TripManipulator.swapDaysInTrip(await getTripDetailed(id), firstDayIndex, secondDayIndex));
+}
+
+export async function setTransport(
+	tripId: string,
+	dayIndex: number,
+	itemIndex: number,
+	settings: TransportSettings): Promise<Trip>  {
+	return Dao.updateTrip(TripManipulator.setTransport(await getTripDetailed(tripId), dayIndex, itemIndex, settings));
 }
 
 export async function movePlaceInDay(
