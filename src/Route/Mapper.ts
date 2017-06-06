@@ -74,7 +74,7 @@ export const createRouteRequest = (
 	} as RouteRequest;
 };
 
-const choseDirection = (
+export const choseDirection = (
 	modeDirectionsSet: ModeDirections[],
 	mode: TransportMode,
 	type: TransportType|null

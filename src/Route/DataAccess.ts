@@ -13,18 +13,18 @@ export async function getRoutes(requests: RouteRequest[]): Promise<Route[]> {
 			return apiData.shift();
 		}
 		return routeData;
-	}).map((routeData, index) => (
-		Mapper.mapRouteFromApiResponse(
+	}).map((routeData, index) => {
+		const route = Mapper.mapRouteFromApiResponse(
 			routeData,
 			requests[index].avoid,
 			requests[index].chosenMode,
 			requests[index].type
-		)
-	)).map((route: Route): Route => {
+		);
 		route.modeDirections.push({
 			mode: 'plane',
 			directions: [estimatePlaneDirection(route.origin, route.destination)]
 		});
+		route.chosenDirection = Mapper.choseDirection(route.modeDirections, requests[index].chosenMode, requests[index].type);
 		return route;
 	});
 }
