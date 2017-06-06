@@ -7,7 +7,7 @@ import {
 	mapTripListApiResponseToTripsList,
 	mapTripToApiResponse
 } from './Mapper';
-import { Trip } from './Trip';
+import {Trip } from './Trip';
 
 export async function getTrips(dateFrom: string, dateTo: string): Promise<Trip[]> {
 	const apiResponse = await get('trips/list?' + stringify({

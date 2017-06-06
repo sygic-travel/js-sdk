@@ -26,6 +26,11 @@ export async function delete_(url: string, requestData): Promise<ApiResponse> {
 	return buildApiResponse(response);
 }
 
+export async function put(url: string, requestData): Promise<ApiResponse> {
+	const response = await axiosInstance.put(url, requestData, buildRequestConfig(url));
+	return buildApiResponse(response);
+}
+
 function buildRequestConfig(url: string, requestData?: any): AxiosRequestConfig {
 	const requestConfig: AxiosRequestConfig = {
 		baseURL: buildBaseUrl(url),
