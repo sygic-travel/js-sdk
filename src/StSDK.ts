@@ -24,6 +24,17 @@ import {
 	updateTrip
 } from './Trip';
 
+import {
+	acceptTripCollaboration,
+	addTripCollaboration,
+	Collaboration,
+	followTrip,
+	getTripCollaborations,
+	removeTripCollaboration,
+	resendInvitation,
+	unfollowTrip
+} from './Collaboration';
+
 export default class StSDK extends BaseSDK {
 	public setUserSession(key: string | null, token: string | null): void {
 		return setUserSession(key, token);
@@ -164,5 +175,54 @@ export default class StSDK extends BaseSDK {
 	 */
 	public setTransport(id: string, dayIndex: number, itemIndex: number, settings: TransportSettings): Promise<Trip> {
 		return setTransport(id, dayIndex, itemIndex, settings);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public followTrip(tripId: string): Promise<void> {
+		return followTrip(tripId);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public unfollowTrip(tripId: string): Promise<void> {
+		return unfollowTrip(tripId);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public addTripCollaboration(tripId: string, userEmail: string, accessLevel: string): Promise<void> {
+		return addTripCollaboration(tripId, userEmail, accessLevel);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public getTripCollaborations(tripId: string): Promise<Collaboration[]> {
+		return getTripCollaborations(tripId);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public removeTripCollaboration(collaborationId: string): Promise<void> {
+		return removeTripCollaboration(collaborationId);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public acceptTripCollaboration(collaborationId: string, hash: string): Promise<void> {
+		return acceptTripCollaboration(collaborationId, hash);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public resendInvitation(collaborationId: string): Promise<void> {
+		return resendInvitation(collaborationId);
 	}
 }

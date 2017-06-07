@@ -18,6 +18,7 @@
     "@types/humps": "^1.1.2",
     "@types/mocha": "^2.2.40",
     "@types/node": "^7.0.8",
+    "@types/polyline": "^0.1.27",
     "@types/query-string": "^4.3.1",
     "@types/sinon": "^1.16.36",
     "chai": "^3.5.0",
@@ -39,10 +40,6 @@
     "webpack-dev-server": "^2.4.2"
   },
   "dependencies": {
-    "@types/fecha": "^2.3.0",
-    "@types/humps": "^1.1.2",
-    "@types/node": "^7.0.8",
-    "@types/polyline": "^0.1.27",
     "axios": "*",
     "humps": "^2.0.0",
     "lodash.clonedeep": "^4.5.0",
