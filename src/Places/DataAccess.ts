@@ -3,6 +3,7 @@ import { stringify } from 'query-string';
 import * as api from '../Api';
 import { placesDetailedCache as cache } from '../Cache';
 import { Medium } from '../Media/Media';
+import { Day, ItineraryItem } from '../Trip';
 import { get } from '../Xhr';
 import { PlacesFilter } from './Filter';
 import {
@@ -74,6 +75,12 @@ export async function getPlaceDetailedBatch(ids: string[], photoSize: string): P
 	});
 
 	return mapPlaceDetailedBatchApiResponseToPlaces(batch, photoSize);
+}
+
+export async function getPlacesFromTripDay(day: Day): Promise<Place[]> {
+
+	const placesIds: string[] = day.itinerary.map((item: ItineraryItem) => (item.placeId));
+	return getPlaceDetailedBatch(placesIds, '100x100');
 }
 
 export async function getPlaceMedia(id: string): Promise<Medium[]> {
