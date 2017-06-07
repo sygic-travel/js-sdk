@@ -1,7 +1,8 @@
-import { getPlaceDetailed, getPlaceDetailedBatch } from '../Places/index';
+import { Dao as placesDao, getPlaceDetailed, getPlaceDetailedBatch, Place } from '../Places';
 import * as Dao from './DataAccess';
 import * as TripManipulator from './Manipulator';
 import { putPlacesToTrip } from './Mapper';
+import * as PositionFinder from './PositionFinder';
 import {
 	Day,
 	isTransportAvoid,
@@ -119,6 +120,18 @@ export async function addPlaceToDay(
 	placeId: string,
 	dayIndex: number,
 	positionInDay?: number): Promise<Trip> {
+	const trip: Trip = await getTripDetailed(tripId);
+	const place: Place = await getPlaceDetailed(placeId, '300x300');
+	if (!positionInDay) {
+		let day: Day;
+		if (trip.days && trip.days[dayIndex]) {
+			day = trip.days[dayIndex];
+		} else {
+			throw new Error('Trip does not have day on index ' + dayIndex);
+		}
+		positionInDay = PositionFinder.findOptimalPosition(place, await placesDao.getPlacesFromTripDay(day));
+	}
+
 	return Dao.updateTrip(TripManipulator.addPlaceToDay(
 		await getTripDetailed(tripId),
 		await getPlaceDetailed(placeId, '300x300'),

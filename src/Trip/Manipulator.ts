@@ -119,7 +119,7 @@ export function addPlaceToDay(
 		throw new Error('Invalid dayIndex');
 	}
 
-	if (positionInDay && !tripToBeUpdated.days[dayIndex].itinerary[positionInDay]) {
+	if (positionInDay && (tripToBeUpdated.days[dayIndex].itinerary.length < positionInDay || positionInDay < 0)) {
 		throw new Error('Invalid positionInDay');
 	}
 

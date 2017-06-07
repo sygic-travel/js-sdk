@@ -28,8 +28,7 @@ export async function getRoutesForTripDay(tripId: string, dayIndex: number): Pro
 		throw new Error('Trip does not have day on index ' + dayIndex);
 	}
 
-	const placesIds: string[] = day.itinerary.map((item: ItineraryItem) => (item.placeId));
-	const places: Place[] = await placesDao.getPlaceDetailedBatch(placesIds, '100x100');
+	const places: Place[] = await placesDao.getPlacesFromTripDay(day);
 	return Dao.getRoutes(createRequests(places, day));
 }
 
