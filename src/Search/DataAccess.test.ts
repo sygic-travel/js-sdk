@@ -13,7 +13,7 @@ import * as Xhr from '../Xhr';
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
 
-describe('PlacesDataAccess', () => {
+describe('SearchDataAccess', () => {
 	before((done) => {
 		setEnvironment('api', '987654321');
 		done();

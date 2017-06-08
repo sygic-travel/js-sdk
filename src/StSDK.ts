@@ -32,8 +32,8 @@ import {
 	getTripCollaborations,
 	removeTripCollaboration,
 	resendInvitation,
-	updateTripCollaboration,
-	unfollowTrip
+	unfollowTrip,
+	updateTripCollaboration
 } from './Collaboration';
 
 import {
@@ -242,7 +242,7 @@ export default class StSDK extends BaseSDK {
 	/**
 	 * @experimental
 	 */
-	public searchLocations(query: string, location: Location): Promise<SearchLocation[]> {
+	public searchLocations(query: string, location?: Location): Promise<SearchLocation[]> {
 		return searchLocations(query, location);
 	}
 }
