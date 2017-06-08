@@ -1,6 +1,7 @@
 import { BaseSDK } from './BaseSDK';
 import { addCustomPlaceToFavorites, addPlaceToFavorites, getFavoritesIds, removePlaceFromFavorites } from './Favorites';
 import { Bounds } from './Geo';
+import { Forecast, getDestinationWeather } from './Forecast';
 import { Location } from './Geo';
 import { Medium } from './Media';
 import { getPlaceDetailed, getPlaceMedia, getPlaces, Place, PlacesFilter, PlacesFilterJSON } from './Places';
@@ -244,5 +245,12 @@ export default class StSDK extends BaseSDK {
 	 */
 	public searchAddress(query: string, location?: Location): Promise<SearchAddressResult[]> {
 		return searchAddress(query, location);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public getDestinationWeather(destinationId: string): Promise<Forecast[]> {
+		return getDestinationWeather(destinationId);
 	}
 }
