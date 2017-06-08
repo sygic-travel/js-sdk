@@ -7,4 +7,5 @@ export interface Collaboration {
 	accessLevel: string;
 	createdAt: string;
 	updatedAt: string | null;
+	tripId: string;
 }
