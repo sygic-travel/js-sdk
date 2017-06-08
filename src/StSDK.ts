@@ -32,8 +32,14 @@ import {
 	getTripCollaborations,
 	removeTripCollaboration,
 	resendInvitation,
-	unfollowTrip
+	unfollowTrip,
+	updateTripCollaboration
 } from './Collaboration';
+
+import {
+	searchAddress,
+	SearchAddressResult
+} from './Search';
 
 export default class StSDK extends BaseSDK {
 	public setUserSession(key: string | null, token: string | null): void {
@@ -215,7 +221,7 @@ export default class StSDK extends BaseSDK {
 	/**
 	 * @experimental
 	 */
-	public acceptTripCollaboration(collaborationId: string, hash: string): Promise<void> {
+	public acceptTripCollaboration(collaborationId: string, hash: string): Promise<string> {
 		return acceptTripCollaboration(collaborationId, hash);
 	}
 
@@ -224,5 +230,19 @@ export default class StSDK extends BaseSDK {
 	 */
 	public resendInvitation(collaborationId: string): Promise<void> {
 		return resendInvitation(collaborationId);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public updateTripCollaboration(collaborationId: string, accessLevel: string): Promise<void> {
+		return updateTripCollaboration(collaborationId, accessLevel);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public searchAddress(query: string, location?: Location): Promise<SearchAddressResult[]> {
+		return searchAddress(query, location);
 	}
 }

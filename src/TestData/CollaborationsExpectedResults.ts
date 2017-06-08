@@ -9,6 +9,7 @@ export const collaborations = [{
 		accessLevel: 'read-write',
 		createdAt: '2015-01-01',
 		updatedAt: '2015-01-01',
+		tripId: '123456'
 	}, {
 		id: 981,
 		userName: 'John Moe',
@@ -18,5 +19,6 @@ export const collaborations = [{
 		accessLevel: 'read-only',
 		createdAt: '2015-01-01',
 		updatedAt: '2015-01-01',
+		tripId: '123456'
 	}
 ] as Collaboration[];

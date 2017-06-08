@@ -23,10 +23,14 @@ export async function removeTripCollaboration(collaborationId: string): Promise<
 	return Dao.removeTripCollaboration(collaborationId);
 }
 
-export async function acceptTripCollaboration(collaborationId: string, hash: string): Promise<void> {
+export async function acceptTripCollaboration(collaborationId: string, hash: string): Promise<string> {
 	return Dao.acceptTripCollaboration(collaborationId, hash);
 }
 
 export async function resendInvitation(collaborationId: string): Promise<void> {
 	return Dao.resendInvitation(collaborationId);
+}
+
+export async function updateTripCollaboration(collaborationId: string, accessLevel: string): Promise<void> {
+	return Dao.updateTripCollaboration(collaborationId, accessLevel);
 }

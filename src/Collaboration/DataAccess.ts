@@ -37,8 +37,14 @@ export async function updateTripCollaboration(collaborationId: string, accessLev
 	});
 }
 
-export async function acceptTripCollaboration(collaborationId: string, hash: string): Promise<void> {
-	await put(`/trip-collaborations/${collaborationId}/accept`, { hash });
+export async function acceptTripCollaboration(collaborationId: string, hash: string): Promise<string> {
+	const apiResponse: ApiResponse = await put(`/trip-collaborations/${collaborationId}/accept`, { hash });
+
+	if (!apiResponse.data.hasOwnProperty('collaboration')) {
+		throw new Error('Wrong API response');
+	}
+
+	return apiResponse.data.collaboration.trip_guid as string;
 }
 
 export async function resendInvitation(collaborationId: string): Promise<void> {

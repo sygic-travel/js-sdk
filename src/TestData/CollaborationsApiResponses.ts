@@ -10,6 +10,7 @@ export const collaborations = {
 			access_level: "read-write",
 			created_at: "2015-01-01",
 			updated_at: "2015-01-01",
+			trip_guid: '123456'
 		}, {
 			id: 981,
 			user_name: "John Moe",
@@ -19,6 +20,7 @@ export const collaborations = {
 			access_level: "read-only",
 			created_at: "2015-01-01",
 			updated_at: "2015-01-01",
+			trip_guid: '123456'
 		}
 	]
 };
