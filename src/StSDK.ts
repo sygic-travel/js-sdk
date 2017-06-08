@@ -221,7 +221,7 @@ export default class StSDK extends BaseSDK {
 	/**
 	 * @experimental
 	 */
-	public acceptTripCollaboration(collaborationId: string, hash: string): Promise<void> {
+	public acceptTripCollaboration(collaborationId: string, hash: string): Promise<string> {
 		return acceptTripCollaboration(collaborationId, hash);
 	}
 

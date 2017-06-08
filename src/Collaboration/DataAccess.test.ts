@@ -135,6 +135,20 @@ describe('CollaborationDataAccess', () => {
 				done();
 			});
 		});
+
+		it('should return tripId', () => {
+			sandbox.stub(Xhr, 'put').returns(new Promise<Xhr.ApiResponse>((resolve) => {
+				resolve(new Xhr.ApiResponse(200, {
+					collaboration: TestApiResponses.collaborations.collaborations[0]
+				}));
+			}));
+
+			const collaborationId = '12345';
+			const hash = '12314212341234';
+			const resultTripId = '123456';
+
+			return chai.expect(Dao.acceptTripCollaboration(collaborationId, hash)).to.eventually.equal(resultTripId);
+		});
 	});
 
 	describe('#resendInvitation', () => {
