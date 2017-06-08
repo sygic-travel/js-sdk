@@ -35,6 +35,11 @@ import {
 	unfollowTrip
 } from './Collaboration';
 
+import {
+	SearchLocation,
+	searchLocations
+} from './Search';
+
 export default class StSDK extends BaseSDK {
 	public setUserSession(key: string | null, token: string | null): void {
 		return setUserSession(key, token);
@@ -224,5 +229,12 @@ export default class StSDK extends BaseSDK {
 	 */
 	public resendInvitation(collaborationId: string): Promise<void> {
 		return resendInvitation(collaborationId);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public searchLocations(query: string, location: Location): Promise<SearchLocation[]> {
+		return searchLocations(query, location);
 	}
 }

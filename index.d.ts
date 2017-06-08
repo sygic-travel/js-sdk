@@ -3,6 +3,7 @@ import * as _Geo from './src/Geo';
 import * as _Media from './src/Media/Media';
 import * as _Place from './src/Places';
 import * as _Route from './src/Route';
+import * as _Search from './src/Search';
 import * as _Spread from './src/Spread';
 import * as _Trip from './src/Trip';
 
@@ -112,6 +113,10 @@ export class StSDK {
 	 * @experimental
 	 */
 	public resendInvitation(collaborationId: string): Promise<void>
+	/**
+	 * @experimental
+	 */
+	public searchLocations(query: string, location: Location): Promise<_Search.SearchLocation[]>
 }
 
 export namespace Places {
@@ -158,4 +163,10 @@ export namespace Route {
 	export import Direction = _Route.Direction;
 	export import DirectionSource = _Route.DirectionSource;
 	export import Route = _Route.Route;
+}
+
+export namespace Search {
+	export import Address = _Search.Address;
+	export import AddressFields = _Search.AddressFields;
+	export import SearchLocation = _Search.SearchLocation;
 }
