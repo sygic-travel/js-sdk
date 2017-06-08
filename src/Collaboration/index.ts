@@ -30,3 +30,7 @@ export async function acceptTripCollaboration(collaborationId: string, hash: str
 export async function resendInvitation(collaborationId: string): Promise<void> {
 	return Dao.resendInvitation(collaborationId);
 }
+
+export async function updateTripCollaboration(collaborationId: string, accessLevel: string): Promise<void> {
+	return Dao.updateTripCollaboration(collaborationId, accessLevel);
+}

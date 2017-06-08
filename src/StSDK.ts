@@ -32,6 +32,7 @@ import {
 	getTripCollaborations,
 	removeTripCollaboration,
 	resendInvitation,
+	updateTripCollaboration,
 	unfollowTrip
 } from './Collaboration';
 
@@ -229,6 +230,13 @@ export default class StSDK extends BaseSDK {
 	 */
 	public resendInvitation(collaborationId: string): Promise<void> {
 		return resendInvitation(collaborationId);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public updateTripCollaboration(collaborationId: string, accessLevel: string): Promise<void> {
+		return updateTripCollaboration(collaborationId, accessLevel);
 	}
 
 	/**
