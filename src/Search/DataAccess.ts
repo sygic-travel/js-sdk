@@ -2,10 +2,10 @@ import { stringify } from 'query-string';
 
 import { Location } from '../Geo';
 import { get } from '../Xhr';
-import { mapSearchLocationsApiRepsponseToLocations } from './Mapper';
-import { SearchLocation } from './SearchLocation';
+import { mapSearchAddressesApiRepsponseToAddresses } from './Mapper';
+import { SearchAddressResult } from './SearchAddressResult';
 
-export async function searchLocations(query: string, location?: Location): Promise<SearchLocation[]> {
+export async function searchAddress(query: string, location?: Location): Promise<SearchAddressResult[]> {
 	const queryString: string = location ? stringify({
 		query,
 		location: [location.lat, location.lng].join(',')
@@ -16,5 +16,5 @@ export async function searchLocations(query: string, location?: Location): Promi
 		throw new Error('Wrong API response');
 	}
 
-	return mapSearchLocationsApiRepsponseToLocations(apiResponse.data.locations);
+	return mapSearchAddressesApiRepsponseToAddresses(apiResponse.data.locations);
 }

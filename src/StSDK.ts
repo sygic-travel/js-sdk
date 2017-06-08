@@ -37,8 +37,8 @@ import {
 } from './Collaboration';
 
 import {
-	SearchLocation,
-	searchLocations
+	searchAddress,
+	SearchAddressResult
 } from './Search';
 
 export default class StSDK extends BaseSDK {
@@ -242,7 +242,7 @@ export default class StSDK extends BaseSDK {
 	/**
 	 * @experimental
 	 */
-	public searchLocations(query: string, location?: Location): Promise<SearchLocation[]> {
-		return searchLocations(query, location);
+	public searchAddress(query: string, location?: Location): Promise<SearchAddressResult[]> {
+		return searchAddress(query, location);
 	}
 }

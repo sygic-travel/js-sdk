@@ -1,9 +1,9 @@
 import { camelizeKeys } from 'humps';
 
-import { SearchLocation } from './SearchLocation';
+import { SearchAddressResult } from './SearchAddressResult';
 
-export function mapSearchLocationsApiRepsponseToLocations(searchLocations: any): SearchLocation[] {
+export function mapSearchAddressesApiRepsponseToAddresses(searchLocations: any): SearchAddressResult[] {
 	return searchLocations.map((searchLocation) => {
-		return camelizeKeys(searchLocation) as SearchLocation;
+		return camelizeKeys(searchLocation) as SearchAddressResult;
 	});
 }

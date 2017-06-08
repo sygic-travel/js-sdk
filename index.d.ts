@@ -116,7 +116,7 @@ export class StSDK {
 	/**
 	 * @experimental
 	 */
-	public searchLocations(query: string, location: Location): Promise<_Search.SearchLocation[]>
+	public searchAddress(query: string, location: Location): Promise<_Search.SearchAddressResult[]>
 }
 
 export namespace Places {
@@ -168,5 +168,5 @@ export namespace Route {
 export namespace Search {
 	export import Address = _Search.Address;
 	export import AddressFields = _Search.AddressFields;
-	export import SearchLocation = _Search.SearchLocation;
+	export import SearchAddressResult = _Search.SearchAddressResult;
 }

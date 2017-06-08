@@ -1,5 +1,5 @@
 /* tslint:disable */
-import { Address, AddressFields, SearchLocation } from '../Search/SearchLocation';
+import { Address, AddressFields, SearchAddressResult } from '../Search/SearchAddressResult';
 import { Location } from '../Geo';
 
 export const locations = [{
@@ -21,7 +21,7 @@ export const locations = [{
 			country: 'Bulgaria'
 		} as AddressFields
 	} as Address
-} as SearchLocation, {
+} as SearchAddressResult, {
 	type: 'street',
 	location: {
 		lat: 36.29416,
@@ -40,4 +40,4 @@ export const locations = [{
 			country: 'Tennessee'
 		} as AddressFields
 	} as Address
-} as SearchLocation];
+} as SearchAddressResult];

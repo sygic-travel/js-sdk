@@ -1,9 +1,9 @@
 import { Location } from '../Geo';
 import * as Dao from './DataAccess';
-import { Address, AddressFields, SearchLocation } from './SearchLocation';
+import { Address, AddressFields, SearchAddressResult } from './SearchAddressResult';
 
-export { Address, AddressFields, SearchLocation }
+export { Address, AddressFields, SearchAddressResult }
 
-export async function searchLocations(query: string, location?: Location): Promise<SearchLocation[]> {
-	return Dao.searchLocations(query, location);
+export async function searchAddress(query: string, location?: Location): Promise<SearchAddressResult[]> {
+	return Dao.searchAddress(query, location);
 }

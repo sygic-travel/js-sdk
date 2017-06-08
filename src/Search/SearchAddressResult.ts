@@ -1,6 +1,6 @@
 import { Location } from '../Geo';
 
-export interface SearchLocation {
+export interface SearchAddressResult {
 	location: Location;
 	type: string;
 	address: Address | null;

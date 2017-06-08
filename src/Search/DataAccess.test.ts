@@ -33,21 +33,21 @@ describe('SearchDataAccess', () => {
 		lng: 14.421861
 	} as Location;
 
-	describe('#searchLocations', () => {
+	describe('#searchAddress', () => {
 		it('should throw and exception when response without searched locations came', () => {
 			sandbox.stub(Xhr, 'get').returns(new Promise<Xhr.ApiResponse>((resolve) => {
 				resolve(new Xhr.ApiResponse(200, {}));
 			}));
 
-			return chai.expect(Search.searchLocations(query, location)).to.be.rejected;
+			return chai.expect(Search.searchAddress(query, location)).to.be.rejected;
 		});
 
-		it('should correctly map searchLocations response', () => {
+		it('should correctly map searchAddress response', () => {
 			sandbox.stub(Xhr, 'get').returns(new Promise<Xhr.ApiResponse>((resolve) => {
 				resolve(new Xhr.ApiResponse(200, TestApiResponses.locations));
 			}));
 
-			return chai.expect(Search.searchLocations(query, location))
+			return chai.expect(Search.searchAddress(query, location))
 				.to.eventually.deep.equal(TestApiExpectedResults.locations);
 		});
 	});
