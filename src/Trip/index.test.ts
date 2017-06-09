@@ -106,7 +106,7 @@ describe('TripController', () => {
 	});
 
 	describe('#updateTrip', () => {
-		it('should update trip', () => {
+		it('should update trip with one day', () => {
 			tripsDetailedCache.set(TripTestData.tripDetail.trip.id, TripTestData.tripDetail.trip);
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, placesResponse));
@@ -114,12 +114,13 @@ describe('TripController', () => {
 
 			const expectedTrip: TripController.Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			expectedTrip.name = 'abc';
-			expectedTrip.startsOn = '123';
+			expectedTrip.startsOn = '2017-04-10';
+			expectedTrip.endsOn = '2017-04-10';
 			expectedTrip.privacyLevel = 'ppp';
 
 			return chai.expect(TripController.updateTrip('58c6bce821287', {
 				name: 'abc',
-				startsOn: '123',
+				startsOn: '2017-04-10',
 				privacyLevel: 'ppp'
 			} as TripController.TripUpdateData)).to.eventually.deep.equal(expectedTrip);
 		});

@@ -1,4 +1,5 @@
 import { Dao as placesDao, getPlaceDetailed, getPlaceDetailedBatch, Place } from '../Places';
+import { addDaysToDate } from '../Util/index';
 import * as Dao from './DataAccess';
 import * as TripManipulator from './Manipulator';
 import { putPlacesToTrip } from './Mapper';
@@ -70,6 +71,8 @@ export async function updateTrip(id: string, dataToUpdate: TripUpdateData): Prom
 
 	if (dataToUpdate.startsOn) {
 		tripToBeUpdated.startsOn = dataToUpdate.startsOn;
+		tripToBeUpdated.endsOn = addDaysToDate(dataToUpdate.startsOn,
+			tripToBeUpdated.days ? tripToBeUpdated.days.length - 1 : 0);
 	}
 
 	if (dataToUpdate.privacyLevel) {
