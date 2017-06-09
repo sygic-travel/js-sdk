@@ -52,6 +52,7 @@ export const itineratyItem = {
 	duration: null,
 	note: null,
 	transportFromPrevious: null,
+	isSticky: false,
 };
 
 export const tripDetailed = {
@@ -79,6 +80,7 @@ export const tripDetailed = {
 					duration: null,
 					note: null,
 					transportFromPrevious: null,
+					isSticky: false,
 				} as ItineraryItem,
 				{
 					placeId: 'poi:2',
@@ -87,6 +89,7 @@ export const tripDetailed = {
 					duration: null,
 					note: null,
 					transportFromPrevious: null,
+					isSticky: true
 				} as ItineraryItem
 			],
 			note: null,
@@ -100,6 +103,7 @@ export const tripDetailed = {
 					duration: null,
 					note: null,
 					transportFromPrevious: null,
+					isSticky: true
 				} as ItineraryItem,
 				{
 					placeId: 'poi:3',
@@ -108,6 +112,7 @@ export const tripDetailed = {
 					duration: null,
 					note: null,
 					transportFromPrevious: null,
+					isSticky: false
 				} as ItineraryItem,
 			],
 			note: null,
@@ -121,6 +126,7 @@ export const tripDetailed = {
 					duration: null,
 					note: null,
 					transportFromPrevious: null,
+					isSticky: false
 				} as ItineraryItem
 			],
 			note: null,

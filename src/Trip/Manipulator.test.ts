@@ -15,6 +15,7 @@ describe('TripManipulator', () => {
 		newPlace.id = id;
 		itineratyItem.placeId = id;
 		itineratyItem.place = newPlace;
+		itineratyItem.isSticky = false;
 		return itineratyItem;
 
 	};
@@ -72,6 +73,7 @@ describe('TripManipulator', () => {
 			if (expectedTrip.days) {
 				expectedTrip.days.splice(indexToBeRemoved, 1);
 				expectedTrip.days[expectedTrip.days.length - 1].date = '2017-04-09';
+				expectedTrip.days[0].itinerary[1].isSticky = false;
 			}
 
 			return chai.expect(Manipulator.removeDayFromTrip(inputTrip, indexToBeRemoved)).to.deep.equal(expectedTrip);
@@ -86,6 +88,7 @@ describe('TripManipulator', () => {
 
 			if (expectedTrip.days) {
 				expectedTrip.days.splice(indexToBeRemoved, 1);
+				expectedTrip.days[0].itinerary[0].isSticky = false;
 			}
 
 			return chai.expect(Manipulator.removeDayFromTrip(inputTrip, indexToBeRemoved)).to.deep.equal(expectedTrip);
@@ -125,6 +128,8 @@ describe('TripManipulator', () => {
 				const tempDay = expectedTrip.days[0];
 				expectedTrip.days[0] = expectedTrip.days[1];
 				expectedTrip.days[1] = tempDay;
+				expectedTrip.days[0].itinerary[0].isSticky = false;
+				expectedTrip.days[1].itinerary[1].isSticky = false;
 			}
 
 			return chai.expect(Manipulator.swapDaysInTrip(inputTrip, 0, 1)).to.deep.equal(expectedTrip);
@@ -261,8 +266,11 @@ describe('TripManipulator', () => {
 					startTime: null,
 					duration: null,
 					note: null,
-					transportFromPrevious: null
+					transportFromPrevious: null,
+					isSticky: false
 				} as ItineraryItem);
+				expectedTrip.days[0].itinerary[1].isSticky = false;
+				expectedTrip.days[1].itinerary[0].isSticky = false;
 			}
 
 			return chai.expect(Manipulator.addPlaceToDay(inputTrip, inputPlace, 0)).to.deep.equal(expectedTrip);
@@ -282,7 +290,8 @@ describe('TripManipulator', () => {
 					startTime: null,
 					duration: null,
 					note: null,
-					transportFromPrevious: null
+					transportFromPrevious: null,
+					isSticky: false
 				} as ItineraryItem);
 			}
 

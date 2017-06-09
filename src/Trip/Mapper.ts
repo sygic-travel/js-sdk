@@ -1,4 +1,5 @@
 import { camelizeKeys, decamelizeKeys } from 'humps';
+import * as cloneDeep from 'lodash.clonedeep';
 
 import { Place } from '../Places';
 import { Day, ItineraryItem, Trip, TripMedia, TripPrivileges } from './Trip';
@@ -31,7 +32,7 @@ export const mapTrip = (trip, days: Day[] | null): Trip => {
 		days: decorateDaysWithDate(trip.starts_on, days)
 	} as Trip;
 
-	return resultTrip;
+	return resolveStickiness(resultTrip);
 };
 
 const mapTripDays = (trip): Day[] => trip.days.map((day) => ({
@@ -42,6 +43,7 @@ const mapTripDays = (trip): Day[] => trip.days.map((day) => ({
 		startTime: itineraryItem.start_time,
 		duration: itineraryItem.duration,
 		note: itineraryItem.note,
+		isSticky: null,
 		transportFromPrevious: itineraryItem.transport_from_previous ? {
 			mode: itineraryItem.transport_from_previous.mode,
 			type: itineraryItem.transport_from_previous.type,
@@ -55,6 +57,40 @@ const mapTripDays = (trip): Day[] => trip.days.map((day) => ({
 		} : null
 	} as ItineraryItem))
 } as Day));
+
+/**
+ * @link https://confluence.sygic.com/display/STV/Sticky+Places+in+Itinerary
+ */
+export const resolveStickiness = (inputTrip: Trip): Trip => {
+	const trip = cloneDeep(inputTrip);
+	if (trip.days === null) {
+		return trip;
+	}
+	let prevDay: Day|null;
+	let nextDay: Day|null;
+	trip.days.forEach((day: Day, index: number) => {
+		day.itinerary.forEach((item: ItineraryItem) => {
+			item.isSticky = false;
+		});
+		if (prevDay &&
+			prevDay.itinerary.length &&
+			day.itinerary.length &&
+			day.itinerary[0].placeId === prevDay.itinerary[prevDay.itinerary.length - 1].placeId
+		) {
+			day.itinerary[0].isSticky = true;
+		}
+		nextDay = trip.days && trip.days[index + 1] ? trip.days[index + 1] : null;
+		if (nextDay &&
+			nextDay.itinerary.length &&
+			day.itinerary.length &&
+			day.itinerary[day.itinerary.length - 1].placeId === nextDay.itinerary[0].placeId
+		) {
+			day.itinerary[day.itinerary.length - 1].isSticky = true;
+		}
+		prevDay = day;
+	});
+	return trip;
+};
 
 export function putPlacesToTrip(trip: Trip, places: Place[]): Trip {
 	if (trip.days) {
