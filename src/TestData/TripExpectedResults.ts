@@ -40,10 +40,19 @@ const itineraryPlace1 = Object.assign({}, placeDetailedEiffelTowerWithoutMedia);
 const itineraryPlace2 = Object.assign({}, placeDetailedEiffelTowerWithoutMedia);
 const itineraryPlace3 = Object.assign({}, placeDetailedEiffelTowerWithoutMedia);
 const itineraryPlace4 = Object.assign({}, placeDetailedEiffelTowerWithoutMedia);
-itineraryPlace1.id = 'poi:51098';
-itineraryPlace2.id = 'poi:48056';
-itineraryPlace3.id = 'poi:48015';
-itineraryPlace4.id = 'poi:48071';
+itineraryPlace1.id = 'poi:1';
+itineraryPlace2.id = 'poi:2';
+itineraryPlace3.id = 'poi:3';
+itineraryPlace4.id = 'poi:4';
+
+export const itineratyItem = {
+	placeId: 'poi:1',
+	place: itineraryPlace1,
+	startTime: null,
+	duration: null,
+	note: null,
+	transportFromPrevious: null,
+};
 
 export const tripDetailed = {
 	id: '58c6bce821287',
@@ -60,44 +69,62 @@ export const tripDetailed = {
 		'delete': true
 	} as TripPrivileges,
 	startsOn: "2017-04-08",
-	endsOn: "2017-04-08",
+	endsOn: "2017-04-10",
 	days: [
 		{
 			itinerary: [{
-					placeId: 'poi:51098',
+					placeId: 'poi:1',
 					place: itineraryPlace1,
 					startTime: null,
 					duration: null,
 					note: null,
-					transportFromPrevious: null
+					transportFromPrevious: null,
 				} as ItineraryItem,
 				{
-					placeId: 'poi:48056',
+					placeId: 'poi:2',
 					place: itineraryPlace2,
 					startTime: null,
 					duration: null,
 					note: null,
-					transportFromPrevious: null
-				} as ItineraryItem,
-				{
-					placeId: 'poi:48015',
-					place: itineraryPlace3,
-					startTime: null,
-					duration: null,
-					note: null,
-					transportFromPrevious: null
-				} as ItineraryItem,
-				{
-					placeId: 'poi:48071',
-					place: itineraryPlace4,
-					startTime: null,
-					duration: null,
-					note: null,
-					transportFromPrevious: null
+					transportFromPrevious: null,
 				} as ItineraryItem
 			],
 			note: null,
 			date: "2017-04-08"
+		} as Day,
+		{
+			itinerary: [{
+					placeId: 'poi:2',
+					place: itineraryPlace2,
+					startTime: null,
+					duration: null,
+					note: null,
+					transportFromPrevious: null,
+				} as ItineraryItem,
+				{
+					placeId: 'poi:3',
+					place: itineraryPlace3,
+					startTime: null,
+					duration: null,
+					note: null,
+					transportFromPrevious: null,
+				} as ItineraryItem,
+			],
+			note: null,
+			date: "2017-04-09"
+		} as Day,
+		{
+			itinerary: [{
+					placeId: 'poi:4',
+					place: itineraryPlace4,
+					startTime: null,
+					duration: null,
+					note: null,
+					transportFromPrevious: null,
+				} as ItineraryItem
+			],
+			note: null,
+			date: "2017-04-10"
 		} as Day,
 	],
 	media: {

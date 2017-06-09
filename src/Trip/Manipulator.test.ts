@@ -8,23 +8,28 @@ import * as Manipulator from './Manipulator';
 import { Day, ItineraryItem, TransportSettings, Trip } from './Trip';
 
 describe('TripManipulator', () => {
-	const emptyDay: Day = {
-		itinerary: [],
-		note: null,
-		date: null
+
+	const buildTestItem = (id: string): ItineraryItem => {
+		const newPlace = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+		const itineratyItem: ItineraryItem = cloneDeep(TripExpectedResults.itineratyItem);
+		newPlace.id = id;
+		itineratyItem.placeId = id;
+		itineratyItem.place = newPlace;
+		return itineratyItem;
+
 	};
 
 	describe('#addDay', () => {
 		it('should add day to trip', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			expectedTrip.endsOn =  '2017-04-09';
+			expectedTrip.endsOn =  '2017-04-11';
 
 			if (expectedTrip.days) {
 				expectedTrip.days.push({
 					itinerary: [],
 					note: null,
-					date: '2017-04-09'
+					date: '2017-04-11'
 				} as Day);
 			}
 
@@ -61,29 +66,12 @@ describe('TripManipulator', () => {
 		it('should remove day from middle of days array and should change end date', () => {
 			const indexToBeRemoved = 1;
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			inputTrip.endsOn = '2017-04-10';
 			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			expectedTrip.endsOn = '2017-04-09';
 
-			if (inputTrip.days) {
-				inputTrip.days.push({
-					itinerary: [],
-					note: null,
-					date: '2017-04-09'
-				});
-				inputTrip.days.push({
-					itinerary: [],
-					note: null,
-					date: '2017-04-10'
-				});
-			}
-
 			if (expectedTrip.days) {
-				expectedTrip.days.push({
-					itinerary: [],
-					note: null,
-					date: '2017-04-09'
-				});
+				expectedTrip.days.splice(indexToBeRemoved, 1);
+				expectedTrip.days[expectedTrip.days.length - 1].date = '2017-04-09';
 			}
 
 			return chai.expect(Manipulator.removeDayFromTrip(inputTrip, indexToBeRemoved)).to.deep.equal(expectedTrip);
@@ -96,30 +84,7 @@ describe('TripManipulator', () => {
 			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			expectedTrip.startsOn = '2017-04-09';
 
-			if (inputTrip.days) {
-				inputTrip.days.push({
-					itinerary: [],
-					note: null,
-					date: '2017-04-09'
-				});
-				inputTrip.days.push({
-					itinerary: [],
-					note: null,
-					date: '2017-04-10'
-				});
-			}
-
 			if (expectedTrip.days) {
-				expectedTrip.days.push({
-					itinerary: [],
-					note: null,
-					date: '2017-04-09'
-				});
-				expectedTrip.days.push({
-					itinerary: [],
-					note: null,
-					date: '2017-04-10'
-				});
 				expectedTrip.days.splice(indexToBeRemoved, 1);
 			}
 
@@ -130,29 +95,11 @@ describe('TripManipulator', () => {
 			const indexToBeRemoved = 2;
 
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			inputTrip.endsOn = '2017-04-10';
 			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			expectedTrip.endsOn = '2017-04-09';
 
-			if (inputTrip.days) {
-				inputTrip.days.push({
-					itinerary: [],
-					note: null,
-					date: '2017-04-09'
-				});
-				inputTrip.days.push({
-					itinerary: [],
-					note: null,
-					date: '2017-04-10'
-				});
-			}
-
 			if (expectedTrip.days) {
-				expectedTrip.days.push({
-					itinerary: [],
-					note: null,
-					date: '2017-04-09'
-				});
+				expectedTrip.days.pop();
 			}
 
 			return chai.expect(Manipulator.removeDayFromTrip(inputTrip, indexToBeRemoved)).to.deep.equal(expectedTrip);
@@ -174,12 +121,10 @@ describe('TripManipulator', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 
-			if (inputTrip.days) {
-				inputTrip.days.push(emptyDay);
-			}
-
 			if (expectedTrip.days) {
-				expectedTrip.days.unshift(emptyDay);
+				const tempDay = expectedTrip.days[0];
+				expectedTrip.days[0] = expectedTrip.days[1];
+				expectedTrip.days[1] = tempDay;
 			}
 
 			return chai.expect(Manipulator.swapDaysInTrip(inputTrip, 0, 1)).to.deep.equal(expectedTrip);
@@ -212,16 +157,20 @@ describe('TripManipulator', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 
-			if (expectedTrip.days) {
-				const firstItineraryItem: ItineraryItem = expectedTrip.days[0].itinerary[0];
-				const secondItineraryItem: ItineraryItem = expectedTrip.days[0].itinerary[1];
-				const thirdItineraryItem: ItineraryItem = expectedTrip.days[0].itinerary[2];
-				const fourthItineraryItem: ItineraryItem = expectedTrip.days[0].itinerary[3];
+			if (inputTrip.days) {
+				inputTrip.days = [inputTrip.days[0]];
+				inputTrip.days[0].itinerary[0] = buildTestItem('poi:1');
+				inputTrip.days[0].itinerary[1] = buildTestItem('poi:2');
+				inputTrip.days[0].itinerary[2] = buildTestItem('poi:3');
+				inputTrip.days[0].itinerary[3] = buildTestItem('poi:4');
+			}
 
-				expectedTrip.days[0].itinerary[0] = firstItineraryItem;
-				expectedTrip.days[0].itinerary[1] = thirdItineraryItem;
-				expectedTrip.days[0].itinerary[2] = fourthItineraryItem;
-				expectedTrip.days[0].itinerary[3] = secondItineraryItem;
+			if (expectedTrip.days) {
+				expectedTrip.days = [expectedTrip.days[0]];
+				expectedTrip.days[0].itinerary[0] = buildTestItem('poi:1');
+				expectedTrip.days[0].itinerary[1] = buildTestItem('poi:3');
+				expectedTrip.days[0].itinerary[2] = buildTestItem('poi:4');
+				expectedTrip.days[0].itinerary[3] = buildTestItem('poi:2');
 			}
 
 			return chai.expect(Manipulator.movePlaceInDay(inputTrip, 0, positionFrom, positionTo))
@@ -235,16 +184,20 @@ describe('TripManipulator', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 
-			if (expectedTrip.days) {
-				const firstItineraryItem: ItineraryItem = expectedTrip.days[0].itinerary[0];
-				const secondItineraryItem: ItineraryItem = expectedTrip.days[0].itinerary[1];
-				const thirdItineraryItem: ItineraryItem = expectedTrip.days[0].itinerary[2];
-				const fourthItineraryItem: ItineraryItem = expectedTrip.days[0].itinerary[3];
+			if (inputTrip.days) {
+				inputTrip.days = [inputTrip.days[0]];
+				inputTrip.days[0].itinerary[0] = buildTestItem('poi:1');
+				inputTrip.days[0].itinerary[1] = buildTestItem('poi:2');
+				inputTrip.days[0].itinerary[2] = buildTestItem('poi:3');
+				inputTrip.days[0].itinerary[3] = buildTestItem('poi:4');
+			}
 
-				expectedTrip.days[0].itinerary[0] = firstItineraryItem;
-				expectedTrip.days[0].itinerary[1] = fourthItineraryItem;
-				expectedTrip.days[0].itinerary[2] = secondItineraryItem;
-				expectedTrip.days[0].itinerary[3] = thirdItineraryItem;
+			if (expectedTrip.days) {
+				expectedTrip.days = [expectedTrip.days[0]];
+				expectedTrip.days[0].itinerary[0] = buildTestItem('poi:1');
+				expectedTrip.days[0].itinerary[1] = buildTestItem('poi:4');
+				expectedTrip.days[0].itinerary[2] = buildTestItem('poi:2');
+				expectedTrip.days[0].itinerary[3] = buildTestItem('poi:3');
 			}
 
 			return chai.expect(Manipulator.movePlaceInDay(inputTrip, 0, positionFrom, positionTo))
