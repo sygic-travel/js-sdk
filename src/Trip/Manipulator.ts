@@ -120,7 +120,11 @@ export function addPlaceToDay(
 		throw new Error('Invalid dayIndex');
 	}
 
-	if (positionInDay && (tripToBeUpdated.days[dayIndex].itinerary.length < positionInDay || positionInDay < 0)) {
+	if (
+		typeof positionInDay !== 'undefined' &&
+		positionInDay !== null &&
+		(tripToBeUpdated.days[dayIndex].itinerary.length < positionInDay || positionInDay < 0)
+	) {
 		throw new Error('Invalid positionInDay');
 	}
 
@@ -135,7 +139,7 @@ export function addPlaceToDay(
 		transportFromPrevious: null
 	};
 
-	if (positionInDay) {
+	if (typeof positionInDay !== 'undefined' && positionInDay !== null) {
 		resultTrip.days[dayIndex].itinerary.splice(positionInDay, 0, itineraryItem);
 	} else {
 		resultTrip.days[dayIndex].itinerary.push(itineraryItem);
@@ -190,4 +194,38 @@ export function removePlaceFromDay(
 	resultTrip.days[dayIndex].itinerary.splice(positionInDay, 1);
 	return resolveStickiness(resultTrip);
 }
+
+export function replaceStickyPlace(
+	trip: Trip,
+	place: Place,
+	dayIndex: number
+): Trip {
+	if (!trip.days) {
+		throw new Error('days property in Trip cannot be null');
+	}
+
+	if (!trip.days[dayIndex]) {
+		throw new Error('Invalid dayIndex');
+	}
+	let resultTrip = cloneDeep(trip);
+	if (
+		trip.days &&
+		trip.days[dayIndex] &&
+		trip.days[dayIndex].itinerary.length &&
+		trip.days[dayIndex].itinerary[trip.days[dayIndex].itinerary.length - 1].isSticky
+	) {
+		resultTrip = removePlaceFromDay(resultTrip, dayIndex, resultTrip.days[dayIndex].itinerary.length - 1);
+		resultTrip = addPlaceToDay(resultTrip, place, dayIndex, resultTrip.days[dayIndex].itinerary.length);
+	}
+	const nextDayIndex = dayIndex + 1;
+	if (
+		trip.days &&
+		trip.days[nextDayIndex] &&
+		trip.days[nextDayIndex].itinerary.length &&
+		trip.days[nextDayIndex].itinerary[0].isSticky
+	) {
+		resultTrip = removePlaceFromDay(resultTrip, nextDayIndex, 0);
+		resultTrip = addPlaceToDay(resultTrip, place, nextDayIndex, 0);
+	}
+	return resolveStickiness(resultTrip);
 }

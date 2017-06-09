@@ -341,4 +341,36 @@ describe('TripManipulator', () => {
 		});
 
 	});
+
+	describe('#replaceStickyPlace', () => {
+		it('should throw an error when invalid dayIndex is passed', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const inputPlace: Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+
+			return chai.expect(() => Manipulator.replaceStickyPlace(inputTrip, inputPlace, 999))
+				.to.throw(Error, 'Invalid dayIndex');
+		});
+
+		it('should correctly add place to the end of the day when positionInDay is not set', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const inputPlace: Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+
+			if (expectedTrip.days) {
+				const item = {
+					place: inputPlace,
+					placeId: 'poi:530',
+					startTime: null,
+					duration: null,
+					note: null,
+					transportFromPrevious: null,
+					isSticky: true
+				};
+				expectedTrip.days[0].itinerary[1] = item;
+				expectedTrip.days[1].itinerary[0] = item;
+			}
+			const trip = Manipulator.replaceStickyPlace(inputTrip, inputPlace, 0);
+			return chai.expect(trip).to.deep.equal(expectedTrip);
+		});
+	});
 });
