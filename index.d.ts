@@ -1,4 +1,5 @@
 import * as _Collaboration from './src/Collaboration';
+import * as _Forecast from './src/Forecast';
 import * as _Geo from './src/Geo';
 import * as _Media from './src/Media/Media';
 import * as _Place from './src/Places';
@@ -117,6 +118,10 @@ export class StSDK {
 	 * @experimental
 	 */
 	public searchAddress(query: string, location: Location): Promise<_Search.SearchAddressResult[]>
+	/**
+	 * @experimental
+	 */
+	public getDestinationWeather(destinationId: string): Promise<_Forecast.Forecast[]>
 }
 
 export namespace Places {
@@ -169,4 +174,10 @@ export namespace Search {
 	export import Address = _Search.Address;
 	export import AddressFields = _Search.AddressFields;
 	export import SearchAddressResult = _Search.SearchAddressResult;
+}
+
+export namespace Forecast {
+	export import Forecast = _Forecast.Forecast;
+	export import ForecastTemperature = _Forecast.ForecastTemperature;
+	export import ForecastWeather = _Forecast.ForecastWeather;
 }
