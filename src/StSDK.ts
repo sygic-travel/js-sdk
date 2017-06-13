@@ -168,8 +168,9 @@ export default class StSDK extends BaseSDK {
 		tripId: string,
 		placeId: string,
 		dayIndex: number,
-		positionInDay?: number): Promise<Trip> {
-			return addPlaceToDay(tripId, placeId, dayIndex, positionInDay);
+		positionInDay?: number,
+		replaceSticky?: boolean): Promise<Trip> {
+			return addPlaceToDay(tripId, placeId, dayIndex, positionInDay, replaceSticky);
 	}
 
 	/**

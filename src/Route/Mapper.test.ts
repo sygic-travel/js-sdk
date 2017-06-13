@@ -28,6 +28,7 @@ describe('RouteMapper', () => {
 				startTime: null,
 				duration: null,
 				note: null,
+				isSticky: null,
 				transportFromPrevious: {
 					mode: 'car',
 					type: 'economic',
@@ -65,6 +66,7 @@ describe('RouteMapper', () => {
 				startTime: null,
 				duration: null,
 				note: null,
+				isSticky: null,
 				transportFromPrevious: null
 			};
 			const origin: Location = {

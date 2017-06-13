@@ -1,14 +1,46 @@
+import { ItineraryItem } from '.';
 import { EARTH_RADIUS, getDistance, Location } from '../Geo';
-import { Place } from '../Places';
+import { isStickyByDefault, Place } from '../Places';
 
-export function findOptimalPosition(place: Place, dayPlaces: Place[]): number {
+export function findOptimalPosition(
+	place: Place,
+	itineraryItems: ItineraryItem[]
+): number {
+
+	if (isStickyByDefault(place) && (!itineraryItems.length || !itineraryItems[itineraryItems.length - 1].isSticky)) {
+		return itineraryItems.length;
+	}
+
 	let minDistance = 0;
 	let minDistanceIndex = 0;
 	let checkIndex = 0;
-	const locations: Location[] = dayPlaces.map((dPlace: Place): Location => (dPlace.location));
+	const blockedIndexes: number[] = [];
 
-	while (checkIndex < dayPlaces.length + 1) {
+	if (itineraryItems.find((item: ItineraryItem) => (item.place === null))) {
+		throw new Error('Itinerary item place is not filled');
+	}
+
+	const locations: Location[] = itineraryItems.reduce((locs: Location[], item: ItineraryItem): Location[] => {
+		if (item.place) {
+			locs.push(item.place.location);
+		}
+		return locs;
+	}, []);
+
+	if (itineraryItems[0] && itineraryItems[0].isSticky) {
+		blockedIndexes.push(0);
+	}
+
+	if (itineraryItems.length && itineraryItems[itineraryItems.length - 1].isSticky) {
+		blockedIndexes.push(itineraryItems.length);
+	}
+
+	while (checkIndex <= locations.length) {
 		const checkLocations = locations.slice();
+		if (blockedIndexes.indexOf(checkIndex) !== -1) {
+			checkIndex++;
+			continue;
+		}
 		checkLocations.splice(checkIndex, 0, place.location);
 		let prevLocation: Location;
 

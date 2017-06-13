@@ -1,10 +1,11 @@
 import { Medium } from '../Media/Media';
 import * as Dao from './DataAccess';
 import { PlacesFilter, PlacesFilterJSON } from './Filter';
-import { Place, Price } from './Place';
+import { isStickyByDefault, Place, Price } from './Place';
 import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
 
 export {
+	isStickyByDefault,
 	PlacesFilter,
 	Place,
 	PlacesFilterJSON,

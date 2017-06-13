@@ -52,33 +52,50 @@ export const tripDetail = {
 			"delete": true
 		},
 		"starts_on": "2017-04-08",
-		"ends_on": "2017-04-08",
+		"ends_on": "2017-04-10",
 		"days": [
 			{
 				"itinerary": [
 					{
-						"place_id": "poi:51098",
+						"place_id": "poi:1",
 						"start_time": null,
 						"duration": null,
 						"note": null,
 						"transport_from_previous": null
 					},
 					{
-						"place_id": "poi:48056",
+						"place_id": "poi:2",
+						"start_time": null,
+						"duration": null,
+						"note": null,
+						"transport_from_previous": null
+					}
+				],
+				"note": null
+			},
+			{
+				"itinerary": [
+					{
+						"place_id": "poi:2",
 						"start_time": null,
 						"duration": null,
 						"note": null,
 						"transport_from_previous": null
 					},
 					{
-						"place_id": "poi:48015",
+						"place_id": "poi:3",
 						"start_time": null,
 						"duration": null,
 						"note": null,
 						"transport_from_previous": null
-					},
+					}
+				],
+				"note": null
+			},
+			{
+				"itinerary": [
 					{
-						"place_id": "poi:48071",
+						"place_id": "poi:4",
 						"start_time": null,
 						"duration": null,
 						"note": null,

@@ -35,10 +35,10 @@ describe('TripController', () => {
 	const responsePlace2 = cloneDeep(PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
 	const responsePlace3 = cloneDeep(PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
 	const responsePlace4 = cloneDeep(PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
-	responsePlace1.id = 'poi:51098';
-	responsePlace2.id = 'poi:48056';
-	responsePlace3.id = 'poi:48015';
-	responsePlace4.id = 'poi:48071';
+	responsePlace1.id = 'poi:1';
+	responsePlace2.id = 'poi:2';
+	responsePlace3.id = 'poi:3';
+	responsePlace4.id = 'poi:4';
 
 	const placesResponse: any = {
 		places: [
@@ -100,13 +100,13 @@ describe('TripController', () => {
 	describe('#getPlacesGuidsFromTrip', () => {
 		it('should get places guids from mapped trip', () => {
 			return chai.expect(TripController.getPlacesIdsFromTrip(TripExpectedResults.tripDetailed)).to.deep.equal([
-				'poi:51098', 'poi:48056', 'poi:48015', 'poi:48071'
+				'poi:1', 'poi:2', 'poi:2', 'poi:3', 'poi:4'
 			]);
 		});
 	});
 
 	describe('#updateTrip', () => {
-		it('should update trip with one day', () => {
+		it('should update trip with three days', () => {
 			tripsDetailedCache.set(TripTestData.tripDetail.trip.id, TripTestData.tripDetail.trip);
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, placesResponse));
@@ -115,7 +115,7 @@ describe('TripController', () => {
 			const expectedTrip: TripController.Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			expectedTrip.name = 'abc';
 			expectedTrip.startsOn = '2017-04-10';
-			expectedTrip.endsOn = '2017-04-10';
+			expectedTrip.endsOn = '2017-04-12';
 			expectedTrip.privacyLevel = 'ppp';
 
 			return chai.expect(TripController.updateTrip('58c6bce821287', {

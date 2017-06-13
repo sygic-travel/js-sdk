@@ -87,6 +87,7 @@ export interface ItineraryItem {
 	startTime: number | null; // Number of seconds from midnight.
 	duration: number | null; // Time in seconds planned to spend visiting place.
 	note: string | null;
+	isSticky: boolean | null; // https://confluence.sygic.com/display/STV/Sticky+Places+in+Itinerary
 	transportFromPrevious: TransportSettings | null;
 
 }

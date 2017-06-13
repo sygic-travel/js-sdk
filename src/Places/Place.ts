@@ -25,3 +25,7 @@ export interface Price {
 	value: number;
 	savings: number;
 }
+
+export function isStickyByDefault(place: Place): boolean {
+	return place.categories.indexOf('sleeping') !== -1;
+}
