@@ -1,11 +1,23 @@
 import { BaseSDK } from './BaseSDK';
+import {
+	acceptTripCollaboration,
+	addTripCollaboration,
+	Collaboration,
+	followTrip,
+	getTripCollaborations,
+	removeTripCollaboration,
+	resendInvitation,
+	unfollowTrip,
+	updateTripCollaboration
+} from './Collaboration';
 import { addCustomPlaceToFavorites, addPlaceToFavorites, getFavoritesIds, removePlaceFromFavorites } from './Favorites';
-import { Bounds } from './Geo';
 import { Forecast, getDestinationWeather } from './Forecast';
 import { Location } from './Geo';
+import { Bounds } from './Geo';
 import { Medium } from './Media';
 import { getPlaceDetailed, getPlaceMedia, getPlaces, Place, PlacesFilter, PlacesFilterJSON } from './Places';
 import { getRoutesForTripDay, Route } from './Route';
+import { searchAddress, SearchAddressResult } from './Search';
 import { setUserSession } from './Settings/index';
 import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from './Spread';
 import {
@@ -24,23 +36,6 @@ import {
 	TripUpdateData,
 	updateTrip
 } from './Trip';
-
-import {
-	acceptTripCollaboration,
-	addTripCollaboration,
-	Collaboration,
-	followTrip,
-	getTripCollaborations,
-	removeTripCollaboration,
-	resendInvitation,
-	unfollowTrip,
-	updateTripCollaboration
-} from './Collaboration';
-
-import {
-	searchAddress,
-	SearchAddressResult
-} from './Search';
 
 export default class StSDK extends BaseSDK {
 	public setUserSession(key: string | null, token: string | null): void {
