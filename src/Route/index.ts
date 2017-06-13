@@ -29,7 +29,14 @@ export async function getRoutesForTripDay(tripId: string, dayIndex: number): Pro
 	}
 
 	const places: Place[] = await placesDao.getPlacesFromTripDay(day);
-	return Dao.getRoutes(createRequests(places, day));
+	const routes: Route[] = await Dao.getRoutes(createRequests(places, day));
+	return routes.map((route: Route): Route => {
+		const availableModes = ModeSelector.getAvailableModes(route.origin, route.destination);
+		route.modeDirections = route.modeDirections.filter((modeDirection: ModeDirections) => {
+			return availableModes.indexOf(modeDirection.mode) !== -1;
+		});
+		return route;
+	});
 }
 
 const createRequests = (places: Place[], day: Day): RouteRequest[] => {
