@@ -7,10 +7,12 @@ import { Day, ItineraryItem } from '../Trip';
 import { get } from '../Xhr';
 import { PlacesFilter } from './Filter';
 import {
-mapPlaceApiResponseToPlaces, mapPlaceDetailedApiResponseToPlace,
-mapPlaceDetailedBatchApiResponseToPlaces
+	mapPlaceApiResponseToPlaces, mapPlaceDetailedApiResponseToPlace,
+	mapPlaceDetailedBatchApiResponseToPlaces,
+	mapPlaceGeometryApiResponseToPlaceGeometry
 } from './Mapper';
 import { Place } from './Place';
+import { PlaceGeometry } from './PlaceGeometry';
 
 export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
 	const apiResponse = await api.getPlaces(filter);
@@ -101,4 +103,13 @@ async function getFromApi(toBeFetchedFromAPI: string[]): Promise<any> {
 	}
 
 	return apiResponse.data.places;
+}
+
+export async function getPlaceGeometry(id: string): Promise<PlaceGeometry> {
+	const apiResponse = await get(`places/${id}/geometry`);
+	if (!apiResponse.data.hasOwnProperty('geometry') || !apiResponse.data.hasOwnProperty('is_shape')) {
+		throw new Error('Wrong API response');
+	}
+
+	return mapPlaceGeometryApiResponseToPlaceGeometry(apiResponse.data);
 }

@@ -14,6 +14,10 @@ export class StSDK {
 	public getPlaces(filter: _Place.PlacesFilterJSON): Promise<_Place.Place[]>;
 	public getPlaceDetailed(guid: string, photoSize: string): Promise<_Place.Place>;
 	public getPlaceMedia(guid: string): Promise<_Media.Medium[]>;
+	/**
+	 * @experimental
+	 */
+	public getPlaceGeometry(id: string): Promise<_Place.PlaceGeometry>
 	public spreadPlacesOnMap(
 		places: _Place.Place[],
 		markerSizes: _Spread.SpreadSizeConfig[],
@@ -129,6 +133,7 @@ export namespace Places {
 	export import PlacesFilterJSON = _Place.PlacesFilterJSON;
 	export import Price = _Place.Price;
 	export import PlaceDetail = _Place.PlaceDetail;
+	export import PlaceGeometry = _Place.PlaceGeometry;
 	export import Reference = _Place.Reference;
 	export import Tag = _Place.Tag;
 	export import Description = _Place.Description;

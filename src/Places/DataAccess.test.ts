@@ -12,6 +12,7 @@ import { ApiResponse } from '../Xhr/ApiResponse';
 import * as Dao from './DataAccess';
 import { PlacesFilter, PlacesFilterJSON } from './Filter';
 import { Place } from './Place';
+import { PlaceGeometry } from './PlaceGeometry';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
@@ -145,6 +146,35 @@ describe('PlacesDataAccess', () => {
 
 			return chai.expect(Dao.getPlaceMedia('poi:530'))
 				.to.eventually.deep.equal(TestData.placeDetailMedia.media);
+		});
+	});
+
+	describe('#getPlaceGeometry', () => {
+		it('should just recall api and return geometry', () => {
+			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, {
+					geometry: {
+						type: 'Point',
+						coordinates: [
+							14.4073390859971,
+							50.0869010651596
+						]
+					},
+					is_shape: false
+				}));
+			}));
+
+			return chai.expect(Dao.getPlaceGeometry('poi:42133'))
+				.to.eventually.deep.equal({
+					geometry: {
+						type: 'Point',
+						coordinates: [
+							14.4073390859971,
+							50.0869010651596
+						]
+					} as GeoJSON.GeoJsonObject,
+					isShape: false
+				} as PlaceGeometry);
 		});
 	});
 });

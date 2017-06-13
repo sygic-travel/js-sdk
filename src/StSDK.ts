@@ -12,10 +12,18 @@ import {
 } from './Collaboration';
 import { addCustomPlaceToFavorites, addPlaceToFavorites, getFavoritesIds, removePlaceFromFavorites } from './Favorites';
 import { Forecast, getDestinationWeather } from './Forecast';
-import { Location } from './Geo';
-import { Bounds } from './Geo';
+import { Bounds, Location } from './Geo';
 import { Medium } from './Media';
-import { getPlaceDetailed, getPlaceMedia, getPlaces, Place, PlacesFilter, PlacesFilterJSON } from './Places';
+import {
+	getPlaceDetailed,
+	getPlaceGeometry,
+	getPlaceMedia,
+	getPlaces,
+	Place,
+	PlaceGeometry,
+	PlacesFilter,
+	PlacesFilterJSON
+} from './Places';
 import { getRoutesForTripDay, Route } from './Route';
 import { searchAddress, SearchAddressResult } from './Search';
 import { setUserSession } from './Settings/index';
@@ -52,6 +60,13 @@ export default class StSDK extends BaseSDK {
 
 	public getPlaceMedia(id: string): Promise<Medium[]> {
 		return getPlaceMedia(id);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public getPlaceGeometry(id: string): Promise<PlaceGeometry> {
+		return getPlaceGeometry(id);
 	}
 
 	public spreadPlacesOnMap(
@@ -168,9 +183,8 @@ export default class StSDK extends BaseSDK {
 		tripId: string,
 		placeId: string,
 		dayIndex: number,
-		positionInDay?: number,
-		replaceSticky?: boolean): Promise<Trip> {
-			return addPlaceToDay(tripId, placeId, dayIndex, positionInDay, replaceSticky);
+		positionInDay?: number): Promise<Trip> {
+			return addPlaceToDay(tripId, placeId, dayIndex, positionInDay);
 	}
 
 	/**
