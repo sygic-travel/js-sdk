@@ -11,6 +11,10 @@ export interface PlaceDetail {
 	phone: string | null;
 	media: MainMedia;
 	references: Reference[];
+	/**
+	 * @experimental
+	 */
+	ownerId?: string;
 }
 
 export interface Reference {

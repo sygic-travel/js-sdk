@@ -14,6 +14,7 @@ export const placeDetailedEiffelTowerWithoutMedia = {
 		"name_suffix": "Paris, France",
 		"url": "https://travel.sygic.com/go/poi:530",
 		"price": null,
+		"owner_id": "12345",
 		"marker": "sightseeing:tower:lookout:observation",
 		"categories": [
 			"sightseeing"
