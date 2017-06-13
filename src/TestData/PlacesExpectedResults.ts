@@ -83,7 +83,8 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 			currency: 'USD',
 			price: 182.88,
 			flags: []
-		} as Reference]
+		} as Reference],
+		ownerId: '12345'
 	} as PlaceDetail
 };
 

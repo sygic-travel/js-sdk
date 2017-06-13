@@ -51,7 +51,7 @@ const mapPlaceDetail = (place, photoSize): PlaceDetail => {
 	const tags: Tag[] = place.tags.map((tag) => (camelizeKeys(tag) as Tag));
 	const description: Description | null = place.description ? camelizeKeys(place.description) as Description : null;
 	const references: Reference[] = place.references.map((reference) => camelizeKeys(reference));
-	return {
+	const resultPlaceDetail = {
 		tags,
 		address: place.address,
 		admission: place.admission,
@@ -63,6 +63,12 @@ const mapPlaceDetail = (place, photoSize): PlaceDetail => {
 		media: mapMainMediaToMedia(camelizeKeys(place.main_media), photoSize),
 		references
 	} as PlaceDetail;
+
+	if (place.owner_id) {
+		resultPlaceDetail.ownerId = place.owner_id;
+	}
+
+	return resultPlaceDetail;
 };
 
 export const mapMainMediaToMedia = (mainMedia, photoSize: string): MainMedia => {
