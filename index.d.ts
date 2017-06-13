@@ -18,6 +18,10 @@ export class StSDK {
 	 * @experimental
 	 */
 	public getPlaceGeometry(id: string): Promise<_Place.PlaceGeometry>
+	/**
+	 * @experimental
+	 */
+	public getPlaceOpeningHours(id: string, from: string, to: string): Promise<_Place.PlaceOpeningHours>
 	public spreadPlacesOnMap(
 		places: _Place.Place[],
 		markerSizes: _Spread.SpreadSizeConfig[],
@@ -134,6 +138,7 @@ export namespace Places {
 	export import Price = _Place.Price;
 	export import PlaceDetail = _Place.PlaceDetail;
 	export import PlaceGeometry = _Place.PlaceGeometry;
+	export import PlaceOpeningHours = _Place.PlaceOpeningHours;
 	export import Reference = _Place.Reference;
 	export import Tag = _Place.Tag;
 	export import Description = _Place.Description;

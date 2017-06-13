@@ -18,15 +18,17 @@ import {
 	getPlaceDetailed,
 	getPlaceGeometry,
 	getPlaceMedia,
+	getPlaceOpeningHours,
 	getPlaces,
 	Place,
 	PlaceGeometry,
+	PlaceOpeningHours,
 	PlacesFilter,
 	PlacesFilterJSON
 } from './Places';
 import { getRoutesForTripDay, Route } from './Route';
 import { searchAddress, SearchAddressResult } from './Search';
-import { setUserSession } from './Settings/index';
+import { setUserSession } from './Settings';
 import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from './Spread';
 import {
 	addDayToTrip,
@@ -67,6 +69,13 @@ export default class StSDK extends BaseSDK {
 	 */
 	public getPlaceGeometry(id: string): Promise<PlaceGeometry> {
 		return getPlaceGeometry(id);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public getPlaceOpeningHours(id: string, from: string, to: string): Promise<PlaceOpeningHours> {
+		return getPlaceOpeningHours(id, from, to);
 	}
 
 	public spreadPlacesOnMap(

@@ -7,12 +7,15 @@ import { Day, ItineraryItem } from '../Trip';
 import { get } from '../Xhr';
 import { PlacesFilter } from './Filter';
 import {
-	mapPlaceApiResponseToPlaces, mapPlaceDetailedApiResponseToPlace,
+	mapPlaceApiResponseToPlaces,
+	mapPlaceDetailedApiResponseToPlace,
 	mapPlaceDetailedBatchApiResponseToPlaces,
-	mapPlaceGeometryApiResponseToPlaceGeometry
+	mapPlaceGeometryApiResponseToPlaceGeometry,
+	mapPlaceOpeningHours
 } from './Mapper';
 import { Place } from './Place';
 import { PlaceGeometry } from './PlaceGeometry';
+import { PlaceOpeningHours } from './PlaceOpeningHours';
 
 export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
 	const apiResponse = await api.getPlaces(filter);
@@ -112,4 +115,16 @@ export async function getPlaceGeometry(id: string): Promise<PlaceGeometry> {
 	}
 
 	return mapPlaceGeometryApiResponseToPlaceGeometry(apiResponse.data);
+}
+
+export async function getPlaceOpeningHours(id: string, from: string, to: string): Promise<PlaceOpeningHours> {
+	const apiResponse = await get(`places/${id}/opening-hours?` + stringify({
+		from,
+		to
+	}));
+	if (!apiResponse.data.hasOwnProperty('opening_hours')) {
+		throw new Error('Wrong API response');
+	}
+
+	return mapPlaceOpeningHours(apiResponse.data.opening_hours);
 }

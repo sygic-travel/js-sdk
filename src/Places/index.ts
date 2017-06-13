@@ -4,15 +4,18 @@ import { PlacesFilter, PlacesFilterJSON } from './Filter';
 import { isStickyByDefault, Place, Price } from './Place';
 import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
+import { DayOpeningHours, PlaceOpeningHours } from './PlaceOpeningHours';
 
 export {
 	isStickyByDefault,
+	DayOpeningHours,
 	PlacesFilter,
 	Place,
 	PlacesFilterJSON,
 	PlaceGeometry,
 	Price,
 	PlaceDetail,
+	PlaceOpeningHours,
 	Reference,
 	Tag,
 	Description,
@@ -37,4 +40,8 @@ export async function getPlaceMedia(id: string): Promise<Medium[]> {
 
 export async function getPlaceGeometry(id: string): Promise<PlaceGeometry> {
 	return await Dao.getPlaceGeometry(id);
+}
+
+export async function getPlaceOpeningHours(id: string, from: string, to: string): Promise<PlaceOpeningHours> {
+	return await Dao.getPlaceOpeningHours(id, from, to);
 }

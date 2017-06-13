@@ -6,6 +6,7 @@ import { MainMedia } from '../Media/Media';
 import { Place, Price } from './Place';
 import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
+import { PlaceOpeningHours } from './PlaceOpeningHours';
 
 const defaultPhotoSize = '300x300';
 
@@ -100,3 +101,7 @@ export const mapPlaceGeometryApiResponseToPlaceGeometry = (placeGeometry: any): 
 		isShape: placeGeometry.is_shape
 	} as PlaceGeometry
 );
+
+export const mapPlaceOpeningHours = (placeOpeningHours: any): PlaceOpeningHours => {
+	return placeOpeningHours as PlaceOpeningHours;
+};
