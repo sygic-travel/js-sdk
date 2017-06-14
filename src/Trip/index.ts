@@ -1,4 +1,4 @@
-import { Dao as placesDao, getPlaceDetailed, getPlaceDetailedBatch, isStickyByDefault, Place } from '../Places';
+import { Dao as placesDao, getPlaceDetailed, getPlacesDetailed, isStickyByDefault, Place } from '../Places';
 import { addDaysToDate } from '../Util/index';
 import * as Dao from './DataAccess';
 import * as TripManipulator from './Manipulator';
@@ -45,7 +45,7 @@ export async function getTripDetailed(id: string): Promise<Trip> {
 	const tripWithoutPlaces: Trip = await Dao.getTripDetailed(id);
 	if (tripWithoutPlaces.days) {
 		const placesGuids: string[] = getPlacesIdsFromTrip(tripWithoutPlaces);
-		return putPlacesToTrip(tripWithoutPlaces, await getPlaceDetailedBatch(placesGuids, '300x300'));
+		return putPlacesToTrip(tripWithoutPlaces, await getPlacesDetailed(placesGuids, '300x300'));
 	}
 	return tripWithoutPlaces;
 }

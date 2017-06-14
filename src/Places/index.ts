@@ -30,8 +30,8 @@ export async function getPlaceDetailed(id: string, photoSize: string): Promise<P
 	return await Dao.getPlaceDetailed(id, photoSize);
 }
 
-export async function getPlaceDetailedBatch(ids: string[], photoSize: string): Promise<Place[]> {
-	return await Dao.getPlaceDetailedBatch(ids, photoSize);
+export async function getPlacesDetailed(ids: string[], photoSize: string): Promise<Place[]> {
+	return await Dao.getPlacesDetailed(ids, photoSize);
 }
 
 export async function getPlaceMedia(id: string): Promise<Medium[]> {

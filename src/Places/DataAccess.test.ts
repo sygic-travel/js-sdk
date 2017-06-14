@@ -80,7 +80,7 @@ describe('PlacesDataAccess', () => {
 		});
 	});
 
-	describe('#getPlaceDetailedBatch', () => {
+	describe('#getPlacesDetailed', () => {
 		const placesFromApi: any[] = [];
 		const expectedPlaces: Place[] = [];
 
@@ -100,7 +100,7 @@ describe('PlacesDataAccess', () => {
 				}));
 			}));
 
-			return Dao.getPlaceDetailedBatch(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
+			return Dao.getPlacesDetailed(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
 				sinon.assert.calledOnce(stub);
 				return chai.expect(result).to.deep.equal(expectedPlaces);
 			});
@@ -114,7 +114,7 @@ describe('PlacesDataAccess', () => {
 
 			const stub = sandbox.stub(Xhr, 'get');
 
-			return Dao.getPlaceDetailedBatch(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
+			return Dao.getPlacesDetailed(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
 				sinon.assert.notCalled(stub);
 				return chai.expect(result).to.deep.equal(expectedPlaces);
 			});
@@ -130,7 +130,7 @@ describe('PlacesDataAccess', () => {
 				}));
 			}));
 
-			return Dao.getPlaceDetailedBatch(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
+			return Dao.getPlacesDetailed(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
 				sinon.assert.calledOnce(stub);
 				return chai.expect(result).to.deep.equal(expectedPlaces);
 			});
