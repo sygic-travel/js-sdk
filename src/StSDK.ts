@@ -47,6 +47,7 @@ import {
 	TripUpdateData,
 	updateTrip
 } from './Trip';
+import { getUserSettings, updateUserSettings, UserSettings } from './User';
 
 export default class StSDK extends BaseSDK {
 	public setUserSession(key: string | null, token: string | null): void {
@@ -276,5 +277,19 @@ export default class StSDK extends BaseSDK {
 	 */
 	public getDestinationWeather(destinationId: string): Promise<Forecast[]> {
 		return getDestinationWeather(destinationId);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public getUserSettings(): Promise<UserSettings> {
+		return getUserSettings();
+	}
+
+	/**
+	 * @experimental
+	 */
+	public updateUserSettings(settings: UserSettings): Promise<UserSettings> {
+		return updateUserSettings(settings);
 	}
 }
