@@ -12,7 +12,8 @@ export function create(apiUrl: string, clientKey: string): StSDK;
 
 export class StSDK {
 	public getPlaces(filter: _Place.PlacesFilterJSON): Promise<_Place.Place[]>;
-	public getPlaceDetailed(guid: string, photoSize: string): Promise<_Place.Place>;
+	public getPlaceDetailed(id: string, photoSize: string): Promise<_Place.Place>;
+	public getPlacesDetailed(id: string[], photoSize: string): Promise<_Place.Place[]>;
 	public getPlaceMedia(guid: string): Promise<_Media.Medium[]>;
 	/**
 	 * @experimental
