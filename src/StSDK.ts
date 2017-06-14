@@ -20,6 +20,7 @@ import {
 	getPlaceMedia,
 	getPlaceOpeningHours,
 	getPlaces,
+	getPlacesDetailed,
 	Place,
 	PlaceGeometry,
 	PlaceOpeningHours,
@@ -58,6 +59,10 @@ export default class StSDK extends BaseSDK {
 
 	public getPlaceDetailed(id: string, photoSize: string): Promise<Place> {
 		return getPlaceDetailed(id, photoSize);
+	}
+
+	public getPlacesDetailed(ids: string[], photoSize: string): Promise<Place[]> {
+		return getPlacesDetailed(ids, photoSize);
 	}
 
 	public getPlaceMedia(id: string): Promise<Medium[]> {

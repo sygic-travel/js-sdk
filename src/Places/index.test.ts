@@ -43,7 +43,7 @@ describe('PlacesController', () => {
 		});
 	});
 
-	describe('#getPlaceDetailedBatch', () => {
+	describe('#getPlacesDetailed', () => {
 		it('should correctly map api response', () => {
 
 			const place1 = Object.assign({}, TestData.placeDetailedEiffelTowerWithoutMedia.place);
@@ -62,7 +62,7 @@ describe('PlacesController', () => {
 				}));
 			}));
 
-			return chai.expect(PlacesController.getPlaceDetailedBatch(['poi:1', 'poi:2'], '150x150'))
+			return chai.expect(PlacesController.getPlacesDetailed(['poi:1', 'poi:2'], '150x150'))
 				.to.eventually.deep.equal([expectedResult1, expectedResult2]);
 		});
 	});

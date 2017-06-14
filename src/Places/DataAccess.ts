@@ -42,7 +42,7 @@ export async function getPlaceDetailed(id: string, photoSize: string): Promise<a
 	return mapPlaceDetailedApiResponseToPlace(result, photoSize);
 }
 
-export async function getPlaceDetailedBatch(ids: string[], photoSize: string): Promise<Place[]> {
+export async function getPlacesDetailed(ids: string[], photoSize: string): Promise<Place[]> {
 	const placesFromCache: any[] = [];
 	let placesFromApi: any[] = [];
 	const toBeFetchedFromAPI: string[] = [];
@@ -85,7 +85,7 @@ export async function getPlaceDetailedBatch(ids: string[], photoSize: string): P
 export async function getPlacesFromTripDay(day: Day): Promise<Place[]> {
 
 	const placesIds: string[] = day.itinerary.map((item: ItineraryItem) => (item.placeId));
-	return getPlaceDetailedBatch(placesIds, '100x100');
+	return getPlacesDetailed(placesIds, '100x100');
 }
 
 export async function getPlaceMedia(id: string): Promise<Medium[]> {
