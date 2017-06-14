@@ -7,6 +7,7 @@ import * as _Route from './src/Route';
 import * as _Search from './src/Search';
 import * as _Spread from './src/Spread';
 import * as _Trip from './src/Trip';
+import * as _User from './src/User';
 
 export function create(apiUrl: string, clientKey: string): StSDK;
 
@@ -131,6 +132,14 @@ export class StSDK {
 	 * @experimental
 	 */
 	public getDestinationWeather(destinationId: string): Promise<_Forecast.Forecast[]>
+	/**
+	 * @experimental
+	 */
+	public getUserSettings(): Promise<_User.UserSettings>
+	/**
+	 * @experimental
+	 */
+	public updateUserSettings(settings: _User.UserSettings): Promise<_User.UserSettings>
 }
 
 export namespace Places {
@@ -191,4 +200,8 @@ export namespace Forecast {
 	export import Forecast = _Forecast.Forecast;
 	export import ForecastTemperature = _Forecast.ForecastTemperature;
 	export import ForecastWeather = _Forecast.ForecastWeather;
+}
+
+export namespace User {
+	export import UserSettings = _User.UserSettings;
 }
