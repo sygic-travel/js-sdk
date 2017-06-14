@@ -7,10 +7,15 @@ import { Day, ItineraryItem } from '../Trip';
 import { get } from '../Xhr';
 import { PlacesFilter } from './Filter';
 import {
-mapPlaceApiResponseToPlaces, mapPlaceDetailedApiResponseToPlace,
-mapPlaceDetailedBatchApiResponseToPlaces
+	mapPlaceApiResponseToPlaces,
+	mapPlaceDetailedApiResponseToPlace,
+	mapPlaceDetailedBatchApiResponseToPlaces,
+	mapPlaceGeometryApiResponseToPlaceGeometry,
+	mapPlaceOpeningHours
 } from './Mapper';
 import { Place } from './Place';
+import { PlaceGeometry } from './PlaceGeometry';
+import { PlaceOpeningHours } from './PlaceOpeningHours';
 
 export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
 	const apiResponse = await api.getPlaces(filter);
@@ -101,4 +106,25 @@ async function getFromApi(toBeFetchedFromAPI: string[]): Promise<any> {
 	}
 
 	return apiResponse.data.places;
+}
+
+export async function getPlaceGeometry(id: string): Promise<PlaceGeometry> {
+	const apiResponse = await get(`places/${id}/geometry`);
+	if (!apiResponse.data.hasOwnProperty('geometry') || !apiResponse.data.hasOwnProperty('is_shape')) {
+		throw new Error('Wrong API response');
+	}
+
+	return mapPlaceGeometryApiResponseToPlaceGeometry(apiResponse.data);
+}
+
+export async function getPlaceOpeningHours(id: string, from: string, to: string): Promise<PlaceOpeningHours> {
+	const apiResponse = await get(`places/${id}/opening-hours?` + stringify({
+		from,
+		to
+	}));
+	if (!apiResponse.data.hasOwnProperty('opening_hours')) {
+		throw new Error('Wrong API response');
+	}
+
+	return mapPlaceOpeningHours(apiResponse.data.opening_hours);
 }

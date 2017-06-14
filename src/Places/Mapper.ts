@@ -5,6 +5,8 @@ import { Bounds } from '../Geo/Bounds';
 import { MainMedia } from '../Media/Media';
 import { Place, Price } from './Place';
 import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
+import { PlaceGeometry } from './PlaceGeometry';
+import { PlaceOpeningHours } from './PlaceOpeningHours';
 
 const defaultPhotoSize = '300x300';
 
@@ -92,4 +94,14 @@ export const mapMainMediaToMedia = (mainMedia, photoSize: string): MainMedia => 
 	}
 
 	return mappedMedia as MainMedia;
+};
+
+export const mapPlaceGeometryApiResponseToPlaceGeometry = (placeGeometry: any): PlaceGeometry => ({
+		geometry: placeGeometry.geometry as GeoJSON.GeoJsonObject,
+		isShape: placeGeometry.is_shape
+	} as PlaceGeometry
+);
+
+export const mapPlaceOpeningHours = (placeOpeningHours: any): PlaceOpeningHours => {
+	return placeOpeningHours as PlaceOpeningHours;
 };
