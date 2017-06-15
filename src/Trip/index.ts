@@ -1,3 +1,4 @@
+import { ChangeNotification } from '../Changes';
 import { Dao as placesDao, getPlaceDetailed, getPlacesDetailed, isStickyByDefault, Place } from '../Places';
 import { addDaysToDate } from '../Util/index';
 import * as Dao from './DataAccess';
@@ -169,4 +170,14 @@ export async function addPlaceToDay(
 		trip = TripManipulator.addPlaceToDay(trip, place, nextDayIndex, 0);
 	}
 	return Dao.updateTrip(trip);
-};
+}
+
+export async function handleTripChanges(changeNotifications: ChangeNotification[]): Promise<void> {
+	await Promise.all(changeNotifications.map((changeNotification: ChangeNotification) => {
+		const tripId = changeNotification.id;
+		if (changeNotification.change === 'updated') {
+			return Dao.handleTripChangeNotification(tripId);
+		}
+		return Dao.deleteTripFromCache(tripId);
+	}));
+}
