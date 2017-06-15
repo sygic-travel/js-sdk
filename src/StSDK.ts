@@ -29,7 +29,6 @@ import {
 } from './Places';
 import { getRoutesForTripDay, Route } from './Route';
 import { searchAddress, SearchAddressResult } from './Search';
-import { setUserSession } from './Settings';
 import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from './Spread';
 import {
 	addDayToTrip,
@@ -47,10 +46,10 @@ import {
 	TripUpdateData,
 	updateTrip
 } from './Trip';
-import { getUserSettings, updateUserSettings, UserSettings } from './User';
+import { getUserSettings, setUserSession, updateUserSettings, UserSettings } from './User';
 
 export default class StSDK extends BaseSDK {
-	public setUserSession(key: string | null, token: string | null): void {
+	public setUserSession(key: string | null, token: string | null): Promise<void> {
 		return setUserSession(key, token);
 	}
 
