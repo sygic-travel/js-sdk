@@ -1,4 +1,5 @@
 import { handleTripChanges } from '../Trip';
+import { handleSettingsChange } from '../User';
 import { ChangeNotification } from './ChangeNotification';
 import ChangeWatcher from './ChangeWatcher';
 
@@ -23,6 +24,10 @@ export function setChangesCallback(callback: (changeNotifications: ChangeNotific
 }
 
 async function handleChanges(changeNotifications: ChangeNotification[]): Promise<void> {
+	const settingsChange = changeNotifications.find((change) => (change.type === 'settings'));
+	if (settingsChange) {
+		handleSettingsChange();
+	}
 	await handleTripChanges(changeNotifications.filter((changeNotification: ChangeNotification) => {
 		return changeNotification.type === 'trip';
 	}));

@@ -11,13 +11,7 @@ export async function getUserSettings(): Promise<UserSettings> {
 	const fromCache: any = await userCache.get(SETTINGS_KEY);
 
 	if (!fromCache) {
-		const apiResponse = await get('users/me');
-		if (!apiResponse.data.hasOwnProperty('settings')) {
-			throw new Error('Wrong API response');
-		}
-
-		result = apiResponse.data.settings;
-		userCache.set(SETTINGS_KEY, result);
+		result = await getFromApi();
 	} else {
 		result = fromCache;
 	}
@@ -30,4 +24,18 @@ export async function updateUserSettings(settings: UserSettings): Promise<UserSe
 	await userCache.set(SETTINGS_KEY, settingsData);
 	await put('users/me', settingsData);
 	return settings;
+}
+
+export async function handleSettingsChange(): Promise<void> {
+	await getFromApi();
+}
+
+async function getFromApi(): Promise<object> {
+	const apiResponse = await get('users/me');
+	if (!apiResponse.data.hasOwnProperty('settings')) {
+		throw new Error('Wrong API response');
+	}
+	const result = apiResponse.data.settings;
+	await userCache.set(SETTINGS_KEY, result);
+	return result;
 }
