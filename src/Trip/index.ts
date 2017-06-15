@@ -174,6 +174,9 @@ export async function addPlaceToDay(
 
 export async function handleTripChanges(changeNotifications: ChangeNotification[]): Promise<void> {
 	await Promise.all(changeNotifications.map((changeNotification: ChangeNotification) => {
+		if (!changeNotification.id) {
+			return Promise.resolve();
+		}
 		const tripId = changeNotification.id;
 		if (changeNotification.change === 'updated') {
 			return Dao.handleTripChangeNotification(tripId);
