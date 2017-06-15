@@ -19,7 +19,7 @@ export interface PlacesFilterJSON {
 
 interface PlacesFilterQuery {
 	query?: string;
-	map_tile?: string;
+	map_tiles?: string;
 	map_spread?: number;
 	categories?: string;
 	categoriesOperator?: LogicalOperator;
@@ -104,7 +104,7 @@ export class PlacesFilter {
 		}
 
 		if (this._mapTile) {
-			query.map_tile = this._mapTile;
+			query.map_tiles = this._mapTile;
 		}
 
 		if (this._mapSpread) {
