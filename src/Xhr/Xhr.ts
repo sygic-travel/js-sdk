@@ -73,6 +73,7 @@ function buildHeaders() {
 function buildApiResponse(response: AxiosResponse): ApiResponse {
 	return new ApiResponse(
 		response.data.status_code,
-		response.data.data
+		response.data.data,
+		response.data.server_timestamp
 	);
 }
