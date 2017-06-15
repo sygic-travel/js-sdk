@@ -1,4 +1,5 @@
 import { BaseSDK } from './BaseSDK';
+import { ChangeNotification, initializeChangesWatching, setChangesCallback, stopChangesWatching } from './Changes';
 import {
 	acceptTripCollaboration,
 	addTripCollaboration,
@@ -269,6 +270,27 @@ export default class StSDK extends BaseSDK {
 	 */
 	public searchAddress(query: string, location?: Location): Promise<SearchAddressResult[]> {
 		return searchAddress(query, location);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public initializeChangesWatching(tickInterval: number): Promise<void> {
+		return initializeChangesWatching(tickInterval);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public stopChangesWatching(): void {
+		return stopChangesWatching();
+	}
+
+	/**
+	 * @experimental
+	 */
+	public setChangesCallback(callback: (changeNotifications: ChangeNotification[]) => any | null): void {
+		setChangesCallback(callback);
 	}
 
 	/**
