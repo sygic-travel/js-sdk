@@ -36,6 +36,21 @@ describe('TripManipulator', () => {
 
 			return chai.expect(Manipulator.addDay(inputTrip)).to.deep.equal(expectedTrip);
 		});
+
+		it('should add day to trip and add sticky place by default to new day', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			if (inputTrip.days) {
+				inputTrip.days = [inputTrip.days[0]];
+				const place = inputTrip.days[0].itinerary[1].place;
+				if (place) {
+					place.categories = ['sleeping'];
+				}
+			}
+			const returnedTrip = Manipulator.addDay(inputTrip);
+
+			return chai.expect(returnedTrip.days && returnedTrip.days[1].itinerary[0].placeId)
+				.to.equal(inputTrip.days && inputTrip.days[0].itinerary[1].placeId);
+		});
 	});
 
 	describe('#prependDayToTrip', () => {
@@ -53,6 +68,21 @@ describe('TripManipulator', () => {
 			}
 
 			return chai.expect(Manipulator.prependDayToTrip(inputTrip)).to.deep.equal(expectedTrip);
+		});
+
+		it('should add day to trip and add sticky place by default to new day', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			if (inputTrip.days) {
+				inputTrip.days = [inputTrip.days[0]];
+				const place = inputTrip.days[0].itinerary[0].place;
+				if (place) {
+					place.categories = ['sleeping'];
+				}
+			}
+			const returnedTrip = Manipulator.prependDayToTrip(inputTrip);
+
+			return chai.expect(returnedTrip.days && returnedTrip.days[0].itinerary[0].placeId)
+				.to.equal(inputTrip.days && inputTrip.days[0].itinerary[0].placeId);
 		});
 	});
 

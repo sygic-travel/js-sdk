@@ -1,7 +1,7 @@
 import * as cloneDeep from 'lodash.clonedeep';
 
 import { Day, Trip } from '.';
-import { Place } from '../Places';
+import { isStickyByDefault, Place } from '../Places';
 import { addDaysToDate, subtractDaysFromDate } from '../Util';
 import { resolveStickiness } from './Mapper';
 import { ItineraryItem, TransportSettings } from './Trip';
@@ -17,7 +17,7 @@ export function addDay(tripToBeUpdated: Trip): Trip {
 		throw new Error('endsOn property in Trip cannot be null');
 	}
 
-	const resultTrip = cloneDeep(tripToBeUpdated);
+	let resultTrip = cloneDeep(tripToBeUpdated);
 	resultTrip.days.push({
 		itinerary: [],
 		note: null,
@@ -25,7 +25,16 @@ export function addDay(tripToBeUpdated: Trip): Trip {
 	} as Day);
 	resultTrip.endsOn = resultTrip.endsOn ? addDaysToDate(resultTrip.endsOn, 1) : resultTrip.endsOn;
 	resultTrip.days = decorateDaysWithDate(resultTrip.startsOn, resultTrip.days);
-	return resultTrip;
+
+	if (resultTrip.days[resultTrip.days.length - 2].itinerary.length > 0) {
+		const lastItem = resultTrip.days[resultTrip.days.length - 2].itinerary[
+			resultTrip.days[resultTrip.days.length - 2].itinerary.length - 1
+		];
+		if (isStickyByDefault(lastItem.place)) {
+			resultTrip = addPlaceToDay(resultTrip, lastItem.place, resultTrip.days.length - 1, 0);
+		}
+	}
+	return resolveStickiness(resultTrip);
 }
 
 export function prependDayToTrip(tripToBeUpdated: Trip): Trip {
@@ -33,7 +42,7 @@ export function prependDayToTrip(tripToBeUpdated: Trip): Trip {
 		throw new Error('days property in Trip cannot be null');
 	}
 
-	const resultTrip = cloneDeep(tripToBeUpdated);
+	let resultTrip = cloneDeep(tripToBeUpdated);
 
 	resultTrip.days.unshift({
 		itinerary: [],
@@ -42,7 +51,14 @@ export function prependDayToTrip(tripToBeUpdated: Trip): Trip {
 	} as Day);
 	resultTrip.startsOn = subtractDaysFromDate(resultTrip.startsOn, 1);
 	resultTrip.days = decorateDaysWithDate(resultTrip.startsOn, resultTrip.days);
-	return resultTrip;
+
+	if (resultTrip.days[1].itinerary.length > 0) {
+		const firstItem = resultTrip.days[1].itinerary[0];
+		if (isStickyByDefault(firstItem.place)) {
+			resultTrip = addPlaceToDay(resultTrip, firstItem.place, 0, 0);
+		}
+	}
+	return resolveStickiness(resultTrip);
 }
 
 export function removeDayFromTrip(tripToBeUpdated: Trip, dayIndex: number): Trip {
