@@ -27,12 +27,7 @@ export async function getTripDetailed(id: string): Promise<Trip> {
 	const fromCache: any = await tripsDetailedCache.get(id);
 
 	if (!fromCache) {
-		const apiResponse = await get('trips/' + id);
-		if (!apiResponse.data.hasOwnProperty('trip')) {
-			throw new Error('Wrong API response');
-		}
-
-		result = apiResponse.data.trip;
+		result = await getTripFromApi(id);
 		tripsDetailedCache.set(id, result);
 	} else {
 		result = fromCache;
@@ -46,4 +41,24 @@ export async function updateTrip(tripToBeUpdated: Trip): Promise<Trip> {
 	await tripsDetailedCache.set(tripToBeUpdated.id, tripRequestData);
 	// save to api somewhere here
 	return tripToBeUpdated;
+}
+
+export async function handleTripChangeNotification(id: string): Promise<void> {
+	const cachedTrip = await tripsDetailedCache.get(id);
+	if (cachedTrip) {
+		await getTripFromApi(id);
+	}
+}
+
+export async function deleteTripFromCache(id: string): Promise<void> {
+	return tripsDetailedCache.remove(id);
+}
+
+async function getTripFromApi(id: string): Promise<object> {
+	const apiResponse = await get('trips/' + id);
+	if (!apiResponse.data.hasOwnProperty('trip')) {
+		throw new Error('Wrong API response');
+	}
+	await tripsDetailedCache.set(id, apiResponse.data.trip);
+	return apiResponse.data.trip;
 }

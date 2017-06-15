@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
+import * as cloneDeep from 'lodash.clonedeep';
 import { SinonSandbox, SinonStub } from 'sinon';
 import * as sinon from 'sinon';
 
@@ -30,16 +31,16 @@ describe('TripDataAccess', () => {
 		sandbox.restore();
 	});
 
-	const trip1FromApi = Object.assign({}, TripTestData.tripDetail.trip);
+	const trip1FromApi = cloneDeep(TripTestData.tripDetail.trip);
 	trip1FromApi.id = '111';
-	const trip1Expected: Trip = Object.assign({}, TripExpectedResults.tripDetailed);
+	const trip1Expected: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 	trip1Expected.id = '111';
 
 	if (trip1Expected.days) {
 		trip1Expected.days = trip1Expected.days.map((day: Day) => {
-			const newDay: Day = Object.assign({}, day);
+			const newDay: Day = cloneDeep(day);
 			newDay.itinerary = newDay.itinerary.map((itineraryItem: ItineraryItem) => {
-				const newItineraryItem: ItineraryItem = Object.assign({}, itineraryItem);
+				const newItineraryItem: ItineraryItem = cloneDeep(itineraryItem);
 				delete newItineraryItem.place;
 				return newItineraryItem;
 			});
@@ -94,5 +95,41 @@ describe('TripDataAccess', () => {
 		});
 
 		it.skip('should call post on api once', () => true);
+	});
+
+	describe('#handleTripChangeNotification', () => {
+		it('should get updated trip from api and set it in cache', async () => {
+			const tripInCache = cloneDeep(trip1FromApi);
+			const tripFromApi = cloneDeep(trip1FromApi);
+			tripFromApi.name = 'x';
+			tripsDetailedCache.set(tripInCache.id, tripInCache);
+
+			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, { trip: tripFromApi }));
+			}));
+
+			await Dao.handleTripChangeNotification(tripInCache.id);
+			const tripToBeUpdated = await tripsDetailedCache.get(tripInCache.id);
+			chai.expect(tripToBeUpdated.name).to.equal(tripFromApi.name);
+		});
+
+		it('should not call api when trip is not in cache', async () => {
+			const apiStub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, {}));
+			}));
+
+			await Dao.handleTripChangeNotification('unknownId');
+			chai.expect(apiStub.callCount).to.equal(0);
+		});
+	});
+
+	describe('#deleteTripFromCache', () => {
+		it('should delete trip from cache', async () => {
+			const tripInCache = cloneDeep(trip1FromApi);
+			await tripsDetailedCache.set(tripInCache.id, tripInCache);
+			chai.expect(tripsDetailedCache.get(tripInCache.id)).to.eventually.deep.equal(tripInCache);
+			await Dao.deleteTripFromCache(tripInCache.id);
+			chai.expect(tripsDetailedCache.get(tripInCache.id)).to.eventually.equal(null);
+		});
 	});
 });
