@@ -1,3 +1,4 @@
+import * as _Changes from './src/Changes';
 import * as _Collaboration from './src/Collaboration';
 import * as _Forecast from './src/Forecast';
 import * as _Geo from './src/Geo';
@@ -140,6 +141,19 @@ export class StSDK {
 	 * @experimental
 	 */
 	public updateUserSettings(settings: _User.UserSettings): Promise<_User.UserSettings>
+	/**
+	 * @experimental
+	 */
+	public initializeChangesWatching(tickInterval: number): Promise<void>
+	/**
+	 * @experimental
+	 */
+	public stopChangesWatching(): void
+	/**
+	 * @experimental
+	 */
+	public setChangesCallback(callback: (changeNotifications: _Changes.ChangeNotification[]) => any | null): void
+
 }
 
 export namespace Places {
@@ -204,4 +218,8 @@ export namespace Forecast {
 
 export namespace User {
 	export import UserSettings = _User.UserSettings;
+}
+
+export namespace Changes {
+	export import ChangeNotification = _Changes.ChangeNotification;
 }
