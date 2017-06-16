@@ -13,7 +13,7 @@ import * as Dao from './DataAccess';
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
 
-describe('TripDataAccess', () => {
+describe('UserDataAccess', () => {
 	before((done) => {
 		setEnvironment('api', '987654321');
 		done();

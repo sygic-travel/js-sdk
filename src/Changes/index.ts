@@ -1,3 +1,4 @@
+import { handleFavoritesChanges } from '../Favorites';
 import { handleTripChanges } from '../Trip';
 import { handleSettingsChange } from '../User';
 import { ChangeNotification } from './ChangeNotification';
@@ -30,6 +31,9 @@ async function handleChanges(changeNotifications: ChangeNotification[]): Promise
 	}
 	await handleTripChanges(changeNotifications.filter((changeNotification: ChangeNotification) => {
 		return changeNotification.type === 'trip';
+	}));
+	await handleFavoritesChanges(changeNotifications.filter((changeNotification: ChangeNotification) => {
+		return changeNotification.type === 'favorite';
 	}));
 	if (externalCallback) {
 		externalCallback(changeNotifications);

@@ -1,19 +1,13 @@
+import { ChangeNotification } from '../Changes';
 import { Location } from '../Geo';
-import { ApiResponse } from '../Xhr/ApiResponse';
-import * as Api from './Api';
+import * as Dao from './DataAccess';
 
 export async function getFavoritesIds(): Promise<string[]> {
-	const apiResponse: ApiResponse = await Api.getFavorites();
-	if (!apiResponse.data.hasOwnProperty('favorites')) {
-		throw new Error('Wrong API response');
-	}
-	return apiResponse.data.favorites.map((favorite) => {
-		return favorite.place_id;
-	});
+	return Dao.getFavorites();
 }
 
 export async function addPlaceToFavorites(id: string): Promise<void> {
-	await Api.addPlaceToFavorites(id);
+	await Dao.addPlaceToFavorites(id);
 }
 
 export async function addCustomPlaceToFavorites(
@@ -21,10 +15,15 @@ export async function addCustomPlaceToFavorites(
 	location: Location,
 	address: string
 ): Promise<string> {
-	const apiResponse: ApiResponse = await Api.addCustomPlaceToFavorites(name, location, address);
-	return apiResponse.data.favorite.place_id;
+	return await Dao.addCustomPlaceToFavorites(name, location, address);
 }
 
 export async function removePlaceFromFavorites(id: string): Promise<void> {
-	await Api.removePlaceFromFavorites(id);
+	await Dao.removePlaceFromFavorites(id);
+}
+
+export async function handleFavoritesChanges(changeNotifications: ChangeNotification[]): Promise<void> {
+	if (changeNotifications.length > 0) {
+		await Dao.handleFavoritesChanges();
+	}
 }

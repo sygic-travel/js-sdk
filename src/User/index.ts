@@ -1,4 +1,4 @@
-import { userCache } from '../Cache';
+import { favoritesCache, tripsDetailedCache, userCache } from '../Cache';
 import * as Settings from '../Settings';
 import * as Dao from './DataAccess';
 import { UserSettings } from './User';
@@ -15,6 +15,8 @@ export async function updateUserSettings(settings: UserSettings): Promise<UserSe
 
 export async function setUserSession(key: string | null, token: string | null): Promise<void> {
 	await userCache.reset();
+	await favoritesCache.reset();
+	await tripsDetailedCache.reset();
 	return Settings.setUserSession(key, token);
 }
 
