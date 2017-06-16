@@ -63,6 +63,10 @@ export class StSDK {
 	/**
 	 * @experimental
 	 */
+	public createTrip(startDate: string, name: string, placeId: string): Promise<_Trip.Trip>
+	/**
+	 * @experimental
+	 */
 	public updateTrip(id, dataToUpdate: _Trip.TripUpdateData): Promise<_Trip.Trip>
 	/**
 	 * @experimental

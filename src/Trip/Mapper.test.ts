@@ -16,11 +16,11 @@ describe('TripMapper', () => {
 		});
 	});
 
-	describe('#mapTripToApiResponse', () => {
+	describe('#mapTripToApiFormat', () => {
 		it('should correctly map trip to api response', () => {
 			const expectedResponse = ApiResponses.tripDetail.trip;
 			const trip = Mapper.mapTripDetailedApiResponseToTrip(ApiResponses.tripDetail.trip);
-			const mappedResponse = Mapper.mapTripToApiResponse(trip);
+			const mappedResponse = Mapper.mapTripToApiFormat(trip);
 			return chai.expect(mappedResponse).to.deep.equal(expectedResponse);
 		});
 	});
