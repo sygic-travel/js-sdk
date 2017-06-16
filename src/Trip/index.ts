@@ -139,7 +139,7 @@ export async function addPlaceToDay(
 		throw new Error('Trip does not have day on index ' + dayIndex);
 	}
 
-	if (positionInDay) {
+	if (typeof positionInDay !== 'undefined' && positionInDay !== null) {
 		return Dao.updateTrip(TripManipulator.addPlaceToDay(trip, place, dayIndex, positionInDay));
 	}
 
