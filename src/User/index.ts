@@ -17,3 +17,7 @@ export async function setUserSession(key: string | null, token: string | null): 
 	await userCache.reset();
 	return Settings.setUserSession(key, token);
 }
+
+export async function handleSettingsChange(): Promise<void> {
+	return Dao.handleSettingsChange();
+}
