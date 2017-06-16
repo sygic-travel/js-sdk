@@ -1,3 +1,4 @@
+import { ChangeNotification } from '../Changes';
 import { Location } from '../Geo';
 import * as Dao from './DataAccess';
 
@@ -19,4 +20,10 @@ export async function addCustomPlaceToFavorites(
 
 export async function removePlaceFromFavorites(id: string): Promise<void> {
 	await Dao.removePlaceFromFavorites(id);
+}
+
+export async function handleFavoritesChanges(changeNotifications: ChangeNotification[]): Promise<void> {
+	if (changeNotifications.length > 0) {
+		await Dao.handleFavoritesChanges();
+	}
 }

@@ -40,6 +40,10 @@ export async function removePlaceFromFavorites(id: string): Promise<ApiResponse>
 	});
 }
 
+export async function handleFavoritesChanges(): Promise<void> {
+	await getFromApi();
+}
+
 async function getFromApi(): Promise<string[]> {
 	const apiResponse: ApiResponse = await get('favorites');
 	if (!apiResponse.data.favorites) {
