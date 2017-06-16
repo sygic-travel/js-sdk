@@ -1,3 +1,4 @@
+import { camelizeKeys } from 'humps';
 import { stringify } from 'query-string';
 
 import * as api from '../Api';
@@ -93,7 +94,7 @@ export async function getPlaceMedia(id: string): Promise<Medium[]> {
 	if (!apiResponse.data.hasOwnProperty('media')) {
 		throw new Error('Wrong API response');
 	}
-	return apiResponse.data.media.map((mediaItem: any) => mediaItem as Medium);
+	return apiResponse.data.media.map((mediaItem: any) => camelizeKeys(mediaItem) as Medium);
 }
 
 async function getFromApi(toBeFetchedFromAPI: string[]): Promise<any> {

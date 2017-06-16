@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
+import { camelizeKeys } from 'humps';
 import { SinonSandbox } from 'sinon';
 import * as sinon from 'sinon';
 
@@ -146,7 +147,7 @@ describe('PlacesDataAccess', () => {
 			}));
 
 			return chai.expect(Dao.getPlaceMedia('poi:530'))
-				.to.eventually.deep.equal(TestData.placeDetailMedia.media);
+				.to.eventually.deep.equal(camelizeKeys(TestData.placeDetailMedia.media));
 		});
 	});
 
