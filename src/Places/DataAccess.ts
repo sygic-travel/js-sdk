@@ -64,23 +64,27 @@ export async function getPlacesDetailed(ids: string[], photoSize: string): Promi
 		}));
 	}
 
-	const batch: Place[] = ids.map((id: string) => {
-		const fromCache = placesFromCache.filter((place: any) => {
+	const places: Place[] = ids.reduce((availPlaces: Place[], id: string) => {
+		const fromCache = placesFromCache.find((place: any) => {
 			return place.id === id;
 		});
 
-		if (fromCache[0]) {
-			return fromCache[0];
+		if (fromCache) {
+			availPlaces.push(fromCache);
 		}
 
-		const fromApi = placesFromApi.filter((place: any) => {
+		const fromApi = placesFromApi.find((place: any) => {
 			return place.id === id;
 		});
 
-		return fromApi[0];
-	});
+		if (fromApi) {
+			availPlaces.push(fromApi);
+		}
 
-	return mapPlaceDetailedBatchApiResponseToPlaces(batch, photoSize);
+		return availPlaces;
+	}, []);
+
+	return mapPlaceDetailedBatchApiResponseToPlaces(places, photoSize);
 }
 
 export async function getPlacesFromTripDay(day: Day): Promise<Place[]> {
