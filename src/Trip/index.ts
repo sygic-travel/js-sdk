@@ -51,6 +51,10 @@ export async function getTripDetailed(id: string): Promise<Trip> {
 	return tripWithoutPlaces;
 }
 
+export async function cloneTrip(id: string): Promise<string> {
+	return Dao.cloneTrip(id);
+}
+
 export function getPlacesIdsFromTrip(trip: Trip): string[] {
 	if (!trip.days) {
 		return [];
