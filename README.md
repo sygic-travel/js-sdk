@@ -58,9 +58,9 @@ const placeFilter: SygicTravelSDK.Places.PlacesFilterJSON = {
         north: 50.523,
         east: 0.05
     },
-    categories: [‘eating’], // filter out only certain categories
+    categories: ['eating'], // filter out only certain categories
     tags: [], // filter out only certain tags
-    parent: ‘city:1’, // filter out only places that has certain parent
+    parents: ['city:1'], // filter out only places that has certain parents
     levels: null,
     limit: 20
 };
@@ -105,10 +105,10 @@ const placeFilter: SygicTravelSDK.Places.PlacesFilterJSON = {
     query: null,
     mapTile: null,
     mapSpread: null,
-    categories: [‘eating’],
+    categories: ['eating'],
     tags: [],
-    parent: ‘city:1’,
-    levels: null
+    parents: ['city:1'],
+    levels: ['poi']
 };
 
 const bounds: SygicTravelSDK.Geo.Bounds = {
