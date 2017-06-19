@@ -61,7 +61,7 @@ const placeFilter: SygicTravelSDK.Places.PlacesFilterJSON = {
     categories: [‘eating’], // filter out only certain categories
     tags: [], // filter out only certain tags
     parent: ‘city:1’, // filter out only places that has certain parent
-    level: null,
+    levels: null,
     limit: 20
 };
 
@@ -108,7 +108,7 @@ const placeFilter: SygicTravelSDK.Places.PlacesFilterJSON = {
     categories: [‘eating’],
     tags: [],
     parent: ‘city:1’,
-    level: null
+    levels: null
 };
 
 const bounds: SygicTravelSDK.Geo.Bounds = {

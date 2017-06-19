@@ -11,7 +11,7 @@ export interface PlacesFilterJSON {
 	tagsOperator?: LogicalOperator;
 	parents?: string[];
 	parentsOperator?: LogicalOperator;
-	level?: string;
+	levels?: string[];
 	limit?: number;
 	bounds?: Bounds;
 	zoom?: number;
@@ -27,7 +27,7 @@ interface PlacesFilterQuery {
 	tagsOperator?: LogicalOperator;
 	parents?: string;
 	parentsOperator?: LogicalOperator;
-	level?: string;
+	levels?: string;
 	limit?: number;
 	bounds?: string;
 }
@@ -47,7 +47,7 @@ export class PlacesFilter {
 	private _tagsOperator?: LogicalOperator;
 	private _parents?: string[];
 	private _parentsOperator?: LogicalOperator;
-	private _level?: string;
+	private _levels?: string[];
 	private _limit?: number;
 	private _bounds?: Bounds;
 	private _zoom?: number;
@@ -62,7 +62,7 @@ export class PlacesFilter {
 		this._tagsOperator = placesFilter.tagsOperator ? placesFilter.tagsOperator : LogicalOperator.AND;
 		this._parents = placesFilter.parents;
 		this._parentsOperator = placesFilter.parentsOperator ? placesFilter.parentsOperator : LogicalOperator.AND;
-		this._level = placesFilter.level;
+		this._levels = placesFilter.levels;
 		this._limit = placesFilter.limit;
 		this._bounds = placesFilter.bounds;
 		this._zoom = placesFilter.zoom;
@@ -123,8 +123,8 @@ export class PlacesFilter {
 			query.parents = this._parents.join(this._parentsOperator === LogicalOperator.AND ? ',' : '|');
 		}
 
-		if (this._level) {
-			query.level = this._level;
+		if (this._levels) {
+			query.levels = this._levels.join('|');
 		}
 
 		if (this._limit) {
