@@ -67,6 +67,10 @@ export class StSDK {
 	/**
 	 * @experimental
 	 */
+	public cloneTrip(id): Promise<string>
+	/**
+	 * @experimental
+	 */
 	public addDayToTrip(id: string): Promise<_Trip.Trip>
 	/**
 	 * @experimental

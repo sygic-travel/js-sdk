@@ -34,6 +34,7 @@ import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from './Spread';
 import {
 	addDayToTrip,
 	addPlaceToDay,
+	cloneTrip,
 	getTripDetailed,
 	getTrips,
 	movePlaceInDay,
@@ -119,6 +120,13 @@ export default class StSDK extends BaseSDK {
 	 */
 	public updateTrip(id, dataToUpdate: TripUpdateData): Promise<Trip> {
 		return updateTrip(id, dataToUpdate);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public cloneTrip(id): Promise<string> {
+		return cloneTrip(id);
 	}
 
 	/**

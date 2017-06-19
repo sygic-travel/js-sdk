@@ -1,7 +1,7 @@
 import { stringify } from 'query-string';
 
 import { tripsDetailedCache as tripsDetailedCache } from '../Cache';
-import { get } from '../Xhr';
+import { ApiResponse, get, post } from '../Xhr';
 import {
 	mapTripDetailedApiResponseToTrip,
 	mapTripListApiResponseToTripsList,
@@ -52,6 +52,14 @@ export async function handleTripChangeNotification(id: string): Promise<void> {
 
 export async function deleteTripFromCache(id: string): Promise<void> {
 	return tripsDetailedCache.remove(id);
+}
+
+export async function cloneTrip(id: string): Promise<string> {
+	const clone: ApiResponse = await post('trips/clone', { trip_id: id });
+	if (!clone.data.hasOwnProperty('trip_id')) {
+		throw new Error('Wrong API response');
+	}
+	return clone.data.trip_id;
 }
 
 async function getTripFromApi(id: string): Promise<object> {
