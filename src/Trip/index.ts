@@ -3,7 +3,7 @@ import { Dao as placesDao, getPlaceDetailed, getPlacesDetailed, isStickyByDefaul
 import { addDaysToDate } from '../Util/index';
 import * as Dao from './DataAccess';
 import * as TripManipulator from './Manipulator';
-import { putPlacesToTrip } from './Mapper';
+import { mapTripCreateRequest, putPlacesToTrip } from './Mapper';
 import * as PositionFinder from './PositionFinder';
 import {
 	Day,
@@ -37,6 +37,10 @@ export {
 	TripPrivileges,
 	TripUpdateData
 };
+
+export async function createTrip(startDate: string, name: string, placeId: string): Promise<Trip> {
+	return await Dao.createTrip(mapTripCreateRequest(startDate, name, placeId));
+}
 
 export async function getTrips(dateFrom: string, dateTo: string): Promise<Trip[]> {
 	return await Dao.getTrips(dateTo, dateFrom);

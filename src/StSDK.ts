@@ -35,6 +35,7 @@ import {
 	addDayToTrip,
 	addPlaceToDay,
 	cloneTrip,
+	createTrip,
 	getTripDetailed,
 	getTrips,
 	movePlaceInDay,
@@ -46,7 +47,7 @@ import {
 	TransportSettings,
 	Trip,
 	TripUpdateData,
-	updateTrip
+	updateTrip,
 } from './Trip';
 import { getUserSettings, setUserSession, updateUserSettings, UserSettings } from './User';
 
@@ -113,6 +114,13 @@ export default class StSDK extends BaseSDK {
 	 */
 	public getTripDetailed(id: string): Promise<Trip> {
 		return getTripDetailed(id);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public createTrip(startDate: string, name: string, placeId: string): Promise<Trip> {
+		return createTrip(startDate, name, placeId);
 	}
 
 	/**

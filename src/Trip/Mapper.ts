@@ -2,7 +2,7 @@ import { camelizeKeys, decamelizeKeys } from 'humps';
 import * as cloneDeep from 'lodash.clonedeep';
 
 import { Place } from '../Places';
-import { Day, ItineraryItem, Trip, TripMedia, TripPrivileges } from './Trip';
+import { Day, ItineraryItem, Trip, TripCreateRequest, TripMedia, TripPrivileges } from './Trip';
 import { decorateDaysWithDate } from './Utility';
 
 export const mapTripListApiResponseToTripsList = (trips: any): Trip[] => {
@@ -13,6 +13,42 @@ export const mapTripListApiResponseToTripsList = (trips: any): Trip[] => {
 
 export const mapTripDetailedApiResponseToTrip = (tripDetailed: any): Trip => {
 	return mapTrip(tripDetailed, mapTripDays(tripDetailed));
+};
+
+export const mapTripCreateRequestToApiFormat = (request: TripCreateRequest): object => {
+	const data = {
+		name: request.name,
+		starts_on: request.startsOn,
+		days: request.days.map(mapTripDayToApiFormat),
+		base_version: null,
+		updated_at: null,
+		privacy_level: request.privacyLevel,
+		ends_on: request.startsOn,
+		is_deleted: request.isDeleted,
+	};
+	return data;
+};
+
+export const mapTripCreateRequest = (startsOn: string, name: string, placeId: string): TripCreateRequest => {
+	return {
+		name,
+		startsOn,
+		days: [{
+			note: null,
+			date: null,
+			itinerary: [{
+				placeId,
+				place: null,
+				note: null,
+				duration: null,
+				startTime: null,
+				transportFromPrevious: null,
+			}]}
+		],
+		privacyLevel: 'private',
+		endsOn: startsOn,
+		isDeleted: false,
+	} as TripCreateRequest;
 };
 
 export const mapTrip = (trip, days: Day[] | null): Trip => {
@@ -104,7 +140,7 @@ export function putPlacesToTrip(trip: Trip, places: Place[]): Trip {
 	return trip;
 }
 
-export const mapTripToApiResponse = (trip: Trip): object => {
+export const mapTripToApiFormat = (trip: Trip): object => {
 	return {
 		id: trip.id,
 		owner_id: trip.ownerId,
@@ -118,24 +154,27 @@ export const mapTripToApiResponse = (trip: Trip): object => {
 		url: trip.url,
 		media: decamelizeKeys(trip.media),
 		privileges: decamelizeKeys(trip.privileges),
-		days: trip.days && trip.days.map((day: Day) => ({
-				note: day.note,
-				itinerary: day.itinerary.map((itineraryItem: ItineraryItem) => ({
-					place_id: itineraryItem.placeId,
-					start_time: itineraryItem.startTime,
-					duration: itineraryItem.duration,
-					note: itineraryItem.note,
-					transport_from_previous: itineraryItem.transportFromPrevious ? {
-						mode: itineraryItem.transportFromPrevious.mode,
-						type: itineraryItem.transportFromPrevious.type,
-						avoid: itineraryItem.transportFromPrevious.avoid,
-						start_time: itineraryItem.transportFromPrevious.startTime,
-						duration: itineraryItem.transportFromPrevious.duration,
-						note: itineraryItem.transportFromPrevious.note,
-						waypoints: itineraryItem.transportFromPrevious.waypoints
-					} : null
-				}))
-			})
-		)
+		days: trip.days && trip.days.map(mapTripDayToApiFormat)
+	};
+};
+
+const mapTripDayToApiFormat = (day: Day): object => {
+	return {
+		note: day.note,
+		itinerary: day.itinerary.map((itineraryItem: ItineraryItem) => ({
+			place_id: itineraryItem.placeId,
+			start_time: itineraryItem.startTime,
+			duration: itineraryItem.duration,
+			note: itineraryItem.note,
+			transport_from_previous: itineraryItem.transportFromPrevious ? {
+				mode: itineraryItem.transportFromPrevious.mode,
+				type: itineraryItem.transportFromPrevious.type,
+				avoid: itineraryItem.transportFromPrevious.avoid,
+				start_time: itineraryItem.transportFromPrevious.startTime,
+				duration: itineraryItem.transportFromPrevious.duration,
+				note: itineraryItem.transportFromPrevious.note,
+				waypoints: itineraryItem.transportFromPrevious.waypoints
+			} : null
+		})),
 	};
 };

@@ -56,6 +56,15 @@ export interface Trip {
 	privileges: TripPrivileges;
 }
 
+export interface TripCreateRequest {
+	name: string | null;
+	startsOn: string;
+	days: Day[];
+	privacyLevel: string;
+	endsOn: string;
+	isDeleted: boolean;
+}
+
 export interface TripMedia {
 	square: {
 		id: string;
