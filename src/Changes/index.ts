@@ -24,6 +24,12 @@ export function setChangesCallback(callback: (changeNotifications: ChangeNotific
 	externalCallback = callback;
 }
 
+export function reset() {
+	if (changeWatcher) {
+		changeWatcher.reset();
+	}
+}
+
 async function handleChanges(changeNotifications: ChangeNotification[]): Promise<void> {
 	const settingsChange = changeNotifications.find((change) => (change.type === 'settings'));
 	if (settingsChange) {
