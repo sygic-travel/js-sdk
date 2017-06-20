@@ -10,7 +10,9 @@ let changeWatcher: ChangeWatcher;
 let externalCallback: (changeNotifications: ChangeNotification[]) => any | null;
 
 export async function initializeChangesWatching(tickInterval: number): Promise<void> {
-	changeWatcher = new ChangeWatcher(tickInterval, handleChanges);
+	if (!changeWatcher) {
+		changeWatcher = new ChangeWatcher(tickInterval, handleChanges);
+	}
 	await changeWatcher.start();
 }
 

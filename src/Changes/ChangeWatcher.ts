@@ -17,6 +17,9 @@ export default class ChangeWatcher {
 	}
 
 	public async start(): Promise<void> {
+		if (this.changeWatchTicker) {
+			return;
+		}
 		await this.checkChanges();
 		this.changeWatchTicker = setInterval(() => this.checkChanges(), this.tickInterval);
 	}
