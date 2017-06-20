@@ -1,5 +1,6 @@
 import { stringify } from 'query-string';
 
+import * as Settings from '../Settings';
 import { get } from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
 import { ChangeNotification } from './ChangeNotification';
@@ -21,6 +22,9 @@ export default class ChangeWatcher {
 	}
 
 	private async checkChanges(): Promise<void> {
+		if (!Settings.getAccessToken() && !Settings.getApiKey()) {
+			return;
+		}
 		const changesNotifications: ChangeNotification[] = await this.getChangesFromApi();
 		if (changesNotifications.length > 0) {
 			await this.callback(changesNotifications);
@@ -56,6 +60,9 @@ export default class ChangeWatcher {
 
 	public kill() {
 		clearInterval(this.changeWatchTicker);
+	}
+
+	public reset() {
 		this.lastServerTimestamp = null;
 	}
 }
