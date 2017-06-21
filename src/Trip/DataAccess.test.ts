@@ -1,12 +1,12 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as cloneDeep from 'lodash.clonedeep';
-import { SinonSandbox, SinonStub } from 'sinon';
+import { SinonFakeTimers, SinonSandbox, SinonStub } from 'sinon';
 import * as sinon from 'sinon';
 
 import { placesDetailedCache as Cache, tripsDetailedCache } from '../Cache';
 import { setEnvironment } from '../Settings';
-import * as TripTestData from '../TestData/TripApiResponses';
+import * as TripApiTestData from '../TestData/TripApiResponses';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
 import * as Xhr from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
@@ -14,6 +14,7 @@ import * as Dao from './DataAccess';
 import { Day, ItineraryItem, Trip } from './Trip';
 
 let sandbox: SinonSandbox;
+let clock: SinonFakeTimers;
 chai.use(chaiAsPromised);
 
 describe('TripDataAccess', () => {
@@ -24,14 +25,16 @@ describe('TripDataAccess', () => {
 
 	beforeEach(() => {
 		sandbox = sinon.sandbox.create();
+		clock = sinon.useFakeTimers();
 		Cache.reset();
 	});
 
 	afterEach(() => {
+		clock.restore();
 		sandbox.restore();
 	});
 
-	const trip1FromApi = cloneDeep(TripTestData.tripDetail.trip);
+	const trip1FromApi = cloneDeep(TripApiTestData.tripDetail.trip);
 	trip1FromApi.id = '111';
 	const trip1Expected: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 	trip1Expected.id = '111';
@@ -51,7 +54,7 @@ describe('TripDataAccess', () => {
 	describe('#getTrips', () => {
 		it('should just recall api and return trips', () => {
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
-				resolve(new ApiResponse(200, TripTestData.tripsList));
+				resolve(new ApiResponse(200, TripApiTestData.tripsList));
 			}));
 
 			return chai.expect(Dao.getTrips('', ''))
@@ -90,11 +93,66 @@ describe('TripDataAccess', () => {
 		it('should put updated trip to cache', () => {
 			Dao.updateTrip(TripExpectedResults.tripDetailed).then(() => {
 				return chai.expect(tripsDetailedCache.get(TripExpectedResults.tripDetailed.id))
-					.to.be.eventually.deep.equal(TripTestData.tripDetail.trip);
+					.to.be.eventually.deep.equal(TripApiTestData.tripDetail.trip);
 			});
 		});
 
-		it.skip('should call post on api once', () => true);
+		it('should call put on api and save response to cache', (done) => {
+			const apiResponseTrip = cloneDeep(TripApiTestData.tripDetail.trip);
+			apiResponseTrip.name = 'API TRIP';
+			const apiPut: SinonStub = sandbox.stub(Xhr, 'put').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, { trip: apiResponseTrip }));
+			}));
+			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
+				chai.expect(tripsDetailedCache.get(TripExpectedResults.tripDetailed.id))
+					.to.be.eventually.deep.equal(TripApiTestData.tripDetail.trip);
+				clock.tick(3100);
+				chai.expect(apiPut.callCount).to.be.equal(1);
+				clock.restore();
+				// Wait for the trip be stored to cache before making further assertions
+				setTimeout(() => {
+					chai.expect(tripsDetailedCache.get(TripExpectedResults.tripDetailed.id))
+					.to.be.eventually.deep.equal(apiResponseTrip);
+					done();
+				}, 50);
+			});
+		});
+
+		it('should call put on api after timeout', () => {
+			const apiResponseTrip = cloneDeep(TripApiTestData.tripDetail.trip);
+			apiResponseTrip.name = 'API TRIP';
+			const apiPut: SinonStub = sandbox.stub(Xhr, 'put').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, { trip: apiResponseTrip }));
+			}));
+			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
+				chai.expect(tripsDetailedCache.get(TripExpectedResults.tripDetailed.id))
+					.to.be.eventually.deep.equal(TripApiTestData.tripDetail.trip);
+				clock.tick(2000);
+				chai.expect(apiPut.callCount).to.be.equal(0);
+				clock.tick(1100);
+				chai.expect(apiPut.callCount).to.be.equal(1);
+			});
+		});
+
+		it('should should call api only once for consequent updates within timeout', () => {
+			const apiResponseTrip = cloneDeep(TripApiTestData.tripDetail.trip);
+			apiResponseTrip.name = 'API TRIP';
+			const apiPut: SinonStub = sandbox.stub(Xhr, 'put').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, { trip: apiResponseTrip }));
+			}));
+			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
+				chai.expect(tripsDetailedCache.get(TripExpectedResults.tripDetailed.id))
+					.to.be.eventually.deep.equal(TripApiTestData.tripDetail.trip);
+				clock.tick(2000);
+				chai.expect(apiPut.callCount).to.be.equal(0);
+				Dao.updateTrip(TripExpectedResults.tripDetailed).then(() => {
+					clock.tick(2000);
+					chai.expect(apiPut.callCount).to.be.equal(0);
+					clock.tick(1010);
+					chai.expect(apiPut.callCount).to.be.equal(1);
+				});
+			});
+		});
 	});
 
 	describe('#handleTripChangeNotification', () => {

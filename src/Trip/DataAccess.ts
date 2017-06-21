@@ -1,14 +1,18 @@
 import { stringify } from 'query-string';
 
 import { tripsDetailedCache as tripsDetailedCache } from '../Cache';
-import { ApiResponse, get, post } from '../Xhr';
+import { ApiResponse, get, post, put } from '../Xhr';
 import {
 	mapTripCreateRequestToApiFormat,
 	mapTripDetailedApiResponseToTrip,
 	mapTripListApiResponseToTripsList,
-	mapTripToApiFormat
+	mapTripToApiFormat,
+	mapTripToApiUpdateFormat
 } from './Mapper';
 import { Trip, TripCreateRequest } from './Trip';
+
+let updateTimeout;
+const UPDATE_TIMEOUT: number = 3000;
 
 export async function getTrips(dateFrom: string, dateTo: string): Promise<Trip[]> {
 	const apiResponse = await get('trips/list?' + stringify({
@@ -50,7 +54,19 @@ export async function createTrip(tripRequest: TripCreateRequest): Promise<Trip> 
 export async function updateTrip(tripToBeUpdated: Trip): Promise<Trip> {
 	const tripRequestData = mapTripToApiFormat(tripToBeUpdated);
 	await tripsDetailedCache.set(tripToBeUpdated.id, tripRequestData);
-	// save to api somewhere here
+	if (updateTimeout) {
+		clearTimeout(updateTimeout);
+	}
+	updateTimeout = setTimeout(async () => {
+		const tripResponse: ApiResponse = await put(
+			'trips/' + tripToBeUpdated.id,
+			mapTripToApiUpdateFormat(tripToBeUpdated)
+		);
+		if (!tripResponse.data.hasOwnProperty('trip')) {
+			throw new Error('Wrong API response');
+		}
+		tripsDetailedCache.set(tripResponse.data.trip.id, tripResponse.data.trip);
+	}, UPDATE_TIMEOUT);
 	return tripToBeUpdated;
 }
 
