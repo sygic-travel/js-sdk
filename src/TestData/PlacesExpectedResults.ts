@@ -20,7 +20,6 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 	perex: 'Built by Gustave Eiffel for the 1889 World’s Fair, Eiffel Tower became the world\'s tallest man-made structure until the Chrysler Building…',
 	url: 'https://travel.sygic.com/go/poi:530',
 	thumbnailUrl: 'https://media-cdn.sygictraveldata.com/media/poi:530',
-	price: null,
 	categories: ['sightseeing'],
 	parents: ['city:14', 'region:303', 'country:14', 'continent:1'],
 	detail: {
@@ -103,7 +102,6 @@ export const places = [{
 	perex: 'This 14-century bridge connects the Old Town with Lesser Town and the Prague Castle. With its length of 621 meters, solid Gothic stone…',
 	url: 'https://alpha.travel.sygic.com/go/poi:345430',
 	thumbnailUrl: 'https://alpha-media-cdn.sygictraveldata.com/media/poi:345430',
-	price: null,
 	marker: 'sightseeing:art:artwork',
 	categories: ['sightseeing'],
 	parents: ['city:5', 'region:26009', 'region:26011', 'country:5', 'continent:1'],

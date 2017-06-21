@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 import { CanvasSize, SpreadSizeConfig } from '.';
 import { Bounds } from '../Geo';
-import { Place, Price } from '../Places';
+import { Place } from '../Places';
 import { spread } from './Spreader';
 
 const bounds: Bounds = {
@@ -24,10 +24,6 @@ const place: Place = {
 	name: 'Poi1',
 	nameSuffix: '',
 	url: '',
-	price: {
-		value: 0,
-		savings: 0
-	} as Price,
 	marker: 'resataurant',
 	categories: [],
 	parents: [],
