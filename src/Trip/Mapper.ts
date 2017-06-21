@@ -158,6 +158,15 @@ export const mapTripToApiFormat = (trip: Trip): object => {
 	};
 };
 
+export const mapTripToApiUpdateFormat = (trip: Trip): object => {
+	const apiFormat = mapTripToApiFormat(trip) as any;
+	if (apiFormat.hasOwnProperty('version')) {
+		apiFormat.base_version = apiFormat.version;
+		delete apiFormat.version;
+	}
+	return apiFormat;
+};
+
 const mapTripDayToApiFormat = (day: Day): object => {
 	return {
 		note: day.note,
