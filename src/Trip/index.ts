@@ -88,6 +88,10 @@ export async function updateTrip(id: string, dataToUpdate: TripUpdateData): Prom
 		tripToBeUpdated.privacyLevel = dataToUpdate.privacyLevel;
 	}
 
+	if (dataToUpdate.isDeleted) {
+		tripToBeUpdated.isDeleted = dataToUpdate.isDeleted;
+	}
+
 	return await Dao.updateTrip(tripToBeUpdated);
 }
 

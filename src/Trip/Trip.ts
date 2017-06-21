@@ -121,4 +121,5 @@ export interface TripUpdateData {
 	name?: string;
 	startsOn?: string;
 	privacyLevel?: string;
+	isDeleted?: boolean;
 }
