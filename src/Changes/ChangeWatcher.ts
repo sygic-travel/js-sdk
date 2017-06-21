@@ -63,6 +63,7 @@ export default class ChangeWatcher {
 
 	public kill() {
 		clearInterval(this.changeWatchTicker);
+		this.changeWatchTicker = null;
 	}
 
 	public reset() {
