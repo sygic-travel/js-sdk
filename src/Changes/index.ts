@@ -8,11 +8,20 @@ export { ChangeNotification } from './ChangeNotification';
 
 let changeWatcher: ChangeWatcher;
 let externalCallback: (changeNotifications: ChangeNotification[]) => any | null;
+const DEFAULT_TICK_INTERVAL = 60000;
+const MINIMAL_TICK_INTERVAL = 5000;
 
-export async function initializeChangesWatching(tickInterval: number): Promise<void> {
+export async function initializeChangesWatching(tickInterval?: number): Promise<void> {
+	if (!tickInterval) {
+		tickInterval = DEFAULT_TICK_INTERVAL;
+	}
+	if (tickInterval < MINIMAL_TICK_INTERVAL) {
+		throw new Error('Sync changes from serer interval must be greater then ' + MINIMAL_TICK_INTERVAL + 'ms.');
+	}
 	if (!changeWatcher) {
 		changeWatcher = new ChangeWatcher(tickInterval, handleChanges);
 	}
+
 	await changeWatcher.start();
 }
 
