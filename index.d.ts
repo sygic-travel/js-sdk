@@ -140,6 +140,10 @@ export class StSDK {
 	/**
 	 * @experimental
 	 */
+	public searchAddressReverse(location: Location): Promise<_Search.SearchAddressResult[]>
+	/**
+	 * @experimental
+	 */
 	public getDestinationWeather(destinationId: string): Promise<_Forecast.Forecast[]>
 	/**
 	 * @experimental

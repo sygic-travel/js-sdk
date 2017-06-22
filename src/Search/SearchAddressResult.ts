@@ -2,8 +2,9 @@ import { Location } from '../Geo';
 
 export interface SearchAddressResult {
 	location: Location;
-	type: string;
+	type: string | null;
 	address: Address | null;
+	distance: number | null;
 }
 
 export interface Address {

@@ -18,3 +18,16 @@ export async function searchAddress(query: string, location?: Location): Promise
 
 	return mapSearchAddressesApiRepsponseToAddresses(apiResponse.data.locations);
 }
+
+export async function searchAddressReverse(location: Location): Promise<SearchAddressResult[]> {
+	const queryString: string = stringify({
+		location: [location.lat, location.lng].join(',')
+	});
+	const apiResponse = await get('search/reverse?' +  queryString);
+
+	if (!apiResponse.data.hasOwnProperty('locations')) {
+		throw new Error('Wrong API response');
+	}
+
+	return mapSearchAddressesApiRepsponseToAddresses(apiResponse.data.locations);
+}
