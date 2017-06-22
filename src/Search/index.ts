@@ -7,3 +7,7 @@ export { Address, AddressFields, SearchAddressResult }
 export async function searchAddress(query: string, location?: Location): Promise<SearchAddressResult[]> {
 	return Dao.searchAddress(query, location);
 }
+
+export async function searchAddressReverse(location: Location): Promise<SearchAddressResult[]> {
+	return Dao.searchAddressReverse(location);
+}

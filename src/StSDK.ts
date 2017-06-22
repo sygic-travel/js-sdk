@@ -29,7 +29,7 @@ import {
 	PlacesFilterJSON
 } from './Places';
 import { getRoutesForTripDay, Route } from './Route';
-import { searchAddress, SearchAddressResult } from './Search';
+import { searchAddress, SearchAddressResult, searchAddressReverse } from './Search';
 import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from './Spread';
 import {
 	addDayToTrip,
@@ -286,6 +286,13 @@ export default class StSDK extends BaseSDK {
 	 */
 	public searchAddress(query: string, location?: Location): Promise<SearchAddressResult[]> {
 		return searchAddress(query, location);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public searchAddressReverse(location: Location): Promise<SearchAddressResult[]> {
+		return searchAddressReverse(location);
 	}
 
 	/**

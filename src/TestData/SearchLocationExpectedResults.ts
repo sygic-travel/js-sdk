@@ -8,6 +8,7 @@ export const locations = [{
 		lat: 43.28442,
 		lng: 28.04403
 	} as Location,
+	distance: null,
 	address: {
 		full: 'Bulgaria, 1000, Varna, Tourist Attractions, Important Tourist Attraction, Eiffel Tower',
 		short: 'Varna 1000, Bulgaria',
@@ -27,6 +28,7 @@ export const locations = [{
 		lat: 36.29416,
 		lng: -88.29645
 	} as Location,
+	distance: 100,
 	address: {
 		full: 'Tennessee, 38242, Henry - Paris, Eiffel Tower Lane',
 		short: 'Eiffel Tower Lane, Henry - Paris 38242, Tennessee',

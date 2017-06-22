@@ -27,6 +27,7 @@ export const locations = {
 				"lat": 36.29416,
 				"lng": -88.29645
 			},
+			"distance": 100,
 			"address": {
 				"full": "Tennessee, 38242, Henry - Paris, Eiffel Tower Lane",
 				"short": "Eiffel Tower Lane, Henry - Paris 38242, Tennessee",
