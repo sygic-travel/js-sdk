@@ -217,7 +217,6 @@ export const places = {
 			"name": "Charles Bridge",
 			"name_suffix": "Prague, Czech Republic",
 			"url": "https://alpha.travel.sygic.com/go/poi:345430",
-			"price": null,
 			"marker": "sightseeing:art:artwork",
 			"categories": [
 				"sightseeing"

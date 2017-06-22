@@ -1,7 +1,7 @@
 import { Medium } from '../Media/Media';
 import * as Dao from './DataAccess';
 import { PlacesFilter, PlacesFilterJSON } from './Filter';
-import { isStickyByDefault, Place, Price } from './Place';
+import { isStickyByDefault, Place } from './Place';
 import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
 import { DayOpeningHours, PlaceOpeningHours } from './PlaceOpeningHours';
@@ -13,7 +13,6 @@ export {
 	Place,
 	PlacesFilterJSON,
 	PlaceGeometry,
-	Price,
 	PlaceDetail,
 	PlaceOpeningHours,
 	Reference,

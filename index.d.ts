@@ -167,7 +167,6 @@ export class StSDK {
 export namespace Places {
 	export import Place = _Place.Place;
 	export import PlacesFilterJSON = _Place.PlacesFilterJSON;
-	export import Price = _Place.Price;
 	export import PlaceDetail = _Place.PlaceDetail;
 	export import PlaceGeometry = _Place.PlaceGeometry;
 	export import PlaceOpeningHours = _Place.PlaceOpeningHours;

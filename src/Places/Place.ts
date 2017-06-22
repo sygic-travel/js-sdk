@@ -15,15 +15,9 @@ export interface Place {
 	perex: string | null;
 	url: string;
 	thumbnailUrl: string | null;
-	price: Price | null;
 	marker: string;
 	parents: string[];
 	detail: PlaceDetail | null;
-}
-
-export interface Price {
-	value: number;
-	savings: number;
 }
 
 export function isStickyByDefault(place: Place): boolean {

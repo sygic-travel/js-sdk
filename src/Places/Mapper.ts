@@ -3,7 +3,7 @@ import { camelizeKeys } from 'humps';
 import { Location } from '../Geo';
 import { Bounds } from '../Geo/Bounds';
 import { MainMedia } from '../Media/Media';
-import { Place, Price } from './Place';
+import { Place } from './Place';
 import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
 import { PlaceOpeningHours } from './PlaceOpeningHours';
@@ -41,7 +41,6 @@ const mapPlace = (place, detail: PlaceDetail | null) => {
 		perex: place.perex,
 		url: place.url,
 		thumbnailUrl: place.thumbnail_url,
-		price: place.price as Price,
 		marker: place.marker,
 		categories: place.categories,
 		parents: place.parent_ids,
