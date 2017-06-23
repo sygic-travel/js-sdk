@@ -22,7 +22,6 @@ const transportTypeValues = listToEnum([
 	'economic'
 ]);
 export type TransportType = keyof typeof transportTypeValues;
-
 export function isTransportType(val: any): val is TransportType {
 	return typeof val === 'string' && transportTypeValues[val] === val;
 }
@@ -33,11 +32,34 @@ const transportAvoidValues = listToEnum([
 	'ferries',
 	'unpaved'
 ]);
-
 export type TransportAvoid = keyof typeof transportAvoidValues;
-
 export function isTransportAvoid(val: any): val is TransportAvoid {
 	return typeof val === 'string' && transportAvoidValues[val] === val;
+}
+
+const conflictResolutionValues = listToEnum([
+	'merged',
+	'duplicated',
+	'ignored',
+	'overrode',
+]);
+export type TripConflictResolution = keyof typeof conflictResolutionValues;
+export function isTripConflictResolution(val: any): val is TripConflictResolution {
+	return typeof val === 'string' && conflictResolutionValues[val] === val;
+}
+
+const conflictClientResolutionValues = listToEnum([
+	'server',
+	'local',
+]);
+export type TripConflictClientResolution = keyof typeof conflictClientResolutionValues;
+export function isTripConflictClientResolution(val: any): val is TripConflictClientResolution {
+	return typeof val === 'string' && conflictClientResolutionValues[val] === val;
+}
+
+export interface TripConflictInfo {
+	lastUserName: string;
+	lastUpdatedAt: string;
 }
 
 export interface Trip {

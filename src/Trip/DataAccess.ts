@@ -1,6 +1,8 @@
+import { camelizeKeys } from 'humps';
 import { stringify } from 'query-string';
 
 import { tripsDetailedCache as tripsDetailedCache } from '../Cache';
+import { getTripConflictHandler } from '../Settings';
 import { dateToW3CString } from '../Util';
 import { ApiResponse, get, post, put } from '../Xhr';
 import {
@@ -10,7 +12,7 @@ import {
 	mapTripToApiFormat,
 	mapTripToApiUpdateFormat
 } from './Mapper';
-import { Trip, TripCreateRequest } from './Trip';
+import { Trip, TripConflictClientResolution, TripConflictInfo, TripCreateRequest } from './Trip';
 
 let updateTimeout;
 const UPDATE_TIMEOUT: number = 3000;
@@ -62,6 +64,9 @@ export async function updateTrip(tripToBeUpdated: Trip): Promise<Trip> {
 	updateRequestData.updated_at = dateToW3CString(new Date());
 	updateTimeout = setTimeout(async () => {
 		const tripResponse: ApiResponse = await putTripToApi(updateRequestData);
+		if (tripResponse.data.conflict_resolution === 'ignored') {
+			const conflictInfo = camelizeKeys(tripResponse.data.conflict_info) as TripConflictInfo;
+			await handleIgnoredConflict(conflictInfo, tripToBeUpdated);
 		}
 	}, UPDATE_TIMEOUT);
 	return tripToBeUpdated;
@@ -105,4 +110,20 @@ async function putTripToApi(requestData): Promise<ApiResponse> {
 	}
 	await tripsDetailedCache.set(tripResponse.data.trip.id, tripResponse.data.trip);
 	return tripResponse;
+}
+
+async function handleIgnoredConflict(
+	conflictInfo: TripConflictInfo,
+	tripToBeUpdated: Trip
+): Promise<void> {
+	const conflictHandler = getTripConflictHandler();
+	if (!conflictHandler) {
+		return;
+	}
+	const clientConflictResolution: TripConflictClientResolution = await conflictHandler(conflictInfo, tripToBeUpdated);
+	if (clientConflictResolution === 'local') {
+		const updateRequestData = mapTripToApiUpdateFormat(tripToBeUpdated) as any;
+		updateRequestData.updated_at = dateToW3CString(new Date());
+		await putTripToApi(updateRequestData);
+	}
 }

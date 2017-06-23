@@ -5,7 +5,7 @@ import { SinonFakeTimers, SinonSandbox, SinonStub } from 'sinon';
 import * as sinon from 'sinon';
 
 import { placesDetailedCache as Cache, tripsDetailedCache } from '../Cache';
-import { setEnvironment } from '../Settings';
+import { setEnvironment, setTripConflictHandler } from '../Settings';
 import * as TripApiTestData from '../TestData/TripApiResponses';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
 import * as Xhr from '../Xhr';
@@ -167,6 +167,62 @@ describe('TripDataAccess', () => {
 					clock.tick(1010);
 					chai.expect(apiPut.callCount).to.be.equal(1);
 				});
+			});
+		});
+
+		it('should should call conflict handler on ignored conflict and leave server response', (done) => {
+			let handlerCalled = false;
+			const handler = async (info, trip) => { handlerCalled = true; return 'server'; };
+			setTripConflictHandler(handler);
+			const apiPut: SinonStub = sandbox.stub(Xhr, 'put').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, {
+					trip: TripApiTestData.tripDetail.trip,
+					conflict_resolution: 'ignored',
+					conflict_info: {
+						last_user_name: 'Lojza',
+						last_updated_at: '2017-10-10T10:10:10+02:00'
+					}
+				}));
+			}));
+
+			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
+				clock.tick(3010);
+				clock.restore();
+				// Wait for the trip be stored to cache before making further assertions
+				setTimeout(() => {
+					chai.expect(handlerCalled).to.be.true;
+					chai.expect(tripsDetailedCache.get(TripExpectedResults.tripDetailed.id))
+						.to.be.eventually.deep.equal(TripApiTestData.tripDetail.trip);
+					chai.expect(apiPut.callCount).to.be.equal(1);
+					done();
+				}, 100);
+			});
+		});
+
+		it('should should call update with newer updated_at when user select local changes', (done) => {
+			let handlerCalled = false;
+			const handler = async (info, trip) => { handlerCalled = true; return 'local'; };
+			setTripConflictHandler(handler);
+			const apiPut: SinonStub = sandbox.stub(Xhr, 'put').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, {
+					trip: TripApiTestData.tripDetail.trip,
+					conflict_resolution: 'ignored',
+					conflict_info: {
+						last_user_name: 'Lojza',
+						last_updated_at: '2017-10-10T10:10:10+02:00'
+					}
+				}));
+			}));
+
+			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
+				clock.tick(3010);
+				clock.restore();
+				// Wait for the trip response to be handled before making further assertions
+				setTimeout(() => {
+					chai.expect(handlerCalled).to.be.true;
+					chai.expect(apiPut.callCount).to.be.equal(2);
+					done();
+				}, 100);
 			});
 		});
 	});

@@ -30,6 +30,7 @@ import {
 } from './Places';
 import { getRoutesForTripDay, Route } from './Route';
 import { searchAddress, SearchAddressResult, searchAddressReverse } from './Search';
+import * as Settings from './Settings';
 import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from './Spread';
 import {
 	addDayToTrip,
@@ -46,6 +47,8 @@ import {
 	swapDaysInTrip,
 	TransportSettings,
 	Trip,
+	TripConflictClientResolution,
+	TripConflictInfo,
 	TripUpdateData,
 	updateTrip,
 } from './Trip';
@@ -335,5 +338,14 @@ export default class StSDK extends BaseSDK {
 	 */
 	public updateUserSettings(settings: UserSettings): Promise<UserSettings> {
 		return updateUserSettings(settings);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public setTripConflictHandler(
+		handler: null | ((conflictInfo: TripConflictInfo, trip: Trip) => Promise<TripConflictClientResolution>)
+	): void {
+		Settings.setTripConflictHandler(handler);
 	}
 }

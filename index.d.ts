@@ -165,6 +165,13 @@ export class StSDK {
 	 * @experimental
 	 */
 	public setChangesCallback(callback: (changeNotifications: _Changes.ChangeNotification[]) => any | null): void
+	/**
+	 * @experimental
+	 */
+	public setTripConflictHandler(
+		handler: null | ((conflictInfo: _Trip.TripConflictInfo, trip: _Trip.Trip)
+			=> Promise<_Trip.TripConflictClientResolution>)
+	): void
 
 }
 
@@ -203,6 +210,8 @@ export namespace Spread {
 export namespace Trips {
 	export import Trip = _Trip.Trip;
 	export import Day = _Trip.Day;
+	export import TripConflictClientResolution = _Trip.TripConflictClientResolution;
+	export import TripConflictInfo = _Trip.TripConflictInfo;
 	export import ItineraryItem = _Trip.ItineraryItem;
 	export import TripPrivileges = _Trip.TripPrivileges;
 	export import TripMedia = _Trip.TripMedia;
