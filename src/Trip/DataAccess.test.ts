@@ -25,7 +25,7 @@ describe('TripDataAccess', () => {
 
 	beforeEach(() => {
 		sandbox = sinon.sandbox.create();
-		clock = sinon.useFakeTimers();
+		clock = sinon.useFakeTimers((new Date()).getTime());
 		Cache.reset();
 	});
 
@@ -114,7 +114,23 @@ describe('TripDataAccess', () => {
 					chai.expect(tripsDetailedCache.get(TripExpectedResults.tripDetailed.id))
 					.to.be.eventually.deep.equal(apiResponseTrip);
 					done();
-				}, 50);
+				}, 100);
+			});
+		});
+
+		it('should call put on api with actual updated_at', () => {
+			const testUpdatedAt = new Date();
+			clock.tick(1000);
+			const apiResponseTrip = cloneDeep(TripApiTestData.tripDetail.trip);
+			const apiPut: SinonStub = sandbox.stub(Xhr, 'put').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, { trip: apiResponseTrip }));
+			}));
+			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
+				clock.tick(3100);
+				const callDate = new Date(apiPut.getCall(0).args[1].updated_at);
+				chai.expect(callDate > testUpdatedAt).to.be.true;
+				testUpdatedAt.setSeconds(testUpdatedAt.getSeconds() + 1);
+				chai.expect(callDate < testUpdatedAt).to.be.true;
 			});
 		});
 

@@ -1,6 +1,7 @@
 import { stringify } from 'query-string';
 
 import { tripsDetailedCache as tripsDetailedCache } from '../Cache';
+import { dateToW3CString } from '../Util';
 import { ApiResponse, get, post, put } from '../Xhr';
 import {
 	mapTripCreateRequestToApiFormat,
@@ -52,20 +53,16 @@ export async function createTrip(tripRequest: TripCreateRequest): Promise<Trip> 
 }
 
 export async function updateTrip(tripToBeUpdated: Trip): Promise<Trip> {
-	const tripRequestData = mapTripToApiFormat(tripToBeUpdated);
-	await tripsDetailedCache.set(tripToBeUpdated.id, tripRequestData);
+	const tripApiFormatData = mapTripToApiFormat(tripToBeUpdated);
+	await tripsDetailedCache.set(tripToBeUpdated.id, tripApiFormatData);
 	if (updateTimeout) {
 		clearTimeout(updateTimeout);
 	}
+	const updateRequestData = mapTripToApiUpdateFormat(tripToBeUpdated) as any;
+	updateRequestData.updated_at = dateToW3CString(new Date());
 	updateTimeout = setTimeout(async () => {
-		const tripResponse: ApiResponse = await put(
-			'trips/' + tripToBeUpdated.id,
-			mapTripToApiUpdateFormat(tripToBeUpdated)
-		);
-		if (!tripResponse.data.hasOwnProperty('trip')) {
-			throw new Error('Wrong API response');
+		const tripResponse: ApiResponse = await putTripToApi(updateRequestData);
 		}
-		tripsDetailedCache.set(tripResponse.data.trip.id, tripResponse.data.trip);
 	}, UPDATE_TIMEOUT);
 	return tripToBeUpdated;
 }
@@ -96,4 +93,16 @@ async function getTripFromApi(id: string): Promise<object> {
 	}
 	await tripsDetailedCache.set(id, apiResponse.data.trip);
 	return apiResponse.data.trip;
+}
+
+async function putTripToApi(requestData): Promise<ApiResponse> {
+	const tripResponse: ApiResponse = await put(
+		'trips/' + requestData.id,
+		requestData
+	);
+	if (!tripResponse.data.hasOwnProperty('trip')) {
+		throw new Error('Wrong API response');
+	}
+	await tripsDetailedCache.set(tripResponse.data.trip.id, tripResponse.data.trip);
+	return tripResponse;
 }
