@@ -28,7 +28,7 @@ export function isTransportType(val: any): val is TransportType {
 
 const transportAvoidValues = listToEnum([
 	'tolls',
-	'highway',
+	'highways',
 	'ferries',
 	'unpaved'
 ]);

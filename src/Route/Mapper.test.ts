@@ -32,7 +32,7 @@ describe('RouteMapper', () => {
 				transportFromPrevious: {
 					mode: 'car',
 					type: 'economic',
-					avoid: ['highway'],
+					avoid: ['highways'],
 					startTime: null,
 					duration: null,
 					note: null,
@@ -50,7 +50,7 @@ describe('RouteMapper', () => {
 			const expected: RouteRequest = {
 				origin,
 				destination,
-				avoid: ['highway'],
+				avoid: ['highways'],
 				chosenMode: 'car',
 				type: 'economic',
 					waypoints: [{lat: 1, lng: 1 }],
