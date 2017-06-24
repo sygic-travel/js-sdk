@@ -16,6 +16,9 @@ import {
 	TransportSettings,
 	TransportType,
 	Trip,
+	TripConflictClientResolution,
+	TripConflictInfo,
+	TripConflictResolution,
 	TripMedia,
 	TripPrivileges,
 	TripUpdateData
@@ -33,6 +36,9 @@ export {
 	TransportSettings,
 	TransportType,
 	Trip,
+	TripConflictClientResolution,
+	TripConflictInfo,
+	TripConflictResolution,
 	TripMedia,
 	TripPrivileges,
 	TripUpdateData

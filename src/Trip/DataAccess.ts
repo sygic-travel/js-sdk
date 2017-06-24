@@ -1,6 +1,9 @@
+import { camelizeKeys } from 'humps';
 import { stringify } from 'query-string';
 
 import { tripsDetailedCache as tripsDetailedCache } from '../Cache';
+import { getTripConflictHandler } from '../Settings';
+import { dateToW3CString } from '../Util';
 import { ApiResponse, get, post, put } from '../Xhr';
 import {
 	mapTripCreateRequestToApiFormat,
@@ -9,7 +12,7 @@ import {
 	mapTripToApiFormat,
 	mapTripToApiUpdateFormat
 } from './Mapper';
-import { Trip, TripCreateRequest } from './Trip';
+import { Trip, TripConflictClientResolution, TripConflictInfo, TripCreateRequest } from './Trip';
 
 let updateTimeout;
 const UPDATE_TIMEOUT: number = 3000;
@@ -52,20 +55,19 @@ export async function createTrip(tripRequest: TripCreateRequest): Promise<Trip> 
 }
 
 export async function updateTrip(tripToBeUpdated: Trip): Promise<Trip> {
-	const tripRequestData = mapTripToApiFormat(tripToBeUpdated);
-	await tripsDetailedCache.set(tripToBeUpdated.id, tripRequestData);
+	const tripApiFormatData = mapTripToApiFormat(tripToBeUpdated);
+	await tripsDetailedCache.set(tripToBeUpdated.id, tripApiFormatData);
 	if (updateTimeout) {
 		clearTimeout(updateTimeout);
 	}
+	const updateRequestData = mapTripToApiUpdateFormat(tripToBeUpdated) as any;
+	updateRequestData.updated_at = dateToW3CString(new Date());
 	updateTimeout = setTimeout(async () => {
-		const tripResponse: ApiResponse = await put(
-			'trips/' + tripToBeUpdated.id,
-			mapTripToApiUpdateFormat(tripToBeUpdated)
-		);
-		if (!tripResponse.data.hasOwnProperty('trip')) {
-			throw new Error('Wrong API response');
+		const tripResponse: ApiResponse = await putTripToApi(updateRequestData);
+		if (tripResponse.data.conflict_resolution === 'ignored') {
+			const conflictInfo = camelizeKeys(tripResponse.data.conflict_info) as TripConflictInfo;
+			await handleIgnoredConflict(conflictInfo, tripToBeUpdated);
 		}
-		tripsDetailedCache.set(tripResponse.data.trip.id, tripResponse.data.trip);
 	}, UPDATE_TIMEOUT);
 	return tripToBeUpdated;
 }
@@ -96,4 +98,32 @@ async function getTripFromApi(id: string): Promise<object> {
 	}
 	await tripsDetailedCache.set(id, apiResponse.data.trip);
 	return apiResponse.data.trip;
+}
+
+async function putTripToApi(requestData): Promise<ApiResponse> {
+	const tripResponse: ApiResponse = await put(
+		'trips/' + requestData.id,
+		requestData
+	);
+	if (!tripResponse.data.hasOwnProperty('trip')) {
+		throw new Error('Wrong API response');
+	}
+	await tripsDetailedCache.set(tripResponse.data.trip.id, tripResponse.data.trip);
+	return tripResponse;
+}
+
+async function handleIgnoredConflict(
+	conflictInfo: TripConflictInfo,
+	tripToBeUpdated: Trip
+): Promise<void> {
+	const conflictHandler = getTripConflictHandler();
+	if (!conflictHandler) {
+		return;
+	}
+	const clientConflictResolution: TripConflictClientResolution = await conflictHandler(conflictInfo, tripToBeUpdated);
+	if (clientConflictResolution === 'local') {
+		const updateRequestData = mapTripToApiUpdateFormat(tripToBeUpdated) as any;
+		updateRequestData.updated_at = dateToW3CString(new Date());
+		await putTripToApi(updateRequestData);
+	}
 }

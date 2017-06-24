@@ -1,8 +1,11 @@
+import { Trip, TripConflictClientResolution, TripConflictInfo } from '../Trip';
+
 let apiUrl: string;
 let clientKey: string;
 
 let apiKey: string | null;
 let accessToken: string | null;
+let tripConflictHandler: null | ((conflictInfo: TripConflictInfo, trip: Trip) => Promise<TripConflictClientResolution>);
 
 export function setEnvironment(url: string, key: string): void {
 	apiUrl = url;
@@ -32,4 +35,15 @@ export function getApiKey() {
 
 export function getAccessToken() {
 	return accessToken;
+}
+
+export function setTripConflictHandler(
+	handler: null | ((conflictInfo: TripConflictInfo, trip: Trip) => Promise<TripConflictClientResolution>)
+) {
+	tripConflictHandler = handler;
+}
+
+export function getTripConflictHandler(
+): null | ((conflictInfo: TripConflictInfo, trip: Trip) => Promise<TripConflictClientResolution>) {
+	return tripConflictHandler;
 }
