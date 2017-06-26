@@ -2,13 +2,14 @@ import * as cloneDeep from 'lodash.clonedeep';
 
 import { Day, Trip } from '.';
 import { isStickyByDefault, Place } from '../Places';
+import { UserSettings } from '../User';
 import { addDaysToDate, subtractDaysFromDate } from '../Util';
 import { resolveStickiness } from './Mapper';
 import { ItineraryItem, TransportSettings } from './Trip';
 import { decorateDaysWithDate } from './Utility';
 
 // Day methods
-export function addDay(tripToBeUpdated: Trip): Trip {
+export function addDay(tripToBeUpdated: Trip, userSettings: UserSettings | null): Trip {
 	if (!tripToBeUpdated.days) {
 		throw new Error('days property in Trip cannot be null');
 	}
@@ -31,13 +32,13 @@ export function addDay(tripToBeUpdated: Trip): Trip {
 			resultTrip.days[resultTrip.days.length - 2].itinerary.length - 1
 		];
 		if (isStickyByDefault(lastItem.place)) {
-			resultTrip = addPlaceToDay(resultTrip, lastItem.place, resultTrip.days.length - 1, 0);
+			resultTrip = addPlaceToDay(resultTrip, lastItem.place, resultTrip.days.length - 1, userSettings, 0);
 		}
 	}
-	return resolveStickiness(resultTrip);
+	return resolveStickiness(resultTrip, userSettings);
 }
 
-export function prependDayToTrip(tripToBeUpdated: Trip): Trip {
+export function prependDayToTrip(tripToBeUpdated: Trip, userSettings: UserSettings | null): Trip {
 	if (!tripToBeUpdated.days) {
 		throw new Error('days property in Trip cannot be null');
 	}
@@ -55,13 +56,13 @@ export function prependDayToTrip(tripToBeUpdated: Trip): Trip {
 	if (resultTrip.days[1].itinerary.length > 0) {
 		const firstItem = resultTrip.days[1].itinerary[0];
 		if (isStickyByDefault(firstItem.place)) {
-			resultTrip = addPlaceToDay(resultTrip, firstItem.place, 0, 0);
+			resultTrip = addPlaceToDay(resultTrip, firstItem.place, 0, userSettings, 0);
 		}
 	}
-	return resolveStickiness(resultTrip);
+	return resolveStickiness(resultTrip, userSettings);
 }
 
-export function removeDayFromTrip(tripToBeUpdated: Trip, dayIndex: number): Trip {
+export function removeDayFromTrip(tripToBeUpdated: Trip, dayIndex: number, userSettings: UserSettings | null): Trip {
 	if (!tripToBeUpdated.days) {
 		throw new Error('days property in Trip cannot be null');
 	}
@@ -80,10 +81,15 @@ export function removeDayFromTrip(tripToBeUpdated: Trip, dayIndex: number): Trip
 
 	resultTrip.days.splice(dayIndex, 1);
 	resultTrip.days = decorateDaysWithDate(resultTrip.startsOn, resultTrip.days);
-	return resolveStickiness(resultTrip);
+	return resolveStickiness(resultTrip, userSettings);
 }
 
-export function swapDaysInTrip(tripToBeUpdated: Trip, firstDayIndex: number, secondDayIndex: number): Trip {
+export function swapDaysInTrip(
+	tripToBeUpdated: Trip,
+	firstDayIndex: number,
+	secondDayIndex: number,
+	userSettings: UserSettings | null
+): Trip {
 	if (!tripToBeUpdated.days) {
 		throw new Error('days property in Trip cannot be null');
 	}
@@ -101,7 +107,7 @@ export function swapDaysInTrip(tripToBeUpdated: Trip, firstDayIndex: number, sec
 	const secondDay: Day = resultTrip.days[secondDayIndex];
 	resultTrip.days[firstDayIndex] = secondDay;
 	resultTrip.days[secondDayIndex] = firstDay;
-	return resolveStickiness(resultTrip);
+	return resolveStickiness(resultTrip, userSettings);
 }
 
 export function setTransport(trip: Trip, dayIndex: number, itemIndex: number, settings: TransportSettings|null): Trip {
@@ -127,7 +133,9 @@ export function addPlaceToDay(
 	tripToBeUpdated: Trip,
 	placeToBeAdded: Place,
 	dayIndex: number,
-	positionInDay?: number): Trip {
+	userSettings: UserSettings | null,
+	positionInDay?: number
+): Trip {
 	if (!tripToBeUpdated.days) {
 		throw new Error('days property in Trip cannot be null');
 	}
@@ -160,14 +168,16 @@ export function addPlaceToDay(
 	} else {
 		resultTrip.days[dayIndex].itinerary.push(itineraryItem);
 	}
-	return resolveStickiness(resultTrip);
+	return resolveStickiness(resultTrip, userSettings);
 }
 
 export function movePlaceInDay(
 	tripToBeUpdated: Trip,
 	dayIndex: number,
 	positionFrom: number,
-	positionTo: number): Trip {
+	positionTo: number,
+	userSettings: UserSettings | null
+): Trip {
 	if (!tripToBeUpdated.days) {
 		throw new Error('days property in Trip cannot be null');
 	}
@@ -187,13 +197,15 @@ export function movePlaceInDay(
 	const itemToBeMoved: ItineraryItem = resultTrip.days[dayIndex].itinerary[positionFrom];
 	resultTrip.days[dayIndex].itinerary.splice(positionFrom, 1);
 	resultTrip.days[dayIndex].itinerary.splice(positionTo, 0, itemToBeMoved);
-	return resolveStickiness(resultTrip);
+	return resolveStickiness(resultTrip, userSettings);
 }
 
 export function removePlacesFromDay(
 	tripToBeUpdated: Trip,
 	dayIndex: number,
-	positionsInDay: number[]): Trip {
+	positionsInDay: number[],
+	userSettings: UserSettings | null
+): Trip {
 	if (!tripToBeUpdated.days) {
 		throw new Error('days property in Trip cannot be null');
 	}
@@ -213,13 +225,14 @@ export function removePlacesFromDay(
 		.itinerary.filter((itineraryItem: ItineraryItem, index: number) => {
 		return positionsInDay.indexOf(index) < 0;
 	});
-	return resolveStickiness(resultTrip);
+	return resolveStickiness(resultTrip, userSettings);
 }
 
 export function replaceStickyPlace(
 	trip: Trip,
 	place: Place,
-	dayIndex: number
+	dayIndex: number,
+	userSettings: UserSettings | null
 ): Trip {
 	if (!trip.days) {
 		throw new Error('days property in Trip cannot be null');
@@ -235,8 +248,13 @@ export function replaceStickyPlace(
 		trip.days[dayIndex].itinerary.length &&
 		trip.days[dayIndex].itinerary[trip.days[dayIndex].itinerary.length - 1].isSticky
 	) {
-		resultTrip = removePlacesFromDay(resultTrip, dayIndex, [resultTrip.days[dayIndex].itinerary.length - 1]);
-		resultTrip = addPlaceToDay(resultTrip, place, dayIndex, resultTrip.days[dayIndex].itinerary.length);
+		resultTrip = removePlacesFromDay(
+			resultTrip,
+			dayIndex,
+			[resultTrip.days[dayIndex].itinerary.length - 1],
+			userSettings
+		);
+		resultTrip = addPlaceToDay(resultTrip, place, dayIndex, userSettings, resultTrip.days[dayIndex].itinerary.length);
 	}
 	const nextDayIndex = dayIndex + 1;
 	if (
@@ -245,8 +263,8 @@ export function replaceStickyPlace(
 		trip.days[nextDayIndex].itinerary.length &&
 		trip.days[nextDayIndex].itinerary[0].isSticky
 	) {
-		resultTrip = removePlacesFromDay(resultTrip, nextDayIndex, [0]);
-		resultTrip = addPlaceToDay(resultTrip, place, nextDayIndex, 0);
+		resultTrip = removePlacesFromDay(resultTrip, nextDayIndex, [0], userSettings);
+		resultTrip = addPlaceToDay(resultTrip, place, nextDayIndex, userSettings, 0);
 	}
-	return resolveStickiness(resultTrip);
+	return resolveStickiness(resultTrip, userSettings);
 }

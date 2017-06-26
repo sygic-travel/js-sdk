@@ -8,6 +8,7 @@ import { placesDetailedCache as Cache, tripsDetailedCache } from '../Cache';
 import { setEnvironment, setTripConflictHandler } from '../Settings';
 import * as TripApiTestData from '../TestData/TripApiResponses';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
+import * as User from '../User';
 import * as Xhr from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
 import * as Dao from './DataAccess';
@@ -25,6 +26,9 @@ describe('TripDataAccess', () => {
 
 	beforeEach(() => {
 		sandbox = sinon.sandbox.create();
+		sandbox.stub(User, 'getUserSettings').returns(new Promise<User.UserSettings>((resolve) => {
+			resolve({homePlaceId: null, workPlaceId: null});
+		}));
 		clock = sinon.useFakeTimers((new Date()).getTime());
 		Cache.reset();
 	});

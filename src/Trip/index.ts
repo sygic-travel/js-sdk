@@ -1,5 +1,6 @@
 import { ChangeNotification } from '../Changes';
 import { Dao as placesDao, getPlaceDetailed, getPlacesDetailed, isStickyByDefault, Place } from '../Places';
+import { getUserSettings } from '../User';
 import { addDaysToDate } from '../Util/index';
 import * as Dao from './DataAccess';
 import * as TripManipulator from './Manipulator';
@@ -106,7 +107,7 @@ export async function updateTrip(id: string, dataToUpdate: TripUpdateData): Prom
 export async function addDaysToTrip(id: string, count: number): Promise<Trip> {
 	let tripToBeUpdated = await getTripDetailed(id);
 	for (let i = 0; i < count; i++) {
-		tripToBeUpdated = TripManipulator.addDay(tripToBeUpdated);
+		tripToBeUpdated = TripManipulator.addDay(tripToBeUpdated, await getUserSettings());
 	}
 	return Dao.updateTrip(tripToBeUpdated);
 }
@@ -114,17 +115,22 @@ export async function addDaysToTrip(id: string, count: number): Promise<Trip> {
 export async function prependDaysToTrip(id: string, count: number): Promise<Trip> {
 	let tripToBeUpdated = await getTripDetailed(id);
 	for (let i = 0; i < count; i++) {
-		tripToBeUpdated = TripManipulator.prependDayToTrip(tripToBeUpdated);
+		tripToBeUpdated = TripManipulator.prependDayToTrip(tripToBeUpdated, await getUserSettings());
 	}
 	return Dao.updateTrip(tripToBeUpdated);
 }
 
 export async function removeDayFromTrip(id: string, dayIndex: number): Promise<Trip> {
-	return Dao.updateTrip(TripManipulator.removeDayFromTrip(await getTripDetailed(id), dayIndex));
+	return Dao.updateTrip(TripManipulator.removeDayFromTrip(await getTripDetailed(id), dayIndex, await getUserSettings()));
 }
 
 export async function swapDaysInTrip(id: string, firstDayIndex: number, secondDayIndex: number): Promise<Trip>  {
-	return Dao.updateTrip(TripManipulator.swapDaysInTrip(await getTripDetailed(id), firstDayIndex, secondDayIndex));
+	return Dao.updateTrip(TripManipulator.swapDaysInTrip(
+		await getTripDetailed(id),
+		firstDayIndex,
+		secondDayIndex,
+		await getUserSettings()
+	));
 }
 
 export async function setTransport(
@@ -140,11 +146,19 @@ export async function movePlaceInDay(
 	dayIndex: number,
 	positionFrom: number,
 	positionTo: number): Promise<Trip> {
-	return Dao.updateTrip(TripManipulator.movePlaceInDay(await getTripDetailed(id), dayIndex, positionFrom, positionTo));
+	return Dao.updateTrip(TripManipulator.movePlaceInDay(
+		await getTripDetailed(id),
+		dayIndex,
+		positionFrom,
+		positionTo,
+		await getUserSettings())
+	);
 }
 
 export async function removePlacesFromDay(id: string, dayIndex: number, positionsInDay: number[]): Promise<Trip> {
-	return Dao.updateTrip(TripManipulator.removePlacesFromDay(await getTripDetailed(id), dayIndex, positionsInDay));
+	return Dao.updateTrip(
+		TripManipulator.removePlacesFromDay(await getTripDetailed(id), dayIndex, positionsInDay, await getUserSettings())
+	);
 }
 
 /**
@@ -168,11 +182,11 @@ export async function addPlaceToDay(
 	}
 
 	if (typeof positionInDay !== 'undefined' && positionInDay !== null) {
-		return Dao.updateTrip(TripManipulator.addPlaceToDay(trip, place, dayIndex, positionInDay));
+		return Dao.updateTrip(TripManipulator.addPlaceToDay(trip, place, dayIndex, await getUserSettings(), positionInDay));
 	}
 
 	if (replaceSticky) {
-		return Dao.updateTrip(TripManipulator.replaceStickyPlace(trip, place, dayIndex));
+		return Dao.updateTrip(TripManipulator.replaceStickyPlace(trip, place, dayIndex, await getUserSettings()));
 	}
 
 	let dayItems: ItineraryItem[] = [];
@@ -195,14 +209,14 @@ export async function addPlaceToDay(
 		dayItems,
 		nextDayItinerary
 	);
-	trip = TripManipulator.addPlaceToDay(trip, place, dayIndex, positionInDay);
+	trip = TripManipulator.addPlaceToDay(trip, place, dayIndex, await getUserSettings(), positionInDay);
 
 	if (
 		(isStickyByDefault(place)) &&
 		nextDayItinerary &&
 		(!nextDayItinerary.length || !nextDayItinerary[0].isSticky)
 	) {
-		trip = TripManipulator.addPlaceToDay(trip, place, nextDayIndex, 0);
+		trip = TripManipulator.addPlaceToDay(trip, place, nextDayIndex, await getUserSettings(), 0);
 	}
 	return Dao.updateTrip(trip);
 }

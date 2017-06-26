@@ -2,17 +2,18 @@ import { camelizeKeys, decamelizeKeys } from 'humps';
 import * as cloneDeep from 'lodash.clonedeep';
 
 import { Place } from '../Places';
+import { UserSettings } from '../User';
 import { Day, ItineraryItem, Trip, TripCreateRequest, TripMedia, TripPrivileges } from './Trip';
 import { decorateDaysWithDate } from './Utility';
 
 export const mapTripListApiResponseToTripsList = (trips: any): Trip[] => {
 	return trips.map((trip) => {
-		return mapTrip(trip, null);
+		return mapTrip(trip, null, null);
 	});
 };
 
-export const mapTripDetailedApiResponseToTrip = (tripDetailed: any): Trip => {
-	return mapTrip(tripDetailed, mapTripDays(tripDetailed));
+export const mapTripDetailedApiResponseToTrip = (tripDetailed: any, userSettings: UserSettings | null): Trip => {
+	return mapTrip(tripDetailed, mapTripDays(tripDetailed), userSettings);
 };
 
 export const mapTripCreateRequestToApiFormat = (request: TripCreateRequest): object => {
@@ -51,7 +52,7 @@ export const mapTripCreateRequest = (startsOn: string, name: string, placeId: st
 	} as TripCreateRequest;
 };
 
-export const mapTrip = (trip, days: Day[] | null): Trip => {
+export const mapTrip = (trip, days: Day[] | null, userSettings: UserSettings | null): Trip => {
 	const resultTrip = {
 		id: trip.id,
 		ownerId: trip.owner_id,
@@ -68,7 +69,7 @@ export const mapTrip = (trip, days: Day[] | null): Trip => {
 		days: decorateDaysWithDate(trip.starts_on, days)
 	} as Trip;
 
-	return resolveStickiness(resultTrip);
+	return resolveStickiness(resultTrip, userSettings);
 };
 
 const mapTripDays = (trip): Day[] => trip.days.map((day) => ({
@@ -97,7 +98,7 @@ const mapTripDays = (trip): Day[] => trip.days.map((day) => ({
 /**
  * @link https://confluence.sygic.com/display/STV/Sticky+Places+in+Itinerary
  */
-export const resolveStickiness = (inputTrip: Trip): Trip => {
+export const resolveStickiness = (inputTrip: Trip, userSettings: UserSettings | null): Trip => {
 	const trip = cloneDeep(inputTrip);
 	if (trip.days === null) {
 		return trip;
@@ -108,6 +109,18 @@ export const resolveStickiness = (inputTrip: Trip): Trip => {
 		day.itinerary.forEach((item: ItineraryItem) => {
 			item.isSticky = false;
 		});
+
+		if (userSettings &&
+			index === 0 &&
+			day.itinerary.length > 0 &&
+			(
+				(userSettings.homePlaceId && day.itinerary[0].placeId === userSettings.homePlaceId) ||
+				(userSettings.workPlaceId && day.itinerary[0].placeId === userSettings.workPlaceId)
+			)
+		) {
+			day.itinerary[0].isSticky = true;
+		}
+
 		if (prevDay &&
 			prevDay.itinerary.length &&
 			day.itinerary.length &&
@@ -123,6 +136,18 @@ export const resolveStickiness = (inputTrip: Trip): Trip => {
 		) {
 			day.itinerary[day.itinerary.length - 1].isSticky = true;
 		}
+
+		if (userSettings &&
+			nextDay === null &&
+			day.itinerary.length > 0 &&
+			(
+				(userSettings.homePlaceId && day.itinerary[day.itinerary.length - 1].placeId === userSettings.homePlaceId) ||
+				(userSettings.workPlaceId && day.itinerary[day.itinerary.length - 1].placeId === userSettings.workPlaceId)
+			)
+		) {
+			day.itinerary[0].isSticky = true;
+		}
+
 		prevDay = day;
 	});
 	return trip;

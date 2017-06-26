@@ -4,6 +4,7 @@ import { stringify } from 'query-string';
 
 import { tripsDetailedCache as tripsDetailedCache } from '../Cache';
 import { getTripConflictHandler } from '../Settings';
+import { getUserSettings } from '../User';
 import { dateToW3CString } from '../Util';
 import { ApiResponse, get, post, put } from '../Xhr';
 import {
@@ -43,7 +44,7 @@ export async function getTripDetailed(id: string): Promise<Trip> {
 		result = fromCache;
 	}
 
-	return mapTripDetailedApiResponseToTrip(result);
+	return mapTripDetailedApiResponseToTrip(result, await getUserSettings());
 }
 
 export async function createTrip(tripRequest: TripCreateRequest): Promise<Trip> {
@@ -53,7 +54,7 @@ export async function createTrip(tripRequest: TripCreateRequest): Promise<Trip> 
 	}
 	const tripData = apiResponse.data.trip;
 	await tripsDetailedCache.set(tripData.id, tripData);
-	return mapTripDetailedApiResponseToTrip(tripData);
+	return mapTripDetailedApiResponseToTrip(tripData, await getUserSettings());
 }
 
 export async function updateTrip(tripToBeUpdated: Trip): Promise<Trip> {
