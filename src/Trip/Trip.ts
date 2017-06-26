@@ -62,6 +62,8 @@ export interface TripConflictInfo {
 	lastUpdatedAt: string;
 }
 
+export type TripConflictHandler = (conflictInfo: TripConflictInfo, trip: Trip) => Promise<TripConflictClientResolution>;
+
 export interface Trip {
 	id: string;
 	ownerId: string;

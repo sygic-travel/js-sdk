@@ -211,6 +211,7 @@ export namespace Trips {
 	export import Trip = _Trip.Trip;
 	export import Day = _Trip.Day;
 	export import TripConflictClientResolution = _Trip.TripConflictClientResolution;
+	export import TripConflictHandler = _Trip.TripConflictHandler;
 	export import TripConflictInfo = _Trip.TripConflictInfo;
 	export import ItineraryItem = _Trip.ItineraryItem;
 	export import TripPrivileges = _Trip.TripPrivileges;

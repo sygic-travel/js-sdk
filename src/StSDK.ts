@@ -47,8 +47,7 @@ import {
 	swapDaysInTrip,
 	TransportSettings,
 	Trip,
-	TripConflictClientResolution,
-	TripConflictInfo,
+	TripConflictHandler,
 	TripUpdateData,
 	updateTrip,
 } from './Trip';
@@ -344,7 +343,7 @@ export default class StSDK extends BaseSDK {
 	 * @experimental
 	 */
 	public setTripConflictHandler(
-		handler: null | ((conflictInfo: TripConflictInfo, trip: Trip) => Promise<TripConflictClientResolution>)
+		handler: null | TripConflictHandler
 	): void {
 		Settings.setTripConflictHandler(handler);
 	}
