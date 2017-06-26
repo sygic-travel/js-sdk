@@ -182,18 +182,25 @@ export async function addPlaceToDay(
 		dayItems = trip.days[dayIndex].itinerary;
 	}
 
+	const nextDayIndex = dayIndex + 1;
+	let nextDayItinerary: ItineraryItem[] | null = null;
+	if (trip.days &&
+		trip.days[nextDayIndex]
+	) {
+		nextDayItinerary = trip.days[nextDayIndex].itinerary;
+	}
+
 	positionInDay = PositionFinder.findOptimalPosition(
 		place,
-		dayItems
+		dayItems,
+		nextDayItinerary
 	);
 	trip = TripManipulator.addPlaceToDay(trip, place, dayIndex, positionInDay);
-	const nextDayIndex = dayIndex + 1;
 
 	if (
 		(isStickyByDefault(place)) &&
-		trip.days &&
-		trip.days[nextDayIndex] &&
-		(!trip.days[nextDayIndex].itinerary.length || !trip.days[nextDayIndex].itinerary[0].isSticky)
+		nextDayItinerary &&
+		(!nextDayItinerary.length || !nextDayItinerary[0].isSticky)
 	) {
 		trip = TripManipulator.addPlaceToDay(trip, place, nextDayIndex, 0);
 	}
