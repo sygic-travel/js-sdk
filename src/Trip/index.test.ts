@@ -4,6 +4,7 @@ import * as cloneDeep from 'lodash.clonedeep';
 import * as sinon from 'sinon';
 import { SinonSandbox } from 'sinon';
 
+import * as TripController from '.';
 import { tripsDetailedCache } from '../Cache';
 import { setEnvironment } from '../Settings';
 import * as PlaceTestData from '../TestData/PlacesApiResponses';
@@ -11,7 +12,6 @@ import * as TripTestData from '../TestData/TripApiResponses';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
 import * as Xhr from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
-import * as TripController from './index';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);

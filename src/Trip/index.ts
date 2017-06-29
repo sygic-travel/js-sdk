@@ -57,8 +57,8 @@ export async function getTrips(dateFrom: string, dateTo: string): Promise<Trip[]
 export async function getTripDetailed(id: string): Promise<Trip> {
 	const tripWithoutPlaces: Trip = await Dao.getTripDetailed(id);
 	if (tripWithoutPlaces.days) {
-		const placesGuids: string[] = getPlacesIdsFromTrip(tripWithoutPlaces);
-		return putPlacesToTrip(tripWithoutPlaces, await getPlacesDetailed(placesGuids, '300x300'));
+		const placesIds: string[] = getPlacesIdsFromTrip(tripWithoutPlaces);
+		return putPlacesToTrip(tripWithoutPlaces, await getPlacesDetailed(placesIds, '300x300'));
 	}
 	return tripWithoutPlaces;
 }
@@ -103,12 +103,20 @@ export async function updateTrip(id: string, dataToUpdate: TripUpdateData): Prom
 	return await Dao.updateTrip(tripToBeUpdated);
 }
 
-export async function addDayToTrip(id: string): Promise<Trip> {
-	return Dao.updateTrip(TripManipulator.addDay(await getTripDetailed(id)));
+export async function addDaysToTrip(id: string, count: number): Promise<Trip> {
+	let tripToBeUpdated = await getTripDetailed(id);
+	for (let i = 0; i < count; i++) {
+		tripToBeUpdated = TripManipulator.addDay(tripToBeUpdated);
+	}
+	return Dao.updateTrip(tripToBeUpdated);
 }
 
-export async function prependDayToTrip(id: string): Promise<Trip> {
-	return Dao.updateTrip(TripManipulator.prependDayToTrip(await getTripDetailed(id)));
+export async function prependDaysToTrip(id: string, count: number): Promise<Trip> {
+	let tripToBeUpdated = await getTripDetailed(id);
+	for (let i = 0; i < count; i++) {
+		tripToBeUpdated = TripManipulator.prependDayToTrip(tripToBeUpdated);
+	}
+	return Dao.updateTrip(tripToBeUpdated);
 }
 
 export async function removeDayFromTrip(id: string, dayIndex: number): Promise<Trip> {

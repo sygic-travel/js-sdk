@@ -33,14 +33,14 @@ import { searchAddress, SearchAddressResult, searchAddressReverse } from './Sear
 import * as Settings from './Settings';
 import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from './Spread';
 import {
-	addDayToTrip,
+	addDaysToTrip,
 	addPlaceToDay,
 	cloneTrip,
 	createTrip,
 	getTripDetailed,
 	getTrips,
 	movePlaceInDay,
-	prependDayToTrip,
+	prependDaysToTrip,
 	removeDayFromTrip,
 	removePlacesFromDay,
 	setTransport,
@@ -170,15 +170,15 @@ export default class StSDK extends BaseSDK {
 	/**
 	 * @experimental
 	 */
-	public addDayToTrip(id: string): Promise<Trip> {
-		return addDayToTrip(id);
+	public addDaysToTrip(id: string, count: number): Promise<Trip> {
+		return addDaysToTrip(id, count);
 	}
 
 	/**
 	 * @experimental
 	 */
-	public prependDayToTrip(id: string): Promise<Trip> {
-		return prependDayToTrip(id);
+	public prependDaysToTrip(id: string, count: number): Promise<Trip> {
+		return prependDaysToTrip(id, count);
 	}
 
 	/**
