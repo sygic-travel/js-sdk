@@ -190,10 +190,10 @@ export function movePlaceInDay(
 	return resolveStickiness(resultTrip);
 }
 
-export function removePlaceFromDay(
+export function removePlacesFromDay(
 	tripToBeUpdated: Trip,
 	dayIndex: number,
-	positionInDay: number): Trip {
+	positionsInDay: number[]): Trip {
 	if (!tripToBeUpdated.days) {
 		throw new Error('days property in Trip cannot be null');
 	}
@@ -202,12 +202,17 @@ export function removePlaceFromDay(
 		throw new Error('Invalid dayIndex');
 	}
 
-	if (!tripToBeUpdated.days[dayIndex].itinerary[positionInDay]) {
-		throw new Error('Invalid positionInDay');
-	}
+	positionsInDay.forEach((positionInDay: number) => {
+		if (tripToBeUpdated.days && !tripToBeUpdated.days[dayIndex].itinerary[positionInDay]) {
+			throw new Error('Invalid positionInDay');
+		}
+	});
 
 	const resultTrip = cloneDeep(tripToBeUpdated);
-	resultTrip.days[dayIndex].itinerary.splice(positionInDay, 1);
+	resultTrip.days[dayIndex].itinerary = resultTrip.days[dayIndex]
+		.itinerary.filter((itineraryItem: ItineraryItem, index: number) => {
+		return positionsInDay.indexOf(index) < 0;
+	});
 	return resolveStickiness(resultTrip);
 }
 
@@ -230,7 +235,7 @@ export function replaceStickyPlace(
 		trip.days[dayIndex].itinerary.length &&
 		trip.days[dayIndex].itinerary[trip.days[dayIndex].itinerary.length - 1].isSticky
 	) {
-		resultTrip = removePlaceFromDay(resultTrip, dayIndex, resultTrip.days[dayIndex].itinerary.length - 1);
+		resultTrip = removePlacesFromDay(resultTrip, dayIndex, [resultTrip.days[dayIndex].itinerary.length - 1]);
 		resultTrip = addPlaceToDay(resultTrip, place, dayIndex, resultTrip.days[dayIndex].itinerary.length);
 	}
 	const nextDayIndex = dayIndex + 1;
@@ -240,7 +245,7 @@ export function replaceStickyPlace(
 		trip.days[nextDayIndex].itinerary.length &&
 		trip.days[nextDayIndex].itinerary[0].isSticky
 	) {
-		resultTrip = removePlaceFromDay(resultTrip, nextDayIndex, 0);
+		resultTrip = removePlacesFromDay(resultTrip, nextDayIndex, [0]);
 		resultTrip = addPlaceToDay(resultTrip, place, nextDayIndex, 0);
 	}
 	return resolveStickiness(resultTrip);

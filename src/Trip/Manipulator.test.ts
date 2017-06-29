@@ -240,20 +240,20 @@ describe('TripManipulator', () => {
 		});
 	});
 
-	describe('#removePlaceFromDay', () => {
+	describe('#removePlacesFromDay', () => {
 		it('should throw error when invalid dayIndex is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			return chai.expect(() => Manipulator.removePlaceFromDay(inputTrip, 999, 0))
+			return chai.expect(() => Manipulator.removePlacesFromDay(inputTrip, 999, [0]))
 				.to.throw(Error, 'Invalid dayIndex');
 		});
 
 		it('should throw error when invalid positionInDay is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			return chai.expect(() => Manipulator.removePlaceFromDay(inputTrip, 0, 99))
+			return chai.expect(() => Manipulator.removePlacesFromDay(inputTrip, 0, [99]))
 				.to.throw(Error, 'Invalid positionInDay');
 		});
 
-		it('should remove place/itineraryItem from a day', () => {
+		it('should remove single place/itineraryItem from a day', () => {
 			const positionInDay = 0;
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
@@ -262,7 +262,20 @@ describe('TripManipulator', () => {
 				expectedTrip.days[0].itinerary.splice(positionInDay, 1);
 			}
 
-			const result = Manipulator.removePlaceFromDay(inputTrip, 0, positionInDay);
+			const result = Manipulator.removePlacesFromDay(inputTrip, 0, [positionInDay]);
+			return chai.expect(result).to.deep.equal(expectedTrip);
+		});
+
+		it('should remove multiple places/itineraryItems from a day', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+
+			if (expectedTrip.days) {
+				expectedTrip.days[0].itinerary.splice(0, 2);
+				expectedTrip.days[1].itinerary[0].isSticky = false;
+			}
+
+			const result = Manipulator.removePlacesFromDay(inputTrip, 0, [0, 1]);
 			return chai.expect(result).to.deep.equal(expectedTrip);
 		});
 	});
