@@ -27,7 +27,7 @@ export const mapRouteFromApiResponse = (
 			direction.type = direction.mode === 'car' ? transportType : null;
 		}
 		if (!direction.avoid) {
-			direction.avoid = direction.mode === 'car' ? transportAvoid : [];
+			direction.avoid = direction.mode === 'car' ? transportAvoid : ['unpaved'];
 		}
 		return direction as Direction;
 	});
@@ -68,7 +68,7 @@ export const createRouteRequest = (
 		origin,
 		destination,
 		waypoints: itineraryItem.transportFromPrevious ? itineraryItem.transportFromPrevious.waypoints : [],
-		avoid: itineraryItem.transportFromPrevious ? itineraryItem.transportFromPrevious.avoid : [],
+		avoid: itineraryItem.transportFromPrevious ? itineraryItem.transportFromPrevious.avoid : ['unpaved'],
 		type: itineraryItem.transportFromPrevious ? itineraryItem.transportFromPrevious.type : 'fastest',
 		chosenMode: userMode ? userMode : ModeSelector.selectOptimalMode(origin, destination),
 	} as RouteRequest;
