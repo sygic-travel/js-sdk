@@ -33,6 +33,12 @@ import { searchAddress, SearchAddressResult, searchAddressReverse } from './Sear
 import * as Settings from './Settings';
 import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from './Spread';
 import {
+	CategoriesCoefficients,
+	spread as spreadV2,
+	SpreadResult as SpreadResultV2,
+	SpreadSizeConfig as SpreadSizeConfigV2
+} from './SpreadV2';
+import {
 	addDaysToTrip,
 	addPlaceToDay,
 	cloneTrip,
@@ -95,6 +101,20 @@ export default class StSDK extends BaseSDK {
 		sizesConfig?: SpreadSizeConfig[]
 	): SpreadResult {
 		return spread(places, bounds, canvas, sizesConfig);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public spreadPlacesOnMapV2(
+		places: Place[],
+		vipPlaces: Place[],
+		bounds: Bounds,
+		canvas: CanvasSize,
+		categoriesCoefficients?: CategoriesCoefficients | null,
+		sizesConfig?: SpreadSizeConfigV2[]
+	): SpreadResultV2 {
+		return spreadV2(places, vipPlaces, bounds, canvas, categoriesCoefficients, sizesConfig);
 	}
 
 	/**

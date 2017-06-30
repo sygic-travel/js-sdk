@@ -7,6 +7,7 @@ import * as _Place from './src/Places';
 import * as _Route from './src/Route';
 import * as _Search from './src/Search';
 import * as _Spread from './src/Spread';
+import * as _SpreadV2 from './src/SpreadV2';
 import * as _Trip from './src/Trip';
 import * as _User from './src/User';
 
@@ -27,11 +28,22 @@ export class StSDK {
 	public getPlaceOpeningHours(id: string, from: string, to: string): Promise<_Place.PlaceOpeningHours>
 	public spreadPlacesOnMap(
 		places: _Place.Place[],
-		markerSizes: _Spread.SpreadSizeConfig[],
 		bounds: _Geo.Bounds,
-		canvas: _Spread.CanvasSize
+		canvas: _Spread.CanvasSize,
+		markerSizes?: _Spread.SpreadSizeConfig[]
 	): _Spread.SpreadResult;
 
+	/**
+	 * @experimental
+	 */
+	public spreadPlacesOnMapV2(
+		places: _Place.Place[],
+		vipPlaces: _Place.Place[],
+		bounds: _Geo.Bounds,
+		canvas: _Spread.CanvasSize,
+		categoriesCoefficients?: _SpreadV2.CategoriesCoefficients | null,
+		markerSizes?: _SpreadV2.SpreadSizeConfig[]
+	): _SpreadV2.SpreadResult;
 	/**
 	 * @experimental
 	 */
@@ -205,6 +217,13 @@ export namespace Spread {
 	export import CanvasSize = _Spread.CanvasSize;
 	export import SpreadResult = _Spread.SpreadResult;
 	export import SpreadedPlace = _Spread.SpreadedPlace;
+}
+
+export namespace SpreadV2 {
+	export import SpreadSizeConfigV2 = _SpreadV2.SpreadSizeConfig;
+	export import SpreadResultV2 = _SpreadV2.SpreadResult;
+	export import SpreadedPlaceV2 = _SpreadV2.SpreadedPlace;
+	export import CategoriesCoefficients = _SpreadV2.CategoriesCoefficients;
 }
 
 export namespace Trips {
