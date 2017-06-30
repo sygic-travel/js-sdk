@@ -1,4 +1,5 @@
 import { camelizeKeys } from 'humps';
+import * as cloneDeep from 'lodash.clonedeep';
 import { stringify } from 'query-string';
 
 import { tripsDetailedCache as tripsDetailedCache } from '../Cache';
@@ -14,7 +15,8 @@ import {
 } from './Mapper';
 import { Trip, TripConflictClientResolution, TripConflictInfo, TripCreateRequest } from './Trip';
 
-let updateTimeout;
+const updateTimeouts = {};
+const tripDataToSend = {};
 const UPDATE_TIMEOUT: number = 3000;
 
 export async function getTrips(dateFrom: string, dateTo: string): Promise<Trip[]> {
@@ -57,16 +59,24 @@ export async function createTrip(tripRequest: TripCreateRequest): Promise<Trip> 
 export async function updateTrip(tripToBeUpdated: Trip): Promise<Trip> {
 	const tripApiFormatData = mapTripToApiFormat(tripToBeUpdated);
 	await tripsDetailedCache.set(tripToBeUpdated.id, tripApiFormatData);
-	if (updateTimeout) {
-		clearTimeout(updateTimeout);
+	if (updateTimeouts[tripToBeUpdated.id]) {
+		clearTimeout(updateTimeouts[tripToBeUpdated.id]);
 	}
 	const updateRequestData = mapTripToApiUpdateFormat(tripToBeUpdated) as any;
 	updateRequestData.updated_at = dateToW3CString(new Date());
-	updateTimeout = setTimeout(async () => {
-		const tripResponse: ApiResponse = await putTripToApi(updateRequestData);
+	tripDataToSend[tripToBeUpdated.id] = updateRequestData;
+	updateTimeouts[tripToBeUpdated.id] = setTimeout(async () => {
+		const requestData =  cloneDeep(tripDataToSend[tripToBeUpdated.id]);
+		delete tripDataToSend[tripToBeUpdated.id];
+		const tripResponse: ApiResponse = await putTripToApi(requestData);
 		if (tripResponse.data.conflict_resolution === 'ignored') {
 			const conflictInfo = camelizeKeys(tripResponse.data.conflict_info) as TripConflictInfo;
-			await handleIgnoredConflict(conflictInfo, tripToBeUpdated);
+			return await handleIgnoredConflict(conflictInfo, tripToBeUpdated, tripResponse);
+		}
+		if (tripDataToSend[tripToBeUpdated.id]) {
+			tripDataToSend[tripToBeUpdated.id].base_version = tripResponse.data.trip.version;
+		} else {
+			await tripsDetailedCache.set(tripResponse.data.trip.id, tripResponse.data.trip);
 		}
 	}, UPDATE_TIMEOUT);
 	return tripToBeUpdated;
@@ -108,22 +118,24 @@ async function putTripToApi(requestData): Promise<ApiResponse> {
 	if (!tripResponse.data.hasOwnProperty('trip')) {
 		throw new Error('Wrong API response');
 	}
-	await tripsDetailedCache.set(tripResponse.data.trip.id, tripResponse.data.trip);
 	return tripResponse;
 }
 
 async function handleIgnoredConflict(
 	conflictInfo: TripConflictInfo,
-	tripToBeUpdated: Trip
+	tripToBeUpdated: Trip,
+	tripServerResponse: ApiResponse
 ): Promise<void> {
 	const conflictHandler = getTripConflictHandler();
 	if (!conflictHandler) {
+		await tripsDetailedCache.set(tripServerResponse.data.trip.id, tripServerResponse.data.trip);
 		return;
 	}
 	const clientConflictResolution: TripConflictClientResolution = await conflictHandler(conflictInfo, tripToBeUpdated);
 	if (clientConflictResolution === 'local') {
 		const updateRequestData = mapTripToApiUpdateFormat(tripToBeUpdated) as any;
 		updateRequestData.updated_at = dateToW3CString(new Date());
-		await putTripToApi(updateRequestData);
+		tripServerResponse = await putTripToApi(updateRequestData);
 	}
+	await tripsDetailedCache.set(tripServerResponse.data.trip.id, tripServerResponse.data.trip);
 }
