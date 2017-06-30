@@ -60,7 +60,7 @@ export function getConfig(): SpreadSizeConfig[] {
 		{
 			radius: 4,
 			margin: 5,
-			name: 'medium',
+			name: 'small',
 			photoRequired: false,
 			zoomLevelLimits: [0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.04, 0.03, 0.02, 0.01, 0.005, 0.005, 0.005, 0.005, 0],
 			disabledCategories: []
