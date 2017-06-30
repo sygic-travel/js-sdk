@@ -4,11 +4,21 @@ import { isStickyByDefault, Place } from '../Places';
 
 export function findOptimalPosition(
 	place: Place,
-	itineraryItems: ItineraryItem[]
+	itinerary: ItineraryItem[],
+	nextItinerary: ItineraryItem[] | null,
 ): number {
 
-	if (isStickyByDefault(place) && (!itineraryItems.length || !itineraryItems[itineraryItems.length - 1].isSticky)) {
-		return itineraryItems.length;
+	if (isStickyByDefault(place) && (!itinerary.length || !itinerary[itinerary.length - 1].isSticky)) {
+		return itinerary.length;
+	}
+
+	if (
+		itinerary.length === 1 &&
+		itinerary[0].isSticky &&
+		nextItinerary &&
+		(nextItinerary.length === 0 || nextItinerary[0].placeId !== itinerary[0].placeId)
+	) {
+		return 1;
 	}
 
 	let minDistance = 0;
@@ -16,23 +26,23 @@ export function findOptimalPosition(
 	let checkIndex = 0;
 	const blockedIndexes: number[] = [];
 
-	if (itineraryItems.find((item: ItineraryItem) => (item.place === null))) {
+	if (itinerary.find((item: ItineraryItem) => (item.place === null))) {
 		throw new Error('Itinerary item place is not filled');
 	}
 
-	const locations: Location[] = itineraryItems.reduce((locs: Location[], item: ItineraryItem): Location[] => {
+	const locations: Location[] = itinerary.reduce((locs: Location[], item: ItineraryItem): Location[] => {
 		if (item.place) {
 			locs.push(item.place.location);
 		}
 		return locs;
 	}, []);
 
-	if (itineraryItems[0] && itineraryItems[0].isSticky) {
+	if (itinerary[0] && itinerary[0].isSticky) {
 		blockedIndexes.push(0);
 	}
 
-	if (itineraryItems.length && itineraryItems[itineraryItems.length - 1].isSticky) {
-		blockedIndexes.push(itineraryItems.length);
+	if (itinerary.length && itinerary[itinerary.length - 1].isSticky) {
+		blockedIndexes.push(itinerary.length);
 	}
 
 	while (checkIndex <= locations.length) {

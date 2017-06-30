@@ -10,11 +10,11 @@ import { ItineraryItem } from './Trip';
 describe('PositionFinder', () => {
 	describe('#findOptimalPosition', () => {
 		it('should find ok position for empty day', () => {
-			chai.expect(findOptimalPosition(place, [])).to.equal(0);
+			chai.expect(findOptimalPosition(place, [], null)).to.equal(0);
 		});
 
 		it('should add as second place when one place is present', () => {
-			chai.expect(findOptimalPosition(buildTestPlace(0, 0, 'p:1'), [buildTestItem(0, 1, 'p:2', false)])).to.equal(1);
+			chai.expect(findOptimalPosition(buildTestPlace(0, 0, 'p:1'), [buildTestItem(0, 1, 'p:2', false)], null)).to.equal(1);
 		});
 
 		it('should add at correct place by air distance ', () => {
@@ -24,7 +24,7 @@ describe('PositionFinder', () => {
 				buildTestItem(0, 2, 'p:2', false),
 				buildTestItem(0, 3, 'p:3', false),
 			];
-			chai.expect(findOptimalPosition(placeIn, places)).to.equal(1);
+			chai.expect(findOptimalPosition(placeIn, places, null)).to.equal(1);
 		});
 
 		it('should add at correct place by air distance and respect sticky at beginning', () => {
@@ -34,7 +34,7 @@ describe('PositionFinder', () => {
 				buildTestItem(0, 2, 'p:2', false),
 				buildTestItem(0, 3, 'p:3', false),
 			];
-			chai.expect(findOptimalPosition(placeIn, places)).to.equal(1);
+			chai.expect(findOptimalPosition(placeIn, places, null)).to.equal(1);
 		});
 
 		it('should add at correct place by air distance and respect sticky at the and', () => {
@@ -44,7 +44,7 @@ describe('PositionFinder', () => {
 				buildTestItem(0, 2, 'p:2', false),
 				buildTestItem(0, 3, 'p:3', true),
 			];
-			chai.expect(findOptimalPosition(placeIn, places)).to.equal(2);
+			chai.expect(findOptimalPosition(placeIn, places, null)).to.equal(2);
 		});
 
 		it('should add by default sticky place as last', () => {
@@ -54,7 +54,7 @@ describe('PositionFinder', () => {
 				buildTestItem(0, 1, 'p:0', false),
 				buildTestItem(0, 3, 'p:1', false),
 			];
-			chai.expect(findOptimalPosition(placeIn, places)).to.equal(2);
+			chai.expect(findOptimalPosition(placeIn, places, null)).to.equal(2);
 		});
 
 		it('should add by default sticky place to order when other sticky is present', () => {
@@ -65,7 +65,43 @@ describe('PositionFinder', () => {
 				buildTestItem(0, 2, 'p:2', false),
 				buildTestItem(0, 3, 'p:3', true),
 			];
-			chai.expect(findOptimalPosition(placeIn, places)).to.equal(0);
+			chai.expect(findOptimalPosition(placeIn, places, null)).to.equal(0);
+		});
+
+		it('should add to second position if only place is sticky and next day is empty', () => {
+			const placeIn = buildTestPlace(0, 0, 'p:2');
+			placeIn.categories = ['sleeping'];
+			const places = [
+				buildTestItem(0, 1, 'p:0', true),
+			];
+			chai.expect(findOptimalPosition(placeIn, places, [])).to.equal(1);
+		});
+
+		it('should add to second position if only place is sticky and next begins with other item', () => {
+			const placeIn = buildTestPlace(0, 0, 'p:2');
+			placeIn.categories = ['sleeping'];
+			const places = [
+				buildTestItem(0, 1, 'p:0', true),
+			];
+			chai.expect(findOptimalPosition(placeIn, places, [buildTestItem(0, 1, 'p:1', true)])).to.equal(1);
+		});
+
+		it('should add to first position if only place is sticky and next begins with same item', () => {
+			const placeIn = buildTestPlace(0, 0, 'p:2');
+			placeIn.categories = ['sleeping'];
+			const places = [
+				buildTestItem(0, 1, 'p:0', true),
+			];
+			chai.expect(findOptimalPosition(placeIn, places, [buildTestItem(0, 1, 'p:0', true)])).to.equal(0);
+		});
+
+		it('should add to first position if only place is sticky and next day does not exists', () => {
+			const placeIn = buildTestPlace(0, 0, 'p:2');
+			placeIn.categories = ['sleeping'];
+			const places = [
+				buildTestItem(0, 1, 'p:0', true),
+			];
+			chai.expect(findOptimalPosition(placeIn, places, null)).to.equal(0);
 		});
 	});
 });

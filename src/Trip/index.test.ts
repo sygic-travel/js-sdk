@@ -10,6 +10,7 @@ import { setEnvironment } from '../Settings';
 import * as PlaceTestData from '../TestData/PlacesApiResponses';
 import * as TripTestData from '../TestData/TripApiResponses';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
+import * as User from '../User';
 import * as Xhr from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
 
@@ -24,6 +25,9 @@ describe('TripController', () => {
 
 	beforeEach(() => {
 		sandbox = sinon.sandbox.create();
+		sandbox.stub(User, 'getUserSettings').returns(new Promise<User.UserSettings>((resolve) => {
+			resolve({homePlaceId: null, workPlaceId: null});
+		}));
 		tripsDetailedCache.reset();
 	});
 
