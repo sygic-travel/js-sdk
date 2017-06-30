@@ -130,10 +130,10 @@ describe('PlacesFilter', () => {
 			const filter = new PlacesFilter({
 				zoom: 1
 			});
-			const modifiedFilter = filter.cloneSetMapTile('123');
-			chai.expect(modifiedFilter).to.has.property('_mapTile', '123');
+			const modifiedFilter = filter.cloneSetMapTiles(['123']);
+			chai.expect(modifiedFilter).to.has.property('_mapTiles').deep.equal(['123']);
 			chai.expect(modifiedFilter.zoom).to.be.equal(1);
-			chai.expect(filter).to.has.property('_mapTile').undefined;
+			chai.expect(filter).to.has.property('_mapTiles').undefined;
 		});
 	});
 

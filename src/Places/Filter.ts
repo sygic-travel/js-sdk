@@ -3,7 +3,7 @@ import { Bounds } from '../Geo/Bounds';
 
 export interface PlacesFilterJSON {
 	query?: string;
-	mapTile?: string;
+	mapTiles?: string[];
 	mapSpread?: number;
 	categories?: string[];
 	categoriesOperator?: LogicalOperator;
@@ -39,7 +39,7 @@ export enum LogicalOperator {
 
 export class PlacesFilter {
 	private _query?: string;
-	private _mapTile?: string;
+	private _mapTiles?: string[];
 	private _mapSpread?: number;
 	private _categories?: string[];
 	private _categoriesOperator?: LogicalOperator;
@@ -54,7 +54,7 @@ export class PlacesFilter {
 
 	constructor(placesFilter: PlacesFilterJSON) {
 		this._query = placesFilter.query;
-		this._mapTile = placesFilter.mapTile;
+		this._mapTiles = placesFilter.mapTiles;
 		this._mapSpread = placesFilter.mapSpread;
 		this._categories = placesFilter.categories;
 		this._categoriesOperator = placesFilter.categoriesOperator ? placesFilter.categoriesOperator : LogicalOperator.AND;
@@ -87,9 +87,9 @@ export class PlacesFilter {
 		return Object.assign(that, this, {_limit: value});
 	}
 
-	public cloneSetMapTile(value: string): PlacesFilter {
+	public cloneSetMapTiles(value: string[]): PlacesFilter {
 		const that = Object.create(this);
-		return Object.assign(that, this, {_mapTile: value});
+		return Object.assign(that, this, {_mapTiles: value});
 	}
 
 	get zoom(): number | null  {
@@ -103,8 +103,8 @@ export class PlacesFilter {
 			query.query = this._query;
 		}
 
-		if (this._mapTile) {
-			query.map_tiles = this._mapTile;
+		if (this._mapTiles) {
+			query.map_tiles = this._mapTiles.join('|');
 		}
 
 		if (this._mapSpread) {
