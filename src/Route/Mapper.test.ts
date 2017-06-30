@@ -80,7 +80,7 @@ describe('RouteMapper', () => {
 			const expected: RouteRequest = {
 				origin,
 				destination,
-				avoid: [],
+				avoid: ['unpaved'],
 				chosenMode: 'pedestrian',
 				type: 'fastest',
 				waypoints: [],

@@ -27,7 +27,7 @@ export const mapRouteFromApiResponse = (
 			direction.type = direction.mode === 'car' ? transportType : null;
 		}
 		if (!direction.avoid) {
-			direction.avoid = direction.mode === 'car' ? transportAvoid : ['unpaved'];
+			direction.avoid = direction.mode === 'car' ? transportAvoid : [];
 		}
 		return direction as Direction;
 	});
