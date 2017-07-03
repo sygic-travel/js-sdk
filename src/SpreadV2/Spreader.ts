@@ -58,7 +58,7 @@ const detectRenderSize = (
 
 		const minimalRating = size.zoomLevelLimits[zoom - 1] ?
 			size.zoomLevelLimits[zoom - 1] : size.zoomLevelLimits[size.zoomLevelLimits.length - 1];
-		if (minimalRating && spreadRating <= minimalRating) {
+		if (minimalRating && spreadRating < minimalRating) {
 			continue;
 		}
 
