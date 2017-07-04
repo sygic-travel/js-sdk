@@ -15,6 +15,7 @@ import * as _User from './src/User';
 export function create(apiUrl: string, clientKey: string): StSDK;
 
 export class StSDK {
+	public setUserSession(key: string | null, token: string | null): Promise<void>;
 	public getPlaces(filter: _Place.PlacesFilterJSON): Promise<_Place.Place[]>;
 	public getPlaceDetailed(id: string, photoSize: string): Promise<_Place.Place>;
 	public getPlacesDetailed(id: string[], photoSize: string): Promise<_Place.Place[]>;

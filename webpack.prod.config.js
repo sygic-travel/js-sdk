@@ -1,6 +1,7 @@
 var webpack = require('webpack');
 var path = require("path");
 var OptimizeJsPlugin = require('optimize-js-plugin');
+var cloneDeep = require('lodash.clonedeep');
 
 var baseConfig = {
 	entry: {
@@ -57,11 +58,11 @@ var baseConfig = {
 	]
 };
 
-var browserConfig = baseConfig;
+var browserConfig = cloneDeep(baseConfig);
 browserConfig.output.filename = 'SygicTravelSDK.js';
 browserConfig.target = 'web';
 
-var nodeConfig = baseConfig;
+var nodeConfig = cloneDeep(baseConfig);
 nodeConfig.output.filename = 'SygicTravelSDK.node.js';
 nodeConfig.target = 'node';
 nodeConfig.node = { process: false };
