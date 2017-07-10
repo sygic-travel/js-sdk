@@ -38,13 +38,13 @@ import { getRoutesForTripDay, Route } from './Route';
 import { searchAddress, SearchAddressResult, searchAddressReverse } from './Search';
 import * as Settings from './Settings';
 import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from './Spread';
-import { getTours, Tour, ToursQuery } from './Tours';
 import {
 	CategoriesCoefficients,
 	spread as spreadV2,
 	SpreadResult as SpreadResultV2,
 	SpreadSizeConfig as SpreadSizeConfigV2
 } from './SpreadV2';
+import { getTours, Tour, ToursQuery } from './Tours';
 import {
 	addDaysToTrip,
 	addPlaceToDay,
