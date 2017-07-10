@@ -8,6 +8,7 @@ import * as _Route from './src/Route';
 import * as _Search from './src/Search';
 import * as _Spread from './src/Spread';
 import * as _SpreadV2 from './src/SpreadV2';
+import * as _Tours from './src/Tours';
 import * as _Trip from './src/Trip';
 import * as _User from './src/User';
 
@@ -187,6 +188,10 @@ export class StSDK {
 	/**
 	 * @experimental
 	 */
+	public getTours(toursQuery: _Tours.ToursQuery): Promise<_Tours.Tour[]>
+	/**
+	 * @experimental
+	 */
 	public addPlaceReview(placeId: string, rating: number, message: string): Promise<_Place.PlaceReview>
 	/**
 	 * @experimental
@@ -279,4 +284,11 @@ export namespace User {
 
 export namespace Changes {
 	export import ChangeNotification = _Changes.ChangeNotification;
+}
+
+export namespace Tours {
+	export import Tour = _Tours.Tour;
+	export import ToursQuery = _Tours.ToursQuery;
+	export import ToursQueryDirection = _Tours.ToursQueryDirection;
+	export import ToursQuerySortBy = _Tours.ToursQuerySortBy;
 }

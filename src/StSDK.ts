@@ -44,6 +44,7 @@ import {
 	SpreadResult as SpreadResultV2,
 	SpreadSizeConfig as SpreadSizeConfigV2
 } from './SpreadV2';
+import { getTours, Tour, ToursQuery } from './Tours';
 import {
 	addDaysToTrip,
 	addPlaceToDay,
@@ -372,6 +373,13 @@ export default class StSDK extends BaseSDK {
 		handler: null | TripConflictHandler
 	): void {
 		Settings.setTripConflictHandler(handler);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public getTours(toursQuery: ToursQuery): Promise<Tour[]> {
+		return getTours(toursQuery);
 	}
 
 	/**
