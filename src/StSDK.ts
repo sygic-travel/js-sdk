@@ -38,6 +38,7 @@ import { getRoutesForTripDay, Route } from './Route';
 import { searchAddress, SearchAddressResult, searchAddressReverse } from './Search';
 import * as Settings from './Settings';
 import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from './Spread';
+import { getTours, Tour, ToursQuery } from './Tours';
 import {
 	CategoriesCoefficients,
 	spread as spreadV2,
@@ -372,6 +373,13 @@ export default class StSDK extends BaseSDK {
 		handler: null | TripConflictHandler
 	): void {
 		Settings.setTripConflictHandler(handler);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public getTours(toursQuery: ToursQuery): Promise<Tour[]> {
+		return getTours(toursQuery);
 	}
 
 	/**
