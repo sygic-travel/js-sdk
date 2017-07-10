@@ -6,6 +6,7 @@ import { placesDetailedCache as cache } from '../Cache';
 import { Medium } from '../Media/Media';
 import { Day, ItineraryItem } from '../Trip';
 import { get } from '../Xhr';
+import { get, post } from '../Xhr';
 import { PlacesFilter } from './Filter';
 import {
 	mapPlaceApiResponseToPlaces,
@@ -13,10 +14,13 @@ import {
 	mapPlaceDetailedBatchApiResponseToPlaces,
 	mapPlaceGeometryApiResponseToPlaceGeometry,
 	mapPlaceOpeningHours
+	mapPlaceOpeningHours,
+	mapPlaceReview
 } from './Mapper';
 import { Place } from './Place';
 import { PlaceGeometry } from './PlaceGeometry';
 import { PlaceOpeningHours } from './PlaceOpeningHours';
+import { PlaceReview } from './PlaceReview';
 
 export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
 	const apiResponse = await api.getPlaces(filter);
@@ -133,3 +137,16 @@ export async function getPlaceOpeningHours(id: string, from: string, to: string)
 
 	return mapPlaceOpeningHours(apiResponse.data.opening_hours);
 }
+
+export async function addItemReview(placeId: number, rating: number, message: string): Promise<PlaceReview> {
+	const apiResponse = await post('reviews', {
+		item_guid: placeId,
+		rating,
+		message
+	});
+	if (!apiResponse.data.hasOwnProperty('review')) {
+		throw new Error('Wrong API response');
+	}
+	return mapPlaceReview(apiResponse.data.review);
+}
+

@@ -213,4 +213,14 @@ describe('PlacesDataAccess', () => {
 				} as PlaceOpeningHours);
 		});
 	});
+
+	describe('#addItemReview', () => {
+		it('should correctly add item review', () => {
+			sandbox.stub(Xhr, 'post').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, TestData.placeReview));
+			}));
+			return chai.expect(Dao.addItemReview(123, 1, 'test'))
+				.to.eventually.deep.equal(ExpectedResults.placeReview);
+		});
+	});
 });

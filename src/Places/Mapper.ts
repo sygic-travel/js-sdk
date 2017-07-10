@@ -7,6 +7,7 @@ import { Place } from './Place';
 import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
 import { PlaceOpeningHours } from './PlaceOpeningHours';
+import { PlaceReview } from './PlaceReview';
 
 const defaultPhotoSize = '300x300';
 
@@ -103,4 +104,8 @@ export const mapPlaceGeometryApiResponseToPlaceGeometry = (placeGeometry: any): 
 
 export const mapPlaceOpeningHours = (placeOpeningHours: any): PlaceOpeningHours => {
 	return placeOpeningHours as PlaceOpeningHours;
+};
+
+export const mapPlaceReview = (placeReview: any): PlaceReview => {
+	return camelizeKeys(placeReview) as PlaceReview;
 };

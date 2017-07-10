@@ -5,6 +5,7 @@ import { isStickyByDefault, Place } from './Place';
 import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
 import { DayOpeningHours, PlaceOpeningHours } from './PlaceOpeningHours';
+import { PlaceReview } from './PlaceReview';
 
 export {
 	isStickyByDefault,
@@ -15,6 +16,7 @@ export {
 	PlaceGeometry,
 	PlaceDetail,
 	PlaceOpeningHours,
+	PlaceReview,
 	Reference,
 	Tag,
 	Description,
@@ -44,3 +46,8 @@ export async function getPlaceGeometry(id: string): Promise<PlaceGeometry> {
 export async function getPlaceOpeningHours(id: string, from: string, to: string): Promise<PlaceOpeningHours> {
 	return await Dao.getPlaceOpeningHours(id, from, to);
 }
+
+export async function addItemReview(placeId: number, raring: number, message: string): Promise<PlaceReview> {
+	return Dao.addItemReview(placeId, raring, message);
+}
+
