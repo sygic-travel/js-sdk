@@ -2,6 +2,8 @@ import { Location } from '../Geo';
 import * as Media from '../Media/Media';
 import { Place } from '../Places/Place';
 import { Description, PlaceDetail, Reference, Tag } from '../Places/PlaceDetail';
+import { PlaceReview } from '../Places/PlaceReview';
+import { PlaceReviewsData } from '../Places/PlaceReviewsData';
 
 /* tslint:disable */
 export const placeDetailedEiffelTowerWithoutMedia: Place = {
@@ -207,4 +209,51 @@ export const mappedMedia = {
 	} as Media.Medium,
 	videoPreview: null
 } as Media.MainMedia;
+
+export const placeReview = {
+	id: 1,
+	userId: '4ff1a1c21977d',
+	userName: 'Test',
+	itemGuid: 'poi:530',
+	message: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
+	rating: 4,
+	votesUp: 5,
+	votesDown: 1,
+	votesScore: 4,
+	currentUserVote: 1,
+	createdAt: '2017-01-30T09:09:45+01:00',
+	updatedAt: '2017-02-30T09:09:45+01:00'
+} as PlaceReview;
+
+export const placeReviewsData = {
+	rating: 10,
+	currentUserHasReview: false,
+	reviews: [{
+		id: 1,
+		userId: '4ff1a1c21977d',
+		userName: 'Test',
+		itemGuid: 'poi:530',
+		message: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
+		rating: 4,
+		votesUp: 5,
+		votesDown: 1,
+		votesScore: 4,
+		currentUserVote: 1,
+		createdAt: '2017-01-30T09:09:45+01:00',
+		updatedAt: '2017-02-30T09:09:45+01:00'
+	} as PlaceReview, {
+		id: 2,
+		userId: '4ff1a1c21977d',
+		userName: 'Test',
+		itemGuid: 'poi:530',
+		message: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
+		rating: 4,
+		votesUp: 5,
+		votesDown: 1,
+		votesScore: 4,
+		currentUserVote: 1,
+		createdAt: '2017-01-30T09:09:45+01:00',
+		updatedAt: '2017-02-30T09:09:45+01:00'
+	} as PlaceReview]
+} as PlaceReviewsData;
 /* tslint:enable */

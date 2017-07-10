@@ -184,7 +184,22 @@ export class StSDK {
 		handler: null | ((conflictInfo: _Trip.TripConflictInfo, trip: _Trip.Trip)
 			=> Promise<_Trip.TripConflictClientResolution>)
 	): void
-
+	/**
+	 * @experimental
+	 */
+	public addPlaceReview(placeId: string, rating: number, message: string): Promise<_Place.PlaceReview>
+	/**
+	 * @experimental
+	 */
+	public deletePlaceReview(reviewId: number): Promise<void>
+	/**
+	 * @experimental
+	 */
+	public getPlaceReviews(placeId: string, limit: number, page: number): Promise<_Place.PlaceReviewsData>
+	/**
+	 * @experimental
+	 */
+	public voteOnReview(reviewId: number, voteValue: number): Promise<void>
 }
 
 export namespace Places {
@@ -196,6 +211,8 @@ export namespace Places {
 	export import Reference = _Place.Reference;
 	export import Tag = _Place.Tag;
 	export import Description = _Place.Description;
+	export import PlaceReview = _Place.PlaceReview;
+	export import PlaceReviewsData = _Place.PlaceReviewsData;
 }
 
 export namespace Geo {

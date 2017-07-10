@@ -5,18 +5,22 @@ import * as api from '../Api';
 import { placesDetailedCache as cache } from '../Cache';
 import { Medium } from '../Media/Media';
 import { Day, ItineraryItem } from '../Trip';
-import { get } from '../Xhr';
+import { delete_, get, post, put } from '../Xhr';
 import { PlacesFilter } from './Filter';
 import {
 	mapPlaceApiResponseToPlaces,
 	mapPlaceDetailedApiResponseToPlace,
 	mapPlaceDetailedBatchApiResponseToPlaces,
 	mapPlaceGeometryApiResponseToPlaceGeometry,
-	mapPlaceOpeningHours
+	mapPlaceOpeningHours,
+	mapPlaceReview,
+	mapPlaceReviewsData
 } from './Mapper';
 import { Place } from './Place';
 import { PlaceGeometry } from './PlaceGeometry';
 import { PlaceOpeningHours } from './PlaceOpeningHours';
+import { PlaceReview } from './PlaceReview';
+import { PlaceReviewsData } from './PlaceReviewsData';
 
 export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
 	const apiResponse = await api.getPlaces(filter);
@@ -132,4 +136,40 @@ export async function getPlaceOpeningHours(id: string, from: string, to: string)
 	}
 
 	return mapPlaceOpeningHours(apiResponse.data.opening_hours);
+}
+
+export async function addPlaceReview(placeId: string, rating: number, message: string): Promise<PlaceReview> {
+	const apiResponse = await post('reviews', {
+		item_guid: placeId,
+		rating,
+		message
+	});
+	if (!apiResponse.data.hasOwnProperty('review')) {
+		throw new Error('Wrong API response');
+	}
+	return mapPlaceReview(apiResponse.data.review);
+}
+
+export async function deletePlaceReview(reviewId: number): Promise<void> {
+	await delete_(`reviews/${reviewId}`, null);
+}
+
+export async function getPlaceReviews(placeId: string, limit: number, page: number): Promise<PlaceReviewsData> {
+	const apiResponse = await get(`items/${placeId}/reviews` + stringify({
+		limit,
+		page
+	}));
+	if (!apiResponse.data.hasOwnProperty('reviews') ||
+		!apiResponse.data.hasOwnProperty('rating') ||
+		!apiResponse.data.hasOwnProperty('current_user_has_review')
+	) {
+		throw new Error('Wrong API response');
+	}
+	return mapPlaceReviewsData(apiResponse.data);
+}
+
+export async function voteOnReview(reviewId: number, voteValue: number): Promise<void> {
+	await put(`reviews/${reviewId}/votes`, {
+		value: voteValue
+	});
 }

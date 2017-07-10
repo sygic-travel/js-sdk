@@ -233,4 +233,53 @@ export const places = {
 		}
 	]
 };
+
+export const placeReview = {
+	review: {
+		id: 1,
+		user_id: "4ff1a1c21977d",
+		user_name: "Test",
+		item_guid: "poi:530",
+		message: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
+		rating: 4,
+		votes_up: 5,
+		votes_down: 1,
+		votes_score: 4,
+		current_user_vote: 1,
+		created_at: "2017-01-30T09:09:45+01:00",
+		updated_at: "2017-02-30T09:09:45+01:00"
+	}
+};
+
+export const placeReviewsData = {
+	rating: 10,
+	current_user_has_review: false,
+	reviews: [{
+		id: 1,
+		user_id: "4ff1a1c21977d",
+		user_name: "Test",
+		item_guid: "poi:530",
+		message: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
+		rating: 4,
+		votes_up: 5,
+		votes_down: 1,
+		votes_score: 4,
+		current_user_vote: 1,
+		created_at: "2017-01-30T09:09:45+01:00",
+		updated_at: "2017-02-30T09:09:45+01:00"
+	}, {
+		id: 2,
+		user_id: "4ff1a1c21977d",
+		user_name: "Test",
+		item_guid: "poi:530",
+		message: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
+		rating: 4,
+		votes_up: 5,
+		votes_down: 1,
+		votes_score: 4,
+		current_user_vote: 1,
+		created_at: "2017-01-30T09:09:45+01:00",
+		updated_at: "2017-02-30T09:09:45+01:00"
+	}]
+};
 /* tslint:enable */
