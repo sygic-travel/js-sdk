@@ -5,7 +5,7 @@ import * as api from '../Api';
 import { placesDetailedCache as cache } from '../Cache';
 import { Medium } from '../Media/Media';
 import { Day, ItineraryItem } from '../Trip';
-import { delete_, get, post } from '../Xhr';
+import { delete_, get, post, put } from '../Xhr';
 import { PlacesFilter } from './Filter';
 import {
 	mapPlaceApiResponseToPlaces,
@@ -168,3 +168,8 @@ export async function getItemReviews(placeId: string, limit: number, page: numbe
 	return mapPlaceReviewsData(apiResponse.data);
 }
 
+export async function voteOnReview(reviewId: number, voteValue: number): Promise<void> {
+	await put(`reviews/${reviewId}/votes`, {
+		value: voteValue
+	});
+}

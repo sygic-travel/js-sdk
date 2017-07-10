@@ -60,3 +60,6 @@ export async function getItemReviews(placeId: string, limit: number, page: numbe
 	return Dao.getItemReviews(placeId, limit, page);
 }
 
+export async function voteOnReview(reviewId: number, voteValue: number): Promise<void> {
+	return Dao.voteOnReview(reviewId, voteValue);
+}
