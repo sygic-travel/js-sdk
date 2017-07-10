@@ -223,4 +223,14 @@ describe('PlacesDataAccess', () => {
 				.to.eventually.deep.equal(ExpectedResults.placeReview);
 		});
 	});
+
+	describe('#getItemReviews', () => {
+		it('should correctly get and map item reviews with additional data', () => {
+			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, TestData.placeReviewsData));
+			}));
+			return chai.expect(Dao.getItemReviews('poi:540', 1, 1))
+				.to.eventually.deep.equal(ExpectedResults.placeReviewsData);
+		});
+	});
 });

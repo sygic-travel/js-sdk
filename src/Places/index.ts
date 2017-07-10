@@ -6,6 +6,7 @@ import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
 import { DayOpeningHours, PlaceOpeningHours } from './PlaceOpeningHours';
 import { PlaceReview } from './PlaceReview';
+import { PlaceReviewsData } from './PlaceReviewsData';
 
 export {
 	isStickyByDefault,
@@ -53,5 +54,9 @@ export async function addItemReview(placeId: number, raring: number, message: st
 
 export async function deleteItemReview(reviewId: number): Promise<void> {
 	return Dao.deleteItemReview(reviewId);
+}
+
+export async function getItemReviews(placeId: string, limit: number, page: number): Promise<PlaceReviewsData> {
+	return Dao.getItemReviews(placeId, limit, page);
 }
 

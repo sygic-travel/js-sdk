@@ -8,6 +8,7 @@ import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
 import { PlaceOpeningHours } from './PlaceOpeningHours';
 import { PlaceReview } from './PlaceReview';
+import { PlaceReviewsData } from './PlaceReviewsData';
 
 const defaultPhotoSize = '300x300';
 
@@ -108,4 +109,12 @@ export const mapPlaceOpeningHours = (placeOpeningHours: any): PlaceOpeningHours 
 
 export const mapPlaceReview = (placeReview: any): PlaceReview => {
 	return camelizeKeys(placeReview) as PlaceReview;
+};
+
+export const mapPlaceReviewsData = (placeReviewsData: any): PlaceReviewsData => {
+	return {
+		rating: placeReviewsData.rating,
+		currentUserHasReview: placeReviewsData.current_user_has_review,
+		reviews: placeReviewsData.reviews.map((placeReview: any) => mapPlaceReview(placeReview))
+	} as PlaceReviewsData;
 };

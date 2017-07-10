@@ -5,7 +5,7 @@ import * as api from '../Api';
 import { placesDetailedCache as cache } from '../Cache';
 import { Medium } from '../Media/Media';
 import { Day, ItineraryItem } from '../Trip';
-import { get, post, delete_ } from '../Xhr';
+import { delete_, get, post } from '../Xhr';
 import { PlacesFilter } from './Filter';
 import {
 	mapPlaceApiResponseToPlaces,
@@ -13,12 +13,14 @@ import {
 	mapPlaceDetailedBatchApiResponseToPlaces,
 	mapPlaceGeometryApiResponseToPlaceGeometry,
 	mapPlaceOpeningHours,
-	mapPlaceReview
+	mapPlaceReview,
+	mapPlaceReviewsData
 } from './Mapper';
 import { Place } from './Place';
 import { PlaceGeometry } from './PlaceGeometry';
 import { PlaceOpeningHours } from './PlaceOpeningHours';
 import { PlaceReview } from './PlaceReview';
+import { PlaceReviewsData } from './PlaceReviewsData';
 
 export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
 	const apiResponse = await api.getPlaces(filter);
@@ -150,5 +152,19 @@ export async function addItemReview(placeId: number, rating: number, message: st
 
 export async function deleteItemReview(reviewId: number): Promise<void> {
 	await delete_(`reviews/${reviewId}`, null);
+}
+
+export async function getItemReviews(placeId: string, limit: number, page: number): Promise<PlaceReviewsData> {
+	const apiResponse = await get(`items/${placeId}/reviews` + stringify({
+		limit,
+		page
+	}));
+	if (!apiResponse.data.hasOwnProperty('reviews') ||
+		!apiResponse.data.hasOwnProperty('rating') ||
+		!apiResponse.data.hasOwnProperty('current_user_has_review')
+	) {
+		throw new Error('Wrong API response');
+	}
+	return mapPlaceReviewsData(apiResponse.data);
 }
 
