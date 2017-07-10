@@ -16,17 +16,23 @@ import { Forecast, getDestinationWeather } from './Forecast';
 import { Bounds, Location } from './Geo';
 import { Medium } from './Media';
 import {
+	addPlaceReview,
+	deletePlaceReview,
 	getPlaceDetailed,
 	getPlaceGeometry,
 	getPlaceMedia,
 	getPlaceOpeningHours,
+	getPlaceReviews,
 	getPlaces,
 	getPlacesDetailed,
 	Place,
 	PlaceGeometry,
 	PlaceOpeningHours,
+	PlaceReview,
+	PlaceReviewsData,
 	PlacesFilter,
-	PlacesFilterJSON
+	PlacesFilterJSON,
+	voteOnReview
 } from './Places';
 import { getRoutesForTripDay, Route } from './Route';
 import { searchAddress, SearchAddressResult, searchAddressReverse } from './Search';
@@ -366,5 +372,33 @@ export default class StSDK extends BaseSDK {
 		handler: null | TripConflictHandler
 	): void {
 		Settings.setTripConflictHandler(handler);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public addPlaceReview(placeId: string, rating: number, message: string): Promise<PlaceReview> {
+		return addPlaceReview(placeId, rating, message);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public deletePlaceReview(reviewId: number): Promise<void> {
+		return deletePlaceReview(reviewId);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public getPlaceReviews(placeId: string, limit: number, page: number): Promise<PlaceReviewsData> {
+		return getPlaceReviews(placeId, limit, page);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public voteOnReview(reviewId: number, voteValue: number): Promise<void> {
+		return voteOnReview(reviewId, voteValue);
 	}
 }

@@ -138,7 +138,7 @@ export async function getPlaceOpeningHours(id: string, from: string, to: string)
 	return mapPlaceOpeningHours(apiResponse.data.opening_hours);
 }
 
-export async function addItemReview(placeId: number, rating: number, message: string): Promise<PlaceReview> {
+export async function addPlaceReview(placeId: string, rating: number, message: string): Promise<PlaceReview> {
 	const apiResponse = await post('reviews', {
 		item_guid: placeId,
 		rating,
@@ -150,11 +150,11 @@ export async function addItemReview(placeId: number, rating: number, message: st
 	return mapPlaceReview(apiResponse.data.review);
 }
 
-export async function deleteItemReview(reviewId: number): Promise<void> {
+export async function deletePlaceReview(reviewId: number): Promise<void> {
 	await delete_(`reviews/${reviewId}`, null);
 }
 
-export async function getItemReviews(placeId: string, limit: number, page: number): Promise<PlaceReviewsData> {
+export async function getPlaceReviews(placeId: string, limit: number, page: number): Promise<PlaceReviewsData> {
 	const apiResponse = await get(`items/${placeId}/reviews` + stringify({
 		limit,
 		page

@@ -18,6 +18,7 @@ export {
 	PlaceDetail,
 	PlaceOpeningHours,
 	PlaceReview,
+	PlaceReviewsData,
 	Reference,
 	Tag,
 	Description,
@@ -48,16 +49,16 @@ export async function getPlaceOpeningHours(id: string, from: string, to: string)
 	return await Dao.getPlaceOpeningHours(id, from, to);
 }
 
-export async function addItemReview(placeId: number, raring: number, message: string): Promise<PlaceReview> {
-	return Dao.addItemReview(placeId, raring, message);
+export async function addPlaceReview(placeId: string, rating: number, message: string): Promise<PlaceReview> {
+	return Dao.addPlaceReview(placeId, rating, message);
 }
 
-export async function deleteItemReview(reviewId: number): Promise<void> {
-	return Dao.deleteItemReview(reviewId);
+export async function deletePlaceReview(reviewId: number): Promise<void> {
+	return Dao.deletePlaceReview(reviewId);
 }
 
-export async function getItemReviews(placeId: string, limit: number, page: number): Promise<PlaceReviewsData> {
-	return Dao.getItemReviews(placeId, limit, page);
+export async function getPlaceReviews(placeId: string, limit: number, page: number): Promise<PlaceReviewsData> {
+	return Dao.getPlaceReviews(placeId, limit, page);
 }
 
 export async function voteOnReview(reviewId: number, voteValue: number): Promise<void> {
