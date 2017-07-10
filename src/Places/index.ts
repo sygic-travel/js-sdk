@@ -51,3 +51,7 @@ export async function addItemReview(placeId: number, raring: number, message: st
 	return Dao.addItemReview(placeId, raring, message);
 }
 
+export async function deleteItemReview(reviewId: number): Promise<void> {
+	return Dao.deleteItemReview(reviewId);
+}
+

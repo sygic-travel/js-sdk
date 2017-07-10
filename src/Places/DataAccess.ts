@@ -5,15 +5,13 @@ import * as api from '../Api';
 import { placesDetailedCache as cache } from '../Cache';
 import { Medium } from '../Media/Media';
 import { Day, ItineraryItem } from '../Trip';
-import { get } from '../Xhr';
-import { get, post } from '../Xhr';
+import { get, post, delete_ } from '../Xhr';
 import { PlacesFilter } from './Filter';
 import {
 	mapPlaceApiResponseToPlaces,
 	mapPlaceDetailedApiResponseToPlace,
 	mapPlaceDetailedBatchApiResponseToPlaces,
 	mapPlaceGeometryApiResponseToPlaceGeometry,
-	mapPlaceOpeningHours
 	mapPlaceOpeningHours,
 	mapPlaceReview
 } from './Mapper';
@@ -148,5 +146,9 @@ export async function addItemReview(placeId: number, rating: number, message: st
 		throw new Error('Wrong API response');
 	}
 	return mapPlaceReview(apiResponse.data.review);
+}
+
+export async function deleteItemReview(reviewId: number): Promise<void> {
+	await delete_(`reviews/${reviewId}`, null);
 }
 
