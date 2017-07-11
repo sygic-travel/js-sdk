@@ -1,42 +1,69 @@
-machine:
-  node:
-    version: 6.9.1
-  environment:
-    YARN_VERSION: 0.23.2
-    PATH: "${PATH}:${HOME}/.yarn/bin:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin"
-
-dependencies:
-  pre:
-    - |
-      if [[ ! -e ~/.yarn/bin/yarn || $(yarn --version) != "${YARN_VERSION}" ]]; then
-        curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
-      fi
-  cache_directories:
-    - ~/.yarn
-    - ~/.cache/yarn
-  override:
-    - yarn
-
-compile:
-  override:
-    - yarn build
-    - yarn doc
-
-test:
-  override:
-    - yarn test
-
+version: 2
+jobs:
+  build:
+    working_directory: ~/js-sdk
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - restore_cache:
+          key: build-bin-cache
+      - run:
+          name: Install runtime
+          working_directory: ~/build-bin
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y rsync
+            if [[ ! -f ~/build-bin/aws/bin/aws ]]; then
+              sudo apt-get install -y python-dev
+              curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+              unzip awscli-bundle.zip
+              sudo ./awscli-bundle/install -i ~/build-bin/aws
+            fi
+      - save_cache:
+          key: build-bin-cache
+          paths:
+            - ~/build-bin
+      - restore_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install dependencies
+          command: |
+            yarn
+      - save_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
+            - ~/.cache/yarn
+      - run:
+          name: Run tests
+          command: |
+            yarn test
+      - run:
+          name: Build
+          command: |
+            yarn build
+            yarn doc
+      - store_artifacts:
+          path: dist
+          destination: dist
+      - deploy:
+          name: Deploy
+          command: |
+            if [[ $CIRCLE_BRANCH == "master" ]] || [[ ! -z $CIRCLE_TAG ]]; then
+              export DEPLOY_TARGET=master
+              if [[ ! -z $CIRCLE_TAG ]]; then
+                export DEPLOY_TARGET=$CIRCLE_TAG
+              fi
+              mkdir -p package && rsync -av ./ ./package --exclude='package' --exclude='node_modules/' --exclude='.git' && tar -zcvf ./dist/SygicTravelSDK.tgz package && rm -rf package
+              ~/build-bin/aws/bin/aws s3 sync ./dist s3://tripomatic-assets/js-sdk/${DEPLOY_TARGET} --delete --acl public-read
+              ~/build-bin/aws/bin/aws s3 sync ./doc s3://docs.sygictravelapi.com/js-sdk/${DEPLOY_TARGET} --delete --acl public-read
+            fi
 deployment:
-  production:
+  # https://discuss.circleci.com/t/build-on-tag/9864/31
+  fake_deploy_for_tags:
     tag: /v[0-9]+(\.[0-9]+)*(\-[a-z]*)*/
     commands:
-      - mkdir -p package && rsync -av ./ ./package --exclude='package' --exclude='node_modules/' --exclude='.git' && tar -zcvf ./dist/SygicTravelSDK.tgz package && rm -rf package
-      - aws s3 sync ./dist s3://tripomatic-assets/js-sdk/${CIRCLE_TAG} --delete --acl public-read
-      - aws s3 sync ./doc s3://docs.sygictravelapi.com/js-sdk/${CIRCLE_TAG} --delete --acl public-read
-  master:
-    branch: master
-    owner: sygic-travel
-    commands:
-      - mkdir -p package && rsync -av ./ ./package --exclude='package' --exclude='node_modules/' --exclude='.git' && tar -zcvf ./dist/SygicTravelSDK.tgz package && rm -rf package
-      - aws s3 sync ./dist s3://tripomatic-assets/js-sdk/master --delete --acl public-read
-      - aws s3 sync ./doc s3://docs.sygictravelapi.com/js-sdk/master --delete --acl public-read
+      - echo "Hacky launching of build on tag push"
+
+
