@@ -140,3 +140,11 @@ async function handleIgnoredConflict(
 	}
 	await tripsDetailedCache.set(tripServerResponse.data.trip.id, tripServerResponse.data.trip);
 }
+
+export async function emptyTripsTrash(): Promise<string[]> {
+	const apiResponse = await post('trips/empty-trash', null);
+	if (!apiResponse.data.hasOwnProperty('deleted_trip_ids')) {
+		throw new Error('Wrong API response');
+	}
+	return apiResponse.data.deleted_trip_ids as string[];
+}

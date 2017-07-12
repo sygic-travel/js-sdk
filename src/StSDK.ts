@@ -50,6 +50,7 @@ import {
 	addPlaceToDay,
 	cloneTrip,
 	createTrip,
+	emptyTripsTrash,
 	getTripDetailed,
 	getTrips,
 	movePlaceInDay,
@@ -408,5 +409,12 @@ export default class StSDK extends BaseSDK {
 	 */
 	public voteOnReview(reviewId: number, voteValue: number): Promise<void> {
 		return voteOnReview(reviewId, voteValue);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public emptyTripsTrash(): Promise<string[]> {
+		return emptyTripsTrash();
 	}
 }

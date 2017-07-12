@@ -205,6 +205,10 @@ export class StSDK {
 	 * @experimental
 	 */
 	public voteOnReview(reviewId: number, voteValue: number): Promise<void>
+	/**
+	 * @experimental
+	 */
+	public emptyTripsTrash(): Promise<string[]>
 }
 
 export namespace Places {
