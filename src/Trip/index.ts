@@ -173,6 +173,7 @@ export async function addPlaceToDay(
 ): Promise<Trip> {
 	let trip: Trip = await getTripDetailed(tripId);
 	const place: Place = await getPlaceDetailed(placeId, '300x300');
+	const userSettings = await getUserSettings();
 
 	let day: Day;
 	if (trip.days && trip.days[dayIndex]) {
@@ -182,11 +183,11 @@ export async function addPlaceToDay(
 	}
 
 	if (typeof positionInDay !== 'undefined' && positionInDay !== null) {
-		return Dao.updateTrip(TripManipulator.addPlaceToDay(trip, place, dayIndex, await getUserSettings(), positionInDay));
+		return Dao.updateTrip(TripManipulator.addPlaceToDay(trip, place, dayIndex, userSettings, positionInDay));
 	}
 
 	if (replaceSticky) {
-		return Dao.updateTrip(TripManipulator.replaceStickyPlace(trip, place, dayIndex, await getUserSettings()));
+		return Dao.updateTrip(TripManipulator.replaceLastStickyPlace(trip, place, dayIndex, userSettings));
 	}
 
 	let dayItems: ItineraryItem[] = [];
@@ -209,15 +210,17 @@ export async function addPlaceToDay(
 		dayItems,
 		nextDayItinerary
 	);
-	trip = TripManipulator.addPlaceToDay(trip, place, dayIndex, await getUserSettings(), positionInDay);
+	trip = TripManipulator.addPlaceToDay(trip, place, dayIndex, userSettings, positionInDay);
 
 	if (
 		(isStickyByDefault(place)) &&
 		nextDayItinerary &&
 		(!nextDayItinerary.length || !nextDayItinerary[0].isSticky)
 	) {
-		trip = TripManipulator.addPlaceToDay(trip, place, nextDayIndex, await getUserSettings(), 0);
+		trip = TripManipulator.addPlaceToDay(trip, place, nextDayIndex, userSettings, 0);
 	}
+
+	trip = TripManipulator.replaceSiblingParentDestination(trip, dayIndex, positionInDay, place.parents, userSettings);
 	return Dao.updateTrip(trip);
 }
 

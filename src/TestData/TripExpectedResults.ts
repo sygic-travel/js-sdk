@@ -1,3 +1,5 @@
+import * as cloneDeep from 'lodash.clonedeep';
+
 import { Day, ItineraryItem, Trip, TripMedia, TripPrivileges } from '../Trip/Trip';
 import { placeDetailedEiffelTowerWithoutMedia } from './PlacesExpectedResults';
 
@@ -36,10 +38,10 @@ export const tripList = [{
 	} as TripMedia
 } as Trip];
 
-const itineraryPlace1 = Object.assign({}, placeDetailedEiffelTowerWithoutMedia);
-const itineraryPlace2 = Object.assign({}, placeDetailedEiffelTowerWithoutMedia);
-const itineraryPlace3 = Object.assign({}, placeDetailedEiffelTowerWithoutMedia);
-const itineraryPlace4 = Object.assign({}, placeDetailedEiffelTowerWithoutMedia);
+const itineraryPlace1 = cloneDeep(placeDetailedEiffelTowerWithoutMedia);
+const itineraryPlace2 = cloneDeep(placeDetailedEiffelTowerWithoutMedia);
+const itineraryPlace3 = cloneDeep(placeDetailedEiffelTowerWithoutMedia);
+const itineraryPlace4 = cloneDeep(placeDetailedEiffelTowerWithoutMedia);
 itineraryPlace1.id = 'poi:1';
 itineraryPlace2.id = 'poi:2';
 itineraryPlace3.id = 'poi:3';

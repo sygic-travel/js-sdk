@@ -387,12 +387,12 @@ describe('TripManipulator', () => {
 
 	});
 
-	describe('#replaceStickyPlace', () => {
+	describe('#replaceLastStickyPlace', () => {
 		it('should throw an error when invalid dayIndex is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			const inputPlace: Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
 
-			return chai.expect(() => Manipulator.replaceStickyPlace(inputTrip, inputPlace, 999, null))
+			return chai.expect(() => Manipulator.replaceLastStickyPlace(inputTrip, inputPlace, 999, null))
 				.to.throw(Error, 'Invalid dayIndex');
 		});
 
@@ -414,8 +414,131 @@ describe('TripManipulator', () => {
 				expectedTrip.days[0].itinerary[1] = item;
 				expectedTrip.days[1].itinerary[0] = item;
 			}
-			const trip = Manipulator.replaceStickyPlace(inputTrip, inputPlace, 0, null);
+			const trip = Manipulator.replaceLastStickyPlace(inputTrip, inputPlace, 0, null);
 			return chai.expect(trip).to.deep.equal(expectedTrip);
+		});
+	});
+
+	describe('#replaceClosestParentDestination', () => {
+		it('should correctly replace destination when poi is added after destination', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+
+			if (inputTrip.days) {
+				inputTrip.days[0].itinerary[0].placeId = 'city:14';
+				const place: Place | null = inputTrip.days[0].itinerary[0].place;
+				if (place) {
+					place.id = 'city:14';
+					inputTrip.days[0].itinerary[0].place = place;
+				}
+			}
+
+			if (expectedTrip.days) {
+				expectedTrip.days[0].itinerary[0].placeId = 'poi:2';
+				expectedTrip.days[0].itinerary[0].isSticky = true;
+				const place: Place | null = expectedTrip.days[0].itinerary[0].place;
+				if (place) {
+					place.id = 'poi:2';
+					expectedTrip.days[0].itinerary[0].place = place;
+				}
+				expectedTrip.days[0].itinerary.pop();
+			}
+
+			return chai.expect(Manipulator.replaceSiblingParentDestination(inputTrip, 0, 1, ['city:14'], null))
+				.to.deep.equal(expectedTrip);
+		});
+
+		it('should correctly replace destination when poi is added before destination', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+
+			if (inputTrip.days) {
+				inputTrip.days[0].itinerary[1].placeId = 'city:14';
+				let place: Place | null = inputTrip.days[0].itinerary[1].place;
+				if (place) {
+					place.id = 'city:14';
+					inputTrip.days[0].itinerary[1].place = place;
+				}
+
+				inputTrip.days[1].itinerary[0].placeId = 'city:14';
+				place = inputTrip.days[1].itinerary[0].place;
+				if (place) {
+					place.id = 'city:14';
+					inputTrip.days[1].itinerary[0].place = place;
+				}
+			}
+
+			if (expectedTrip.days) {
+				expectedTrip.days[0].itinerary[0].placeId = 'poi:1';
+				let place: Place | null = expectedTrip.days[0].itinerary[0].place;
+				if (place) {
+					place.id = 'poi:1';
+					expectedTrip.days[0].itinerary[0].place = place;
+				}
+				expectedTrip.days[0].itinerary.pop();
+
+				// next day
+				expectedTrip.days[1].itinerary[0].placeId = 'city:14';
+				expectedTrip.days[1].itinerary[0].isSticky = false;
+				place = expectedTrip.days[1].itinerary[0].place;
+				if (place) {
+					place.id = 'city:14';
+					expectedTrip.days[1].itinerary[0].place = place;
+				}
+			}
+
+			return chai.expect(Manipulator.replaceSiblingParentDestination(inputTrip, 0, 0, ['city:14'], null))
+				.to.deep.equal(expectedTrip);
+		});
+
+		it('should correctly replace destination with poi when there are multiple destinations in trip', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+
+			if (inputTrip.days) {
+				const itineraryItem2: ItineraryItem = cloneDeep(TripExpectedResults.itineratyItem);
+				const itineraryItem3: ItineraryItem = cloneDeep(TripExpectedResults.itineratyItem);
+				const itineraryItem4: ItineraryItem = cloneDeep(TripExpectedResults.itineratyItem);
+				const itineraryItem5: ItineraryItem = cloneDeep(TripExpectedResults.itineratyItem);
+				itineraryItem2.placeId = 'poi:222';
+				itineraryItem3.placeId = 'city:14';
+				itineraryItem4.placeId = 'poi:333';
+				itineraryItem5.placeId = 'city:14';
+				if (itineraryItem2.place) {
+					itineraryItem2.place.id = 'poi:222';
+				}
+				if (itineraryItem3.place) {
+					itineraryItem3.place.id = 'city:14';
+				}
+				if (itineraryItem4.place) {
+					itineraryItem4.place.id = 'poi:333';
+				}
+				if (itineraryItem5.place) {
+					itineraryItem5.place.id = 'city:14';
+				}
+				inputTrip.days[0].itinerary.splice(1, 0, itineraryItem2);
+				inputTrip.days[0].itinerary.splice(2, 0, itineraryItem3);
+				inputTrip.days[0].itinerary.splice(3, 0, itineraryItem4);
+				inputTrip.days[0].itinerary.splice(4, 0, itineraryItem5);
+			}
+
+			if (expectedTrip.days) {
+				const itineraryItem2: ItineraryItem = cloneDeep(TripExpectedResults.itineratyItem);
+				const itineraryItem3: ItineraryItem = cloneDeep(TripExpectedResults.itineratyItem);
+				itineraryItem2.placeId = 'poi:222';
+				itineraryItem3.placeId = 'poi:333';
+				if (itineraryItem2.place) {
+					itineraryItem2.place.id = 'poi:222';
+				}
+				if (itineraryItem3.place) {
+					itineraryItem3.place.id = 'poi:333';
+				}
+				expectedTrip.days[0].itinerary.splice(1, 0, itineraryItem2);
+				expectedTrip.days[0].itinerary.splice(2, 0, itineraryItem3);
+			}
+
+			return chai.expect(Manipulator.replaceSiblingParentDestination(inputTrip, 0, 3, ['city:14'], null))
+				.to.deep.equal(expectedTrip);
 		});
 	});
 });
