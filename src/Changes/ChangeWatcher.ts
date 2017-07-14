@@ -54,7 +54,8 @@ export default class ChangeWatcher {
 				changesNotifications.push({
 					id: item.id,
 					type: item.type,
-					change: item.change
+					change: item.change,
+					version: item.version ? item.version : null,
 				} as ChangeNotification);
 			});
 		}
