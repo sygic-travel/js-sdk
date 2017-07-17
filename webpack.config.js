@@ -46,11 +46,16 @@ module.exports = {
 	},
 	devtool: 'inline-source-map',
 	plugins: [
-		new webpack.HotModuleReplacementPlugin()
+		new webpack.HotModuleReplacementPlugin(),
+		new webpack.DefinePlugin({
+			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+		})
 	],
 	devServer: {
 		hot: true,
 		inline: false,
 		contentBase: './build'
-	}
+	},
+	target: 'node',
+	node: { process: false }
 };
