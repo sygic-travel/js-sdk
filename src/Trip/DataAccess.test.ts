@@ -266,4 +266,15 @@ describe('TripDataAccess', () => {
 			chai.expect(tripsDetailedCache.get(tripInCache.id)).to.eventually.equal(null);
 		});
 	});
+
+	describe('#emptyTripsTrash', () => {
+		it('should empty trips trash', () => {
+			sandbox.stub(Xhr, 'post').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, {
+					deleted_trip_ids: ['poi:1', 'poi:2', 'poi:3']
+				}));
+			}));
+			chai.expect(Dao.emptyTripsTrash()).to.eventually.deep.equal(['poi:1', 'poi:2', 'poi:3']);
+		});
+	});
 });
