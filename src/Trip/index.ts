@@ -236,3 +236,8 @@ export async function handleTripChanges(changeNotifications: ChangeNotification[
 		return Dao.deleteTripFromCache(tripId);
 	}));
 }
+
+export async function emptyTripsTrash(): Promise<string[]> {
+	return Dao.emptyTripsTrash();
+}
+
