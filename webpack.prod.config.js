@@ -2,12 +2,11 @@ var webpack = require('webpack');
 var path = require("path");
 var OptimizeJsPlugin = require('optimize-js-plugin');
 
-module.exports = {
+var baseConfig = {
 	entry: {
 		sdk: './src/sdk.ts'
 	},
 	output: {
-		filename: 'SygicTravelSDK.js',
 		path: __dirname + '/dist',
 		library: 'SygicTravelSDK',
 		libraryTarget: 'umd',
@@ -54,11 +53,20 @@ module.exports = {
 			},
 			comments: false,
 			sourceMap: false
-		}),
-		new webpack.DefinePlugin({
-			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
 		})
-	],
-	target: 'node',
-	node: { process: false }
+	]
 };
+
+var browserConfig = baseConfig;
+browserConfig.output.filename = 'SygicTravelSDK.js';
+browserConfig.target = 'web';
+
+var nodeConfig = baseConfig;
+nodeConfig.output.filename = 'SygicTravelSDK.node.js';
+nodeConfig.target = 'node';
+nodeConfig.node = { process: false };
+nodeConfig.plugins.push(new webpack.DefinePlugin({
+	'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+}));
+
+module.exports = [browserConfig, nodeConfig];
