@@ -83,11 +83,15 @@ export async function updateTrip(tripToBeUpdated: Trip): Promise<Trip> {
 	return tripToBeUpdated;
 }
 
-export async function handleTripChangeNotification(id: string): Promise<void> {
+export async function handleTripChangeNotification(id: string, version: number | null): Promise<boolean> {
 	const cachedTrip = await tripsDetailedCache.get(id);
+	if (cachedTrip && cachedTrip.version === version) {
+		return false;
+	}
 	if (cachedTrip) {
 		await getTripFromApi(id);
 	}
+	return true;
 }
 
 export async function deleteTripFromCache(id: string): Promise<void> {

@@ -22,8 +22,9 @@ export async function removePlaceFromFavorites(id: string): Promise<void> {
 	await Dao.removePlaceFromFavorites(id);
 }
 
-export async function handleFavoritesChanges(changeNotifications: ChangeNotification[]): Promise<void> {
+export async function handleFavoritesChanges(changeNotifications: ChangeNotification[]): Promise<ChangeNotification[]> {
 	if (changeNotifications.length > 0) {
 		await Dao.handleFavoritesChanges();
 	}
+	return changeNotifications;
 }

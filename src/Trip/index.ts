@@ -224,17 +224,22 @@ export async function addPlaceToDay(
 	return Dao.updateTrip(trip);
 }
 
-export async function handleTripChanges(changeNotifications: ChangeNotification[]): Promise<void> {
-	await Promise.all(changeNotifications.map((changeNotification: ChangeNotification) => {
+export async function handleTripChanges(changeNotifications: ChangeNotification[]): Promise<ChangeNotification[]> {
+	const relevantChanges: ChangeNotification[] = [];
+
+	for (const changeNotification of changeNotifications) {
 		if (!changeNotification.id) {
-			return Promise.resolve();
+			continue;
 		}
 		const tripId = changeNotification.id;
-		if (changeNotification.change === 'updated') {
-			return Dao.handleTripChangeNotification(tripId);
+		if (changeNotification.change === 'updated' &&
+			await Dao.handleTripChangeNotification(tripId, changeNotification.version)
+		) {
+			relevantChanges.push(changeNotification);
+
 		}
-		return Dao.deleteTripFromCache(tripId);
-	}));
+	}
+	return relevantChanges;
 }
 
 export async function emptyTripsTrash(): Promise<string[]> {

@@ -42,17 +42,27 @@ export function reset() {
 }
 
 async function handleChanges(changeNotifications: ChangeNotification[]): Promise<void> {
+	let relevantChanges: ChangeNotification[] = [];
+
 	const settingsChange = changeNotifications.find((change) => (change.type === 'settings'));
 	if (settingsChange) {
+		relevantChanges.push(settingsChange);
 		handleSettingsChange();
 	}
-	await handleTripChanges(changeNotifications.filter((changeNotification: ChangeNotification) => {
-		return changeNotification.type === 'trip';
-	}));
-	await handleFavoritesChanges(changeNotifications.filter((changeNotification: ChangeNotification) => {
-		return changeNotification.type === 'favorite';
-	}));
+
+	relevantChanges = relevantChanges.concat(await handleTripChanges(
+		changeNotifications.filter((changeNotification: ChangeNotification) => {
+			return changeNotification.type === 'trip';
+		})
+	));
+
+	relevantChanges = relevantChanges.concat(await handleFavoritesChanges(
+		changeNotifications.filter((changeNotification: ChangeNotification) => {
+			return changeNotification.type === 'favorite';
+		})
+	));
+
 	if (externalCallback) {
-		externalCallback(changeNotifications);
+		externalCallback(relevantChanges);
 	}
 }

@@ -232,7 +232,7 @@ describe('TripDataAccess', () => {
 	});
 
 	describe('#handleTripChangeNotification', () => {
-		it('should get updated trip from api and set it in cache', async () => {
+		it('should get updated trip from api and set it in cache and return true', async () => {
 			const tripInCache = cloneDeep(trip1FromApi);
 			const tripFromApi = cloneDeep(trip1FromApi);
 			tripFromApi.name = 'x';
@@ -242,18 +242,30 @@ describe('TripDataAccess', () => {
 				resolve(new ApiResponse(200, { trip: tripFromApi }));
 			}));
 
-			await Dao.handleTripChangeNotification(tripInCache.id);
+			const result = await Dao.handleTripChangeNotification(tripInCache.id, 34);
 			const tripToBeUpdated = await tripsDetailedCache.get(tripInCache.id);
 			chai.expect(tripToBeUpdated.name).to.equal(tripFromApi.name);
+			chai.expect(result).to.be.true;
 		});
 
-		it('should not call api when trip is not in cache', async () => {
+		it('should not call api for trip which is already up to date and return should return false', async () => {
+			const tripInCache = cloneDeep(trip1FromApi);
+			await tripsDetailedCache.set(tripInCache.id, tripInCache);
+			const apiStub = sandbox.stub(Xhr, 'get');
+
+			const result = await Dao.handleTripChangeNotification(tripInCache.id, 33);
+			chai.expect(apiStub.callCount).to.equal(0);
+			chai.expect(result).to.be.false;
+		});
+
+		it('should not call api when trip is not in cache and should return true', async () => {
 			const apiStub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
-			await Dao.handleTripChangeNotification('unknownId');
+			const result = await Dao.handleTripChangeNotification('unknownId', null);
 			chai.expect(apiStub.callCount).to.equal(0);
+			chai.expect(result).to.be.true;
 		});
 	});
 
