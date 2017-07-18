@@ -44,13 +44,56 @@ Fetches a list of places according to the applied filter.
 
 ##### Arguments:
 - [`filter: Places.PlacesFilterJSON`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_places_filter_.placesfilterjson.html)
+
+###### PlacesFilter:
+
+```ts 
+// Filter full example
+const placeFilter: SygicTravelSDK.Places.PlacesFilterJSON = {
+    query: 'Tower', 
+    mapTiles: ['0121011'], // Matches places within map tile coordinate.  For details see [Bing Maps docs](https://msdn.microsoft.com/en-us/library/bb259689.aspx) or Maptiler.org
+    mapSpread: 1,
+    bounds: {
+        south: 50.123,
+        west: -0.55,
+        north: 50.523,
+        east: 0.05
+    },
+    categories: ['eating', 'sightseeing'], // filter out only certain categories
+    categoriesOperator: 'OR',
+    tags: ['indian_cousine', 'mexican_counsine'], 
+    tagsOperator: 'OR',
+    parents: ['city:1', 'city:5'], // filter out only places that has certain parents
+    parentsOperator: 'OR',
+    levels: ['poi'],
+    limit: 20,
+    zoom: 10
+}
+```
+
+| Property  | Description |
+| ---------- | ----------- |
+| query | Matches places containing the query within name, description ... |
+| mapTiles | Matches places within map tile coordinate.  For details see [Bing Maps docs](https://msdn.microsoft.com/en-us/library/bb259689.aspx) or [Maptiler.org](Maptiler.org) |
+| bounds | Limits results to area defined by bounds. The units are in degrees of latitude/longitude. |
+| mapSpread | Use mapSpread when you want to display the places on the map. The area is subdivided into more areas so places cover map equally. Possible values are 0,1,2 or 3. This parameter requires bounds and zoom.|
+| categories | Limits results by categories. It is possible to pass multiple categories. To get possible values check [Places section in API documentation](http://docs.sygictravelapi.com/1.0/).|
+| categoriesOperator | 'AND' or 'OR' specifies which logic operator will be applied for multiple categories. The default value is AND.|
+| tags | Limits results by tags. It is possible to pass multiple tags. To get possible values check [Places section in API documentation](http://docs.sygictravelapi.com/1.0/).|
+| tagsOperator | 'AND' or 'OR' specifies which logic operator will be applied for multiple tags. The default value is AND.|
+| parents | Limits results by ID of parent place. It is possible to pass multiple parents. |
+| parentsOperator | 'AND' or 'OR' specifies which logic operator will be applied for multiple parents. The default value is AND.|
+| levels | Limits results by levels. For multiple levels the AND operator applies. To get possible values check [Places section in API documentation](http://docs.sygictravelapi.com/1.0/). |
+| limit | Limits the number of results. Default value is 10. Maximum value is 512. |
+| zoom | Zoom level of map. This is required for mapSpread. |
+
 ##### Returns:
 - [`Promise<Places.Place[]>`](http://docs.sygictravelapi.com/js-sdk/master/interfaces/_places_place_.place.html)
 
 ```ts
 const placeFilter: SygicTravelSDK.Places.PlacesFilterJSON = {
     query: null, // text query, for example from a search input field
-    mapTile: null,
+    mapTiles: null,
     mapSpread: null,
     bounds: {
         south: 50.123,
@@ -103,7 +146,7 @@ Will calculate positions of places (map markers) according to spread configurati
 ```ts
 const placeFilter: SygicTravelSDK.Places.PlacesFilterJSON = {
     query: null,
-    mapTile: null,
+    mapTiles: null,
     mapSpread: null,
     categories: ['eating'],
     tags: [],
