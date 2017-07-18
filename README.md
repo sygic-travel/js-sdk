@@ -12,7 +12,7 @@ The Sygic Travel SDK for JavaScript provides a set of client-side functionality 
 - Enables you to get media (photos and videos) for a place
 - Spreads places on a map according to your configuration
 
-You can also check out our [API Documentation](http://docs.sygictravelapi.com/js-sdk/v1.0.0/).
+You can also check out our [Reference documentation](http://docs.sygictravelapi.com/js-sdk/v1.0.0/).
 
 ## Installation
 You can get the UMD build from the CDN, which you can include to your document,
@@ -32,9 +32,9 @@ Creates an instance of [Sygic Travel SDK](http://docs.sygictravelapi.com/js-sdk/
 ##### Returns:
 - [`StSDK`](http://docs.sygictravelapi.com/js-sdk/v1.0.0/classes/_stsdk_.stsdk.html)
 ```
-//const SygicTravelSDK = require('sygic-travel-js-sdk/index.node') for node
+// const SygicTravelSDK = require('sygic-travel-js-sdk/index.node') for node
 import * as SygicTravelSDK from ‘sygic-travel-js-sdk’;
-const apiUrl: string = ‘https://api.sygictravelapi.com/0.1/en/';
+const apiUrl: string = ‘https://api.sygictravelapi.com/1.0/en/';
 const clientKey: ‘CLIENT_KEY’; // Get your client key at https://travel.sygic.com/b2b/api-key
 const stSDK: SygicTravelSDK.StSDK = SygicTravelSDK.create(apiUrl, clientKey);
 ```
@@ -88,10 +88,10 @@ const placeFilter: SygicTravelSDK.Places.PlacesFilterJSON = {
 | limit | Limits the number of results. Default value is 10. Maximum value is 512. |
 | zoom | Zoom level of map. This is required for mapSpread. |
 
-- [`filter: Places.PlacesFilterJSON`](http://docs.sygictravelapi.com/js-sdk/v1.0.0/interfaces/_places_filter_.placesfilterjson.html)
 ##### Returns:
 - [`Promise<Places.Place[]>`](http://docs.sygictravelapi.com/js-sdk/v1.0.0/interfaces/_places_place_.place.html)
 
+##### Usage example:
 ```ts
 const placeFilter: SygicTravelSDK.Places.PlacesFilterJSON = {
     query: null, // text query, for example from a search input field
@@ -145,6 +145,7 @@ Will calculate positions of places (map markers) according to spread configurati
 #### Returns:
 - [`Spread.SpreadResult`](http://docs.sygictravelapi.com/js-sdk/v1.0.0/interfaces/_spread_spreader_.spreadresult.html)
 
+#### Usage example:
 ```ts
 const placeFilter: SygicTravelSDK.Places.PlacesFilterJSON = {
     query: null,
