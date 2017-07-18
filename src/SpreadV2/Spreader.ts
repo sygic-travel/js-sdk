@@ -38,7 +38,7 @@ const detectRenderSize = (
 	categoriesCoefficients?: CategoriesCoefficients | null
 ): SpreadResult => {
 	let spreadRating = 0;
-	if (categoriesCoefficients && (place.level === 'poi' || place.level === 'hotel')) {
+	if (categoriesCoefficients && place.level === 'poi') {
 		spreadRating = place.rating * getRatingCoeficientFromCategories(categoriesCoefficients, place.categories);
 	} else {
 		spreadRating = place.rating;
@@ -62,7 +62,7 @@ const detectRenderSize = (
 			continue;
 		}
 
-		if ((place.level === 'poi' || place.level === 'hotel') && isDisabledByCategory(size.disabledCategories, place.categories)) {
+		if (place.level === 'poi' && isDisabledByCategory(size.disabledCategories, place.categories)) {
 			continue;
 		}
 
