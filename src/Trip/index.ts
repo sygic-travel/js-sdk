@@ -161,6 +161,12 @@ export async function removePlacesFromDay(id: string, dayIndex: number, position
 	);
 }
 
+export async function removeAllPlacesFromDay(id: string, dayIndex: number): Promise<Trip> {
+	return Dao.updateTrip(
+		TripManipulator.removeAllPlacesFromDay(await getTripDetailed(id), dayIndex, await getUserSettings())
+	);
+}
+
 /**
  * @specification https://confluence.sygic.com/display/STV/Sticky+Places+in+Itinerary
  */
@@ -245,4 +251,3 @@ export async function handleTripChanges(changeNotifications: ChangeNotification[
 export async function emptyTripsTrash(): Promise<string[]> {
 	return Dao.emptyTripsTrash();
 }
-

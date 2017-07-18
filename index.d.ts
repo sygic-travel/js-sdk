@@ -96,7 +96,11 @@ export class StSDK {
 	/**
 	 * @experimental
 	 */
-	public removePlaceFromDay(id: string, dayIndex: number, positionInDay: number): Promise<Trips.Trip>
+	public removePlacesFromDay(id: string, dayIndex: number, positionsInDay: number[]): Promise<Trips.Trip>
+	/**
+	 * @experimental
+	 */
+	public removeAllPlacesFromDay(id: string, dayIndex: number): Promise<Trips.Trip>
 	/**
 	 * @experimental
 	 */

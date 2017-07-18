@@ -282,6 +282,18 @@ describe('TripManipulator', () => {
 		});
 	});
 
+	describe('#removeAllPlacesFromDay', () => {
+		it('should remove all places from given day in trip', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			if (expectedTrip.days) {
+				expectedTrip.days[0].itinerary = [];
+				expectedTrip.days[1].itinerary[0].isSticky = false;
+			}
+			return chai.expect(Manipulator.removeAllPlacesFromDay(inputTrip, 0, null)).to.be.deep.equal(expectedTrip);
+		});
+	});
+
 	describe('#addPlaceToDay', () => {
 		it('should throw an error when invalid dayIndex is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
