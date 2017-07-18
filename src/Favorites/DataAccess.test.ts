@@ -49,4 +49,24 @@ describe('FavoritesDataAccess', () => {
 		});
 
 	});
+
+	describe('#addPlaceToFavorites', () => {
+		it('should add place to favorites and also to cache', async () => {
+			sandbox.stub(Xhr, 'post');
+			favoritesCache.set('favorites', []);
+			await Dao.addPlaceToFavorites('poi:530');
+			return chai.expect(favoritesCache.get('favorites')).to.eventually.deep.equal(['poi:530']);
+		});
+	});
+
+	describe('removePlaceFromFavorites', () => {
+		it('should remove a place from favorites and also from cache', async () => {
+			sandbox.stub(Xhr, 'delete_').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, {}));
+			}));
+			favoritesCache.set('favorites', ['poi:530', 'poi:531']);
+			await Dao.removePlaceFromFavorites('poi:530');
+			return chai.expect(favoritesCache.get('favorites')).to.eventually.deep.equal(['poi:531']);
+		});
+	});
 });

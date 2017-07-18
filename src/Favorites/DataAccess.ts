@@ -35,9 +35,12 @@ export async function addCustomPlaceToFavorites(
 }
 
 export async function removePlaceFromFavorites(id: string): Promise<ApiResponse> {
-	return await delete_('favorites', {
+	const apiResponse: ApiResponse = await delete_('favorites', {
 		place_id: id
 	});
+	const favoriteIds = await getFavorites();
+	await favoritesCache.set(CACHE_KEY, favoriteIds.filter((favoriteId) => favoriteId !== id));
+	return apiResponse;
 }
 
 export async function handleFavoritesChanges(): Promise<void> {
