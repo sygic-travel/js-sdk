@@ -228,6 +228,24 @@ export function removePlacesFromDay(
 	return resolveStickiness(resultTrip, userSettings);
 }
 
+export function removeAllPlacesFromDay(
+	tripToBeUpdated: Trip,
+	dayIndex: number,
+	userSettings: UserSettings | null
+): Trip {
+	if (!tripToBeUpdated.days) {
+		throw new Error('days property in Trip cannot be null');
+	}
+
+	if (!tripToBeUpdated.days[dayIndex]) {
+		throw new Error('Invalid dayIndex');
+	}
+
+	const resultTrip = cloneDeep(tripToBeUpdated);
+	resultTrip.days[dayIndex].itinerary = [];
+	return resolveStickiness(resultTrip, userSettings);
+}
+
 export function replaceLastStickyPlace(
 	trip: Trip,
 	place: Place,
