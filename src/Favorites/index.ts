@@ -23,8 +23,24 @@ export async function removePlaceFromFavorites(id: string): Promise<void> {
 }
 
 export async function handleFavoritesChanges(changeNotifications: ChangeNotification[]): Promise<ChangeNotification[]> {
-	if (changeNotifications.length > 0) {
-		await Dao.handleFavoritesChanges();
+	const relevantChanges: ChangeNotification[] = [];
+
+	for (const changeNotification of changeNotifications) {
+		if (!changeNotification.id) {
+			continue;
+		}
+
+		const placeId = changeNotification.id;
+		if (changeNotification.change === 'updated' &&
+			await Dao.handleFavoritesUpdateChangesNotification(placeId)) {
+			relevantChanges.push(changeNotification);
+		}
+
+		if (changeNotification.change === 'deleted' &&
+			await Dao.handleFavoritesDeleteChangesNotification(placeId)) {
+			Dao.removeFavoriteFromCache(placeId);
+			relevantChanges.push(changeNotification);
+		}
 	}
-	return changeNotifications;
+	return relevantChanges;
 }

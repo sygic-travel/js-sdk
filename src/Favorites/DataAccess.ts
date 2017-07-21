@@ -38,13 +38,27 @@ export async function removePlaceFromFavorites(id: string): Promise<ApiResponse>
 	const apiResponse: ApiResponse = await delete_('favorites', {
 		place_id: id
 	});
-	const favoriteIds = await getFavorites();
-	await favoritesCache.set(CACHE_KEY, favoriteIds.filter((favoriteId) => favoriteId !== id));
+	await removeFavoriteFromCache(id);
 	return apiResponse;
 }
 
-export async function handleFavoritesChanges(): Promise<void> {
+export async function handleFavoritesUpdateChangesNotification(id: string): Promise<boolean> {
+	const fromCache: string[] = await favoritesCache.get(CACHE_KEY) || [];
+	if (fromCache) {
+		return !fromCache.find((favoriteId: string) => favoriteId === id);
+	}
 	await getFromApi();
+	return true;
+}
+
+export async function handleFavoritesDeleteChangesNotification(id: string): Promise<boolean> {
+	const fromCache: string[] = await favoritesCache.get(CACHE_KEY) || [];
+	return !!fromCache.find((favoriteId: string) => favoriteId === id);
+}
+
+export async function removeFavoriteFromCache(id: string): Promise<void> {
+	const favoriteIds = await getFavorites();
+	await favoritesCache.set(CACHE_KEY, favoriteIds.filter((favoriteId) => favoriteId !== id));
 }
 
 async function getFromApi(): Promise<string[]> {

@@ -6,7 +6,7 @@ import ChangeWatcher from './ChangeWatcher';
 
 export { ChangeNotification } from './ChangeNotification';
 
-let changeWatcher: ChangeWatcher;
+let changeWatcher: ChangeWatcher | null;
 let externalCallback: (changeNotifications: ChangeNotification[]) => any | null;
 const DEFAULT_TICK_INTERVAL = 60000;
 const MINIMAL_TICK_INTERVAL = 5000;
@@ -28,6 +28,7 @@ export async function initializeChangesWatching(tickInterval?: number): Promise<
 export function stopChangesWatching(): void {
 	if (changeWatcher) {
 		changeWatcher.kill();
+		changeWatcher = null;
 	}
 }
 
