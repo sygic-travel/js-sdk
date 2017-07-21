@@ -1,4 +1,4 @@
-import { Bounds, locationToTileCoordinate, normalizeLng } from '.';
+import { Bounds, Location, locationToTileCoordinate, normalizeLng } from '.';
 import { Coordinate } from './Coordinate';
 
 export function boundsToMapTileKeys(bounds: Bounds , zoom: number): string[] {
@@ -27,19 +27,7 @@ export function boundsToMapTileKeys(bounds: Bounds , zoom: number): string[] {
 	const quadkeys: string[] = [];
 	while (processedTile.y <= endTile.y) {
 		while (processedTile.x >= endTile.x) {
-			let quadkey = '';
-			for (let i = zoom; i > 0; i--) {
-				let digit = 0;
-				const mask = 1 << (i - 1);
-				if ((processedTile.x & mask) !== 0) {
-					digit += 1;
-				}
-				if ((processedTile.y & mask) !== 0) {
-					digit += 2;
-				}
-				quadkey += digit.toString();
-			}
-			quadkeys.push(quadkey);
+			quadkeys.push(coordinateToMapTileKey(processedTile, zoom));
 			processedTile.x -= 1;
 		}
 		processedTile.y += 1;
@@ -47,4 +35,24 @@ export function boundsToMapTileKeys(bounds: Bounds , zoom: number): string[] {
 	}
 
 	return quadkeys;
+}
+
+export function locationToMapTileKey(location: Location, zoom: number): string {
+	return coordinateToMapTileKey(locationToTileCoordinate(location, zoom), zoom);
+}
+
+function coordinateToMapTileKey(coordinate: Coordinate, zoom: number): string {
+	let tileKey = '';
+	for (let i = zoom; i > 0; i--) {
+		let digit = 0;
+		const mask = 1 << (i - 1);
+		if ((coordinate.x & mask) !== 0) {
+			digit += 1;
+		}
+		if ((coordinate.y & mask) !== 0) {
+			digit += 2;
+		}
+		tileKey += digit.toString();
+	}
+	return tileKey;
 }
