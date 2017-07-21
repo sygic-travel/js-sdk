@@ -200,6 +200,10 @@ export class StSDK {
 	 * @experimental
 	 */
 	public emptyTripsTrash(): Promise<string[]>
+	/**
+	 * @experimental
+	 */
+	public locationToMapTileKey(location: Location, zoom: number): string
 }
 
 export namespace Places {

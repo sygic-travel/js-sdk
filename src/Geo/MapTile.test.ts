@@ -1,9 +1,9 @@
 import * as chai from 'chai';
-import { boundsToMapTileKeys } from './MapTile';
+import { boundsToMapTileKeys, locationToMapTileKey } from './MapTile';
 
-describe('Quadkey', () => {
+describe('MapTile', () => {
 	describe('#boundsToMapTileKeys', () => {
-		it('should return correct quadkeys for London', () => {
+		it('should return correct mapTileKeys for London', () => {
 			const bounds = {
 				south: 51.38678061104849,
 				west: -0.2688217163085938,
@@ -24,8 +24,18 @@ describe('Quadkey', () => {
 				'03131313131',
 				'03131313130'
 			];
-			const quadkeys = boundsToMapTileKeys(bounds, 11);
-			chai.expect(quadkeys).to.deep.equal(expectedResult);
+			const mapTileKeys = boundsToMapTileKeys(bounds, 11);
+			chai.expect(mapTileKeys).to.deep.equal(expectedResult);
+		});
+	});
+
+	describe('#locationToMapTileKey', () => {
+		it('should return correct mapTileKey', () => {
+			const location = {
+				lat: 51.38678061104849,
+				lng: -0.2688217163085938
+			};
+			chai.expect(locationToMapTileKey(location, 10)).to.equal('0313131313');
 		});
 	});
 });

@@ -13,7 +13,7 @@ import {
 } from './Collaboration';
 import { addCustomPlaceToFavorites, addPlaceToFavorites, getFavoritesIds, removePlaceFromFavorites } from './Favorites';
 import { Forecast, getDestinationWeather } from './Forecast';
-import { Bounds, Location } from './Geo';
+import { Bounds, Location, locationToMapTileKey } from './Geo';
 import { Medium } from './Media';
 import {
 	addPlaceReview,
@@ -424,5 +424,12 @@ export default class StSDK extends BaseSDK {
 	 */
 	public emptyTripsTrash(): Promise<string[]> {
 		return emptyTripsTrash();
+	}
+
+	/**
+	 * @experimental
+	 */
+	public locationToMapTileKey(location: Location, zoom: number): string {
+		return locationToMapTileKey(location, zoom);
 	}
 }
