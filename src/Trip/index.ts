@@ -242,7 +242,11 @@ export async function handleTripChanges(changeNotifications: ChangeNotification[
 			await Dao.handleTripChangeNotification(tripId, changeNotification.version)
 		) {
 			relevantChanges.push(changeNotification);
+		}
 
+		if (changeNotification.change === 'deleted' && await Dao.isTripInCache(tripId)) {
+			await Dao.deleteTripFromCache(tripId);
+			relevantChanges.push(changeNotification);
 		}
 	}
 	return relevantChanges;

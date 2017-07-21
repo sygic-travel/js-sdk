@@ -43,7 +43,7 @@ export async function removePlaceFromFavorites(id: string): Promise<ApiResponse>
 }
 
 export async function handleFavoritesUpdateChangesNotification(id: string): Promise<boolean> {
-	const fromCache: string[] = await favoritesCache.get(CACHE_KEY) || [];
+	const fromCache: string[] = await favoritesCache.get(CACHE_KEY);
 	if (fromCache) {
 		return !fromCache.find((favoriteId: string) => favoriteId === id);
 	}
@@ -51,7 +51,7 @@ export async function handleFavoritesUpdateChangesNotification(id: string): Prom
 	return true;
 }
 
-export async function handleFavoritesDeleteChangesNotification(id: string): Promise<boolean> {
+export async function isFavoriteInCache(id: string): Promise<boolean> {
 	const fromCache: string[] = await favoritesCache.get(CACHE_KEY) || [];
 	return !!fromCache.find((favoriteId: string) => favoriteId === id);
 }

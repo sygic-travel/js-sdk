@@ -36,8 +36,7 @@ export async function handleFavoritesChanges(changeNotifications: ChangeNotifica
 			relevantChanges.push(changeNotification);
 		}
 
-		if (changeNotification.change === 'deleted' &&
-			await Dao.handleFavoritesDeleteChangesNotification(placeId)) {
+		if (changeNotification.change === 'deleted' && await Dao.isFavoriteInCache(placeId)) {
 			Dao.removeFavoriteFromCache(placeId);
 			relevantChanges.push(changeNotification);
 		}

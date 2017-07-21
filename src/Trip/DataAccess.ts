@@ -94,6 +94,10 @@ export async function handleTripChangeNotification(id: string, version: number |
 	return true;
 }
 
+export async function isTripInCache(id: string): Promise<boolean> {
+	return !!await tripsDetailedCache.get(id);
+}
+
 export async function deleteTripFromCache(id: string): Promise<void> {
 	return tripsDetailedCache.remove(id);
 }

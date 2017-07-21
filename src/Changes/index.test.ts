@@ -55,14 +55,21 @@ describe('ChangesController', () => {
 	});
 
 	describe('#handleChanges', () => {
-		const tripChangesResponse = {
+		const tripChangesResponses = [{
 			changes: [{
 				type: 'trip',
 				id: 'xxx',
 				change: 'updated',
 				version: 3
 			}]
-		};
+		}, {
+			changes: [{
+				type: 'trip',
+				id: 'xxx',
+				change: 'deleted',
+				version: 3
+			}]
+		}];
 
 		const favoritesChangesResponses = [{
 			changes: [{
@@ -82,7 +89,7 @@ describe('ChangesController', () => {
 			tripsDetailedCache.set('xxx', { version: 3 });
 			sandbox.stub(Xhr, 'get').callsFake((): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
-					resolve(new ApiResponse(200, tripChangesResponse));
+					resolve(new ApiResponse(200, tripChangesResponses[0]));
 				});
 			});
 			const spy: SinonSpy = sandbox.spy();
@@ -94,10 +101,9 @@ describe('ChangesController', () => {
 		});
 
 		it('should handle changes after trip change is made remotely', async () => {
-			tripsDetailedCache.set('yyy', { version: 3 });
 			sandbox.stub(Xhr, 'get').callsFake((): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
-					resolve(new ApiResponse(200, tripChangesResponse));
+					resolve(new ApiResponse(200, tripChangesResponses[0]));
 				});
 			});
 			const spy: SinonSpy = sandbox.spy();
@@ -109,6 +115,42 @@ describe('ChangesController', () => {
 				type: 'trip',
 				id: 'xxx',
 				change: 'updated',
+				version: 3
+			} as ChangeNotification])).to.be.true;
+		});
+
+		it('should not handle changes after trip was deleted locally', async () => {
+			sandbox.stub(Xhr, 'get').callsFake((): Promise<ApiResponse> => {
+				return new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(200, tripChangesResponses[1]));
+				});
+			});
+
+			const spy: SinonSpy = sandbox.spy();
+			setChangesCallback(spy);
+
+			await initializeChangesWatching(5000);
+			clock.tick(6000);
+			return chai.expect(spy.calledWithExactly([])).to.be.true;
+		});
+
+		it('should handle changes after trip was deleted remotely', async () => {
+			tripsDetailedCache.set('xxx', { version: 3 });
+			sandbox.stub(Xhr, 'get').callsFake((): Promise<ApiResponse> => {
+				return new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(200, tripChangesResponses[1]));
+				});
+			});
+
+			const spy: SinonSpy = sandbox.spy();
+			setChangesCallback(spy);
+
+			await initializeChangesWatching(5000);
+			clock.tick(6000);
+			return chai.expect(spy.calledWithExactly([{
+				type: 'trip',
+				id: 'xxx',
+				change: 'deleted',
 				version: 3
 			} as ChangeNotification])).to.be.true;
 		});
@@ -130,11 +172,25 @@ describe('ChangesController', () => {
 		});
 
 		it('should handle changes after favorite was added remotely', async () => {
-			sandbox.stub(Xhr, 'get').callsFake((): Promise<ApiResponse> => {
+			const onChangeCall = (): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, favoritesChangesResponses[0]));
 				});
+			};
+			const stub: SinonStub = sandbox.stub(Xhr, 'get');
+
+			stub.onFirstCall().callsFake(onChangeCall);
+			stub.onSecondCall().callsFake((): Promise<ApiResponse> => {
+				return new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(200, {
+						favorites: [
+							{ place_id: 'poi:1'},
+							{ place_id: 'poi:2'}
+						]
+					}));
+				});
 			});
+			stub.onThirdCall().callsFake(onChangeCall);
 
 			const spy: SinonSpy = sandbox.spy();
 			setChangesCallback(spy);
