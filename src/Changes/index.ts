@@ -16,7 +16,7 @@ export async function initializeChangesWatching(tickInterval?: number): Promise<
 		tickInterval = DEFAULT_TICK_INTERVAL;
 	}
 	if (tickInterval < MINIMAL_TICK_INTERVAL) {
-		throw new Error('Sync changes from serer interval must be greater then ' + MINIMAL_TICK_INTERVAL + 'ms.');
+		throw new Error('Sync changes from server interval must be greater then ' + MINIMAL_TICK_INTERVAL + 'ms.');
 	}
 	if (!changeWatcher) {
 		changeWatcher = new ChangeWatcher(tickInterval, handleChanges);
