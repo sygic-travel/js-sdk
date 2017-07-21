@@ -55,7 +55,5 @@ module.exports = {
 		hot: true,
 		inline: false,
 		contentBase: './build'
-	},
-	target: 'node',
-	node: { process: false }
+	}
 };
