@@ -147,6 +147,7 @@ describe('ChangesController', () => {
 
 			await initializeChangesWatching(5000);
 			clock.tick(6000);
+			chai.expect(tripsDetailedCache.get('xxx')).to.eventually.be.null;
 			return chai.expect(spy.calledWithExactly([{
 				type: 'trip',
 				id: 'xxx',
@@ -197,6 +198,7 @@ describe('ChangesController', () => {
 
 			await initializeChangesWatching(5000);
 			clock.tick(6000);
+			chai.expect(favoritesCache.get('favorites')).to.eventually.eql(['poi:1', 'poi:2']);
 			return chai.expect(spy.calledWithExactly([{
 				type: 'favorite',
 				id: 'poi:530',
@@ -233,6 +235,7 @@ describe('ChangesController', () => {
 
 			await initializeChangesWatching(5000);
 			clock.tick(6000);
+			chai.expect(favoritesCache.get('favorites')).to.eventually.eql([]);
 			return chai.expect(spy.calledWithExactly([{
 				type: 'favorite',
 				id: 'poi:530',
