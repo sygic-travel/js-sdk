@@ -11,7 +11,8 @@
     "array-type": [true, "array"],
     "no-bitwise": false,
     "no-namespace": false,
-    "no-string-literal": false
+    "no-string-literal": false,
+    "no-empty": false
   },
   "rulesDirectory": []
 }
