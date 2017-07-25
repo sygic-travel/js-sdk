@@ -31,7 +31,7 @@ export function getConfig(): SpreadSizeConfig[] {
 	return [
 		{
 			radius: 29,
-			margin: 10,
+			margin: 0,
 			name: 'popular',
 			photoRequired: true,
 			zoomLevelLimits: [1, 1, 1, 1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1],
@@ -41,20 +41,24 @@ export function getConfig(): SpreadSizeConfig[] {
 		},
 		{
 			radius: 22,
-			margin: 5,
+			margin: 0,
 			name: 'big',
 			photoRequired: true,
-			zoomLevelLimits: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.07, 0.05, 0.04, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.02, 0.01],
+			zoomLevelLimits: [
+				0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.04, 0.03, 0.02, 0.015, 0.010, 0.008, 0.007, 0.006, 0.005, 0.004, 0.003
+			],
 			disabledCategories: [
 				'no_category', 'eating', 'going_out', 'playing', 'shopping', 'sleeping', 'doing_sports', 'traveling'
 			]
 		},
 		{
 			radius: 10,
-			margin: 5,
+			margin: 0,
 			name: 'medium',
 			photoRequired: false,
-			zoomLevelLimits: [0.07, 0.07, 0.07, 0.07, 0.07, 0.07, 0.06, 0.04, 0.03, 0.02, 0.01, 0.01, 0.01, 0.01, 0.005, 0],
+			zoomLevelLimits: [
+				0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.007, 0.006, 0.005, 0.004, 0.003, 0.002, 0.0015, 0.001, 0.001, 0
+			],
 			disabledCategories: []
 		},
 		{
@@ -62,7 +66,9 @@ export function getConfig(): SpreadSizeConfig[] {
 			margin: 5,
 			name: 'small',
 			photoRequired: false,
-			zoomLevelLimits: [0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.04, 0.03, 0.02, 0.01, 0.005, 0.005, 0.005, 0.005, 0],
+			zoomLevelLimits: [
+				0.01, 0.01, 0.01, 0.01, 0.01, 0.008, 0.006, 0.004, 0.003, 0.0025, 0.0020, 0.0015, 0.0010, 0.0005, 0
+			],
 			disabledCategories: []
 		},
 	];
