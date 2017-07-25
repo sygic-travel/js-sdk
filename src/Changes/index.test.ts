@@ -97,7 +97,7 @@ describe('ChangesController', () => {
 
 			await initializeChangesWatching(5000);
 			clock.tick(6000);
-			return chai.expect(spy.calledWithExactly([])).to.be.true;
+			return chai.expect(spy.notCalled).to.be.true;
 		});
 
 		it('should handle changes after trip change is made remotely', async () => {
@@ -131,7 +131,7 @@ describe('ChangesController', () => {
 
 			await initializeChangesWatching(5000);
 			clock.tick(6000);
-			return chai.expect(spy.calledWithExactly([])).to.be.true;
+			return chai.expect(spy.notCalled).to.be.true;
 		});
 
 		it('should handle changes after trip was deleted remotely', async () => {
@@ -169,7 +169,7 @@ describe('ChangesController', () => {
 
 			await initializeChangesWatching(5000);
 			clock.tick(6000);
-			return chai.expect(spy.calledWithExactly([])).to.be.true;
+			return chai.expect(spy.notCalled).to.be.true;
 		});
 
 		it('should handle changes after favorite was added remotely', async () => {
@@ -224,7 +224,7 @@ describe('ChangesController', () => {
 
 			await initializeChangesWatching(5000);
 			clock.tick(6000);
-			return chai.expect(spy.calledWithExactly([])).to.be.true;
+			return chai.expect(spy.notCalled).to.be.true;
 		});
 
 		it('should handle changes when favorite was removed remotely', async () => {
