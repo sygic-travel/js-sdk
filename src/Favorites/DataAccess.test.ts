@@ -44,7 +44,7 @@ describe('FavoritesDataAccess', () => {
 
 			return Dao.shouldNotifyOnFavoritesUpdate('').then(() => {
 				sinon.assert.calledOnce(stub);
-				chai.expect(favoritesCache.get('favorites')).to.eventually.deep.equal(favoritesData);
+				chai.expect(favoritesCache.getAll()).to.eventually.deep.equal(favoritesData);
 			});
 		});
 	});
@@ -52,9 +52,8 @@ describe('FavoritesDataAccess', () => {
 	describe('#addPlaceToFavorites', () => {
 		it('should add place to favorites and also to cache', async () => {
 			sandbox.stub(Xhr, 'post');
-			favoritesCache.set('favorites', []);
 			await Dao.addPlaceToFavorites('poi:530');
-			return chai.expect(favoritesCache.get('favorites')).to.eventually.deep.equal(['poi:530']);
+			return chai.expect(favoritesCache.getAll()).to.eventually.deep.equal(['poi:530']);
 		});
 	});
 
@@ -63,9 +62,10 @@ describe('FavoritesDataAccess', () => {
 			sandbox.stub(Xhr, 'delete_').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
-			favoritesCache.set('favorites', ['poi:530', 'poi:531']);
+			favoritesCache.set('poi:530', 'poi:530');
+			favoritesCache.set('poi:531', 'poi:531');
 			await Dao.removePlaceFromFavorites('poi:530');
-			return chai.expect(favoritesCache.get('favorites')).to.eventually.deep.equal(['poi:531']);
+			return chai.expect(favoritesCache.getAll()).to.eventually.deep.equal(['poi:531']);
 		});
 	});
 });

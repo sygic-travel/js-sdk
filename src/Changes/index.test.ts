@@ -157,7 +157,7 @@ describe('ChangesController', () => {
 		});
 
 		it('should not handle changes after favorite was added locally', async () => {
-			favoritesCache.set('favorites', ['poi:530']);
+			favoritesCache.set('poi:530', 'poi:530');
 			sandbox.stub(Xhr, 'get').callsFake((): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, favoritesChangesResponses[0]));
@@ -173,14 +173,13 @@ describe('ChangesController', () => {
 		});
 
 		it('should handle changes after favorite was added remotely', async () => {
-			const onChangeCall = (): Promise<ApiResponse> => {
+			const stub: SinonStub = sandbox.stub(Xhr, 'get');
+
+			stub.onFirstCall().callsFake((): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, favoritesChangesResponses[0]));
 				});
-			};
-			const stub: SinonStub = sandbox.stub(Xhr, 'get');
-
-			stub.onFirstCall().callsFake(onChangeCall);
+			});
 			stub.onSecondCall().callsFake((): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, {
@@ -191,14 +190,20 @@ describe('ChangesController', () => {
 					}));
 				});
 			});
-			stub.onThirdCall().callsFake(onChangeCall);
+			stub.onThirdCall().callsFake((): Promise<ApiResponse> => {
+				return new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(200, {
+						changes: []
+					}));
+				});
+			});
 
 			const spy: SinonSpy = sandbox.spy();
 			setChangesCallback(spy);
 
 			await initializeChangesWatching(5000);
 			clock.tick(6000);
-			chai.expect(favoritesCache.get('favorites')).to.eventually.eql(['poi:1', 'poi:2']);
+			chai.expect(favoritesCache.getAll()).to.eventually.eql(['poi:1', 'poi:2']);
 			return chai.expect(spy.calledWithExactly([{
 				type: 'favorite',
 				id: 'poi:530',
@@ -223,7 +228,7 @@ describe('ChangesController', () => {
 		});
 
 		it('should handle changes when favorite was removed remotely', async () => {
-			favoritesCache.set('favorites', ['poi:530']);
+			favoritesCache.set('poi:530', 'poi:530');
 			sandbox.stub(Xhr, 'get').callsFake((): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, favoritesChangesResponses[1]));
@@ -235,7 +240,7 @@ describe('ChangesController', () => {
 
 			await initializeChangesWatching(5000);
 			clock.tick(6000);
-			chai.expect(favoritesCache.get('favorites')).to.eventually.eql([]);
+			chai.expect(favoritesCache.getAll()).to.eventually.eql([]);
 			return chai.expect(spy.calledWithExactly([{
 				type: 'favorite',
 				id: 'poi:530',

@@ -16,6 +16,10 @@ export class InMemoryCache implements ICache {
 		return typeof value === 'object' ? cloneDeep(value) : value;
 	}
 
+	public async getAll(): Promise<any[]> {
+		return Object.keys(this.cache).map((key: string) => this.cache[key]);
+	}
+
 	public getBatch(keys: string[]): Promise<any[]> {
 		return Promise.all(keys.map((key: string) => this.get(key)));
 	}

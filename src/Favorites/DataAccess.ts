@@ -2,11 +2,9 @@ import { favoritesCache } from '../Cache';
 import { Location } from '../Geo';
 import { ApiResponse, delete_, get, post } from '../Xhr';
 
-const CACHE_KEY = 'favorites';
-
 export async function getFavorites(): Promise<string[]> {
-	const fromCache = await favoritesCache.get(CACHE_KEY);
-	if (fromCache) {
+	const fromCache: string[] = await favoritesCache.getAll();
+	if (fromCache.length > 0) {
 		return fromCache;
 	}
 	return await getFromApi();
@@ -16,9 +14,7 @@ export async function addPlaceToFavorites(id: string): Promise<void> {
 	await post('favorites', {
 		place_id: id
 	});
-	const favoriteIds = await getFavorites();
-	favoriteIds.push(id);
-	favoritesCache.set(CACHE_KEY, favoriteIds);
+	favoritesCache.set(id, id);
 }
 
 export async function addCustomPlaceToFavorites(
@@ -43,22 +39,20 @@ export async function removePlaceFromFavorites(id: string): Promise<ApiResponse>
 }
 
 export async function shouldNotifyOnFavoritesUpdate(id: string): Promise<boolean> {
-	const fromCache: string[] = await favoritesCache.get(CACHE_KEY);
-	if (fromCache) {
-		return !fromCache.find((favoriteId: string) => favoriteId === id);
+	const favoriteFromCache: string = await favoritesCache.get(id);
+	if (favoriteFromCache) {
+		return false;
 	}
 	await getFromApi();
 	return true;
 }
 
 export async function isFavoriteInCache(id: string): Promise<boolean> {
-	const fromCache: string[] = await favoritesCache.get(CACHE_KEY) || [];
-	return !!fromCache.find((favoriteId: string) => favoriteId === id);
+	return !!await favoritesCache.get(id);
 }
 
 export async function removeFavoriteFromCache(id: string): Promise<void> {
-	const favoriteIds = await getFavorites();
-	await favoritesCache.set(CACHE_KEY, favoriteIds.filter((favoriteId) => favoriteId !== id));
+	await favoritesCache.remove(id);
 }
 
 async function getFromApi(): Promise<string[]> {
@@ -67,6 +61,6 @@ async function getFromApi(): Promise<string[]> {
 		throw new Error('Wrong API response');
 	}
 	const favoriteIds = apiResponse.data.favorites.map((favoriteData) => (favoriteData.place_id));
-	favoritesCache.set(CACHE_KEY, favoriteIds);
+	await Promise.all(favoriteIds.map((favoriteId: string) => favoritesCache.set(favoriteId, favoriteId)));
 	return favoriteIds;
 }
