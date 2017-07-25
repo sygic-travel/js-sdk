@@ -231,7 +231,7 @@ describe('TripDataAccess', () => {
 		});
 	});
 
-	describe('#handleTripChangeNotification', () => {
+	describe('#shouldNotifyOnTripUpdate', () => {
 		it('should get updated trip from api and set it in cache and return true', async () => {
 			const tripInCache = cloneDeep(trip1FromApi);
 			const tripFromApi = cloneDeep(trip1FromApi);
@@ -242,7 +242,7 @@ describe('TripDataAccess', () => {
 				resolve(new ApiResponse(200, { trip: tripFromApi }));
 			}));
 
-			const result = await Dao.handleTripChangeNotification(tripInCache.id, 34);
+			const result = await Dao.shouldNotifyOnTripUpdate(tripInCache.id, 34);
 			const tripToBeUpdated = await tripsDetailedCache.get(tripInCache.id);
 			chai.expect(tripToBeUpdated.name).to.equal(tripFromApi.name);
 			chai.expect(result).to.be.true;
@@ -253,7 +253,7 @@ describe('TripDataAccess', () => {
 			await tripsDetailedCache.set(tripInCache.id, tripInCache);
 			const apiStub = sandbox.stub(Xhr, 'get');
 
-			const result = await Dao.handleTripChangeNotification(tripInCache.id, 33);
+			const result = await Dao.shouldNotifyOnTripUpdate(tripInCache.id, 33);
 			chai.expect(apiStub.callCount).to.equal(0);
 			chai.expect(result).to.be.false;
 		});
@@ -263,7 +263,7 @@ describe('TripDataAccess', () => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
-			const result = await Dao.handleTripChangeNotification('unknownId', null);
+			const result = await Dao.shouldNotifyOnTripUpdate('unknownId', null);
 			chai.expect(apiStub.callCount).to.equal(0);
 			chai.expect(result).to.be.true;
 		});

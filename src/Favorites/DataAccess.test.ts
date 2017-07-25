@@ -36,18 +36,17 @@ describe('FavoritesDataAccess', () => {
 
 	const favoritesData = ['poi:1', 'poi:2'];
 
-	describe('#handleFavoritesChanges', () => {
+	describe('#shouldNotifyOnFavoritesUpdate', () => {
 		it('should reload all favorites guids from api', () => {
 			const stub: SinonStub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, apiData));
 			}));
 
-			return Dao.handleFavoritesChanges().then(() => {
+			return Dao.shouldNotifyOnFavoritesUpdate('').then(() => {
 				sinon.assert.calledOnce(stub);
 				chai.expect(favoritesCache.get('favorites')).to.eventually.deep.equal(favoritesData);
 			});
 		});
-
 	});
 
 	describe('#addPlaceToFavorites', () => {
