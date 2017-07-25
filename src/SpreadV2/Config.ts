@@ -27,7 +27,7 @@ export interface SpreadSizeConfig {
 /**
  * https://confluence.sygic.com/display/STV/Map+Markers+2
  */
-export function getConfig(): SpreadSizeConfig[] {
+export function getSizesConfig(): SpreadSizeConfig[] {
 	return [
 		{
 			radius: 29,
@@ -72,6 +72,23 @@ export function getConfig(): SpreadSizeConfig[] {
 			disabledCategories: []
 		},
 	];
+}
+
+export function getCategoriesConfig(): CategoriesCoefficients {
+	return {
+		noCategory: 0.3,
+		discovering: 0.8,
+		eating: 0.6,
+		goingOut: 0.6,
+		hiking: 0.5,
+		playing: 0.5,
+		relaxing: 0.6,
+		shopping: 0.5,
+		sightseeing: 1,
+		sleeping: 0.2,
+		doingSports: 0.4,
+		traveling: 0.1,
+	} as CategoriesCoefficients;
 }
 
 export function getRatingCoeficientFromCategories(

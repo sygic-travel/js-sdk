@@ -120,10 +120,10 @@ export default class StSDK extends BaseSDK {
 		vipPlaces: Place[],
 		bounds: Bounds,
 		canvas: CanvasSize,
-		categoriesCoefficients?: CategoriesCoefficients | null,
-		sizesConfig?: SpreadSizeConfigV2[]
+		sizesConfig?: SpreadSizeConfigV2[],
+		categoriesCoefficients?: CategoriesCoefficients | null
 	): SpreadResultV2 {
-		return spreadV2(places, vipPlaces, bounds, canvas, categoriesCoefficients, sizesConfig);
+		return spreadV2(places, vipPlaces, bounds, canvas, sizesConfig, categoriesCoefficients);
 	}
 
 	/**

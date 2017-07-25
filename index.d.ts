@@ -29,8 +29,8 @@ export class StSDK {
 		vipPlaces: Places.Place[],
 		bounds: Geo.Bounds,
 		canvas: Spread.CanvasSize,
+		markerSizes?: SpreadV2.SpreadSizeConfig[],
 		categoriesCoefficients?: SpreadV2.CategoriesCoefficients | null,
-		markerSizes?: SpreadV2.SpreadSizeConfig[]
 	): SpreadV2.SpreadResult;
 	/**
 	 * @experimental
