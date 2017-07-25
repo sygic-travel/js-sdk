@@ -12,15 +12,34 @@ export function getPlaces(filter: PlacesFilter): Promise<ApiResponse> {
 
 const getPlacesWitMapSpread = async (filter: PlacesFilter): Promise<ApiResponse>  => {
 
-	let zoom: number = filter.zoom ? filter.zoom : 1;
-	// The highest zoom api can handle
-	if (zoom > 18) {
-		zoom = 18;
-	}
-	const mapTiles: string[] = boundsToMapTileKeys(filter.bounds as Bounds, zoom);
+	const mapTiles: string[] = boundsToMapTileKeys(filter.bounds as Bounds, filter.zoom as number);
 
-	let apiFilter = filter.cloneSetBounds(null);
-	apiFilter = apiFilter.cloneSetLimit(32);
-	apiFilter = apiFilter.cloneSetMapTiles(mapTiles);
-	return await xhrGet('places/list?' + apiFilter.toQueryString());
+	const apiResults: Promise<ApiResponse>[] = [];
+
+	for (const mapTile of mapTiles) {
+		let apiFilter = filter.cloneSetBounds(null);
+		apiFilter = apiFilter.cloneSetLimit(32);
+		apiFilter = apiFilter.cloneSetMapTiles([mapTile]);
+		const promise = new Promise(async (success) => {
+			try {
+				success(await xhrGet('places/list?' + apiFilter.toQueryString()));
+			} catch (error) {
+				success(new ApiResponse( 200, {places: []}));
+			}
+		});
+		apiResults.push(promise);
+	}
+
+	const responses = await Promise.all(apiResults);
+	const finalResponse: ApiResponse = responses.reduce((result: ApiResponse, response: ApiResponse): ApiResponse => {
+		result.statusCode = response.statusCode;
+		result.data.places = result.data.places.concat(response.data.places);
+		return result;
+	}, new ApiResponse(200, {places: []}));
+
+	finalResponse.data.places = finalResponse.data.places.sort((a, b) => {
+		if (a.rating > b.rating) { return -1; }
+		return 1;
+	});
+	return finalResponse;
 };
