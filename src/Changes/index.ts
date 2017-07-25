@@ -63,7 +63,7 @@ async function handleChanges(changeNotifications: ChangeNotification[]): Promise
 		})
 	));
 
-	if (externalCallback) {
+	if (externalCallback && relevantChanges.length > 0) {
 		externalCallback(relevantChanges);
 	}
 }
