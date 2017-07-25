@@ -61,6 +61,6 @@ async function getFromApi(): Promise<string[]> {
 		throw new Error('Wrong API response');
 	}
 	const favoriteIds = apiResponse.data.favorites.map((favoriteData) => (favoriteData.place_id));
-	favoriteIds.forEach((favoriteId: string) => favoritesCache.set(favoriteId, favoriteId));
+	await Promise.all(favoriteIds.map((favoriteId: string) => favoritesCache.set(favoriteId, favoriteId)));
 	return favoriteIds;
 }
