@@ -239,7 +239,7 @@ export async function handleTripChanges(changeNotifications: ChangeNotification[
 		}
 		const tripId = changeNotification.id;
 		if (changeNotification.change === 'updated' &&
-			await Dao.handleTripChangeNotification(tripId, changeNotification.version)
+			await Dao.shouldNotifyOnTripUpdate(tripId, changeNotification.version)
 		) {
 			relevantChanges.push(changeNotification);
 		}

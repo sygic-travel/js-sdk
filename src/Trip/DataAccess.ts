@@ -83,7 +83,7 @@ export async function updateTrip(tripToBeUpdated: Trip): Promise<Trip> {
 	return tripToBeUpdated;
 }
 
-export async function handleTripChangeNotification(id: string, version: number | null): Promise<boolean> {
+export async function shouldNotifyOnTripUpdate(id: string, version: number | null): Promise<boolean> {
 	const cachedTrip = await tripsDetailedCache.get(id);
 	if (cachedTrip && cachedTrip.version === version) {
 		return false;

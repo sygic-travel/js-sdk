@@ -42,7 +42,7 @@ export async function removePlaceFromFavorites(id: string): Promise<ApiResponse>
 	return apiResponse;
 }
 
-export async function handleFavoritesUpdateChangesNotification(id: string): Promise<boolean> {
+export async function shouldNotifyOnFavoritesUpdate(id: string): Promise<boolean> {
 	const fromCache: string[] = await favoritesCache.get(CACHE_KEY);
 	if (fromCache) {
 		return !fromCache.find((favoriteId: string) => favoriteId === id);

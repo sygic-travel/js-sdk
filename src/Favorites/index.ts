@@ -31,7 +31,7 @@ export async function handleFavoritesChanges(changeNotifications: ChangeNotifica
 		}
 
 		const placeId = changeNotification.id;
-		if (changeNotification.change === 'updated' && await Dao.handleFavoritesUpdateChangesNotification(placeId)) {
+		if (changeNotification.change === 'updated' && await Dao.shouldNotifyOnFavoritesUpdate(placeId)) {
 			relevantChanges.push(changeNotification);
 		}
 
