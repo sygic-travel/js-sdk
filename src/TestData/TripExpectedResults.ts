@@ -42,10 +42,12 @@ const itineraryPlace1 = cloneDeep(placeDetailedEiffelTowerWithoutMedia);
 const itineraryPlace2 = cloneDeep(placeDetailedEiffelTowerWithoutMedia);
 const itineraryPlace3 = cloneDeep(placeDetailedEiffelTowerWithoutMedia);
 const itineraryPlace4 = cloneDeep(placeDetailedEiffelTowerWithoutMedia);
+const itineraryPlace5 = cloneDeep(placeDetailedEiffelTowerWithoutMedia);
 itineraryPlace1.id = 'poi:1';
 itineraryPlace2.id = 'poi:2';
 itineraryPlace3.id = 'poi:3';
 itineraryPlace4.id = 'poi:4';
+itineraryPlace5.id = 'poi:5';
 
 export const itineratyItem = {
 	placeId: 'poi:1',
@@ -124,6 +126,15 @@ export const tripDetailed = {
 			itinerary: [{
 					placeId: 'poi:4',
 					place: itineraryPlace4,
+					startTime: null,
+					duration: null,
+					note: null,
+					transportFromPrevious: null,
+					isSticky: false
+				} as ItineraryItem,
+				{
+					placeId: 'poi:5',
+					place: itineraryPlace5,
 					startTime: null,
 					duration: null,
 					note: null,
