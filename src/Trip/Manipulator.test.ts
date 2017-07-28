@@ -240,6 +240,29 @@ describe('TripManipulator', () => {
 			return chai.expect(Manipulator.movePlaceInDay(inputTrip, 0, positionFrom, positionTo, null))
 				.to.deep.equal(expectedTrip);
 		});
+
+		it('should correctly resolve stickyness when moving sticky place from the end of the day', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const expectedTrip: Trip = Manipulator.movePlaceInDay(inputTrip, 0, 0, 1, null);
+
+			let firstDayItinerary: ItineraryItem[];
+			let secondDayItinerary: ItineraryItem[];
+
+			if (expectedTrip.days) {
+				firstDayItinerary = expectedTrip.days[0].itinerary;
+				secondDayItinerary = expectedTrip.days[1].itinerary;
+
+				chai.expect(firstDayItinerary[0].placeId).to.be.eq('poi:2');
+				chai.expect(firstDayItinerary[0].isSticky).to.be.false;
+				chai.expect(firstDayItinerary[1].placeId).to.be.eq('poi:1');
+				chai.expect(firstDayItinerary[1].isSticky).to.be.false;
+
+				chai.expect(secondDayItinerary[0].placeId).to.be.eq('poi:2');
+				chai.expect(secondDayItinerary[0].isSticky).to.be.false;
+				chai.expect(secondDayItinerary[1].placeId).to.be.eq('poi:3');
+				chai.expect(secondDayItinerary[1].isSticky).to.be.false;
+			}
+		});
 	});
 
 	describe('#removePlacesFromDay', () => {
