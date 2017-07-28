@@ -6,6 +6,7 @@ export function findOptimalPosition(
 	place: Place,
 	itinerary: ItineraryItem[],
 	nextItinerary: ItineraryItem[] | null,
+	previousItinerary: ItineraryItem[] | null,
 ): number {
 
 	if (isStickyByDefault(place) && (!itinerary.length || !itinerary[itinerary.length - 1].isSticky)) {
@@ -15,8 +16,9 @@ export function findOptimalPosition(
 	if (
 		itinerary.length === 1 &&
 		itinerary[0].isSticky &&
-		nextItinerary &&
-		(nextItinerary.length === 0 || nextItinerary[0].placeId !== itinerary[0].placeId)
+		(nextItinerary && (nextItinerary.length === 0 || nextItinerary[0].placeId !== itinerary[0].placeId) ||
+		previousItinerary &&
+			(previousItinerary.length > 0 || previousItinerary[previousItinerary.length - 1].placeId === itinerary[0].placeId))
 	) {
 		return 1;
 	}

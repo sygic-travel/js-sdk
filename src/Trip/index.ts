@@ -202,10 +202,19 @@ export async function addPlaceToDay(
 		if (trip.days) {
 			dayItinerary = trip.days[dayIndex].itinerary;
 		}
+		const prevDayIndex = dayIndex - 1;
+		let prevDayItinerary: ItineraryItem[] | null = null;
+		if (trip.days &&
+			trip.days[prevDayIndex]
+		) {
+			prevDayItinerary = trip.days[prevDayIndex].itinerary;
+		}
+
 		positionInDay = PositionFinder.findOptimalPosition(
 			place,
 			dayItinerary,
-			nextDayItinerary
+			nextDayItinerary,
+			prevDayItinerary
 		);
 	}
 
