@@ -145,7 +145,7 @@ export const resolveStickiness = (inputTrip: Trip, userSettings: UserSettings | 
 				(userSettings.workPlaceId && day.itinerary[day.itinerary.length - 1].placeId === userSettings.workPlaceId)
 			)
 		) {
-			day.itinerary[0].isSticky = true;
+			day.itinerary[day.itinerary.length - 1].isSticky = true;
 		}
 
 		prevDay = day;

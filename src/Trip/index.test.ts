@@ -39,17 +39,20 @@ describe('TripController', () => {
 	const responsePlace2 = cloneDeep(PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
 	const responsePlace3 = cloneDeep(PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
 	const responsePlace4 = cloneDeep(PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
+	const responsePlace5 = cloneDeep(PlaceTestData.placeDetailedEiffelTowerWithoutMedia.place);
 	responsePlace1.id = 'poi:1';
 	responsePlace2.id = 'poi:2';
 	responsePlace3.id = 'poi:3';
 	responsePlace4.id = 'poi:4';
+	responsePlace5.id = 'poi:5';
 
 	const placesResponse: any = {
 		places: [
 			responsePlace1,
 			responsePlace2,
 			responsePlace3,
-			responsePlace4
+			responsePlace4,
+			responsePlace5
 		]
 	};
 
@@ -104,7 +107,7 @@ describe('TripController', () => {
 	describe('#getPlacesGuidsFromTrip', () => {
 		it('should get places guids from mapped trip', () => {
 			return chai.expect(TripController.getPlacesIdsFromTrip(TripExpectedResults.tripDetailed)).to.deep.equal([
-				'poi:1', 'poi:2', 'poi:2', 'poi:3', 'poi:4'
+				'poi:1', 'poi:2', 'poi:2', 'poi:3', 'poi:4', 'poi:5'
 			]);
 		});
 	});

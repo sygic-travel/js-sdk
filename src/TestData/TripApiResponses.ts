@@ -100,6 +100,13 @@ export const tripDetail = {
 						"duration": null,
 						"note": null,
 						"transport_from_previous": null
+					},
+					{
+						"place_id": "poi:5",
+						"start_time": null,
+						"duration": null,
+						"note": null,
+						"transport_from_previous": null
 					}
 				],
 				"note": null

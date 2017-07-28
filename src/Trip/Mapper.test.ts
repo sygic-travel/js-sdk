@@ -77,9 +77,9 @@ describe('TripMapper', () => {
 					delete item.place;
 				});
 			});
-			result.days[2].itinerary[0].isSticky = true;
+			result.days[2].itinerary[1].isSticky = true;
 			const userSettings: UserSettings = {
-				homePlaceId: 'poi:4',
+				homePlaceId: 'poi:5',
 				workPlaceId: 'poi:10'
 			};
 			chai.expect(Mapper.mapTripDetailedApiResponseToTrip(ApiResponses.tripDetail.trip, userSettings))
@@ -93,10 +93,10 @@ describe('TripMapper', () => {
 					delete item.place;
 				});
 			});
-			result.days[2].itinerary[0].isSticky = true;
+			result.days[2].itinerary[1].isSticky = true;
 			const userSettings: UserSettings = {
 				homePlaceId: 'poi:10',
-				workPlaceId: 'poi:4'
+				workPlaceId: 'poi:5'
 			};
 			chai.expect(Mapper.mapTripDetailedApiResponseToTrip(ApiResponses.tripDetail.trip, userSettings))
 				.to.deep.equal(result);
