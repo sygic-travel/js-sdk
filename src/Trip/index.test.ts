@@ -6,13 +6,16 @@ import { SinonSandbox } from 'sinon';
 
 import * as TripController from '.';
 import { tripsDetailedCache } from '../Cache';
+import * as PlaceController from '../Places';
 import { setEnvironment } from '../Settings';
 import * as PlaceTestData from '../TestData/PlacesApiResponses';
+import * as PlaceExpectedResults from '../TestData/PlacesExpectedResults';
 import * as TripTestData from '../TestData/TripApiResponses';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
 import * as User from '../User';
 import * as Xhr from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
+import { Day, ItineraryItem, Trip } from './Trip';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
@@ -130,6 +133,66 @@ describe('TripController', () => {
 				startsOn: '2017-04-10',
 				privacyLevel: 'ppp'
 			} as TripController.TripUpdateData)).to.eventually.deep.equal(expectedTrip);
+		});
+	});
+
+	describe('#addPlaceToDay', () => {
+		it('should correctly add hotel to last position in day', () => {
+			const hotel: PlaceController.Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			hotel.id = 'poi:123456';
+			hotel.categories = ['sleeping'];
+
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			if (expectedTrip.days) {
+				const itineraryItem: ItineraryItem = {
+					place: hotel,
+					placeId: hotel.id,
+					startTime: null,
+					duration: null,
+					note: null,
+					isSticky: true,
+					transportFromPrevious: null
+				};
+
+				expectedTrip.days[0].itinerary[1].isSticky = false;
+				expectedTrip.days[1].itinerary[0].isSticky = false;
+
+				const newPoi: PlaceController.Place = cloneDeep(hotel);
+				newPoi.categories = [];
+				newPoi.id = 'poi:999';
+				expectedTrip.days[1].itinerary[0].place = newPoi;
+				expectedTrip.days[1].itinerary[0].placeId = 'poi:999';
+
+				expectedTrip.days[0].itinerary.push(cloneDeep(itineraryItem));
+				expectedTrip.days[1].itinerary.splice(0, 0, cloneDeep(itineraryItem));
+			}
+
+			sandbox.stub(Xhr, 'get').onFirstCall().returns(new Promise<ApiResponse>((resolve) => {
+				const trip = cloneDeep(TripTestData.tripDetail.trip);
+				trip.days[1].itinerary[0].place_id = 'poi:999';
+				resolve(new ApiResponse(200, { trip }));
+			}));
+
+			sandbox.stub(PlaceController, 'getPlaceDetailed').returns(new Promise<PlaceController.Place>((resolve) => {
+				resolve(cloneDeep(hotel));
+			}));
+			sandbox.stub(PlaceController, 'getPlacesDetailed').returns(
+				new Promise<(PlaceController.Place | null)[]>((resolve) => {
+					const places: (PlaceController.Place | null)[] = [];
+
+					if (expectedTrip.days) {
+						expectedTrip.days.forEach((days: Day) => {
+							days.itinerary.forEach((itineraryItem: ItineraryItem) => {
+								places.push(itineraryItem.place);
+							});
+						});
+					}
+
+					resolve(places);
+			}));
+
+			return chai.expect(TripController.addPlaceToDay('1234', 'poi:123456', 0, 2))
+				.to.eventually.eql(expectedTrip);
 		});
 	});
 });

@@ -188,35 +188,33 @@ export async function addPlaceToDay(
 		throw new Error('Trip does not have day on index ' + dayIndex);
 	}
 
+	let nextDayItinerary: ItineraryItem[] | null = null;
+	let dayItems: ItineraryItem[] = [];
+	const nextDayIndex = dayIndex + 1;
+
+	if (trip.days && trip.days[nextDayIndex]) {
+		nextDayItinerary = trip.days[nextDayIndex].itinerary;
+	}
+
 	if (typeof positionInDay !== 'undefined' && positionInDay !== null) {
-		return Dao.updateTrip(TripManipulator.addPlaceToDay(trip, place, dayIndex, userSettings, positionInDay));
+		trip = await Dao.updateTrip(TripManipulator.addPlaceToDay(trip, place, dayIndex, userSettings, positionInDay));
+	} else {
+		const dayPlaces = await placesDao.getPlacesFromTripDay(day);
+		trip = putPlacesToTrip(trip, dayPlaces);
+		if (trip.days) {
+			dayItems = trip.days[dayIndex].itinerary;
+		}
+		positionInDay = PositionFinder.findOptimalPosition(
+			place,
+			dayItems,
+			nextDayItinerary
+		);
+		trip = TripManipulator.addPlaceToDay(trip, place, dayIndex, userSettings, positionInDay);
 	}
 
 	if (replaceSticky) {
 		return Dao.updateTrip(TripManipulator.replaceLastStickyPlace(trip, place, dayIndex, userSettings));
 	}
-
-	let dayItems: ItineraryItem[] = [];
-	const dayPlaces = await placesDao.getPlacesFromTripDay(day);
-	trip = putPlacesToTrip(trip, dayPlaces);
-	if (trip.days) {
-		dayItems = trip.days[dayIndex].itinerary;
-	}
-
-	const nextDayIndex = dayIndex + 1;
-	let nextDayItinerary: ItineraryItem[] | null = null;
-	if (trip.days &&
-		trip.days[nextDayIndex]
-	) {
-		nextDayItinerary = trip.days[nextDayIndex].itinerary;
-	}
-
-	positionInDay = PositionFinder.findOptimalPosition(
-		place,
-		dayItems,
-		nextDayItinerary
-	);
-	trip = TripManipulator.addPlaceToDay(trip, place, dayIndex, userSettings, positionInDay);
 
 	if (
 		(isStickyByDefault(place)) &&
