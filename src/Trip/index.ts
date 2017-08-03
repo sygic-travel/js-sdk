@@ -182,29 +182,26 @@ export async function addPlaceToDay(
 	const userSettings = await getUserSettings();
 
 	let day: Day;
-	if (trip.days && trip.days[dayIndex]) {
-		day = trip.days[dayIndex];
-	} else {
+
+	if (!trip.days || trip.days.length <= dayIndex) {
 		throw new Error('Trip does not have day on index ' + dayIndex);
 	}
+
+	day = trip.days[dayIndex];
 
 	let nextDayItinerary: ItineraryItem[] | null = null;
 	let dayItinerary: ItineraryItem[] = [];
 	const nextDayIndex = dayIndex + 1;
 
-	if (trip.days && trip.days[nextDayIndex]) {
+	if (trip.days[nextDayIndex]) {
 		nextDayItinerary = trip.days[nextDayIndex].itinerary;
 	}
 
 	if (typeof positionInDay === 'undefined' || positionInDay === null) {
-		if (trip.days) {
-			dayItinerary = trip.days[dayIndex].itinerary;
-		}
+		dayItinerary = trip.days[dayIndex].itinerary;
 		const prevDayIndex = dayIndex - 1;
 		let prevDayItinerary: ItineraryItem[] | null = null;
-		if (trip.days &&
-			trip.days[prevDayIndex]
-		) {
+		if (trip.days[prevDayIndex]) {
 			prevDayItinerary = trip.days[prevDayIndex].itinerary;
 		}
 
