@@ -8,6 +8,7 @@ import { mapTripCreateRequest, putPlacesToTrip } from './Mapper';
 import * as PositionFinder from './PositionFinder';
 import {
 	Day,
+	hasDayStickyPlaceFromBothSides,
 	isTransportAvoid,
 	isTransportMode,
 	isTransportType,
@@ -194,18 +195,18 @@ export async function addPlaceToDay(
 	}
 
 	if (typeof positionInDay === 'undefined' || positionInDay === null) {
-		dayItinerary = trip.days[dayIndex].itinerary;
-		const prevDayIndex = dayIndex - 1;
-		let prevDayItinerary: ItineraryItem[] | null = null;
-		if (trip.days[prevDayIndex]) {
-			prevDayItinerary = trip.days[prevDayIndex].itinerary;
+		const firstPlaceInDay: Place|null = trip.days[dayIndex].itinerary[0] && trip.days[dayIndex].itinerary[0].place
+		if (firstPlaceInDay && hasDayStickyPlaceFromBothSides(trip, dayIndex) && firstPlaceInDay.id !== place.id) {
+			trip = TripManipulator.addPlaceToDay(trip, firstPlaceInDay, dayIndex, userSettings, 1);
+		}
+
+		if (trip.days) {
+			dayItinerary = trip.days[dayIndex].itinerary;
 		}
 
 		positionInDay = PositionFinder.findOptimalPosition(
 			place,
-			dayItinerary,
-			nextDayItinerary,
-			prevDayItinerary
+			dayItinerary
 		);
 	}
 
