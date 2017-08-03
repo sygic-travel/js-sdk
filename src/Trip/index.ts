@@ -181,13 +181,9 @@ export async function addPlaceToDay(
 	const place: Place = await getPlaceDetailed(placeId, '300x300');
 	const userSettings = await getUserSettings();
 
-	let day: Day;
-
 	if (!trip.days || trip.days.length <= dayIndex) {
 		throw new Error('Trip does not have day on index ' + dayIndex);
 	}
-
-	day = trip.days[dayIndex];
 
 	let nextDayItinerary: ItineraryItem[] | null = null;
 	let dayItinerary: ItineraryItem[] = [];
