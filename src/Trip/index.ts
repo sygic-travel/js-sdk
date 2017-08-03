@@ -168,6 +168,14 @@ export async function removeAllPlacesFromDay(id: string, dayIndex: number): Prom
 	);
 }
 
+export async function replaceLastStickyPlaceInDay(tripId: string, placeId: string, dayIndex: number): Promise<Trip> {
+	return Dao.updateTrip(TripManipulator.replaceLastStickyPlace(
+		await getTripDetailed(tripId),
+		await getPlaceDetailed(placeId, '300x300'),
+		dayIndex, await getUserSettings())
+	);
+}
+
 /**
  * @specification https://confluence.sygic.com/display/STV/Sticky+Places+in+Itinerary
  */
@@ -175,8 +183,7 @@ export async function addPlaceToDay(
 	tripId: string,
 	placeId: string,
 	dayIndex: number,
-	positionInDay?: number,
-	replaceSticky?: boolean
+	positionInDay?: number
 ): Promise<Trip> {
 	let trip: Trip = await getTripDetailed(tripId);
 	const place: Place = await getPlaceDetailed(placeId, '300x300');
@@ -211,10 +218,6 @@ export async function addPlaceToDay(
 	}
 
 	trip = await Dao.updateTrip(TripManipulator.addPlaceToDay(trip, place, dayIndex, userSettings, positionInDay));
-
-	if (replaceSticky) {
-		return Dao.updateTrip(TripManipulator.replaceLastStickyPlace(trip, place, dayIndex, userSettings));
-	}
 
 	if (
 		(isStickyByDefault(place)) &&

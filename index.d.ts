@@ -112,6 +112,13 @@ export class StSDK {
 	/**
 	 * @experimental
 	 */
+	public replaceLastStickyPlaceInDay(
+		tripId: string,
+		placeId: string,
+		dayIndex: number): Promise<Trips.Trip>
+	/**
+	 * @experimental
+	 */
 	public followTrip(tripId: string): Promise<void>
 	/**
 	 * @experimental
