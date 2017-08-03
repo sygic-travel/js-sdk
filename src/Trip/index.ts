@@ -1,5 +1,5 @@
 import { ChangeNotification } from '../Changes';
-import { Dao as placesDao, getPlaceDetailed, getPlacesDetailed, isStickyByDefault, Place } from '../Places';
+import { getPlaceDetailed, getPlacesDetailed, isStickyByDefault, Place } from '../Places';
 import { getUserSettings } from '../User';
 import { addDaysToDate } from '../Util/index';
 import * as Dao from './DataAccess';
@@ -197,8 +197,6 @@ export async function addPlaceToDay(
 	}
 
 	if (typeof positionInDay === 'undefined' || positionInDay === null) {
-		const dayPlaces = await placesDao.getPlacesFromTripDay(day);
-		trip = putPlacesToTrip(trip, dayPlaces);
 		if (trip.days) {
 			dayItinerary = trip.days[dayIndex].itinerary;
 		}
