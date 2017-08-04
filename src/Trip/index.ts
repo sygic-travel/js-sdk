@@ -217,7 +217,7 @@ export async function addPlaceToDay(
 		);
 	}
 
-	trip = await Dao.updateTrip(TripManipulator.addPlaceToDay(trip, place, dayIndex, userSettings, positionInDay));
+	trip = TripManipulator.addPlaceToDay(trip, place, dayIndex, userSettings, positionInDay);
 
 	if (
 		(isStickyByDefault(place)) &&
