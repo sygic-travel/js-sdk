@@ -261,8 +261,6 @@ export function replaceLastStickyPlace(
 	}
 	let resultTrip = cloneDeep(trip);
 	if (
-		trip.days &&
-		trip.days[dayIndex] &&
 		trip.days[dayIndex].itinerary.length &&
 		trip.days[dayIndex].itinerary[trip.days[dayIndex].itinerary.length - 1].isSticky
 	) {
@@ -276,7 +274,6 @@ export function replaceLastStickyPlace(
 	}
 	const nextDayIndex = dayIndex + 1;
 	if (
-		trip.days &&
 		trip.days[nextDayIndex] &&
 		trip.days[nextDayIndex].itinerary.length &&
 		trip.days[nextDayIndex].itinerary[0].isSticky

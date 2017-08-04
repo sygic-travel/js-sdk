@@ -5,6 +5,10 @@ import * as sinon from 'sinon';
 import { SinonSandbox } from 'sinon';
 
 import * as TripController from '.';
+import * as TripDao from './DataAccess';
+import * as Mapper from './Mapper';
+import { Day, ItineraryItem, Trip } from './Trip';
+
 import { tripsDetailedCache } from '../Cache';
 import * as PlaceController from '../Places';
 import { setEnvironment } from '../Settings';
@@ -15,7 +19,6 @@ import * as TripExpectedResults from '../TestData/TripExpectedResults';
 import * as User from '../User';
 import * as Xhr from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
-import { Day, ItineraryItem, Trip } from './Trip';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
@@ -193,6 +196,58 @@ describe('TripController', () => {
 
 			return chai.expect(TripController.addPlaceToDay('1234', 'poi:123456', 0, 2))
 				.to.eventually.eql(expectedTrip);
+		});
+
+		it('should correctly duplicate the both side sticky place', async () => {
+
+			const stickyPlace: PlaceController.Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			stickyPlace.id = 'poi:1';
+
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			if (!inputTrip.days) {
+				throw new Error('Wrong trip data.');
+			}
+			const stickyItineraryItem: ItineraryItem = {
+				place: stickyPlace,
+				placeId: stickyPlace.id,
+				startTime: null,
+				duration: null,
+				note: null,
+				isSticky: true,
+				transportFromPrevious: null
+			};
+			// Place in second day is sticky from both sides
+			inputTrip.days[0].itinerary = [cloneDeep(stickyItineraryItem)];
+			inputTrip.days[1].itinerary = [cloneDeep(stickyItineraryItem)];
+			inputTrip.days[2].itinerary = [cloneDeep(stickyItineraryItem)];
+
+			// Stubs for fetching trip
+			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => {resolve(inputTrip); }));
+			sandbox.stub(Mapper, 'putPlacesToTrip').returns(new Promise<Trip>((resolve) => {resolve(inputTrip); }));
+			sandbox.stub(PlaceController, 'getPlacesDetailed');
+
+			// Update trip stub
+			sandbox.stub(TripDao, 'updateTrip').callsFake((trip) => {
+				return new Promise<Trip>((resolve) => {
+					resolve(trip);
+				});
+			});
+
+			// Place to add
+			const placeToAdd: PlaceController.Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			placeToAdd.id = 'poi:2';
+			sandbox.stub(PlaceController, 'getPlaceDetailed').returns(new Promise<PlaceController.Place>((resolve) => {
+				resolve(placeToAdd);
+			}));
+
+			const resultTrip: Trip = await TripController.addPlaceToDay('xxx', 'poi:2', 1);
+			chai.expect(resultTrip.days && resultTrip.days.length).to.equal(3);
+			chai.expect(resultTrip.days && resultTrip.days[0].itinerary.length).to.equal(1);
+			chai.expect(resultTrip.days && resultTrip.days[1].itinerary.length).to.equal(3);
+			chai.expect(resultTrip.days && resultTrip.days[1].itinerary[0].placeId).to.equal('poi:1');
+			chai.expect(resultTrip.days && resultTrip.days[1].itinerary[1].placeId).to.equal('poi:2');
+			chai.expect(resultTrip.days && resultTrip.days[1].itinerary[2].placeId).to.equal('poi:1');
+			chai.expect(resultTrip.days && resultTrip.days[2].itinerary.length).to.equal(1);
 		});
 	});
 });

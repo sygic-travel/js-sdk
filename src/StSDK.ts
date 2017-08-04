@@ -58,6 +58,7 @@ import {
 	removeAllPlacesFromDay,
 	removeDayFromTrip,
 	removePlacesFromDay,
+	replaceLastStickyPlaceInDay,
 	setTransport,
 	swapDaysInTrip,
 	TransportSettings,
@@ -254,6 +255,16 @@ export default class StSDK extends BaseSDK {
 		dayIndex: number,
 		positionInDay?: number): Promise<Trip> {
 			return addPlaceToDay(tripId, placeId, dayIndex, positionInDay);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public replaceLastStickyPlaceInDay(
+		tripId: string,
+		placeId: string,
+		dayIndex: number): Promise<Trip> {
+		return replaceLastStickyPlaceInDay(tripId, placeId, dayIndex);
 	}
 
 	/**
