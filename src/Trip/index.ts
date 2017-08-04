@@ -202,7 +202,7 @@ export async function addPlaceToDay(
 	}
 
 	if (typeof positionInDay === 'undefined' || positionInDay === null) {
-		const firstPlaceInDay: Place|null = trip.days[dayIndex].itinerary[0] && trip.days[dayIndex].itinerary[0].place
+		const firstPlaceInDay: Place|null = trip.days[dayIndex].itinerary[0] && trip.days[dayIndex].itinerary[0].place;
 		if (firstPlaceInDay && hasDayStickyPlaceFromBothSides(trip, dayIndex) && firstPlaceInDay.id !== place.id) {
 			trip = TripManipulator.addPlaceToDay(trip, firstPlaceInDay, dayIndex, userSettings, 1);
 		}
