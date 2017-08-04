@@ -14,6 +14,10 @@ export class StSDK {
 	 * @experimental
 	 */
 	public getPlaceOpeningHours(id: string, from: string, to: string): Promise<Places.PlaceOpeningHours>
+	/**
+	 * @experimental
+	 */
+	public detectParents(bounds: Geo.Bounds, zoom: number): Promise<Places.Place[]>
 	public spreadPlacesOnMap(
 		places: Places.Place[],
 		bounds: Geo.Bounds,
