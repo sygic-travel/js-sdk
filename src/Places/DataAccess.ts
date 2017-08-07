@@ -3,9 +3,10 @@ import { stringify } from 'query-string';
 
 import * as api from '../Api';
 import { placesDetailedCache as cache } from '../Cache';
+import { Bounds, locationToMapTileKey } from '../Geo';
 import { Medium } from '../Media/Media';
 import { Day, ItineraryItem } from '../Trip';
-import { delete_, get, post, put } from '../Xhr';
+import { ApiResponse, delete_, get, post, put } from '../Xhr';
 import { PlacesFilter } from './Filter';
 import {
 	mapPlaceApiResponseToPlaces,
@@ -172,4 +173,16 @@ export async function voteOnReview(reviewId: number, voteValue: number): Promise
 	await put(`reviews/${reviewId}/votes`, {
 		value: voteValue
 	});
+}
+
+export async function detectParents(bounds: Bounds, zoom: number): Promise<Place[]> {
+	const swMapTile = locationToMapTileKey({lat: bounds.south, lng: bounds.west}, zoom);
+	const neMapTile = locationToMapTileKey({lat: bounds.north, lng: bounds.east}, zoom);
+	const apiResponse: ApiResponse = await get(`places/detect-parents?` + stringify({
+		map_tile_bounds: swMapTile + ',' + neMapTile
+	}));
+	if (!apiResponse.data.hasOwnProperty('places')) {
+		throw new Error('Wrong API response');
+	}
+	return mapPlaceApiResponseToPlaces(apiResponse.data.places);
 }

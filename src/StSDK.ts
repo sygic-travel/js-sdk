@@ -18,6 +18,7 @@ import { Medium } from './Media';
 import {
 	addPlaceReview,
 	deletePlaceReview,
+	detectParents,
 	getPlaceDetailed,
 	getPlaceGeometry,
 	getPlaceMedia,
@@ -102,6 +103,13 @@ export default class StSDK extends BaseSDK {
 	 */
 	public getPlaceOpeningHours(id: string, from: string, to: string): Promise<PlaceOpeningHours> {
 		return getPlaceOpeningHours(id, from, to);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public detectParents(bounds: Bounds, zoom: number): Promise<Place[]>  {
+		return detectParents(bounds, zoom);
 	}
 
 	public spreadPlacesOnMap(

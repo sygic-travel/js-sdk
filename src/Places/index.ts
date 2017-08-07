@@ -1,3 +1,4 @@
+import { Bounds } from '../Geo';
 import { Medium } from '../Media/Media';
 import * as Dao from './DataAccess';
 import { PlacesFilter, PlacesFilterJSON } from './Filter';
@@ -63,4 +64,8 @@ export async function getPlaceReviews(placeId: string, limit: number, page: numb
 
 export async function voteOnReview(reviewId: number, voteValue: number): Promise<void> {
 	return Dao.voteOnReview(reviewId, voteValue);
+}
+
+export async function detectParents(bounds: Bounds, zoom: number): Promise<Place[]> {
+	return Dao.detectParents(bounds, zoom);
 }
