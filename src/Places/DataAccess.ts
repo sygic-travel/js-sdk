@@ -22,6 +22,8 @@ import { PlaceGeometry } from './PlaceGeometry';
 import { PlaceOpeningHours } from './PlaceOpeningHours';
 import { PlaceReview } from './PlaceReview';
 import { PlaceReviewsData } from './PlaceReviewsData';
+import { PlacesStats } from './Stats';
+import { PlacesStatsFilter } from './StatsFilter';
 
 export async function getPlaces(filter: PlacesListFilter): Promise<Place[]> {
 	const apiResponse = await api.getPlaces(filter);
@@ -185,4 +187,18 @@ export async function detectParents(bounds: Bounds, zoom: number): Promise<Place
 		throw new Error('Wrong API response');
 	}
 	return mapPlaceApiResponseToPlaces(apiResponse.data.places);
+}
+
+export async function getPlacesStats(filter: PlacesStatsFilter): Promise<PlacesStats> {
+	if (filter.bounds) {
+		filter = filter.switchBoundsToMapTileBounds();
+	}
+	const apiResponse: ApiResponse = await get(`places/stats?` + filter.toQueryString());
+	if (!apiResponse.data.hasOwnProperty('stats')) {
+		throw new Error('Wrong API response');
+	}
+	return {
+		categories: apiResponse.data.stats.categories.map((item) => camelizeKeys(item)),
+		tags: apiResponse.data.stats.tags.map((item) => camelizeKeys(item)),
+	} as PlacesStats;
 }
