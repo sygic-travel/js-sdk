@@ -11,7 +11,7 @@ import * as ExpectedResults from '../TestData/PlacesExpectedResults';
 import * as Xhr from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
 import * as Dao from './DataAccess';
-import { PlacesFilter, PlacesFilterJSON } from './Filter';
+import { PlacesListFilter, PlacesListFilterJSON } from './ListFilter';
 import { Place } from './Place';
 import { PlaceGeometry } from './PlaceGeometry';
 import { DayOpeningHours, PlaceOpeningHours } from './PlaceOpeningHours';
@@ -42,14 +42,14 @@ describe('PlacesDataAccess', () => {
 				resolve(new ApiResponse(200, TestData.places));
 			}));
 
-			const placesFilterJSON: PlacesFilterJSON = {
+			const placesFilterJSON: PlacesListFilterJSON = {
 				categories: ['eating'],
 				limit: 20,
 				parents: ['city:1'],
 				tags: []
 			};
 
-			return chai.expect(Dao.getPlaces(new PlacesFilter(placesFilterJSON)))
+			return chai.expect(Dao.getPlaces(new PlacesListFilter(placesFilterJSON)))
 				.to.eventually.deep.equal(ExpectedResults.places);
 		});
 	});

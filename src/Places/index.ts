@@ -1,7 +1,7 @@
 import { Bounds } from '../Geo';
 import { Medium } from '../Media/Media';
 import * as Dao from './DataAccess';
-import { PlacesFilter, PlacesFilterJSON } from './Filter';
+import { PlacesListFilter, PlacesListFilterJSON } from './ListFilter';
 import { isStickyByDefault, Place } from './Place';
 import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
@@ -12,9 +12,9 @@ import { PlaceReviewsData } from './PlaceReviewsData';
 export {
 	isStickyByDefault,
 	DayOpeningHours,
-	PlacesFilter,
+	PlacesListFilter,
 	Place,
-	PlacesFilterJSON,
+	PlacesListFilterJSON,
 	PlaceGeometry,
 	PlaceDetail,
 	PlaceOpeningHours,
@@ -26,7 +26,7 @@ export {
 	Dao,
 }
 
-export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
+export async function getPlaces(filter: PlacesListFilter): Promise<Place[]> {
 	return await Dao.getPlaces(filter);
 }
 

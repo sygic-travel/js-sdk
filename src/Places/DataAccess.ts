@@ -7,7 +7,7 @@ import { Bounds, locationToMapTileKey } from '../Geo';
 import { Medium } from '../Media/Media';
 import { Day, ItineraryItem } from '../Trip';
 import { ApiResponse, delete_, get, post, put } from '../Xhr';
-import { PlacesFilter } from './Filter';
+import { PlacesListFilter } from './ListFilter';
 import {
 	mapPlaceApiResponseToPlaces,
 	mapPlaceDetailedApiResponseToPlace,
@@ -23,7 +23,7 @@ import { PlaceOpeningHours } from './PlaceOpeningHours';
 import { PlaceReview } from './PlaceReview';
 import { PlaceReviewsData } from './PlaceReviewsData';
 
-export async function getPlaces(filter: PlacesFilter): Promise<Place[]> {
+export async function getPlaces(filter: PlacesListFilter): Promise<Place[]> {
 	const apiResponse = await api.getPlaces(filter);
 	if (!apiResponse.data.hasOwnProperty('places')) {
 		throw new Error('Wrong API response');

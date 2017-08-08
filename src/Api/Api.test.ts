@@ -3,7 +3,7 @@ import * as chaiAsPromised from 'chai-as-promised';
 import * as sinon from 'sinon';
 
 import { getPlaces } from '.';
-import { PlacesFilter } from '../Places/Filter';
+import { PlacesListFilter } from '../Places/ListFilter';
 import * as Xhr from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
 
@@ -25,7 +25,7 @@ describe('Api', () => {
 			const stub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, { places: [] }));
 			}));
-			const filter = new PlacesFilter({
+			const filter = new PlacesListFilter({
 				bounds: {
 					south: 0,
 					west: 0,
@@ -46,7 +46,7 @@ describe('Api', () => {
 			const stub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve, reject) => {
 				reject(new Error('Something went wrong'));
 			}));
-			const filter = new PlacesFilter({
+			const filter = new PlacesListFilter({
 				bounds: {
 					south: 0,
 					west: 0,

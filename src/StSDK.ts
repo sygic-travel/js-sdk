@@ -31,8 +31,8 @@ import {
 	PlaceOpeningHours,
 	PlaceReview,
 	PlaceReviewsData,
-	PlacesFilter,
-	PlacesFilterJSON,
+	PlacesListFilter,
+	PlacesListFilterJSON,
 	voteOnReview
 } from './Places';
 import { getRoutesForTripDay, Route } from './Route';
@@ -75,8 +75,8 @@ export default class StSDK extends BaseSDK {
 		return setUserSession(key, token);
 	}
 
-	public getPlaces(filter: PlacesFilterJSON): Promise<Place[]> {
-		return getPlaces(new PlacesFilter(filter));
+	public getPlaces(filter: PlacesListFilterJSON): Promise<Place[]> {
+		return getPlaces(new PlacesListFilter(filter));
 	}
 
 	public getPlaceDetailed(id: string, photoSize: string): Promise<Place> {
