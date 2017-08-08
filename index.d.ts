@@ -9,6 +9,10 @@ export class StSDK {
 	/**
 	 * @experimental
 	 */
+	public getPlacesStats(filter: Places.PlacesStatsFilterJSON): Promise<Places.PlacesStats>
+	/**
+	 * @experimental
+	 */
 	public getPlaceGeometry(id: string): Promise<Places.PlaceGeometry>
 	/**
 	 * @experimental
@@ -252,6 +256,21 @@ export namespace Places {
 		zoom?: number;
 	}
 
+	export interface PlacesStatsFilterJSON {
+		query?: string;
+		mapTiles?: string[];
+		mapTileBounds?: string[];
+		categories?: string[];
+		categoriesOperator?: LogicalOperator;
+		tags?: string[];
+		tagsOperator?: LogicalOperator;
+		parents?: string[];
+		parentsOperator?: LogicalOperator;
+		levels?: string[];
+		bounds?: Geo.Bounds;
+		zoom?: number;
+	}
+
 	export enum LogicalOperator {
 		AND,
 		OR
@@ -334,6 +353,17 @@ export namespace Places {
 		rating: number;
 		currentUserHasReview: boolean;
 		reviews: PlaceReview[];
+	}
+
+	export interface SumStatistic {
+		name: string;
+		key: string;
+		count: number;
+	}
+
+	export interface PlacesStats {
+		categories: SumStatistic[];
+		tags: SumStatistic[];
 	}
 }
 

@@ -8,18 +8,23 @@ import { PlaceGeometry } from './PlaceGeometry';
 import { DayOpeningHours, PlaceOpeningHours } from './PlaceOpeningHours';
 import { PlaceReview } from './PlaceReview';
 import { PlaceReviewsData } from './PlaceReviewsData';
+import { PlacesStats } from './Stats';
+import { PlacesStatsFilter, PlacesStatsFilterJSON } from './StatsFilter';
 
 export {
 	isStickyByDefault,
 	DayOpeningHours,
 	PlacesListFilter,
+	PlacesStatsFilter,
 	Place,
 	PlacesListFilterJSON,
+	PlacesStatsFilterJSON,
 	PlaceGeometry,
 	PlaceDetail,
 	PlaceOpeningHours,
 	PlaceReview,
 	PlaceReviewsData,
+	PlacesStats,
 	Reference,
 	Tag,
 	Description,
@@ -28,6 +33,10 @@ export {
 
 export async function getPlaces(filter: PlacesListFilter): Promise<Place[]> {
 	return await Dao.getPlaces(filter);
+}
+
+export async function getPlacesStats(filter: PlacesStatsFilter): Promise<PlacesStats> {
+	return await Dao.getPlacesStats(filter);
 }
 
 export async function getPlaceDetailed(id: string, photoSize: string): Promise<Place> {
