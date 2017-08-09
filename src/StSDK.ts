@@ -17,6 +17,9 @@ import { Bounds, Location, locationToMapTileKey } from './Geo';
 import { Medium } from './Media';
 import {
 	addPlaceReview,
+	createCustomPlace,
+	CustomPlaceFormData,
+	deleteCustomPlace,
 	deletePlaceReview,
 	detectParents,
 	getPlaceDetailed,
@@ -37,6 +40,7 @@ import {
 	PlacesStats,
 	PlacesStatsFilter,
 	PlacesStatsFilterJSON,
+	updateCustomPlace,
 	voteOnReview
 } from './Places';
 import { getRoutesForTripDay, Route } from './Route';
@@ -118,6 +122,27 @@ export default class StSDK extends BaseSDK {
 	 */
 	public detectParents(bounds: Bounds, zoom: number): Promise<Place[]>  {
 		return detectParents(bounds, zoom);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public createCustomPlace(data: CustomPlaceFormData): Promise<Place> {
+		return createCustomPlace(data);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public updateCustomPlace(id: string, data: CustomPlaceFormData): Promise<Place> {
+		return updateCustomPlace(id, data);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public deleteCustomPlace(id: string): Promise<void> {
+		return deleteCustomPlace(id);
 	}
 
 	public spreadPlacesOnMap(
