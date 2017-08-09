@@ -2,7 +2,7 @@ import { Bounds } from '../Geo';
 import { Medium } from '../Media/Media';
 import * as Dao from './DataAccess';
 import { PlacesListFilter, PlacesListFilterJSON } from './ListFilter';
-import { isStickyByDefault, Place } from './Place';
+import { CustomPlaceFormData, isStickyByDefault, Place } from './Place';
 import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
 import { DayOpeningHours, PlaceOpeningHours } from './PlaceOpeningHours';
@@ -12,6 +12,7 @@ import { PlacesStats } from './Stats';
 import { PlacesStatsFilter, PlacesStatsFilterJSON } from './StatsFilter';
 
 export {
+	CustomPlaceFormData,
 	isStickyByDefault,
 	DayOpeningHours,
 	PlacesListFilter,
@@ -49,6 +50,18 @@ export async function getPlacesDetailed(ids: string[], photoSize: string): Promi
 
 export async function getPlaceMedia(id: string): Promise<Medium[]> {
 	return await Dao.getPlaceMedia(id);
+}
+
+export async function createCustomPlace(data: CustomPlaceFormData): Promise<Place> {
+	return await Dao.createCustomPlace(data);
+}
+
+export async function updateCustomPlace(id: string, data: CustomPlaceFormData): Promise<Place> {
+	return await Dao.updateCustomPlace(id, data);
+}
+
+export async function deleteCustomPlace(id: string): Promise<void> {
+	return await Dao.deleteCustomPlace(id);
 }
 
 export async function getPlaceGeometry(id: string): Promise<PlaceGeometry> {

@@ -22,6 +22,18 @@ export class StSDK {
 	 * @experimental
 	 */
 	public detectParents(bounds: Geo.Bounds, zoom: number): Promise<Places.Place[]>
+	/**
+	 * @experimental
+	 */
+	public createCustomPlace(data: Places.CustomPlaceFormData): Promise<Places.Place>
+	/**
+	 * @experimental
+	 */
+	public updateCustomPlace(id: string, data: Places.CustomPlaceFormData): Promise<Places.Place>
+	/**
+	 * @experimental
+	 */
+	public deleteCustomPlace(id: string): Promise<void>
 	public spreadPlacesOnMap(
 		places: Places.Place[],
 		bounds: Geo.Bounds,
@@ -238,6 +250,17 @@ export namespace Places {
 		marker: string;
 		parents: string[];
 		detail: PlaceDetail | null;
+	}
+
+	export interface CustomPlaceFormData {
+		name: string;
+		location: Location;
+		address?: string;
+		description?: string;
+		phone?: string;
+		email?: string;
+		opening_hours?: string;
+		admission?: string;
 	}
 
 	export interface PlacesListFilterJSON {

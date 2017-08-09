@@ -17,7 +17,7 @@ import {
 	mapPlaceReview,
 	mapPlaceReviewsData
 } from './Mapper';
-import { Place } from './Place';
+import { CustomPlaceFormData, Place } from './Place';
 import { PlaceGeometry } from './PlaceGeometry';
 import { PlaceOpeningHours } from './PlaceOpeningHours';
 import { PlaceReview } from './PlaceReview';
@@ -48,6 +48,32 @@ export async function getPlaceDetailed(id: string, photoSize: string): Promise<a
 		result = fromCache;
 	}
 	return mapPlaceDetailedApiResponseToPlace(result, photoSize);
+}
+
+export async function createCustomPlace(data: CustomPlaceFormData): Promise<Place> {
+	const apiResponse: ApiResponse = await post('places', data);
+	if (!apiResponse.data.hasOwnProperty('place')) {
+		throw new Error('Wrong API response');
+	}
+	const result = apiResponse.data.place;
+	await cache.set(result.id, result);
+	return mapPlaceDetailedApiResponseToPlace(result, '100x100');
+}
+
+export async function updateCustomPlace(id: string, data: CustomPlaceFormData): Promise<Place> {
+	const apiResponse: ApiResponse = await put('places/' + id, data);
+	if (!apiResponse.data.hasOwnProperty('place')) {
+		throw new Error('Wrong API response');
+	}
+	const result = apiResponse.data.place;
+	await cache.set(result.id, result);
+	return mapPlaceDetailedApiResponseToPlace(result, '100x100');
+}
+
+export async function deleteCustomPlace(id: string): Promise<void> {
+	await delete_('places/' + id, {});
+	await cache.remove(id);
+	return;
 }
 
 export async function getPlacesDetailed(ids: string[], photoSize: string): Promise<Place[]> {

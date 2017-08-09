@@ -282,4 +282,42 @@ export const placesStatsData = {
 		} as SumStatistic
 	],
 } as PlacesStats;
+
+export const customPlace = {
+		id: 'c:1',
+		level: 'poi',
+		rating: 0,
+		location: {
+			lat: -18.894964,
+			lng: 47.51632
+		} as Location,
+		quadkey: '301022033120323222',
+		boundingBox: null,
+		name: 'Antananarivo',
+		nameSuffix: null,
+		url: null,
+		categories: [],
+		marker: 'default',
+		parents: [],
+		perex: '',
+		thumbnailUrl: null,
+		detail: {
+			tags: [],
+			address: null,
+			admission: null,
+			duration: 3600,
+			email: null,
+			openingHours: null,
+			phone: null,
+			media: {
+				landscape: null,
+				portrait: null,
+				square: null,
+				videoPreview: null
+			},
+			references: [],
+			ownerId: '4d945cecbe65e',
+			description: null
+		}
+} as Place;
 /* tslint:enable */
