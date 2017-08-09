@@ -20,6 +20,17 @@ export interface Place {
 	detail: PlaceDetail | null;
 }
 
+export interface CustomPlaceFormData {
+	name: string;
+	location: Location;
+	address?: string;
+	description?: string;
+	phone?: string;
+	email?: string;
+	opening_hours?: string;
+	admission?: string;
+}
+
 export function isStickyByDefault(place: Place): boolean {
 	return place.categories.indexOf('sleeping') !== -1;
 }
