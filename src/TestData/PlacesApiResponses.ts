@@ -309,4 +309,44 @@ export const placesStatsData = {
 		],
 	}
 };
+
+export const customPlaceData = {
+	"place": {
+		"id": "c:1",
+		"level": "poi",
+		"rating": 0,
+		"location": {
+			"lat": -18.894964,
+			"lng": 47.51632
+		},
+		"quadkey": "301022033120323222",
+		"bounding_box": null,
+		"name": "Antananarivo",
+		"name_suffix": null,
+		"url": null,
+		"price": null,
+		"categories": [],
+		"customer_rating": null,
+		"star_rating": null,
+		"tags": [],
+		"address": null,
+		"admission": null,
+		"duration": 3600,
+		"email": null,
+		"is_deleted": false,
+		"opening_hours": null,
+		"phone": null,
+		"main_media": null,
+		"references": [],
+		"tours": [],
+		"marker": "default",
+		"owner_id": "4d945cecbe65e",
+		"share": false,
+		"admin_message": null,
+		"parent_ids": [],
+		"perex": "",
+		"description": null,
+		"thumbnail_url": null
+	}
+};
 /* tslint:enable */

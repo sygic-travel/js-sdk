@@ -12,7 +12,7 @@ import * as Xhr from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
 import * as Dao from './DataAccess';
 import { PlacesListFilter, PlacesListFilterJSON } from './ListFilter';
-import { Place } from './Place';
+import { CustomPlaceFormData, Place } from './Place';
 import { PlaceGeometry } from './PlaceGeometry';
 import { DayOpeningHours, PlaceOpeningHours } from './PlaceOpeningHours';
 import { PlacesStatsFilter } from './StatsFilter';
@@ -242,6 +242,52 @@ describe('PlacesDataAccess', () => {
 			}));
 			return chai.expect(Dao.getPlacesStats(new PlacesStatsFilter({query: 'test'})))
 				.to.eventually.deep.equal(ExpectedResults.placesStatsData);
+		});
+	});
+
+	describe('#createCustomPlace', () => {
+		it('should correctly create an custom place', () => {
+			const formData: CustomPlaceFormData = {
+				name: 'Antananarivo',
+				location: {
+					lat: -18.894964,
+					lng: 47.51632
+				}
+			};
+			sandbox.stub(Xhr, 'post').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, TestData.customPlaceData));
+			}));
+			return chai.expect(Dao.createCustomPlace(formData))
+				.to.eventually.deep.equal(ExpectedResults.customPlace);
+		});
+	});
+
+	describe('#updateCustomPlace', () => {
+		it('should correctly update the custom place', () => {
+			const formData: CustomPlaceFormData = {
+				name: 'Antananarivo',
+				location: {
+					lat: -18.894964,
+					lng: 47.51632
+				}
+			};
+			sandbox.stub(Xhr, 'put').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, TestData.customPlaceData));
+			}));
+			return chai.expect(Dao.updateCustomPlace('c:1', formData))
+				.to.eventually.deep.equal(ExpectedResults.customPlace);
+		});
+	});
+
+	describe('#deleteCustomPlace', () => {
+		it('should correctly call api delete and remove from cache', async () => {
+			const cacheSpy = sinon.spy(Cache, 'remove');
+			const apiStub = sandbox.stub(Xhr, 'delete_').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, {}));
+			}));
+			await Dao.deleteCustomPlace('c:1');
+			chai.expect(cacheSpy.callCount).to.equal(1);
+			chai.expect(apiStub.callCount).to.equal(1);
 		});
 	});
 });
