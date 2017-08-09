@@ -1,16 +1,16 @@
 import { boundsToMapTileKeys } from '../Geo';
 import { Bounds } from '../Geo/Bounds';
-import { PlacesFilter } from '../Places/Filter';
+import { PlacesListFilter } from '../Places/ListFilter';
 import { ApiResponse, get as xhrGet} from '../Xhr';
 
-export function getPlaces(filter: PlacesFilter): Promise<ApiResponse> {
+export function getPlaces(filter: PlacesListFilter): Promise<ApiResponse> {
 	if (filter.mapSpread) {
 		return getPlacesWitMapSpread(filter);
 	}
 	return xhrGet('places/list?' + filter.toQueryString());
 }
 
-const getPlacesWitMapSpread = async (filter: PlacesFilter): Promise<ApiResponse>  => {
+const getPlacesWitMapSpread = async (filter: PlacesListFilter): Promise<ApiResponse>  => {
 
 	const mapTiles: string[] = boundsToMapTileKeys(filter.bounds as Bounds, filter.zoom as number);
 

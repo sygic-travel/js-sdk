@@ -2,10 +2,14 @@ export function create(apiUrl: string, clientKey: string): StSDK;
 
 export class StSDK {
 	public setUserSession(key: string | null, token: string | null): Promise<void>;
-	public getPlaces(filter: Places.PlacesFilterJSON): Promise<Places.Place[]>;
+	public getPlaces(filter: Places.PlacesListFilterJSON): Promise<Places.Place[]>;
 	public getPlaceDetailed(id: string, photoSize: string): Promise<Places.Place>;
 	public getPlacesDetailed(id: string[], photoSize: string): Promise<Places.Place[]>;
 	public getPlaceMedia(guid: string): Promise<Media.Medium[]>;
+	/**
+	 * @experimental
+	 */
+	public getPlacesStats(filter: Places.PlacesStatsFilterJSON): Promise<Places.PlacesStats>
 	/**
 	 * @experimental
 	 */
@@ -236,7 +240,7 @@ export namespace Places {
 		detail: PlaceDetail | null;
 	}
 
-	export interface PlacesFilterJSON {
+	export interface PlacesListFilterJSON {
 		query?: string;
 		mapTiles?: string[];
 		mapSpread?: number;
@@ -248,6 +252,21 @@ export namespace Places {
 		parentsOperator?: LogicalOperator;
 		levels?: string[];
 		limit?: number;
+		bounds?: Geo.Bounds;
+		zoom?: number;
+	}
+
+	export interface PlacesStatsFilterJSON {
+		query?: string;
+		mapTiles?: string[];
+		mapTileBounds?: string[];
+		categories?: string[];
+		categoriesOperator?: LogicalOperator;
+		tags?: string[];
+		tagsOperator?: LogicalOperator;
+		parents?: string[];
+		parentsOperator?: LogicalOperator;
+		levels?: string[];
 		bounds?: Geo.Bounds;
 		zoom?: number;
 	}
@@ -334,6 +353,17 @@ export namespace Places {
 		rating: number;
 		currentUserHasReview: boolean;
 		reviews: PlaceReview[];
+	}
+
+	export interface SumStatistic {
+		name: string;
+		key: string;
+		count: number;
+	}
+
+	export interface PlacesStats {
+		categories: SumStatistic[];
+		tags: SumStatistic[];
 	}
 }
 

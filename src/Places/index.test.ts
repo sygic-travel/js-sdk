@@ -3,10 +3,10 @@ import * as chaiAsPromised from 'chai-as-promised';
 import { SinonSandbox } from 'sinon';
 import * as sinon from 'sinon';
 
+import { PlacesListFilter, PlacesListFilterJSON } from '.';
 import { setEnvironment } from '../Settings';
 import * as Xhr from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
-import { PlacesFilter, PlacesFilterJSON } from './Filter';
 import * as PlacesController from './index';
 
 import * as TestData from '../TestData/PlacesApiResponses';
@@ -73,14 +73,14 @@ describe('PlacesController', () => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
-			const placesFilterJSON: PlacesFilterJSON = {
+			const placesFilterJSON: PlacesListFilterJSON = {
 				categories: ['eating'],
 				limit: 20,
 				parents: ['city:1'],
 				tags: []
 			};
 
-			return chai.expect(PlacesController.getPlaces(new PlacesFilter(placesFilterJSON))).to.be.rejected;
+			return chai.expect(PlacesController.getPlaces(new PlacesListFilter(placesFilterJSON))).to.be.rejected;
 		});
 
 		it('should return array of places', () => {
@@ -88,14 +88,14 @@ describe('PlacesController', () => {
 				resolve(new ApiResponse(200, TestData.places));
 			}));
 
-			const placesFilterJSON: PlacesFilterJSON = {
+			const placesFilterJSON: PlacesListFilterJSON = {
 				categories: ['eating'],
 				limit: 20,
 				parents: ['city:1'],
 				tags: []
 			};
 
-			return chai.expect(PlacesController.getPlaces(new PlacesFilter(placesFilterJSON)))
+			return chai.expect(PlacesController.getPlaces(new PlacesListFilter(placesFilterJSON)))
 				.to.eventually.have.lengthOf(1);
 		});
 
@@ -104,14 +104,14 @@ describe('PlacesController', () => {
 				resolve(new ApiResponse(200, TestData.places));
 			}));
 
-			const placesFilterJSON: PlacesFilterJSON = {
+			const placesFilterJSON: PlacesListFilterJSON = {
 				categories: ['eating'],
 				limit: 20,
 				parents: ['city:1'],
 				tags: []
 			};
 
-			return chai.expect(PlacesController.getPlaces(new PlacesFilter(placesFilterJSON)))
+			return chai.expect(PlacesController.getPlaces(new PlacesListFilter(placesFilterJSON)))
 				.to.eventually.deep.equal(ExpectedResults.places);
 		});
 	});

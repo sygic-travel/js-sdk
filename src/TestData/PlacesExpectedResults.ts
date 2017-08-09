@@ -4,6 +4,7 @@ import { Place } from '../Places/Place';
 import { Description, PlaceDetail, Reference, Tag } from '../Places/PlaceDetail';
 import { PlaceReview } from '../Places/PlaceReview';
 import { PlaceReviewsData } from '../Places/PlaceReviewsData';
+import { PlacesStats, SumStatistic } from '../Places/Stats';
 
 /* tslint:disable */
 export const placeDetailedEiffelTowerWithoutMedia: Place = {
@@ -256,4 +257,29 @@ export const placeReviewsData = {
 		updatedAt: '2017-02-30T09:09:45+01:00'
 	} as PlaceReview]
 } as PlaceReviewsData;
+
+export const placesStatsData = {
+	categories: [
+		{
+			key: "shopping",
+			name: "Shopping",
+			count: 10
+		} as SumStatistic, {
+			key: "eating",
+			name: "eating",
+			count: 100
+		} as SumStatistic
+	],
+	tags: [
+		{
+			key: "market",
+			name: "market",
+			count: 10
+		} as SumStatistic, {
+			key: "kfc",
+			name: "KFC",
+			count: 100
+		} as SumStatistic
+	],
+} as PlacesStats;
 /* tslint:enable */

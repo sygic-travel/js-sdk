@@ -282,4 +282,31 @@ export const placeReviewsData = {
 		updated_at: "2017-02-30T09:09:45+01:00"
 	}]
 };
+
+export const placesStatsData = {
+	stats: {
+		categories: [
+			{
+				key: "shopping",
+				name: "Shopping",
+				count: 10
+			}, {
+				key: "eating",
+				name: "eating",
+				count: 100
+			}
+		],
+		tags: [
+			{
+				key: "market",
+				name: "market",
+				count: 10
+			}, {
+				key: "kfc",
+				name: "KFC",
+				count: 100
+			}
+		],
+	}
+};
 /* tslint:enable */
