@@ -13,7 +13,7 @@ export interface Place {
 	name: string;
 	nameSuffix: string | null;
 	perex: string | null;
-	url: string;
+	url: string | null;
 	thumbnailUrl: string | null;
 	marker: string;
 	parents: string[];
