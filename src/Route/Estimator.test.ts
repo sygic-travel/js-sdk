@@ -15,7 +15,7 @@ describe('Estimator', () => {
 			chai.expect(direction.polyline).to.equal('_c`|@_c`|@_ibE_ibE');
 			chai.expect(direction.type).to.equal('fastest');
 			chai.expect(direction.distance).to.equal(156116);
-			chai.expect(direction.duration).to.equal(11503);
+			chai.expect(direction.duration).to.equal(7824);
 			chai.expect(direction.avoid).to.deep.equal([]);
 			chai.expect(direction.isoCodes).to.deep.equal([]);
 			chai.expect(direction.source).to.equal('estimator');
