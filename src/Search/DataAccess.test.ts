@@ -33,41 +33,41 @@ describe('SearchDataAccess', () => {
 		lng: 14.421861
 	} as Location;
 
-	describe('#searchAddress', () => {
+	describe('#search', () => {
 		it('should throw and exception when response without searched locations came', () => {
 			sandbox.stub(Xhr, 'get').returns(new Promise<Xhr.ApiResponse>((resolve) => {
 				resolve(new Xhr.ApiResponse(200, {}));
 			}));
 
-			return chai.expect(Dao.searchAddress(query, location)).to.be.rejected;
+			return chai.expect(Dao.search(query, location)).to.be.rejected;
 		});
 
-		it('should correctly map searchAddress response', () => {
+		it('should correctly map search response', () => {
 			sandbox.stub(Xhr, 'get').returns(new Promise<Xhr.ApiResponse>((resolve) => {
-				resolve(new Xhr.ApiResponse(200, TestApiResponses.locations));
+				resolve(new Xhr.ApiResponse(200, TestApiResponses.searchLocations));
 			}));
 
-			return chai.expect(Dao.searchAddress(query, location))
-				.to.eventually.deep.equal(TestApiExpectedResults.locations);
+			return chai.expect(Dao.search(query, location))
+				.to.eventually.deep.equal(TestApiExpectedResults.searchLocations);
 		});
 	});
 
-	describe('#searchAddressReverse', () => {
+	describe('#searchReverse', () => {
 		it('should throw and exception when response without searched locations came', () => {
 			sandbox.stub(Xhr, 'get').returns(new Promise<Xhr.ApiResponse>((resolve) => {
 				resolve(new Xhr.ApiResponse(200, {}));
 			}));
 
-			return chai.expect(Dao.searchAddressReverse(location)).to.be.rejected;
+			return chai.expect(Dao.searchReverse(location)).to.be.rejected;
 		});
 
-		it('should correctly map searchAddress response', () => {
+		it('should correctly map search response', () => {
 			sandbox.stub(Xhr, 'get').returns(new Promise<Xhr.ApiResponse>((resolve) => {
-				resolve(new Xhr.ApiResponse(200, TestApiResponses.locations));
+				resolve(new Xhr.ApiResponse(200, TestApiResponses.searchLocations));
 			}));
 
-			return chai.expect(Dao.searchAddressReverse(location))
-				.to.eventually.deep.equal(TestApiExpectedResults.locations);
+			return chai.expect(Dao.searchReverse(location))
+				.to.eventually.deep.equal(TestApiExpectedResults.searchLocations);
 		});
 	});
 });

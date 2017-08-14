@@ -1,45 +1,96 @@
 /* tslint:disable */
-export const locations = {
-	"locations": [
+export const searchLocations = {
+	locations: [
 		{
-			"type": "poi",
-			"location" : {
-				"lat": 43.28442,
-				"lng": 28.04403
+			type: "city",
+			distance: 11215662,
+			location: {
+				lat: -26.53032,
+				lng: 22.98887
 			},
-			"address": {
-				"full": "Bulgaria, 1000, Varna, Tourist Attractions, Important Tourist Attraction, Eiffel Tower",
-				"short": "Varna 1000, Bulgaria",
-				"fields": {
-					"name": null,
-					"house_number": null,
-					"street": null,
-					"city": "Varna",
-					"state": null,
-					"postal_code": "1000",
-					"country": "Bulgaria"
+			address: {
+				full: "Klein Eiffel, South Africa",
+				short: "Klein Eiffel, South Africa",
+				fields: {
+					name: null,
+					house_number: null,
+					street: null,
+					city: "Klein Eiffel",
+					state: null,
+					postal_code: null,
+					country: "South Africa"
 				}
-			}
+			},
+			place: null
 		},
 		{
-			"type": "street",
-			"location": {
-				"lat": 36.29416,
-				"lng": -88.29645
+			type: "poi",
+			distance: 8555865,
+			location: {
+				lat: 49.84796,
+				lng: 18.14732
 			},
-			"distance": 100,
-			"address": {
-				"full": "Tennessee, 38242, Henry - Paris, Eiffel Tower Lane",
-				"short": "Eiffel Tower Lane, Henry - Paris 38242, Tennessee",
-				"fields": {
-					"name": null,
-					"house_number": null,
-					"street": "Eiffel Tower Lane",
-					"city": "Henry - Paris",
-					"state": null,
-					"postal_code": "38242",
-					"country": "Tennessee"
+			address: {
+				full: "eiffel optic, Ostrava, Czech Republic",
+				short: "eiffel optic, Ostrava, Czech Republic",
+				fields: {
+					name: "eiffel optic",
+					house_number: null,
+					street: null,
+					city: "Ostrava",
+					state: null,
+					postal_code: null,
+					country: "Czech Republic"
 				}
+			},
+			place: {
+				id: "poi:203997",
+				level: "poi",
+				type: "poi",
+				rating: 0.002,
+				quadkey: "120213203332231310",
+				location: {
+					lat: 49.8479662,
+					lng: 18.1473294
+				},
+				bounding_box: null,
+				name: "eiffel optic",
+				name_suffix: "Ostrava, Czech Republic",
+				original_name: "eiffel optic",
+				url: "https://travel.sygic.com/go/poi:203997",
+				gateway_url: null,
+				price: null,
+				marker: "shopping:optician",
+				categories: [
+					"shopping"
+				],
+				parent_ids: [],
+				perex: null,
+				customer_rating: null,
+				star_rating: null,
+				thumbnail_url: null,
+				meta: {
+					tier: 3,
+					edited_at: "1900-01-01T00:00:00+00:00",
+					is_outdated: true
+				},
+				tags: [
+					{
+						key: "Optician",
+						name: "Optician"
+					}
+				],
+				address: null,
+				admission: null,
+				duration: 3600,
+				email: null,
+				opening_hours: null,
+				is_deleted: false,
+				phone: null,
+				description: null,
+				origin_custom_poi: null,
+				main_media: null,
+				references: []
 			}
 		}
 	]

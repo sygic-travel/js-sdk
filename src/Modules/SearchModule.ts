@@ -1,15 +1,15 @@
 import { Location } from '../Geo';
-import { searchAddress, SearchAddressResult, searchAddressReverse } from '../Search';
+import { search, SearchResult, searchReverse } from '../Search';
 
 /**
  * @experimental
  */
 export default class SearchModule {
-	public searchAddress(query: string, location?: Location): Promise<SearchAddressResult[]> {
-		return searchAddress(query, location);
+	public search(query: string, location?: Location): Promise<SearchResult[]> {
+		return search(query, location);
 	}
 
-	public searchAddressReverse(location: Location): Promise<SearchAddressResult[]> {
-		return searchAddressReverse(location);
+	public searchReverse(location: Location): Promise<SearchResult[]> {
+		return searchReverse(location);
 	}
 }
