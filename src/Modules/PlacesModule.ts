@@ -3,7 +3,7 @@ import { Medium } from '../Media';
 import {
 	addPlaceReview,
 	deletePlaceReview,
-	detectParents,
+	detectParentsByBounds,
 	getPlaceDetailed,
 	getPlaceGeometry,
 	getPlaceMedia,
@@ -61,8 +61,8 @@ export default class PlacesModule{
 		return getPlaceOpeningHours(id, from, to);
 	}
 
-	public detectParents(bounds: Bounds, zoom: number): Promise<Place[]>  {
-		return detectParents(bounds, zoom);
+	public detectParentsByBounds(bounds: Bounds, zoom: number): Promise<Place[]>  {
+		return detectParentsByBounds(bounds, zoom);
 	}
 
 	public addPlaceReview(placeId: string, rating: number, message: string): Promise<PlaceReview> {

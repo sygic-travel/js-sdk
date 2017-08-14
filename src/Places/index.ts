@@ -88,6 +88,6 @@ export async function voteOnReview(reviewId: number, voteValue: number): Promise
 	return Dao.voteOnReview(reviewId, voteValue);
 }
 
-export async function detectParents(bounds: Bounds, zoom: number): Promise<Place[]> {
-	return Dao.detectParents(bounds, zoom);
+export async function detectParentsByBounds(bounds: Bounds, zoom: number): Promise<Place[]> {
+	return Dao.detectParentsByBounds(bounds, zoom);
 }

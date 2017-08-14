@@ -203,10 +203,10 @@ export async function voteOnReview(reviewId: number, voteValue: number): Promise
 	});
 }
 
-export async function detectParents(bounds: Bounds, zoom: number): Promise<Place[]> {
+export async function detectParentsByBounds(bounds: Bounds, zoom: number): Promise<Place[]> {
 	const swMapTile = locationToMapTileKey({lat: bounds.south, lng: bounds.west}, zoom);
 	const neMapTile = locationToMapTileKey({lat: bounds.north, lng: bounds.east}, zoom);
-	const apiResponse: ApiResponse = await get(`places/detect-parents?` + stringify({
+	const apiResponse: ApiResponse = await get(`places/detect-parents/main-in-bounds?` + stringify({
 		map_tile_bounds: swMapTile + ',' + neMapTile
 	}));
 	if (!apiResponse.data.hasOwnProperty('places')) {
