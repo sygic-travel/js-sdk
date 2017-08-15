@@ -48,7 +48,7 @@ describe('Xhr', () => {
 			get('/');
 			Moxios.wait(() => {
 				const request = Moxios.requests.mostRecent();
-				chai.expect(request.url).to.equal(testApiURL + apiKey + '/');
+				chai.expect(request.url).to.equal(testApiURL + '/?api_key=' + apiKey);
 				done();
 			});
 		});
@@ -93,7 +93,7 @@ describe('Xhr', () => {
 			post('/', null);
 			Moxios.wait(() => {
 				const request = Moxios.requests.mostRecent();
-				chai.expect(request.url).to.equal(testApiURL + apiKey + '/');
+				chai.expect(request.url).to.equal(testApiURL + '/?api_key=' + apiKey);
 				done();
 			});
 		});
@@ -133,7 +133,7 @@ describe('Xhr', () => {
 			put('/', null);
 			Moxios.wait(() => {
 				const request = Moxios.requests.mostRecent();
-				chai.expect(request.url).to.equal(testApiURL + apiKey + '/');
+				chai.expect(request.url).to.equal(testApiURL + '/?api_key=' + apiKey);
 				done();
 			});
 		});

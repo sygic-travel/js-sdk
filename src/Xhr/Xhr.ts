@@ -12,28 +12,28 @@ axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
 });
 
 export async function get(url: string): Promise<ApiResponse> {
-	const response = await axiosInstance.get(url, buildRequestConfig(url));
+	const response = await axiosInstance.get(decorateUrl(url, 'GET'), buildRequestConfig());
 	return buildApiResponse(response);
 }
 
 export async function post(url: string, requestData): Promise<ApiResponse> {
-	const response = await axiosInstance.post(url, requestData, buildRequestConfig(url));
+	const response = await axiosInstance.post(decorateUrl(url, 'POST'), requestData, buildRequestConfig());
 	return buildApiResponse(response);
 }
 
 export async function delete_(url: string, requestData): Promise<ApiResponse> {
-	const response = await axiosInstance.delete(url, buildRequestConfig(url, requestData));
+	const response = await axiosInstance.delete(decorateUrl(url, 'DELETE'), buildRequestConfig(requestData));
 	return buildApiResponse(response);
 }
 
 export async function put(url: string, requestData): Promise<ApiResponse> {
-	const response = await axiosInstance.put(url, requestData, buildRequestConfig(url));
+	const response = await axiosInstance.put(decorateUrl(url, 'PUT'), requestData, buildRequestConfig());
 	return buildApiResponse(response);
 }
 
-function buildRequestConfig(url: string, requestData?: any): AxiosRequestConfig {
+function buildRequestConfig(requestData?: any): AxiosRequestConfig {
 	const requestConfig: AxiosRequestConfig = {
-		baseURL: buildBaseUrl(url),
+		baseURL: getApiUrl(),
 		headers: buildHeaders()
 	};
 
@@ -43,14 +43,17 @@ function buildRequestConfig(url: string, requestData?: any): AxiosRequestConfig 
 	return requestConfig;
 }
 
-function buildBaseUrl(url: string): string {
-	let baseUrl: string = getApiUrl();
+function decorateUrl(url: string, method: string): string {
 	const apiKey: string | null = getApiKey();
-
-	if (apiKey && url.indexOf('places') < 0) {
-		baseUrl = baseUrl + apiKey;
+	if (!apiKey || (url.indexOf('places') > -1 && method === 'GET')) {
+		return url;
 	}
-	return baseUrl;
+
+	if (url.indexOf('?') > -1) {
+		return url + '&api_key=' + apiKey;
+	} else {
+		return url + '?api_key=' + apiKey;
+	}
 }
 
 function buildHeaders() {
