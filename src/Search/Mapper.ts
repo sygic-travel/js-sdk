@@ -1,16 +1,15 @@
 import { camelizeKeys } from 'humps';
 
-import { SearchAddressResult } from './SearchAddressResult';
+import { mapPlaceDetailedApiResponseToPlace } from '../Places/Mapper';
+import { SearchResult } from './SearchResult';
 
-export function mapSearchAddressesApiRepsponseToAddresses(searchLocations: any): SearchAddressResult[] {
-	return searchLocations.map((searchLocation) => {
-		const result: SearchAddressResult = camelizeKeys(searchLocation) as SearchAddressResult;
-		if (!result.hasOwnProperty('type')) {
-			result.type = 'address';
-		}
-		if (!result.hasOwnProperty('distance')) {
-			result.distance = null;
-		}
-		return result;
-	});
+export function mapSearchApiResponseToSearchResults(searchLocations: any): SearchResult[] {
+	return searchLocations.map((searchLocation) => ({
+			location: camelizeKeys(searchLocation.location),
+			type: searchLocation.type,
+			distance: searchLocation.distance,
+			address: camelizeKeys(searchLocation.address),
+			place: searchLocation.place ? mapPlaceDetailedApiResponseToPlace(searchLocation.place, '150x150') : null
+		} as SearchResult
+	));
 }

@@ -1,10 +1,12 @@
 import { Location } from '../Geo';
+import { Place } from '../Places';
 
-export interface SearchAddressResult {
+export interface SearchResult {
 	location: Location;
 	type: string | null;
 	address: Address | null;
 	distance: number | null;
+	place: Place | null;
 }
 
 export interface Address {
