@@ -1,9 +1,10 @@
-import { Bounds } from '../Geo';
+import { Bounds, Location } from '../Geo';
 import { Medium } from '../Media';
 import {
 	addPlaceReview,
 	deletePlaceReview,
 	detectParentsByBounds,
+	detectParentsByLocation,
 	getPlaceDetailed,
 	getPlaceGeometry,
 	getPlaceMedia,
@@ -63,6 +64,10 @@ export default class PlacesModule{
 
 	public detectParentsByBounds(bounds: Bounds, zoom: number): Promise<Place[]>  {
 		return detectParentsByBounds(bounds, zoom);
+	}
+
+	public detectParentsByLocation(location: Location): Promise<Place[]>  {
+		return detectParentsByLocation(location);
 	}
 
 	public addPlaceReview(placeId: string, rating: number, message: string): Promise<PlaceReview> {

@@ -25,6 +25,10 @@ export class StSDK {
 	/**
 	 * @experimental
 	 */
+	public detectParentsByLocation(location: Geo.Location): Promise<Places.Place[]>
+	/**
+	 * @experimental
+	 */
 	public createCustomPlace(data: Places.CustomPlaceFormData): Promise<Places.Place>
 	/**
 	 * @experimental
