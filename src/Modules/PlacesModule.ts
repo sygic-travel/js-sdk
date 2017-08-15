@@ -32,7 +32,7 @@ import {
 	SpreadSizeConfig as SpreadSizeConfigV2
 } from '../SpreadV2';
 
-export default class PlacesModule{
+export default class PlacesModule {
 	public getPlaces(filter: PlacesListFilterJSON): Promise<Place[]> {
 		return getPlaces(new PlacesListFilter(filter));
 	}
