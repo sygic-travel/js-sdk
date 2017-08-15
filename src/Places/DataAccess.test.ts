@@ -290,4 +290,17 @@ describe('PlacesDataAccess', () => {
 			chai.expect(apiStub.callCount).to.equal(1);
 		});
 	});
+
+	describe('#detectParentsByLocation', () => {
+		it('should correctly get and return places', async () => {
+			const apiStub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, TestData.places));
+			}));
+
+			const result: Place[] = await Dao.detectParentsByLocation({lat: 49.123, lng: 15.321});
+			sinon.assert.calledOnce(apiStub);
+			sinon.assert.calledWith(apiStub, 'places/detect-parents?location=49.123%2C15.321');
+			chai.expect(result).to.deep.equal(ExpectedResults.places);
+		});
+	});
 });

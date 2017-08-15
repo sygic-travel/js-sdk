@@ -3,7 +3,7 @@ import { stringify } from 'query-string';
 
 import * as api from '../Api';
 import { placesDetailedCache as cache } from '../Cache';
-import { Bounds, locationToMapTileKey } from '../Geo';
+import { Bounds, Location, locationToMapTileKey } from '../Geo';
 import { Medium } from '../Media/Media';
 import { Day, ItineraryItem } from '../Trip';
 import { ApiResponse, delete_, get, post, put } from '../Xhr';
@@ -203,11 +203,21 @@ export async function voteOnReview(reviewId: number, voteValue: number): Promise
 	});
 }
 
-export async function detectParents(bounds: Bounds, zoom: number): Promise<Place[]> {
+export async function detectParentsByBounds(bounds: Bounds, zoom: number): Promise<Place[]> {
 	const swMapTile = locationToMapTileKey({lat: bounds.south, lng: bounds.west}, zoom);
 	const neMapTile = locationToMapTileKey({lat: bounds.north, lng: bounds.east}, zoom);
-	const apiResponse: ApiResponse = await get(`places/detect-parents?` + stringify({
+	const apiResponse: ApiResponse = await get(`places/detect-parents/main-in-bounds?` + stringify({
 		map_tile_bounds: swMapTile + ',' + neMapTile
+	}));
+	if (!apiResponse.data.hasOwnProperty('places')) {
+		throw new Error('Wrong API response');
+	}
+	return mapPlaceApiResponseToPlaces(apiResponse.data.places);
+}
+
+export async function detectParentsByLocation(location: Location): Promise<Place[]> {
+	const apiResponse: ApiResponse = await get(`places/detect-parents?` + stringify({
+		location: location.lat + ',' + location.lng
 	}));
 	if (!apiResponse.data.hasOwnProperty('places')) {
 		throw new Error('Wrong API response');

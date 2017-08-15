@@ -21,7 +21,11 @@ export class StSDK {
 	/**
 	 * @experimental
 	 */
-	public detectParents(bounds: Geo.Bounds, zoom: number): Promise<Places.Place[]>
+	public detectParentsByBounds(bounds: Geo.Bounds, zoom: number): Promise<Places.Place[]>
+	/**
+	 * @experimental
+	 */
+	public detectParentsByLocation(location: Geo.Location): Promise<Places.Place[]>
 	/**
 	 * @experimental
 	 */

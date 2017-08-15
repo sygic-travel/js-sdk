@@ -1,4 +1,4 @@
-import { Bounds } from '../Geo';
+import { Bounds, Location } from '../Geo';
 import { Medium } from '../Media/Media';
 import * as Dao from './DataAccess';
 import { PlacesListFilter, PlacesListFilterJSON } from './ListFilter';
@@ -88,6 +88,10 @@ export async function voteOnReview(reviewId: number, voteValue: number): Promise
 	return Dao.voteOnReview(reviewId, voteValue);
 }
 
-export async function detectParents(bounds: Bounds, zoom: number): Promise<Place[]> {
-	return Dao.detectParents(bounds, zoom);
+export async function detectParentsByBounds(bounds: Bounds, zoom: number): Promise<Place[]> {
+	return Dao.detectParentsByBounds(bounds, zoom);
+}
+
+export async function detectParentsByLocation(location: Location): Promise<Place[]> {
+	return Dao.detectParentsByLocation(location);
 }
