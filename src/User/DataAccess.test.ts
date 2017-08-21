@@ -21,11 +21,11 @@ describe('UserDataAccess', () => {
 
 	beforeEach(() => {
 		sandbox = sinon.sandbox.create();
-		userCache.reset();
 	});
 
 	afterEach(() => {
 		sandbox.restore();
+		userCache.reset();
 	});
 
 	const apiData = {

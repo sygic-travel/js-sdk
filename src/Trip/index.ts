@@ -197,21 +197,25 @@ export async function addPlaceToDay(
 		throw new Error('Trip does not have day on index ' + dayIndex);
 	}
 
-	let dayItinerary: ItineraryItem[] = [];
 	if (typeof positionInDay === 'undefined' || positionInDay === null) {
 		const firstPlaceInDay: Place|null = trip.days[dayIndex].itinerary[0] && trip.days[dayIndex].itinerary[0].place;
 		if (firstPlaceInDay && hasDayStickyPlaceFromBothSides(trip, dayIndex) && firstPlaceInDay.id !== place.id) {
 			trip = TripManipulator.addPlaceToDay(trip, firstPlaceInDay, dayIndex, userSettings, 1);
 		}
 
-		if (trip.days) {
-			dayItinerary = trip.days[dayIndex].itinerary;
+		if (dayIndex === 0 && (placeId === userSettings.homePlaceId || placeId === userSettings.workPlaceId)) {
+			positionInDay = 0;
+		} else if (
+			trip.days && dayIndex === trip.days.length - 1 &&
+			(placeId === userSettings.homePlaceId || placeId === userSettings.workPlaceId)
+		) {
+			positionInDay = trip.days[dayIndex].itinerary.length;
+		} else {
+			positionInDay = PositionFinder.findOptimalPosition(
+				place,
+				trip.days ? trip.days[dayIndex].itinerary : []
+			);
 		}
-
-		positionInDay = PositionFinder.findOptimalPosition(
-			place,
-			dayItinerary
-		);
 	}
 
 	trip = TripManipulator.addPlaceToDay(trip, place, dayIndex, userSettings, positionInDay);

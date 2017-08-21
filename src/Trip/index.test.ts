@@ -2,7 +2,7 @@ import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as cloneDeep from 'lodash.clonedeep';
 import * as sinon from 'sinon';
-import { SinonSandbox } from 'sinon';
+import {SinonSandbox, SinonStub} from 'sinon';
 
 import * as TripController from '.';
 import * as TripDao from './DataAccess';
@@ -23,6 +23,8 @@ import { ApiResponse } from '../Xhr/ApiResponse';
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
 
+let userSettingsStub: SinonStub;
+
 describe('TripController', () => {
 	before((done) => {
 		setEnvironment('api', '987654321');
@@ -31,7 +33,7 @@ describe('TripController', () => {
 
 	beforeEach(() => {
 		sandbox = sinon.sandbox.create();
-		sandbox.stub(User, 'getUserSettings').returns(new Promise<User.UserSettings>((resolve) => {
+		userSettingsStub = sandbox.stub(User, 'getUserSettings').returns(new Promise<User.UserSettings>((resolve) => {
 			resolve({homePlaceId: null, workPlaceId: null});
 		}));
 		tripsDetailedCache.reset();
@@ -124,6 +126,7 @@ describe('TripController', () => {
 			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, placesResponse));
 			}));
+			sandbox.stub(TripDao, 'updateTrip').returnsArg(0);
 
 			const expectedTrip: TripController.Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			expectedTrip.name = 'abc';
@@ -174,6 +177,8 @@ describe('TripController', () => {
 				trip.days[1].itinerary[0].place_id = 'poi:999';
 				resolve(new ApiResponse(200, { trip }));
 			}));
+
+			sandbox.stub(TripDao, 'updateTrip').returnsArg(0);
 
 			sandbox.stub(PlaceController, 'getPlaceDetailed').returns(new Promise<PlaceController.Place>((resolve) => {
 				resolve(cloneDeep(hotel));
@@ -247,6 +252,88 @@ describe('TripController', () => {
 			chai.expect(resultTrip.days && resultTrip.days[1].itinerary[1].placeId).to.equal('poi:2');
 			chai.expect(resultTrip.days && resultTrip.days[1].itinerary[2].placeId).to.equal('poi:1');
 			chai.expect(resultTrip.days && resultTrip.days[2].itinerary.length).to.equal(1);
+		});
+
+		it('should add home/work at the beginning of the first day and end of last day', async () => {
+
+			const place: PlaceController.Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			place.id = 'poi:1';
+
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			if (!inputTrip.days) {
+				throw new Error('Wrong trip data.');
+			}
+
+			// Stubs for fetching trip
+			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => { resolve(inputTrip); }));
+			sandbox.stub(Mapper, 'putPlacesToTrip').returns(new Promise<Trip>((resolve) => { resolve(inputTrip); }));
+			sandbox.stub(PlaceController, 'getPlacesDetailed');
+
+			// Update trip stub
+			sandbox.stub(TripDao, 'updateTrip').callsFake((trip) => {
+				return new Promise<Trip>((resolve) => {
+					resolve(trip);
+				});
+			});
+
+			// Place to add
+			const placeToAdd: PlaceController.Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			placeToAdd.id = 'poi:100';
+			sandbox.stub(PlaceController, 'getPlaceDetailed').returns(new Promise<PlaceController.Place>((resolve) => {
+				resolve(placeToAdd);
+			}));
+
+			// Test home in first day
+			userSettingsStub.resetBehavior();
+			userSettingsStub.returns(new Promise<User.UserSettings>((resolve) => {
+				resolve({homePlaceId: 'poi:100', workPlaceId: null});
+			}));
+
+			let resultTrip: Trip = await TripController.addPlaceToDay('xxx', 'poi:100', 0);
+			chai.expect(resultTrip.days && resultTrip.days.length).to.equal(3);
+			chai.expect(resultTrip.days && resultTrip.days[0].itinerary.length).to.equal(3);
+			chai.expect(resultTrip.days && resultTrip.days[0].itinerary[0].placeId).to.equal('poi:100');
+			chai.expect(resultTrip.days && resultTrip.days[0].itinerary[1].placeId).to.equal('poi:1');
+			chai.expect(resultTrip.days && resultTrip.days[0].itinerary[2].placeId).to.equal('poi:2');
+
+			// Test work in first day
+			userSettingsStub.resetBehavior();
+			userSettingsStub.returns(new Promise<User.UserSettings>((resolve) => {
+				resolve({homePlaceId: null, workPlaceId: 'poi:100'});
+			}));
+
+			resultTrip = await TripController.addPlaceToDay('xxx', 'poi:100', 0);
+			chai.expect(resultTrip.days && resultTrip.days.length).to.equal(3);
+			chai.expect(resultTrip.days && resultTrip.days[0].itinerary.length).to.equal(3);
+			chai.expect(resultTrip.days && resultTrip.days[0].itinerary[0].placeId).to.equal('poi:100');
+			chai.expect(resultTrip.days && resultTrip.days[0].itinerary[1].placeId).to.equal('poi:1');
+			chai.expect(resultTrip.days && resultTrip.days[0].itinerary[2].placeId).to.equal('poi:2');
+
+			// Test home in last day
+			userSettingsStub.resetBehavior();
+			userSettingsStub.returns(new Promise<User.UserSettings>((resolve) => {
+				resolve({homePlaceId: 'poi:100', workPlaceId: null});
+			}));
+
+			resultTrip = await TripController.addPlaceToDay('xxx', 'poi:100', 2);
+			chai.expect(resultTrip.days && resultTrip.days.length).to.equal(3);
+			chai.expect(resultTrip.days && resultTrip.days[2].itinerary.length).to.equal(3);
+			chai.expect(resultTrip.days && resultTrip.days[2].itinerary[0].placeId).to.equal('poi:4');
+			chai.expect(resultTrip.days && resultTrip.days[2].itinerary[1].placeId).to.equal('poi:5');
+			chai.expect(resultTrip.days && resultTrip.days[2].itinerary[2].placeId).to.equal('poi:100');
+
+			// Test work in last day
+			userSettingsStub.resetBehavior();
+			userSettingsStub.returns(new Promise<User.UserSettings>((resolve) => {
+				resolve({homePlaceId: null, workPlaceId: 'poi:100'});
+			}));
+
+			resultTrip = await TripController.addPlaceToDay('xxx', 'poi:100', 2);
+			chai.expect(resultTrip.days && resultTrip.days.length).to.equal(3);
+			chai.expect(resultTrip.days && resultTrip.days[2].itinerary.length).to.equal(3);
+			chai.expect(resultTrip.days && resultTrip.days[2].itinerary[0].placeId).to.equal('poi:4');
+			chai.expect(resultTrip.days && resultTrip.days[2].itinerary[1].placeId).to.equal('poi:5');
+			chai.expect(resultTrip.days && resultTrip.days[2].itinerary[2].placeId).to.equal('poi:100');
 		});
 	});
 });
