@@ -153,7 +153,7 @@ describe('TripController', () => {
 					startTime: null,
 					duration: null,
 					note: null,
-					isSticky: true,
+					isSticky: false,
 					transportFromPrevious: null
 				};
 
@@ -167,7 +167,6 @@ describe('TripController', () => {
 				expectedTrip.days[1].itinerary[0].placeId = 'poi:999';
 
 				expectedTrip.days[0].itinerary.push(cloneDeep(itineraryItem));
-				expectedTrip.days[1].itinerary.splice(0, 0, cloneDeep(itineraryItem));
 			}
 
 			sandbox.stub(Xhr, 'get').onFirstCall().returns(new Promise<ApiResponse>((resolve) => {
