@@ -422,16 +422,16 @@ describe('TripManipulator', () => {
 
 	});
 
-	describe('#replaceLastStickyPlace', () => {
+	describe('#addOrReplaceOvernightPlace', () => {
 		it('should throw an error when invalid dayIndex is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			const inputPlace: Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
 
-			return chai.expect(() => Manipulator.replaceLastStickyPlace(inputTrip, inputPlace, 999, null))
+			chai.expect(() => Manipulator.addOrReplaceOvernightPlace(inputTrip, inputPlace, 999, null))
 				.to.throw(Error, 'Invalid dayIndex');
 		});
 
-		it('should correctly add place to the end of the day when positionInDay is not set', () => {
+		it('should correctly replace current sticky place', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			const inputPlace: Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
 			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
@@ -449,8 +449,76 @@ describe('TripManipulator', () => {
 				expectedTrip.days[0].itinerary[1] = item;
 				expectedTrip.days[1].itinerary[0] = item;
 			}
-			const trip = Manipulator.replaceLastStickyPlace(inputTrip, inputPlace, 0, null);
-			return chai.expect(trip).to.deep.equal(expectedTrip);
+			const trip = Manipulator.addOrReplaceOvernightPlace(inputTrip, inputPlace, 0, null);
+			chai.expect(trip).to.deep.equal(expectedTrip);
+		});
+
+		it('should correctly add place to end of day and beginning of next day', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const inputPlace: Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+
+			if (expectedTrip.days) {
+				const item = {
+					place: inputPlace,
+					placeId: 'poi:530',
+					startTime: null,
+					duration: null,
+					note: null,
+					transportFromPrevious: null,
+					isSticky: true
+				};
+				expectedTrip.days[1].itinerary.push(item);
+				expectedTrip.days[2].itinerary.unshift(item);
+			}
+			const trip = Manipulator.addOrReplaceOvernightPlace(inputTrip, inputPlace, 1, null);
+			chai.expect(trip).to.deep.equal(expectedTrip);
+		});
+
+		it('should add place to end of day and beginning of next day and avoid duplicates in next day', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const inputPlace: Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			inputPlace.id = 'poi:4';
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+
+			if (expectedTrip.days) {
+				const item = {
+					place: inputPlace,
+					placeId: 'poi:4',
+					startTime: null,
+					duration: null,
+					note: null,
+					transportFromPrevious: null,
+					isSticky: true
+				};
+				expectedTrip.days[1].itinerary.push(item);
+				expectedTrip.days[2].itinerary[0].isSticky = true;
+			}
+			const trip = Manipulator.addOrReplaceOvernightPlace(inputTrip, inputPlace, 1, null);
+			chai.expect(trip).to.deep.equal(expectedTrip);
+		});
+
+		it('should add place to end of day and beginning of next day and avoid duplicates in current day', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const inputPlace: Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			inputPlace.id = 'poi:3';
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+
+			if (expectedTrip.days) {
+				const item = {
+					place: inputPlace,
+					placeId: 'poi:3',
+					startTime: null,
+					duration: null,
+					note: null,
+					transportFromPrevious: null,
+					isSticky: true
+				};
+				expectedTrip.days[2].itinerary.unshift(item);
+				expectedTrip.days[1].itinerary[1].isSticky = true;
+			}
+			const trip = Manipulator.addOrReplaceOvernightPlace(inputTrip, inputPlace, 1, null);
+			chai.expect(trip).to.deep.equal(expectedTrip);
 		});
 	});
 

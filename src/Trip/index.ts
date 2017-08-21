@@ -172,8 +172,8 @@ export async function removeAllPlacesFromDay(id: string, dayIndex: number): Prom
 	);
 }
 
-export async function replaceLastStickyPlaceInDay(tripId: string, placeId: string, dayIndex: number): Promise<Trip> {
-	return Dao.updateTrip(TripManipulator.replaceLastStickyPlace(
+export async function setOvernightPlace(tripId: string, placeId: string, dayIndex: number): Promise<Trip> {
+	return Dao.updateTrip(TripManipulator.addOrReplaceOvernightPlace(
 		await getTripDetailed(tripId),
 		await getPlaceDetailed(placeId, '300x300'),
 		dayIndex, await getUserSettings())
