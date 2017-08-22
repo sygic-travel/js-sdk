@@ -33,6 +33,16 @@ export async function getTrips(dateFrom: string, dateTo: string): Promise<Trip[]
 	return mapTripListApiResponseToTripsList(apiResponse.data.trips);
 }
 
+export async function getTripsInTrash(): Promise<Trip[]> {
+	const apiResponse = await get('trips/trash');
+
+	if (!apiResponse.data.hasOwnProperty('trips')) {
+		throw new Error('Wrong API response');
+	}
+
+	return mapTripListApiResponseToTripsList(apiResponse.data.trips);
+}
+
 export async function getTripDetailed(id: string): Promise<Trip> {
 	let result: any = null;
 	const fromCache: any = await tripsDetailedCache.get(id);

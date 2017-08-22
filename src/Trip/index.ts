@@ -56,6 +56,10 @@ export async function getTrips(dateFrom: string, dateTo: string): Promise<Trip[]
 	return await Dao.getTrips(dateTo, dateFrom);
 }
 
+export async function getTripsInTrash(): Promise<Trip[]> {
+	return await Dao.getTripsInTrash();
+}
+
 export async function getTripDetailed(id: string): Promise<Trip> {
 	const tripWithoutPlaces: Trip = await Dao.getTripDetailed(id);
 	if (tripWithoutPlaces.days) {

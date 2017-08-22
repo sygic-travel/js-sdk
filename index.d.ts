@@ -79,6 +79,10 @@ export class StSDK {
 	/**
 	 * @experimental
 	 */
+	public getTripsInTrash(): Promise<Trips.Trip[]>;
+	/**
+	 * @experimental
+	 */
 	public getTripDetailed(id: string): Promise<Trips.Trip>;
 	/**
 	 * @experimental

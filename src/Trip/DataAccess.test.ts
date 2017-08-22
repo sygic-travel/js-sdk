@@ -66,6 +66,19 @@ describe('TripDataAccess', () => {
 		});
 	});
 
+	describe('#getTripsInTrash', () => {
+		it('should just recall api and return trips which are deleted', async () => {
+			const apiStub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, TripApiTestData.tripsList));
+			}));
+
+			const result: Trip[] = await Dao.getTripsInTrash();
+			sinon.assert.calledOnce(apiStub);
+			sinon.assert.calledWith(apiStub, 'trips/trash');
+			chai.expect(result).to.deep.equal(TripExpectedResults.tripList);
+		});
+	});
+
 	describe('#getTripDetailed', () => {
 		it('should get trip response from api if is not in cache', () => {
 			const stub: SinonStub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
