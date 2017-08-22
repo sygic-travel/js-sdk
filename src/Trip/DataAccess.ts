@@ -20,11 +20,15 @@ const updateTimeouts = {};
 const tripDataToSend = {};
 const UPDATE_TIMEOUT: number = 3000;
 
-export async function getTrips(dateFrom: string, dateTo: string): Promise<Trip[]> {
-	const apiResponse = await get('trips/list?' + stringify({
-		from: dateFrom,
-		to: dateTo
-	}));
+export async function getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trip[]> {
+	const query: any = {};
+	if (dateFrom !== null) {
+		query.from = dateFrom;
+	}
+	if (dateTo !== null) {
+		query.to = dateTo;
+	}
+	const apiResponse = await get('trips/list?' + stringify(query));
 
 	if (!apiResponse.data.hasOwnProperty('trips')) {
 		throw new Error('Wrong API response');

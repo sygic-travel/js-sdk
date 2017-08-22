@@ -75,7 +75,7 @@ export class StSDK {
 	/**
 	 * @experimental
 	 */
-	public getTrips(dateFrom: string, dateTo: string): Promise<Trips.Trip[]>;
+	public getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trips.Trip[]>;
 	/**
 	 * @experimental
 	 */

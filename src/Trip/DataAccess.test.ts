@@ -56,13 +56,27 @@ describe('TripDataAccess', () => {
 	}
 
 	describe('#getTrips', () => {
-		it('should just recall api and return trips', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+		it('should just recallapi, compose parameter from and to and return trips', async () => {
+			const apiStub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, TripApiTestData.tripsList));
 			}));
 
-			return chai.expect(Dao.getTrips('', ''))
-				.to.eventually.deep.equal(TripExpectedResults.tripList);
+			const result: Trip[] = await Dao.getTrips();
+			sinon.assert.calledOnce(apiStub);
+			sinon.assert.calledWith(apiStub, 'trips/list?');
+			chai.expect(result).to.deep.equal(TripExpectedResults.tripList);
+
+			await Dao.getTrips(null, null);
+			sinon.assert.calledWith(apiStub, 'trips/list?');
+
+			await Dao.getTrips(null, '2017-01-01');
+			sinon.assert.calledWith(apiStub, 'trips/list?to=2017-01-01');
+
+			await Dao.getTrips('2017-01-01', null);
+			sinon.assert.calledWith(apiStub, 'trips/list?from=2017-01-01');
+
+			await Dao.getTrips('2017-01-01', '2017-12-01');
+			sinon.assert.calledWith(apiStub, 'trips/list?from=2017-01-01&to=2017-12-01');
 		});
 	});
 

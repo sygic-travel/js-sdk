@@ -32,7 +32,7 @@ export default class TripModule {
 		return getRoutesForTripDay(tripId, dayIndex);
 	}
 
-	public getTrips(dateFrom: string, dateTo: string): Promise<Trip[]> {
+	public getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trip[]> {
 		return getTrips(dateFrom, dateTo);
 	}
 
