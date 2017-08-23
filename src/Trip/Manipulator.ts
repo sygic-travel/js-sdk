@@ -321,15 +321,18 @@ export function addOrReplaceOvernightPlace(
 
 	// Add new sticky places if they are not already there
 	if (
-		trip.days[dayIndex].itinerary.length === 0 ||
-		trip.days[dayIndex].itinerary[trip.days[dayIndex].itinerary.length - 1].placeId !== place.id
+		resultTrip.days[dayIndex].itinerary.length === 0 ||
+		resultTrip.days[dayIndex].itinerary[resultTrip.days[dayIndex].itinerary.length - 1].placeId !== place.id
 	) {
 		resultTrip = addPlaceToDay(resultTrip, place, dayIndex, userSettings, resultTrip.days[dayIndex].itinerary.length);
 	}
 
 	if (
-		trip.days[nextDayIndex] &&
-		(trip.days[nextDayIndex].itinerary.length === 0 || trip.days[nextDayIndex].itinerary[0].placeId !== place.id)
+		resultTrip.days[nextDayIndex] &&
+		(
+			resultTrip.days[nextDayIndex].itinerary.length === 0 ||
+			resultTrip.days[nextDayIndex].itinerary[0].placeId !== place.id
+		)
 	) {
 		resultTrip = addPlaceToDay(resultTrip, place, nextDayIndex, userSettings, 0);
 	}
