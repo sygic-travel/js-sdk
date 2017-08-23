@@ -102,7 +102,7 @@ export async function updateTrip(id: string, dataToUpdate: TripUpdateData): Prom
 		tripToBeUpdated.privacyLevel = dataToUpdate.privacyLevel;
 	}
 
-	if (dataToUpdate.isDeleted) {
+	if (dataToUpdate.isDeleted !== undefined) {
 		tripToBeUpdated.isDeleted = dataToUpdate.isDeleted;
 	}
 

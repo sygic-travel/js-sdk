@@ -2,7 +2,7 @@ import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as cloneDeep from 'lodash.clonedeep';
 import * as sinon from 'sinon';
-import {SinonSandbox, SinonStub} from 'sinon';
+import { SinonSandbox, SinonSpy, SinonStub } from 'sinon';
 
 import * as TripController from '.';
 import * as TripDao from './DataAccess';
@@ -139,6 +139,31 @@ describe('TripController', () => {
 				startsOn: '2017-04-10',
 				privacyLevel: 'ppp'
 			} as TripController.TripUpdateData)).to.eventually.deep.equal(expectedTrip);
+		});
+
+		it('should call dao correctly when deleting a trip', async () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			inputTrip.days = null;
+
+			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => {resolve(inputTrip); }));
+			const spy: SinonSpy = sandbox.spy(TripDao, 'updateTrip');
+
+			await TripController.updateTrip('123', { isDeleted: true });
+			const tripToBeUpdated: Trip = spy.getCall(0).args[0] as Trip;
+			return chai.expect(tripToBeUpdated.isDeleted).to.be.true;
+		});
+
+		it('should call dao correctly when restoring a trip', async () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			inputTrip.days = null;
+			inputTrip.isDeleted = true;
+
+			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => {resolve(inputTrip); }));
+			const spy: SinonSpy = sandbox.spy(TripDao, 'updateTrip');
+
+			await TripController.updateTrip('123', { isDeleted: false });
+			const tripToBeUpdated: Trip = spy.getCall(0).args[0] as Trip;
+			return chai.expect(tripToBeUpdated.isDeleted).to.be.false;
 		});
 	});
 
