@@ -23,6 +23,7 @@ export interface Medium {
 	original: Original;
 	suitability: mediaSuitability[];
 	urlTemplate: string;
+	urlWithSize: string;
 	createdAt: string;
 	source: Source;
 	type: mediaType;

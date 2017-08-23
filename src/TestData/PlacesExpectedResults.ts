@@ -119,7 +119,8 @@ export const mappedMedia = {
 			height: 4235
 		} as Media.Original,
 		suitability: ['square'],
-		urlTemplate: 'https://media-cdn.sygictraveldata.com/media/400x400/612664395a40232133447d33247d383632393531',
+		urlTemplate: 'https://media-cdn.sygictraveldata.com/media/{size}/612664395a40232133447d33247d383632393531',
+		urlWithSize: 'https://media-cdn.sygictraveldata.com/media/400x400/612664395a40232133447d33247d383632393531',
 		createdAt: '2015-03-17T14:48:02+0000',
 		source: {
 			provider: 'wikipedia',
@@ -149,7 +150,8 @@ export const mappedMedia = {
 			height: 3072
 		},
 		suitability: ['portrait'],
-		urlTemplate: 'https://media-cdn.sygictraveldata.com/media/400x400/612664395a40232133447d33247d383336353933333937',
+		urlTemplate: 'https://media-cdn.sygictraveldata.com/media/{size}/612664395a40232133447d33247d383336353933333937',
+		urlWithSize: 'https://media-cdn.sygictraveldata.com/media/400x400/612664395a40232133447d33247d383336353933333937',
 		createdAt: '2017-04-19T12:00:34+0000',
 		source: {
 			provider: 'wikipedia',
@@ -182,7 +184,8 @@ export const mappedMedia = {
 			height: 1536
 		} as Media.Original,
 		suitability: ['landscape'],
-		urlTemplate: 'https://media-cdn.sygictraveldata.com/media/400x400/612664395a40232133447d33247d3832343230303032',
+		urlTemplate: 'https://media-cdn.sygictraveldata.com/media/{size}/612664395a40232133447d33247d3832343230303032',
+		urlWithSize: 'https://media-cdn.sygictraveldata.com/media/400x400/612664395a40232133447d33247d3832343230303032',
 		createdAt: '1970-01-01T00:00:00+0000',
 		source: {
 			provider: 'wikipedia',
