@@ -86,7 +86,7 @@ export const mapMainMediaToMedia = (mainMedia, photoSize: string): MainMedia => 
 			const mediaId = mainMedia.usage[key];
 			mappedMedia[key] = mainMedia.media.reduce((acc, item) => {
 				if (item.id === mediaId) {
-					item.urlTemplate = item.urlTemplate.replace(/{size}/i, photoSize || defaultPhotoSize);
+					item.urlWithSize = item.urlTemplate.replace(/{size}/i, photoSize || defaultPhotoSize);
 					return item;
 				}
 				return acc;
