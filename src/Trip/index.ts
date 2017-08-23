@@ -52,8 +52,12 @@ export async function createTrip(startDate: string, name: string, placeId: strin
 	return await Dao.createTrip(mapTripCreateRequest(startDate, name, placeId));
 }
 
-export async function getTrips(dateFrom: string, dateTo: string): Promise<Trip[]> {
-	return await Dao.getTrips(dateTo, dateFrom);
+export async function getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trip[]> {
+	return await Dao.getTrips(dateFrom, dateTo);
+}
+
+export async function getTripsInTrash(): Promise<Trip[]> {
+	return await Dao.getTripsInTrash();
 }
 
 export async function getTripDetailed(id: string): Promise<Trip> {
