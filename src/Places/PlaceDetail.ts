@@ -39,6 +39,6 @@ export interface Description {
 	text: string;
 	provider: string | null;
 	translationProvider: string | null;
-	link: null | null;
+	link: string | null;
 	isTranslated: boolean;
 }
