@@ -284,6 +284,61 @@ export function replaceLastStickyPlace(
 	return resolveStickiness(resultTrip, userSettings);
 }
 
+export function addOrReplaceOvernightPlace(
+	trip: Trip,
+	place: Place,
+	dayIndex: number,
+	userSettings: UserSettings | null
+): Trip {
+	if (!trip.days) {
+		throw new Error('days property in Trip cannot be null');
+	}
+
+	if (!trip.days[dayIndex]) {
+		throw new Error('Invalid dayIndex');
+	}
+	let resultTrip = cloneDeep(trip);
+	// Remove old sticky places
+	if (
+		trip.days[dayIndex].itinerary.length &&
+		trip.days[dayIndex].itinerary[trip.days[dayIndex].itinerary.length - 1].isSticky
+	) {
+		resultTrip = removePlacesFromDay(
+			resultTrip,
+			dayIndex,
+			[resultTrip.days[dayIndex].itinerary.length - 1],
+			userSettings
+		);
+	}
+	const nextDayIndex = dayIndex + 1;
+	if (
+		trip.days[nextDayIndex] &&
+		trip.days[nextDayIndex].itinerary.length &&
+		trip.days[nextDayIndex].itinerary[0].isSticky
+	) {
+		resultTrip = removePlacesFromDay(resultTrip, nextDayIndex, [0], userSettings);
+	}
+
+	// Add new sticky places if they are not already there
+	if (
+		resultTrip.days[dayIndex].itinerary.length === 0 ||
+		resultTrip.days[dayIndex].itinerary[resultTrip.days[dayIndex].itinerary.length - 1].placeId !== place.id
+	) {
+		resultTrip = addPlaceToDay(resultTrip, place, dayIndex, userSettings, resultTrip.days[dayIndex].itinerary.length);
+	}
+
+	if (
+		resultTrip.days[nextDayIndex] &&
+		(
+			resultTrip.days[nextDayIndex].itinerary.length === 0 ||
+			resultTrip.days[nextDayIndex].itinerary[0].placeId !== place.id
+		)
+	) {
+		resultTrip = addPlaceToDay(resultTrip, place, nextDayIndex, userSettings, 0);
+	}
+	return resolveStickiness(resultTrip, userSettings);
+}
+
 export function replaceSiblingParentDestination(
 	trip: Trip,
 	dayIndex: number,

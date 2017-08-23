@@ -1,5 +1,5 @@
 import { ChangeNotification } from '../Changes';
-import { getPlaceDetailed, getPlacesDetailed, isStickyByDefault, Place } from '../Places';
+import { getPlaceDetailed, getPlacesDetailed, Place } from '../Places';
 import { getUserSettings } from '../User';
 import { addDaysToDate } from '../Util/index';
 import * as Dao from './DataAccess';
@@ -172,8 +172,8 @@ export async function removeAllPlacesFromDay(id: string, dayIndex: number): Prom
 	);
 }
 
-export async function replaceLastStickyPlaceInDay(tripId: string, placeId: string, dayIndex: number): Promise<Trip> {
-	return Dao.updateTrip(TripManipulator.replaceLastStickyPlace(
+export async function setOvernightPlace(tripId: string, placeId: string, dayIndex: number): Promise<Trip> {
+	return Dao.updateTrip(TripManipulator.addOrReplaceOvernightPlace(
 		await getTripDetailed(tripId),
 		await getPlaceDetailed(placeId, '300x300'),
 		dayIndex, await getUserSettings())
@@ -197,40 +197,28 @@ export async function addPlaceToDay(
 		throw new Error('Trip does not have day on index ' + dayIndex);
 	}
 
-	let nextDayItinerary: ItineraryItem[] | null = null;
-	let dayItinerary: ItineraryItem[] = [];
-	const nextDayIndex = dayIndex + 1;
-
-	if (trip.days[nextDayIndex]) {
-		nextDayItinerary = trip.days[nextDayIndex].itinerary;
-	}
-
 	if (typeof positionInDay === 'undefined' || positionInDay === null) {
 		const firstPlaceInDay: Place|null = trip.days[dayIndex].itinerary[0] && trip.days[dayIndex].itinerary[0].place;
 		if (firstPlaceInDay && hasDayStickyPlaceFromBothSides(trip, dayIndex) && firstPlaceInDay.id !== place.id) {
 			trip = TripManipulator.addPlaceToDay(trip, firstPlaceInDay, dayIndex, userSettings, 1);
 		}
 
-		if (trip.days) {
-			dayItinerary = trip.days[dayIndex].itinerary;
+		if (dayIndex === 0 && (placeId === userSettings.homePlaceId || placeId === userSettings.workPlaceId)) {
+			positionInDay = 0;
+		} else if (
+			trip.days && dayIndex === trip.days.length - 1 &&
+			(placeId === userSettings.homePlaceId || placeId === userSettings.workPlaceId)
+		) {
+			positionInDay = trip.days[dayIndex].itinerary.length;
+		} else {
+			positionInDay = PositionFinder.findOptimalPosition(
+				place,
+				trip.days ? trip.days[dayIndex].itinerary : []
+			);
 		}
-
-		positionInDay = PositionFinder.findOptimalPosition(
-			place,
-			dayItinerary
-		);
 	}
 
 	trip = TripManipulator.addPlaceToDay(trip, place, dayIndex, userSettings, positionInDay);
-
-	if (
-		(isStickyByDefault(place)) &&
-		nextDayItinerary &&
-		(!nextDayItinerary.length || !nextDayItinerary[0].isSticky)
-	) {
-		trip = TripManipulator.addPlaceToDay(trip, place, nextDayIndex, userSettings, 0);
-	}
-
 	trip = TripManipulator.replaceSiblingParentDestination(trip, dayIndex, positionInDay, place.parents, userSettings);
 	return Dao.updateTrip(trip);
 }

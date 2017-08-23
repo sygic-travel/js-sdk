@@ -140,7 +140,7 @@ export class StSDK {
 	/**
 	 * @experimental
 	 */
-	public replaceLastStickyPlaceInDay(
+	public setOvernightPlace(
 		tripId: string,
 		placeId: string,
 		dayIndex: number): Promise<Trips.Trip>
