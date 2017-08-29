@@ -2,6 +2,7 @@ import { BaseSDK } from './BaseSDK';
 
 import ChangesModule from './Modules/ChangesModule';
 import CollaborationModule from './Modules/CollaborationModule';
+import CollectionsModule from './Modules/CollectionsModule';
 import CustomPlacesModule from './Modules/CustomPlacesModule';
 import FavoritesModule from './Modules/FavoritesModule';
 import ForecastModule from './Modules/ForecastModule';
@@ -16,6 +17,7 @@ import UtilityModule from './Modules/UtilityModule';
 export default class StSDK extends BaseSDK {
 	public changes: ChangesModule = new ChangesModule();
 	public collaboration: CollaborationModule = new CollaborationModule();
+	public collections: CollectionsModule = new CollectionsModule();
 	public customPlaces: CustomPlacesModule = new CustomPlacesModule();
 	public favorites: FavoritesModule = new FavoritesModule();
 	public forecast: ForecastModule = new ForecastModule();

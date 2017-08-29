@@ -243,6 +243,10 @@ export class StSDK {
 	 * @experimental
 	 */
 	public getHotels(filter: Hotels.HotelsFilterJSON): Promise<Hotels.Hotel[]>
+	/**
+	 * @experimental
+	 */
+	public getCollection(collectionId: number, photoSize: string): Promise<Collections.Collection>
 }
 
 export namespace Places {
@@ -812,4 +816,16 @@ export namespace Tours {
 
 	export type ToursQueryDirection = 'asc' | 'desc';
 	export type ToursQuerySortBy = 'price' | 'rating' | 'top_sellers' ;
+}
+
+export namespace Collections {
+	export interface Collection {
+		id: number;
+		nameLong: string;
+		nameShort: string | null;
+		description: string | null;
+		tags: Places.Tag[];
+		places: Places.Place[];
+		placeIds: string[];
+	}
 }
