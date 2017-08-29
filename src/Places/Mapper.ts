@@ -30,7 +30,7 @@ export const mapPlaceDetailedBatchApiResponseToPlaces = (places: any, photoSize:
 	});
 };
 
-const mapPlace = (place, detail: PlaceDetail | null) => {
+export const mapPlace = (place, detail: PlaceDetail | null) => {
 	return {
 		id: place.id,
 		level: place.level,
