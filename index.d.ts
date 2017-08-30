@@ -239,6 +239,10 @@ export class StSDK {
 	 * @experimental
 	 */
 	public locationToMapTileKey(location: Location, zoom: number): string
+	/**
+	 * @experimental
+	 */
+	public getHotels(filter: Hotels.HotelsFilterJSON): Promise<Hotels.Hotel[]>
 }
 
 export namespace Places {
@@ -395,6 +399,35 @@ export namespace Places {
 	export interface PlacesStats {
 		categories: SumStatistic[];
 		tags: SumStatistic[];
+	}
+}
+
+export namespace Hotels {
+	export interface Hotel {
+		place: Places.Place;
+		bookingCom: {
+			price: number;
+			hotelId: string;
+		};
+	}
+
+	export interface HotelsFilterJSON {
+		checkIn: string;
+		checkOut: string;
+		adults: number;
+		children?: number[] | null;
+		maxPrice?: number | null;
+		minPrice?: number | null;
+		minReviewScore?: number | null;
+		bounds?: Geo.Bounds | null;
+		mapTileBounds?: string[] | null;
+		stars?: number[] | null;
+		currency?: string | null;
+		propertyTypes?: string[] | null;
+		hotelFacilities?: string[] | null;
+		roomFacilities?: string[] | null;
+		limit?: number;
+		zoom?: number;
 	}
 }
 
