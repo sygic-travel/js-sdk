@@ -247,6 +247,16 @@ export class StSDK {
 	 * @experimental
 	 */
 	public getCollection(collectionId: number, photoSize: string): Promise<Collections.Collection>
+	/**
+	 * @experimental
+	 */
+	public getCollections(
+		placeId: string,
+		limit: number,
+		offset: number,
+		loadPlaces: boolean,
+		photoSize: string
+	): Promise<Collections.Collection[]>
 }
 
 export namespace Places {

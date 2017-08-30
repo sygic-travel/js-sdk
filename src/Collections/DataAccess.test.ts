@@ -48,4 +48,17 @@ describe('CollectionsDataAccess', () => {
 			chai.expect(result).to.deep.equal(ExpectedResults.collection);
 		});
 	});
+
+	describe('#getCollections', () => {
+		it('should correctly get and return collections', async () => {
+			const apiStub = sandbox.stub(Xhr, 'get').returns(new Promise<Xhr.ApiResponse>((resolve) => {
+				resolve(new Xhr.ApiResponse(200, TestData.collections));
+			}));
+
+			const result: Collection[] = await Dao.getCollections('city:1', 5, 0, false, '100x100');
+			sinon.assert.calledOnce(apiStub);
+			sinon.assert.calledWith(apiStub, 'collections?limit=5&offset=0&placeId=city%3A1');
+			chai.expect(result).to.deep.equal(ExpectedResults.collections);
+		});
+	});
 });

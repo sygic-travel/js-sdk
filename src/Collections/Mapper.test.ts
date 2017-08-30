@@ -25,4 +25,11 @@ describe('CollectionMapper', () => {
 				.to.deep.equal(ExpectedResults.collection);
 		});
 	});
+
+	describe('#mapCollectionsApiResponseToCollections', () => {
+		it('should correctly map collections response to Collections', () => {
+			return chai.expect(Mapper.mapCollectionsApiResponseToCollections(ApiResponses.collections.collections))
+				.to.deep.equal(ExpectedResults.collections);
+		});
+	});
 });

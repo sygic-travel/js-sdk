@@ -5,6 +5,12 @@ export const mapCollectionApiResponseToCollection = (collection: any): Collectio
 	return mapCollection(collection);
 };
 
+export const mapCollectionsApiResponseToCollections = (collections: any): Collection[] => {
+	return collections.map((collection): Collection => {
+		return mapCollection(collection);
+	});
+};
+
 const mapCollection = (collection) => {
 	const tags: Tag[] = collection.tags.map((tag) => (tag as Tag));
 	return {
