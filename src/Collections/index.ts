@@ -1,18 +1,17 @@
 import { Collection } from './Collection';
 import * as Dao from './DataAccess';
+import { CollectionsFilter, CollectionsFilterJSON } from './Filter';
 
-export { Collection };
+export { Collection, CollectionsFilter, CollectionsFilterJSON };
 
 export async function getCollection(collectionId: number, photoSize: string): Promise<Collection> {
 	return Dao.getCollection(collectionId, photoSize);
 }
 
 export async function getCollections(
-	placeId: string,
-	limit: number,
-	offset: number,
+	filter: CollectionsFilter,
 	loadPlaces: boolean,
 	photoSize: string
 ): Promise<Collection[]> {
-	return Dao.getCollections(placeId, limit, offset, loadPlaces, photoSize);
+	return Dao.getCollections(filter, loadPlaces, photoSize);
 }

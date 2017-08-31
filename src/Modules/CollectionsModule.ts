@@ -1,5 +1,7 @@
 import {
 	Collection,
+	CollectionsFilter,
+	CollectionsFilterJSON,
 	getCollection,
 	getCollections
 } from '../Collections';
@@ -13,12 +15,10 @@ export default class CollectionsModule {
 	}
 
 	public getCollections(
-		placeId: string,
-		limit: number,
-		offset: number,
+		filter: CollectionsFilterJSON,
 		loadPlaces: boolean,
 		photoSize: string
 	): Promise<Collection[]> {
-		return getCollections(placeId, limit, offset, loadPlaces, photoSize);
+		return getCollections(new CollectionsFilter(filter), loadPlaces, photoSize);
 	}
 };

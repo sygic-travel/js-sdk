@@ -1,9 +1,8 @@
-import { stringify } from 'query-string';
-
 import { getPlacesDetailed } from '../Places';
 import { get } from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
 import { Collection } from './Collection';
+import { CollectionsFilter } from './Filter';
 import { mapCollectionApiResponseToCollection, mapCollectionsApiResponseToCollections } from './Mapper';
 
 export async function getCollection(collectionId: number, photoSize: string): Promise<Collection> {
@@ -18,17 +17,11 @@ export async function getCollection(collectionId: number, photoSize: string): Pr
 }
 
 export async function getCollections(
-	placeId: string,
-	limit: number,
-	offset: number,
+	filter: CollectionsFilter,
 	loadPlaces: boolean,
 	photoSize: string
 ): Promise<Collection[]> {
-	const apiResponse: ApiResponse = await get('collections?' + stringify({
-		placeId,
-		limit,
-		offset
-	}));
+	const apiResponse: ApiResponse = await get('collections?' + filter.toQueryString());
 	if (!apiResponse.data.hasOwnProperty('collections')) {
 		throw new Error('Wrong API response');
 	}
