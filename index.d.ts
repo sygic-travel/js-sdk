@@ -251,9 +251,7 @@ export class StSDK {
 	 * @experimental
 	 */
 	public getCollections(
-		placeId: string,
-		limit: number,
-		offset: number,
+		filter: Collections.CollectionsFilterJSON,
 		loadPlaces: boolean,
 		photoSize: string
 	): Promise<Collections.Collection[]>
@@ -837,5 +835,15 @@ export namespace Collections {
 		tags: Places.Tag[];
 		places: Places.Place[];
 		placeIds: string[];
+	}
+
+	export interface CollectionsFilterJSON {
+		placeId?: string;
+		containedPlaceIds?: string[];
+		tags?: string[];
+		tagsNot?: string[];
+		query?: string;
+		limit?: number;
+		offset?: number;
 	}
 }
