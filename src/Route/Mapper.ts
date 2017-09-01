@@ -1,7 +1,7 @@
 import { camelizeKeys } from 'humps';
 import { Direction, ModeDirections, ModeSelector, Route, RouteRequest } from '.';
 import { Location } from '../Geo';
-import { ItineraryItem, TransportAvoid, TransportMode, TransportType } from '../Trip';
+import { ItineraryItem, TransportAvoid, TransportMode, TransportSettings, TransportType } from '../Trip';
 
 const toTranspotModesMapping = {
 	driving: 'car',
@@ -59,17 +59,22 @@ export const mapRouteFromApiResponse = (
 };
 
 export const createRouteRequest = (
-	itineraryItem: ItineraryItem,
 	destination: Location,
-	origin: Location
+	origin: Location,
+	itineraryItem?: ItineraryItem
 ): RouteRequest => {
-	const userMode: TransportMode|null = itineraryItem.transportFromPrevious && itineraryItem.transportFromPrevious.mode;
+
+	const userMode: TransportMode | null =
+		itineraryItem ? itineraryItem.transportFromPrevious && itineraryItem.transportFromPrevious.mode : null;
+	const transportFromPrevious: TransportSettings | null =
+		itineraryItem ? itineraryItem.transportFromPrevious : null;
+
 	return {
 		origin,
 		destination,
-		waypoints: itineraryItem.transportFromPrevious ? itineraryItem.transportFromPrevious.waypoints : [],
-		avoid: itineraryItem.transportFromPrevious ? itineraryItem.transportFromPrevious.avoid : ['unpaved'],
-		type: itineraryItem.transportFromPrevious ? itineraryItem.transportFromPrevious.type : 'fastest',
+		waypoints: transportFromPrevious ? transportFromPrevious.waypoints : [],
+		avoid: transportFromPrevious ? transportFromPrevious.avoid : ['unpaved'],
+		type: transportFromPrevious ? transportFromPrevious.type : 'fastest',
 		chosenMode: userMode ? userMode : ModeSelector.selectOptimalMode(origin, destination),
 	} as RouteRequest;
 };

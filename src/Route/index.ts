@@ -1,3 +1,4 @@
+import { Location } from '../Geo';
 import { Dao as placesDao, Place } from '../Places';
 import { Dao as tripsDao, Day, ItineraryItem, Trip } from '../Trip';
 import * as Dao from './DataAccess';
@@ -50,7 +51,12 @@ const createRequests = (places: Place[], day: Day): RouteRequest[] => {
 		if (!currentPlace || !previousPlace) {
 			throw new Error('Place not found!');
 		}
-		requests.push(Mapper.createRouteRequest(currentItem, currentPlace.location, previousPlace.location));
+		requests.push(Mapper.createRouteRequest(currentPlace.location, previousPlace.location, currentItem));
 		return requests;
 	}, []);
 };
+
+export async function getDirections(origin: Location, destination: Location): Promise<Route | null> {
+	const routes: Route[] = await Dao.getRoutes([Mapper.createRouteRequest(destination, origin)]);
+	return routes.length > 0 ? routes[0] : null;
+}

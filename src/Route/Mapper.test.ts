@@ -55,7 +55,7 @@ describe('RouteMapper', () => {
 				type: 'economic',
 					waypoints: [{lat: 1, lng: 1 }],
 			};
-			chai.expect(Mapper.createRouteRequest(item, destination, origin))
+			chai.expect(Mapper.createRouteRequest(destination, origin, item))
 				.to.deep.equal(expected);
 		});
 
@@ -85,7 +85,7 @@ describe('RouteMapper', () => {
 				type: 'fastest',
 				waypoints: [],
 			};
-			chai.expect(Mapper.createRouteRequest(item, destination, origin))
+			chai.expect(Mapper.createRouteRequest(destination, origin, item))
 				.to.deep.equal(expected);
 		});
 
