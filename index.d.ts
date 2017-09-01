@@ -255,6 +255,10 @@ export class StSDK {
 		loadPlaces: boolean,
 		photoSize: string
 	): Promise<Collections.Collection[]>
+	/**
+	 * @experimental
+	 */
+	public getDirections(origin: Location, destination: Location): Promise<Route.Route>
 }
 
 export namespace Places {
