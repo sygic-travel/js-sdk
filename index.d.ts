@@ -1,264 +1,147 @@
 export function create(apiUrl: string, clientKey: string): StSDK;
 
-export class StSDK {
-	public setUserSession(key: string | null, token: string | null): Promise<void>;
-	public getPlaces(filter: Places.PlacesListFilterJSON): Promise<Places.Place[]>;
-	public getPlaceDetailed(id: string, photoSize: string): Promise<Places.Place>;
-	public getPlacesDetailed(id: string[], photoSize: string): Promise<Places.Place[]>;
-	public getPlaceMedia(guid: string): Promise<Media.Medium[]>;
-	/**
-	 * @experimental
-	 */
-	public getPlacesStats(filter: Places.PlacesStatsFilterJSON): Promise<Places.PlacesStats>
-	/**
-	 * @experimental
-	 */
-	public getPlaceGeometry(id: string): Promise<Places.PlaceGeometry>
-	/**
-	 * @experimental
-	 */
-	public getPlaceOpeningHours(id: string, from: string, to: string): Promise<Places.PlaceOpeningHours>
-	/**
-	 * @experimental
-	 */
-	public detectParentsByBounds(bounds: Geo.Bounds, zoom: number): Promise<Places.Place[]>
-	/**
-	 * @experimental
-	 */
-	public detectParentsByLocation(location: Geo.Location): Promise<Places.Place[]>
-	/**
-	 * @experimental
-	 */
-	public createCustomPlace(data: Places.CustomPlaceFormData): Promise<Places.Place>
-	/**
-	 * @experimental
-	 */
-	public updateCustomPlace(id: string, data: Places.CustomPlaceFormData): Promise<Places.Place>
-	/**
-	 * @experimental
-	 */
-	public deleteCustomPlace(id: string): Promise<void>
-	public spreadPlacesOnMap(
-		places: Places.Place[],
-		bounds: Geo.Bounds,
-		canvas: Spread.CanvasSize,
-		markerSizes?: Spread.SpreadSizeConfig[]
-	): Spread.SpreadResult;
+declare class ChangesModule {
+	public initializeChangesWatching(tickInterval: number): Promise<void>;
+	public stopChangesWatching(): void;
+	public setChangesCallback(callback: (changeNotifications: Changes.ChangeNotification[]) => any | null): void;
+}
 
-	/**
-	 * @experimental
-	 */
-	public spreadPlacesOnMapV2(
-		places: Places.Place[],
-		vipPlaces: Places.Place[],
-		bounds: Geo.Bounds,
-		canvas: Spread.CanvasSize,
-		markerSizes?: SpreadV2.SpreadSizeConfig[],
-		categoriesCoefficients?: SpreadV2.CategoriesCoefficients | null,
-	): SpreadV2.SpreadResult;
-	/**
-	 * @experimental
-	 */
-	public addPlaceToFavorites(id: string): Promise<void>;
-	/**
-	 * @experimental
-	 */
-	public addCustomPlaceToFavorites(name: string, location: Geo.Location, address: string): Promise<string>;
-	/**
-	 * @experimental
-	 */
-	public getFavoritesIds(): Promise<string[]>;
-	/**
-	 * @experimental
-	 */
-	public removePlaceFromFavorites(id: string): Promise<void>
-	/**
-	 * @experimental
-	 */
-	public getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trips.Trip[]>;
-	/**
-	 * @experimental
-	 */
-	public getTripsInTrash(): Promise<Trips.Trip[]>;
-	/**
-	 * @experimental
-	 */
-	public getTripDetailed(id: string): Promise<Trips.Trip>;
-	/**
-	 * @experimental
-	 */
-	public getRoutesForTripDay(tripId: string, dayIndex: number): Promise<Route.Route[]>
-	/**
-	 * @experimental
-	 */
-	public createTrip(startDate: string, name: string, placeId: string): Promise<Trips.Trip>
-	/**
-	 * @experimental
-	 */
-	public updateTrip(id, dataToUpdate: Trips.TripUpdateData): Promise<Trips.Trip>
-	/**
-	 * @experimental
-	 */
-	public cloneTrip(id): Promise<string>
-	/**
-	 * @experimental
-	 */
-	public addDayToTrip(id: string): Promise<Trips.Trip>
-	/**
-	 * @experimental
-	 */
-	public prependDayToTrip(id: string): Promise<Trips.Trip>
-	/**
-	 * @experimental
-	 */
-	public removeDayFromTrip(id: string, dayIndex: number): Promise<Trips.Trip>
-	/**
-	 * @experimental
-	 */
-	public swapDaysInTrip(id: string, firstDayIndex: number, secondDayIndex: number): Promise<Trips.Trip>
+declare class CollaborationModule {
+	public followTrip(tripId: string): Promise<void>;
+	public unfollowTrip(tripId: string): Promise<void>;
+	public addTripCollaboration(tripId: string, userEmail: string, accessLevel: string): Promise<void>;
+	public getTripCollaborations(tripId: string): Promise<Trips.Collaboration[]>;
+	public removeTripCollaboration(collaborationId: string): Promise<void>;
+	public acceptTripCollaboration(collaborationId: string, hash: string): Promise<string>;
+	public resendInvitation(collaborationId: string): Promise<void>;
+	public updateTripCollaboration(collaborationId: string, accessLevel: string): Promise<void>
+}
 
-	/**
-	 * @experimental
-	 */
-	public movePlaceInDay(id: string, dayIndex: number, positionFrom: number, positionTo: number): Promise<Trips.Trip>
-	/**
-	 * @experimental
-	 */
-	public removePlacesFromDay(id: string, dayIndex: number, positionsInDay: number[]): Promise<Trips.Trip>
-	/**
-	 * @experimental
-	 */
-	public removeAllPlacesFromDay(id: string, dayIndex: number): Promise<Trips.Trip>
-	/**
-	 * @experimental
-	 */
-	public addPlaceToDay(
-		tripId: string,
-		placeId: string,
-		dayIndex: number,
-		positionInDay?: number): Promise<Trips.Trip>
-	/**
-	 * @experimental
-	 */
-	public setOvernightPlace(
-		tripId: string,
-		placeId: string,
-		dayIndex: number): Promise<Trips.Trip>
-	/**
-	 * @experimental
-	 */
-	public followTrip(tripId: string): Promise<void>
-	/**
-	 * @experimental
-	 */
-	public unfollowTrip(tripId: string): Promise<void>
-	/**
-	 * @experimental
-	 */
-	public addTripCollaboration(tripId: string, userEmail: string, accessLevel: string): Promise<void>
-	/**
-	 * @experimental
-	 */
-	public getTripCollaborations(tripId: string): Promise<Trips.Collaboration[]>
-	/**
-	 * @experimental
-	 */
-	public removeTripCollaboration(collaborationId: string): Promise<void>
-	/**
-	 * @experimental
-	 */
-	public acceptTripCollaboration(collaborationId: string, hash: string): Promise<void>
-	/**
-	 * @experimental
-	 */
-	public resendInvitation(collaborationId: string): Promise<void>
-	/**
-	 * @experimental
-	 */
-	public searchAddress(query: string, location: Location): Promise<Search.SearchAddressResult[]>
-	/**
-	 * @experimental
-	 */
-	public searchAddressReverse(location: Location): Promise<Search.SearchAddressResult[]>
-	/**
-	 * @experimental
-	 */
-	public getDestinationWeather(destinationId: string): Promise<Forecast.Forecast[]>
-	/**
-	 * @experimental
-	 */
-	public getUserSettings(): Promise<User.UserSettings>
-	/**
-	 * @experimental
-	 */
-	public updateUserSettings(settings: User.UserSettings): Promise<User.UserSettings>
-	/**
-	 * @experimental
-	 */
-	public initializeChangesWatching(tickInterval: number): Promise<void>
-	/**
-	 * @experimental
-	 */
-	public stopChangesWatching(): void
-	/**
-	 * @experimental
-	 */
-	public setChangesCallback(callback: (changeNotifications: Changes.ChangeNotification[]) => any | null): void
-	/**
-	 * @experimental
-	 */
-	public setTripConflictHandler(
-		handler: null | ((conflictInfo: Trips.TripConflictInfo, trip: Trips.Trip)
-			=> Promise<Trips.TripConflictClientResolution>)
-	): void
-	/**
-	 * @experimental
-	 */
-	public getTours(toursQuery: Tours.ToursQuery): Promise<Tours.Tour[]>
-	/**
-	 * @experimental
-	 */
-	public addPlaceReview(placeId: string, rating: number, message: string): Promise<Places.PlaceReview>
-	/**
-	 * @experimental
-	 */
-	public deletePlaceReview(reviewId: number): Promise<void>
-	/**
-	 * @experimental
-	 */
-	public getPlaceReviews(placeId: string, limit: number, page: number): Promise<Places.PlaceReviewsData>
-	/**
-	 * @experimental
-	 */
-	public voteOnReview(reviewId: number, voteValue: number): Promise<void>
-	/**
-	 * @experimental
-	 */
-	public emptyTripsTrash(): Promise<string[]>
-	/**
-	 * @experimental
-	 */
-	public locationToMapTileKey(location: Location, zoom: number): string
-	/**
-	 * @experimental
-	 */
-	public getHotels(filter: Hotels.HotelsFilterJSON): Promise<Hotels.Hotel[]>
-	/**
-	 * @experimental
-	 */
-	public getCollection(collectionId: number, photoSize: string): Promise<Collections.Collection>
-	/**
-	 * @experimental
-	 */
+declare class CollectionsModule {
+	public getCollection(collectionId: number, photoSize: string): Promise<Collections.Collection>;
 	public getCollections(
 		filter: Collections.CollectionsFilterJSON,
 		loadPlaces: boolean,
 		photoSize: string
 	): Promise<Collections.Collection[]>
-	/**
-	 * @experimental
-	 */
+}
+
+declare class CustomPlacesModule {
+	public createCustomPlace(data: Places.CustomPlaceFormData): Promise<Places.Place>;
+	public updateCustomPlace(id: string, data: Places.CustomPlaceFormData): Promise<Places.Place>
+	public deleteCustomPlace(id: string): Promise<void>;
+}
+
+declare class FavoritesModule {
+	public addPlaceToFavorites(id: string): Promise<void>;
+	public addCustomPlaceToFavorites(name: string, location: Location, address: string): Promise<string>;
+	public getFavoritesIds(): Promise<string[]>;
+	public removePlaceFromFavorites(id: string): Promise<void>;
+}
+
+declare class ForecastModule {
+	public getDestinationWeather(destinationId: string): Promise<Forecast.Forecast[]>
+}
+
+declare class HotelsModule {
+	public getHotels(filter: Hotels.HotelsFilterJSON): Promise<Hotels.Hotel[]>
+}
+
+declare class PlacesModule {
+	public getPlaces(filter: Places.PlacesListFilterJSON): Promise<Places.Place[]>;
+	public getPlaceDetailed(id: string, photoSize: string): Promise<Places.Place>;
+	public getPlacesDetailed(ids: string[], photoSize: string): Promise<Places.Place[]>;
+	public getPlaceMedia(id: string): Promise<Media.Medium[]>;
+	public getPlacesStats(filter: Places.PlacesStatsFilterJSON): Promise<Places.PlacesStats>;
+	public getPlaceGeometry(id: string): Promise<Places.PlaceGeometry>;
+	public getPlaceOpeningHours(id: string, from: string, to: string): Promise<Places.PlaceOpeningHours>
+	public detectParentsByBounds(bounds: Geo.Bounds, zoom: number): Promise<Places.Place[]>
+	public detectParentsByLocation(location: Location): Promise<Places.Place[]>
+	public addPlaceReview(placeId: string, rating: number, message: string): Promise<Places.PlaceReview>
+	public deletePlaceReview(reviewId: number): Promise<void>;
+	public getPlaceReviews(placeId: string, limit: number, page: number): Promise<Places.PlaceReviewsData>;
+	public voteOnReview(reviewId: number, voteValue: number): Promise<void>;
+	public spreadPlacesOnMap(
+		places: Places.Place[],
+		bounds: Geo.Bounds,
+		canvas: Spread.CanvasSize,
+		sizesConfig?: Spread.SpreadSizeConfig[]
+	): Spread.SpreadResult;
+	public spreadPlacesOnMapV2(
+		places: Places.Place[],
+		vipPlaces: Places.Place[],
+		bounds: Geo.Bounds,
+		canvas: Spread.CanvasSize,
+		sizesConfig?: SpreadV2.SpreadSizeConfig[],
+		categoriesCoefficients?: SpreadV2.CategoriesCoefficients | null
+	): SpreadV2.SpreadResult;
+}
+
+declare class RoutesModule {
 	public getDirections(origin: Location, destination: Location): Promise<Route.Route>
+}
+
+declare class SearchModule {
+	public search(query: string, location?: Location): Promise<Search.SearchResult[]>;
+	public searchReverse(location: Location): Promise<Search.SearchResult[]>;
+}
+
+declare class ToursModule {
+	public getTours(toursQuery: Tours.ToursQuery): Promise<Tours.Tour[]>;
+}
+
+declare class TripModule {
+	public getRoutesForTripDay(tripId: string, dayIndex: number): Promise<Route.Route[]>;
+	public getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trips.Trip[]>;
+	public getTripsInTrash(): Promise<Trips.Trip[]>;
+	public getTripDetailed(id: string): Promise<Trips.Trip>;
+	public createTrip(startDate: string, name: string, placeId: string): Promise<Trips.Trip>;
+	public updateTrip(id, dataToUpdate: Trips.TripUpdateData): Promise<Trips.Trip>;
+	public cloneTrip(id): Promise<string>;
+	public addDaysToTrip(id: string, count: number): Promise<Trips.Trip>;
+	public prependDaysToTrip(id: string, count: number): Promise<Trips.Trip>;
+	public removeDayFromTrip(id: string, dayIndex: number): Promise<Trips.Trip>;
+	public swapDaysInTrip(id: string, firstDayIndex: number, secondDayIndex: number): Promise<Trips.Trip>;
+	public movePlaceInDay(id: string, dayIndex: number, positionFrom: number, positionTo: number): Promise<Trips.Trip>;
+	public removePlacesFromDay(id: string, dayIndex: number, positionsInDay: number[]): Promise<Trips.Trip>;
+	public removeAllPlacesFromDay(id: string, dayIndex: number): Promise<Trips.Trip>;
+	public addPlaceToDay(tripId: string, placeId: string, dayIndex: number, positionInDay?: number): Promise<Trips.Trip>;
+	public setOvernightPlace(tripId: string, placeId: string, dayIndex: number): Promise<Trips.Trip>;
+	public setTransport(
+		id: string,
+		dayIndex: number,
+		itemIndex: number,
+		settings: Trips.TransportSettings
+	): Promise<Trips.Trip>;
+	public setTripConflictHandler(handler: null | Trips.TripConflictHandler): void;
+	public emptyTripsTrash(): Promise<string[]>;
+}
+
+declare class UserModule {
+	public setUserSession(key: string | null, token: string | null): Promise<void>;
+	public getUserSettings(): Promise<User.UserSettings>;
+	public updateUserSettings(settings: User.UserSettings): Promise<User.UserSettings>;
+}
+
+declare class UtilityModule {
+	public locationToMapTileKey(location: Location, zoom: number): string;
+}
+
+export class StSDK {
+	public changes: ChangesModule;
+	public collaboration: CollaborationModule;
+	public collections: CollectionsModule;
+	public customPlaces: CustomPlacesModule;
+	public favorites: FavoritesModule;
+	public forecast: HotelsModule;
+	public hotels: HotelsModule;
+	public places: PlacesModule;
+	public routes: RoutesModule;
+	public search: SearchModule;
+	public tours: ToursModule;
+	public trip: TripModule;
+	public user: UserModule;
+	public utility: UtilityModule;
 }
 
 export namespace Places {
@@ -759,11 +642,12 @@ export namespace Search {
 		country: string | null;
 	}
 
-	export interface SearchAddressResult {
-		location: Geo.Location;
+	export interface SearchResult {
+		location: Location;
 		type: string | null;
 		address: Address | null;
 		distance: number | null;
+		place: Places.Place | null;
 	}
 }
 
