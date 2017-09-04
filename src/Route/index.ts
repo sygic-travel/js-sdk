@@ -31,13 +31,7 @@ export async function getRoutesForTripDay(tripId: string, dayIndex: number): Pro
 
 	const places: Place[] = await placesDao.getPlacesFromTripDay(day);
 	const routes: Route[] = await Dao.getRoutes(createRequests(places, day));
-	return routes.map((route: Route): Route => {
-		const availableModes = ModeSelector.getAvailableModes(route.origin, route.destination);
-		route.modeDirections = route.modeDirections.filter((modeDirection: ModeDirections) => {
-			return availableModes.indexOf(modeDirection.mode) !== -1;
-		});
-		return route;
-	});
+	return filterRoutesDirections(routes);
 }
 
 const createRequests = (places: Place[], day: Day): RouteRequest[] => {
@@ -57,6 +51,17 @@ const createRequests = (places: Place[], day: Day): RouteRequest[] => {
 };
 
 export async function getDirections(origin: Location, destination: Location): Promise<Route | null> {
-	const routes: Route[] = await Dao.getRoutes([Mapper.createRouteRequest(destination, origin)]);
+	let routes: Route[] = await Dao.getRoutes([Mapper.createRouteRequest(destination, origin)]);
+	routes = filterRoutesDirections(routes);
 	return routes.length > 0 ? routes[0] : null;
 }
+
+const filterRoutesDirections = (routes: Route[]): Route[] => {
+	return routes.map((route: Route): Route => {
+		const availableModes = ModeSelector.getAvailableModes(route.origin, route.destination);
+		route.modeDirections = route.modeDirections.filter((modeDirection: ModeDirections) => {
+			return availableModes.indexOf(modeDirection.mode) !== -1;
+		});
+		return route;
+	});
+};
