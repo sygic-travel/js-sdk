@@ -3,12 +3,14 @@ import * as Settings from '../Settings';
 import {
 	addDaysToTrip,
 	addPlaceToDay,
+	applyTripTemplate,
 	cloneTrip,
 	createTrip,
 	emptyTripsTrash,
 	getTripDetailed,
 	getTrips,
 	getTripsInTrash,
+	getTripTemplates,
 	movePlaceInDay,
 	prependDaysToTrip,
 	removeAllPlacesFromDay,
@@ -20,6 +22,7 @@ import {
 	TransportSettings,
 	Trip,
 	TripConflictHandler,
+	TripTemplate,
 	TripUpdateData,
 	updateTrip,
 } from '../Trip';
@@ -111,5 +114,13 @@ export default class TripModule {
 
 	public emptyTripsTrash(): Promise<string[]> {
 		return emptyTripsTrash();
+	}
+
+	public getTripTemplates(placeId: string): Promise<TripTemplate[]> {
+		return getTripTemplates(placeId);
+	}
+
+	public applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trip> {
+		return applyTripTemplate(tripId, templateId, dayIndex);
 	}
 }

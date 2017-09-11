@@ -178,3 +178,10 @@ export function hasDayStickyPlaceFromBothSides(trip: Trip, dayIndex: number): bo
 
 	return false;
 }
+
+export interface TripTemplate {
+	id: number;
+	description: string;
+	duration: number | null;
+	trip: Trip;
+}

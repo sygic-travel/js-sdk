@@ -4,17 +4,18 @@ import { stringify } from 'query-string';
 
 import { tripsDetailedCache as tripsDetailedCache } from '../Cache';
 import { getTripConflictHandler } from '../Settings';
-import { getUserSettings } from '../User';
+import { getUserSettings, UserSettings } from '../User';
 import { dateToW3CString } from '../Util';
 import { ApiResponse, get, post, put } from '../Xhr';
 import {
 	mapTripCreateRequestToApiFormat,
 	mapTripDetailedApiResponseToTrip,
 	mapTripListApiResponseToTripsList,
+	mapTripTemplateApiResponse,
 	mapTripToApiFormat,
 	mapTripToApiUpdateFormat
 } from './Mapper';
-import { Trip, TripConflictClientResolution, TripConflictInfo, TripCreateRequest } from './Trip';
+import { Trip, TripConflictClientResolution, TripConflictInfo, TripCreateRequest, TripTemplate } from './Trip';
 
 const updateTimeouts = {};
 const tripDataToSend = {};
@@ -169,4 +170,32 @@ export async function emptyTripsTrash(): Promise<string[]> {
 		throw new Error('Wrong API response');
 	}
 	return apiResponse.data.deleted_trip_ids as string[];
+}
+
+export async function getTripTemplates(placeId: string): Promise<TripTemplate[]> {
+	const apiResponse: ApiResponse = await get(`trip-templates?${stringify({
+		place_id: placeId
+	})}`);
+	if (!apiResponse.data.hasOwnProperty('trip_templates')) {
+		throw new Error('Wrong API response');
+	}
+
+	const userSettings: UserSettings = await getUserSettings();
+	return apiResponse.data.trip_templates.map((tripTemplate: any): TripTemplate => (
+		mapTripTemplateApiResponse(tripTemplate, userSettings)
+	));
+}
+
+export async function applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trip> {
+	const apiResponse: ApiResponse = await put(`/trips/${tripId}/apply-template`, {
+		template_id: templateId,
+		day_index: dayIndex
+	});
+	if (!apiResponse.data.hasOwnProperty('trip')) {
+		throw new Error('Wrong API response');
+	}
+
+	const trip: Trip = mapTripDetailedApiResponseToTrip(apiResponse.data.trip, await getUserSettings());
+	await tripsDetailedCache.set(trip.id, trip);
+	return trip;
 }

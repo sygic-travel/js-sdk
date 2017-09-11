@@ -24,6 +24,7 @@ import {
 	TripConflictResolution,
 	TripMedia,
 	TripPrivileges,
+	TripTemplate,
 	TripUpdateData
 } from './Trip';
 
@@ -45,6 +46,7 @@ export {
 	TripConflictResolution,
 	TripMedia,
 	TripPrivileges,
+	TripTemplate,
 	TripUpdateData
 };
 
@@ -247,4 +249,12 @@ export async function handleTripChanges(changeNotifications: ChangeNotification[
 
 export async function emptyTripsTrash(): Promise<string[]> {
 	return Dao.emptyTripsTrash();
+}
+
+export async function getTripTemplates(placeId: string): Promise<TripTemplate[]> {
+	return Dao.getTripTemplates(placeId);
+}
+
+export async function applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trip> {
+	return Dao.applyTripTemplate(tripId, templateId, dayIndex);
 }
