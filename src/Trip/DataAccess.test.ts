@@ -330,7 +330,7 @@ describe('TripDataAccess', () => {
 				}));
 			}));
 
-			const tripTemplate: TripTemplate[] = await Dao.getTripTemplates(123);
+			const tripTemplate: TripTemplate[] = await Dao.getTripTemplates('city:1');
 			chai.expect(tripTemplate[0]).to.deep.equal({
 				id: 1234,
 				description: 'test',

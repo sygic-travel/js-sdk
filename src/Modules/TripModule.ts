@@ -116,7 +116,7 @@ export default class TripModule {
 		return emptyTripsTrash();
 	}
 
-	public getTripTemplates(placeId: number): Promise<TripTemplate[]> {
+	public getTripTemplates(placeId: string): Promise<TripTemplate[]> {
 		return getTripTemplates(placeId);
 	}
 
