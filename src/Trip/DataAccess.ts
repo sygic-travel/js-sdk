@@ -172,7 +172,7 @@ export async function emptyTripsTrash(): Promise<string[]> {
 	return apiResponse.data.deleted_trip_ids as string[];
 }
 
-export async function getTripTemplates(placeId: number): Promise<TripTemplate[]> {
+export async function getTripTemplates(placeId: string): Promise<TripTemplate[]> {
 	const apiResponse: ApiResponse = await get(`trip-templates?${stringify({
 		place_id: placeId
 	})}`);

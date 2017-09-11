@@ -251,7 +251,7 @@ export async function emptyTripsTrash(): Promise<string[]> {
 	return Dao.emptyTripsTrash();
 }
 
-export async function getTripTemplates(placeId: number): Promise<TripTemplate[]> {
+export async function getTripTemplates(placeId: string): Promise<TripTemplate[]> {
 	return Dao.getTripTemplates(placeId);
 }
 
