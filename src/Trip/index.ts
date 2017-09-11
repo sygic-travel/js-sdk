@@ -255,3 +255,6 @@ export async function getTripTemplates(placeId: number): Promise<TripTemplate[]>
 	return Dao.getTripTemplates(placeId);
 }
 
+export async function applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trip> {
+	return Dao.applyTripTemplate(tripId, templateId, dayIndex);
+}

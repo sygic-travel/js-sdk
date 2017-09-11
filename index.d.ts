@@ -116,6 +116,7 @@ declare class TripModule {
 	public setTripConflictHandler(handler: null | Trips.TripConflictHandler): void;
 	public emptyTripsTrash(): Promise<string[]>;
 	public getTripTemplates(placeId: number): Promise<Trips.TripTemplate[]>
+	public applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trips.Trip>;
 }
 
 declare class UserModule {

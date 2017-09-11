@@ -185,3 +185,17 @@ export async function getTripTemplates(placeId: number): Promise<TripTemplate[]>
 		mapTripTemplateApiResponse(tripTemplate, userSettings)
 	));
 }
+
+export async function applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trip> {
+	const apiResponse: ApiResponse = await put(`/trips/${tripId}/apply-template`, {
+		template_id: templateId,
+		day_index: dayIndex
+	});
+	if (!apiResponse.data.hasOwnProperty('trip')) {
+		throw new Error('Wrong API response');
+	}
+
+	const trip: Trip = mapTripDetailedApiResponseToTrip(apiResponse.data.trip, await getUserSettings());
+	await tripsDetailedCache.set(trip.id, trip);
+	return trip;
+}

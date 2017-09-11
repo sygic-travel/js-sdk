@@ -339,4 +339,17 @@ describe('TripDataAccess', () => {
 			});
 		});
 	});
+
+	describe('#applyTripTemplate', () => {
+		it('should apply a trip template (recall api) and return trip', async () => {
+			sandbox.stub(Xhr, 'put').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, {
+					trip: cloneDeep(trip1FromApi)
+				}));
+			}));
+
+			const expectedTrip: Trip = cloneDeep(trip1Expected);
+			chai.expect(await Dao.applyTripTemplate('1', 123, 1)).to.deep.equal(expectedTrip);
+		});
+	});
 });

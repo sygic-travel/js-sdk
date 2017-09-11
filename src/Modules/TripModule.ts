@@ -3,6 +3,7 @@ import * as Settings from '../Settings';
 import {
 	addDaysToTrip,
 	addPlaceToDay,
+	applyTripTemplate,
 	cloneTrip,
 	createTrip,
 	emptyTripsTrash,
@@ -117,5 +118,9 @@ export default class TripModule {
 
 	public getTripTemplates(placeId: number): Promise<TripTemplate[]> {
 		return getTripTemplates(placeId);
+	}
+
+	public applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trip> {
+		return applyTripTemplate(tripId, templateId, dayIndex);
 	}
 }
