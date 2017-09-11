@@ -84,6 +84,7 @@ declare class RoutesModule {
 declare class SearchModule {
 	public search(query: string, location?: Location): Promise<Search.SearchResult[]>;
 	public searchReverse(location: Location): Promise<Search.SearchResult[]>;
+	public searchTags(query: string): Promise<Search.SearchTagsResult[]>;
 }
 
 declare class ToursModule {
@@ -657,6 +658,11 @@ export namespace Search {
 		address: Address | null;
 		distance: number | null;
 		place: Places.Place | null;
+	}
+
+	export interface SearchTagsResult extends Places.Tag {
+		priority: number;
+		isVisible: boolean;
 	}
 }
 
