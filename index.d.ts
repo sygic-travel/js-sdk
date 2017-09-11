@@ -115,6 +115,7 @@ declare class TripModule {
 	): Promise<Trips.Trip>;
 	public setTripConflictHandler(handler: null | Trips.TripConflictHandler): void;
 	public emptyTripsTrash(): Promise<string[]>;
+	public getTripTemplates(placeId: number): Promise<Trips.TripTemplate[]>
 }
 
 declare class UserModule {
@@ -583,6 +584,13 @@ export namespace Trips {
 		startsOn?: string;
 		privacyLevel?: string;
 		isDeleted?: boolean;
+	}
+
+	export interface TripTemplate {
+		id: string;
+		description: string;
+		duration: number | null;
+		trip: Trips.Trip;
 	}
 }
 

@@ -3,7 +3,7 @@ import * as cloneDeep from 'lodash.clonedeep';
 
 import { Place } from '../Places';
 import { UserSettings } from '../User';
-import { Day, ItineraryItem, Trip, TripCreateRequest, TripMedia, TripPrivileges } from './Trip';
+import { Day, ItineraryItem, Trip, TripCreateRequest, TripMedia, TripPrivileges, TripTemplate } from './Trip';
 import { decorateDaysWithDate } from './Utility';
 
 export const mapTripListApiResponseToTripsList = (trips: any): Trip[] => {
@@ -212,3 +212,10 @@ const mapTripDayToApiFormat = (day: Day): object => {
 		})),
 	};
 };
+
+export const mapTripTemplateApiResponse = (tripTemplate: any, userSettings: UserSettings): TripTemplate => ({
+	id: tripTemplate.id,
+	description: tripTemplate.description,
+	duration: tripTemplate.duration,
+	trip: mapTripDetailedApiResponseToTrip(tripTemplate.trip, userSettings)
+});

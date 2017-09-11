@@ -12,7 +12,7 @@ import * as User from '../User';
 import * as Xhr from '../Xhr';
 import { ApiResponse } from '../Xhr/ApiResponse';
 import * as Dao from './DataAccess';
-import { Day, ItineraryItem, Trip } from './Trip';
+import { Day, ItineraryItem, Trip, TripTemplate } from './Trip';
 
 let sandbox: SinonSandbox;
 let clock: SinonFakeTimers;
@@ -314,6 +314,29 @@ describe('TripDataAccess', () => {
 				}));
 			}));
 			chai.expect(Dao.emptyTripsTrash()).to.eventually.deep.equal(['poi:1', 'poi:2', 'poi:3']);
+		});
+	});
+
+	describe('#getTripTemplates', () => {
+		it('should get trip templates', async () => {
+			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, {
+					trip_templates: [{
+						id: 1234,
+						description: 'test',
+						duration: 123456,
+						trip: trip1FromApi
+					}]
+				}));
+			}));
+
+			const tripTemplate: TripTemplate[] = await Dao.getTripTemplates(123);
+			chai.expect(tripTemplate[0]).to.deep.equal({
+				id: 1234,
+				description: 'test',
+				duration: 123456,
+				trip: trip1Expected
+			});
 		});
 	});
 });

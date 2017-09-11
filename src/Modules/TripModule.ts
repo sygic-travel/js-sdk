@@ -9,6 +9,7 @@ import {
 	getTripDetailed,
 	getTrips,
 	getTripsInTrash,
+	getTripTemplates,
 	movePlaceInDay,
 	prependDaysToTrip,
 	removeAllPlacesFromDay,
@@ -20,6 +21,7 @@ import {
 	TransportSettings,
 	Trip,
 	TripConflictHandler,
+	TripTemplate,
 	TripUpdateData,
 	updateTrip,
 } from '../Trip';
@@ -111,5 +113,9 @@ export default class TripModule {
 
 	public emptyTripsTrash(): Promise<string[]> {
 		return emptyTripsTrash();
+	}
+
+	public getTripTemplates(placeId: number): Promise<TripTemplate[]> {
+		return getTripTemplates(placeId);
 	}
 }
