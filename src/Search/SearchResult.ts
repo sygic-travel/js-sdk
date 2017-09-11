@@ -1,5 +1,5 @@
 import { Location } from '../Geo';
-import { Place } from '../Places';
+import { Place, Tag } from '../Places';
 
 export interface SearchResult {
 	location: Location;
@@ -23,4 +23,9 @@ export interface AddressFields {
 	state: string | null;
 	postalCode: string | null;
 	country: string | null;
+}
+
+export interface SearchTagsResult extends Tag {
+	priority: number;
+	isVisible: boolean;
 }

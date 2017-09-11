@@ -9,6 +9,7 @@ import * as TestApiExpectedResults from '../TestData/SearchLocationExpectedResul
 import * as TestApiResponses from '../TestData/SearchLocationsApiResponses';
 import * as Xhr from '../Xhr';
 import * as Dao from './DataAccess';
+import { SearchTagsResult } from './SearchResult';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
@@ -68,6 +69,39 @@ describe('SearchDataAccess', () => {
 
 			return chai.expect(Dao.searchReverse(location))
 				.to.eventually.deep.equal(TestApiExpectedResults.searchLocations);
+		});
+	});
+
+	describe('#searchTags', () => {
+		it('should recall api and return search tags results', async () => {
+			sandbox.stub(Xhr, 'get').returns(new Promise<Xhr.ApiResponse>((resolve) => {
+				resolve(new Xhr.ApiResponse(200, {
+					tags: [{
+						key: 'Dinner Theater',
+						name: 'Dinner Theater',
+						priority: 0,
+						is_visible: true
+					}, {
+						key: 'Theater, Show & Musical',
+						name: 'Theater, Show & Musical',
+						priority: 0,
+						is_visible: true
+					}]
+				}));
+			}));
+
+			return chai.expect(await Dao.searchTags('eat')).to.deep.equal([{
+					key: 'Dinner Theater',
+					name: 'Dinner Theater',
+					priority: 0,
+					isVisible: true
+				} as SearchTagsResult, {
+					key: 'Theater, Show & Musical',
+					name: 'Theater, Show & Musical',
+					priority: 0,
+					isVisible: true
+				} as SearchTagsResult]
+			);
 		});
 	});
 });
