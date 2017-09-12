@@ -1,4 +1,4 @@
-import { Place } from '../Places';
+import { Place, Tag } from '../Places';
 
 export interface Hotel {
 	place: Place;
@@ -6,4 +6,10 @@ export interface Hotel {
 		price: number;
 		hotelId: string;
 	};
+}
+
+export interface AvailableHotels {
+	hotels: Hotel[];
+	hotelFacilities: Tag[];
+	roomFacilities: Tag[];
 }
