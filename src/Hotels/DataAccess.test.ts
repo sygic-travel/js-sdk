@@ -34,7 +34,7 @@ describe('HotelsDataAccess', () => {
 			});
 
 			chai.expect(await Dao.getHotels(hotelsFilter))
-				.to.deep.equal(HotelsResults.hotels);
+				.to.deep.equal(HotelsResults.availableHotels);
 			chai.expect(apiStub.callCount).to.equal(1);
 			chai.expect(apiStub.getCall(0).args[0]).to.equal('hotels/list/?adults=2&check_in=2017-11-11&check_out=2017-11-12');
 		});
