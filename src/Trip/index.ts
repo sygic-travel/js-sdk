@@ -256,5 +256,7 @@ export async function getTripTemplates(placeId: string): Promise<TripTemplate[]>
 }
 
 export async function applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trip> {
-	return Dao.applyTripTemplate(tripId, templateId, dayIndex);
+	const tripWithoutPlaces: Trip = await Dao.applyTripTemplate(tripId, templateId, dayIndex);
+	const placesIds: string[] = getPlacesIdsFromTrip(tripWithoutPlaces);
+	return putPlacesToTrip(tripWithoutPlaces, await getPlacesDetailed(placesIds, '300x300'));
 }
