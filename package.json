@@ -36,8 +36,8 @@
     "tslint-loader": "^3.4.3",
     "typedoc": "^0.5.10",
     "typescript": "^2.3.0",
-    "webpack": "^2.2.1",
-    "webpack-dev-server": "^2.4.2"
+    "webpack": "^3.5.6",
+    "webpack-dev-server": "^2.7.1"
   },
   "dependencies": {
     "@types/geojson": "^1.0.2",
