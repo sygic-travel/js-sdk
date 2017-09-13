@@ -44,7 +44,7 @@ declare class ForecastModule {
 }
 
 declare class HotelsModule {
-	public getHotels(filter: Hotels.HotelsFilterJSON): Promise<Hotels.Hotel[]>
+	public getHotels(filter: Hotels.HotelsFilterJSON): Promise<Hotels.AvailableHotels>
 }
 
 declare class PlacesModule {
@@ -311,6 +311,12 @@ export namespace Hotels {
 			price: number;
 			hotelId: string;
 		};
+	}
+
+	export interface AvailableHotels {
+		hotels: Hotel[];
+		hotelFacilities: Places.Tag[];
+		roomFacilities: Places.Tag[];
 	}
 
 	export interface HotelsFilterJSON {

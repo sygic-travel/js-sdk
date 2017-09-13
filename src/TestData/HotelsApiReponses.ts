@@ -34,5 +34,13 @@ export const hotels = {
 				"price": 169.47
 			}
 		}
-	]
+	],
+	"room_facilities": [{
+		"name": "Bath",
+		"key": "bath"
+	}],
+	"hotel_facilities": [{
+		"name": "Restaurant",
+		"key": "restaurant"
+	}],
 };

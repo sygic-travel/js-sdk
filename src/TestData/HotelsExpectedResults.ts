@@ -30,3 +30,15 @@ export const hotels = [{
 		}
 	} as Hotel
 ];
+
+export const availableHotels = {
+	hotels,
+	roomFacilities: [{
+		name: 'Bath',
+		key: 'bath'
+	}],
+	hotelFacilities: [{
+		name: 'Restaurant',
+		key: 'restaurant'
+	}],
+};
