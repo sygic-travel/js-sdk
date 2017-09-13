@@ -194,8 +194,6 @@ export async function applyTripTemplate(tripId: string, templateId: number, dayI
 	if (!apiResponse.data.hasOwnProperty('trip')) {
 		throw new Error('Wrong API response');
 	}
-
-	const trip: Trip = mapTripDetailedApiResponseToTrip(apiResponse.data.trip, await getUserSettings());
-	await tripsDetailedCache.set(trip.id, trip);
-	return trip;
+	await tripsDetailedCache.set(apiResponse.data.trip.id, apiResponse.data.trip);
+	return mapTripDetailedApiResponseToTrip(apiResponse.data.trip, await getUserSettings());
 }

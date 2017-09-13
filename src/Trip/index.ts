@@ -252,9 +252,21 @@ export async function emptyTripsTrash(): Promise<string[]> {
 }
 
 export async function getTripTemplates(placeId: string): Promise<TripTemplate[]> {
-	return Dao.getTripTemplates(placeId);
+	const tripTemplatesWithoutPlaces: TripTemplate[] = await Dao.getTripTemplates(placeId);
+	return await Promise.all(tripTemplatesWithoutPlaces.map(populateTripTemplateWithPlaces));
+}
+
+async function populateTripTemplateWithPlaces(tripTemplateWithoutPlaces: TripTemplate): Promise<TripTemplate> {
+	tripTemplateWithoutPlaces.trip = await populateTripWithPlaces(tripTemplateWithoutPlaces.trip);
+	return tripTemplateWithoutPlaces;
 }
 
 export async function applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trip> {
-	return Dao.applyTripTemplate(tripId, templateId, dayIndex);
+	const tripWithoutPlaces: Trip = await Dao.applyTripTemplate(tripId, templateId, dayIndex);
+	return await populateTripWithPlaces(tripWithoutPlaces);
+}
+
+async function populateTripWithPlaces(trip: Trip): Promise<Trip> {
+	const placesIds: string[] = getPlacesIdsFromTrip(trip);
+	return putPlacesToTrip(trip, await getPlacesDetailed(placesIds, '300x300'));
 }

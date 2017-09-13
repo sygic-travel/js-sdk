@@ -349,7 +349,11 @@ describe('TripDataAccess', () => {
 			}));
 
 			const expectedTrip: Trip = cloneDeep(trip1Expected);
-			chai.expect(await Dao.applyTripTemplate('1', 123, 1)).to.deep.equal(expectedTrip);
+			const resultTrip: Trip = await Dao.applyTripTemplate('111', 123, 1);
+			const tripFromCache: any = await tripsDetailedCache.get('111');
+
+			chai.expect(tripFromCache).to.deep.equal(cloneDeep(trip1FromApi));
+			chai.expect(resultTrip).to.deep.equal(expectedTrip);
 		});
 	});
 });
