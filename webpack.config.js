@@ -25,7 +25,7 @@ module.exports = {
 				}
 			},
 			{
-				test: /\.tsx?$/,
+				test: /\.ts$/,
 				loader: 'ts-loader',
 				exclude: /node_modules/
 			},
@@ -36,10 +36,10 @@ module.exports = {
 			},
 			{
 				enforce: 'pre',
-				test: /\.tsx?$/,
+				test: /\.ts$/,
 				use: "source-map-loader"
 			}
-		]
+]
 	},
 	resolve: {
 		extensions: [".tsx", ".ts", ".js"]

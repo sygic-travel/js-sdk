@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "webpack-dev-server",
-    "build": "webpack -p --config ./webpack.prod.config.js",
+    "build": "webpack --config ./webpack.prod.config.js",
     "test": "mocha-webpack --webpack-config webpack.config.js \"src/**/*.test.ts\" --reporter \"list\"",
     "test-watch": "mocha-webpack --watch --webpack-config webpack.config.js \"src/**/*.test.ts\" --reporter \"list\"",
     "doc": "typedoc --out ./doc --excludeExternals --exclude \"**/*+(.test).ts\""
@@ -36,8 +36,8 @@
     "tslint-loader": "^3.4.3",
     "typedoc": "^0.5.10",
     "typescript": "^2.3.0",
-    "webpack": "^2.2.1",
-    "webpack-dev-server": "^2.4.2"
+    "webpack": "^3.5.6",
+    "webpack-dev-server": "^2.7.1"
   },
   "dependencies": {
     "@types/geojson": "^1.0.2",
