@@ -10,6 +10,7 @@ export interface HotelsFilterJSON {
 	maxPrice?: number | null;
 	minPrice?: number | null;
 	minReviewScore?: number | null;
+	places?: string[] | null;
 	bounds?: Bounds | null;
 	mapTileBounds?: string[] | null;
 	stars?: number[] | null;
@@ -29,6 +30,7 @@ export interface HotelsFilterQuery {
 	max_price?: number;
 	min_price?: number;
 	min_review_score?: number;
+	places?: string;
 	bounds?: string;
 	map_tile_bounds?: string;
 	stars?: string;
@@ -48,7 +50,8 @@ export class HotelsFilter {
 	protected _maxPrice?: number | null;
 	protected _minPrice?: number | null;
 	protected _minReviewScore?: number | null;
-	private _bounds?: Bounds | null;
+	protected _places?: string[] | null;
+	protected _bounds?: Bounds | null;
 	protected _mapTileBounds?: string[] | null;
 	protected _stars?: number[] | null;
 	protected _currency?: string | null;
@@ -56,7 +59,7 @@ export class HotelsFilter {
 	protected _hotelFacilities?: string[] | null;
 	protected _roomFacilities?: string[] | null;
 	protected _limit?: number;
-	private _zoom?: number;
+	protected _zoom?: number;
 
 	constructor(filter: HotelsFilterJSON) {
 		this._checkIn = filter.checkIn;
@@ -67,6 +70,7 @@ export class HotelsFilter {
 		this._minPrice = filter.minPrice;
 		this._minReviewScore = filter.minReviewScore;
 		this._bounds = filter.bounds;
+		this._places = filter.places;
 		this._mapTileBounds = filter.mapTileBounds;
 		this._stars = filter.stars;
 		this._currency = filter.currency;
@@ -103,6 +107,9 @@ export class HotelsFilter {
 		}
 		if (this._minReviewScore) {
 			query.min_review_score = this._minReviewScore;
+		}
+		if (this._places) {
+			query.places = this._places.join('|');
 		}
 		if (this._bounds) {
 			query.bounds = this._bounds.south + ',' + this._bounds.west + ',' + this._bounds.north + ',' + this._bounds.east;
@@ -146,8 +153,11 @@ export class HotelsFilter {
 	}
 
 	private validate(): void {
-		if (this._bounds && this._mapTileBounds) {
-			throw new Error('Bounds and mapTileBounds have to be used exclusively.');
+		if (!this._adults) {
+			throw new Error('Adults count is mandatory.');
+		}
+		if ([this._bounds, this._mapTileBounds, this._places].filter((it) => it).length !== 1) {
+			throw new Error('Bounds, mapTileBounds and places have to be used exclusively and one of them has to be present.');
 		}
 		const chInDate = new Date(this._checkIn);
 		const chOutDate = new Date(this._checkOut);
@@ -159,9 +169,6 @@ export class HotelsFilter {
 		}
 		if (chOutDate <= chInDate) {
 			throw new Error('Invalid checkIn/checkOut combination.');
-		}
-		if (!this._adults) {
-			throw new Error('Adults count is mandatory.');
 		}
 	}
 }
