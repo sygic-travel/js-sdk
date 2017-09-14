@@ -62,7 +62,19 @@ describe('HotelsFilter', () => {
 			};
 			chai.expect(createFilter).to.throw('Adults count is mandatory.');
 		});
-		it('should raise error when bounds passed witn mapTileBounds', () => {
+		it('should raise error on missing bounds', () => {
+			const createFilter = () => {
+				return new HotelsFilter({
+					adults: 1,
+					checkIn: '2017-11-11',
+					checkOut: '2017-11-12',
+				});
+			};
+			chai.expect(createFilter).to.throw(
+				'Bounds, mapTileBounds and places have to be used exclusively and one of them has to be present.'
+			);
+		});
+		it('should raise error when bounds passed with mapTileBounds', () => {
 			const createFilter = () => {
 				return new HotelsFilter({
 					adults: 1,
@@ -77,7 +89,28 @@ describe('HotelsFilter', () => {
 					mapTileBounds: ['1', '2']
 				});
 			};
-			chai.expect(createFilter).to.throw('Bounds and mapTileBounds have to be used exclusively.');
+			chai.expect(createFilter).to.throw(
+				'Bounds, mapTileBounds and places have to be used exclusively and one of them has to be present.'
+			);
+		});
+		it('should raise error when bounds passed with places', () => {
+			const createFilter = () => {
+				return new HotelsFilter({
+					adults: 1,
+					checkIn: '2017-11-11',
+					checkOut: '2017-11-12',
+					bounds: {
+						south: 1,
+						west: 2,
+						north: 3,
+						east: 4,
+					},
+					places: ['poi:1', 'poi:2']
+				});
+			};
+			chai.expect(createFilter).to.throw(
+				'Bounds, mapTileBounds and places have to be used exclusively and one of them has to be present.'
+			);
 		});
 		it('should raise error when same dates are passed', () => {
 			const createFilter = () => {
@@ -85,6 +118,7 @@ describe('HotelsFilter', () => {
 					adults: 1,
 					checkIn: '2017-11-11',
 					checkOut: '2017-11-11',
+					mapTileBounds: ['123', '321'],
 				});
 			};
 			chai.expect(createFilter).to.throw('Invalid checkIn/checkOut combination.');
@@ -95,6 +129,7 @@ describe('HotelsFilter', () => {
 					adults: 1,
 					checkIn: 'xxx',
 					checkOut: 'fdfdfd',
+					mapTileBounds: ['123', '321'],
 				});
 			};
 			chai.expect(createFilter).to.throw('Invalid checkIn date.');
@@ -105,6 +140,7 @@ describe('HotelsFilter', () => {
 					adults: 1,
 					checkIn: '2017-11-11',
 					checkOut: 'fdfdfd',
+					places: ['poi:1'],
 				});
 			};
 			chai.expect(createFilter).to.throw('Invalid checkOut date.');
