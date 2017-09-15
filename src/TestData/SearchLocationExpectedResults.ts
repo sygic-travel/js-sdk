@@ -63,6 +63,9 @@ export const searchLocations = [{
 		url: 'https://travel.sygic.com/go/poi:203997',
 		thumbnailUrl: null,
 		marker: 'shopping:optician',
+		starRating: null,
+		starRatingUnofficial: null,
+		customerRating: null,
 		parents: [],
 		detail: {
 			tags: [{

@@ -16,6 +16,9 @@ export const hotels = {
 				"name_suffix": "Prague, Czech Republic",
 				"url": "https://alpha.travel.sygic.com/go/poi:345430",
 				"marker": "sightseeing:art:artwork",
+				"star_rating": 4,
+				"star_rating_unofficial": null,
+				"customer_rating": 8.6,
 				"categories": [
 					"sightseeing"
 				],

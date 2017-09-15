@@ -68,6 +68,7 @@ export const searchLocations = {
 				perex: null,
 				customer_rating: null,
 				star_rating: null,
+				star_rating_unofficial: null,
 				thumbnail_url: null,
 				meta: {
 					tier: 3,
