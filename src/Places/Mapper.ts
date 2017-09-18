@@ -46,6 +46,9 @@ export const mapPlace = (place, detail: PlaceDetail | null) => {
 		marker: place.marker,
 		categories: place.categories,
 		parents: place.parent_ids,
+		starRating: place.star_rating,
+		starRatingUnofficial: place.star_rating_unofficial,
+		customerRating: place.customer_rating,
 		detail
 	} as Place;
 };

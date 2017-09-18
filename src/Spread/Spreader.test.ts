@@ -28,6 +28,9 @@ const place: Place = {
 	categories: [],
 	parents: [],
 	perex: '',
+	starRatingUnofficial: null,
+	starRating: null,
+	customerRating: null,
 	thumbnailUrl: 'http://example.com',
 	detail: null
 };

@@ -16,6 +16,9 @@ export const placeDetailedEiffelTowerWithoutMedia = {
 		"price": null,
 		"owner_id": "12345",
 		"marker": "sightseeing:tower:lookout:observation",
+		"star_rating": 4,
+		"star_rating_unofficial": null,
+		"customer_rating": 8.6,
 		"categories": [
 			"sightseeing"
 		],
@@ -218,6 +221,9 @@ export const places = {
 			"name_suffix": "Prague, Czech Republic",
 			"url": "https://alpha.travel.sygic.com/go/poi:345430",
 			"marker": "sightseeing:art:artwork",
+			"star_rating" : 4,
+			"star_rating_unofficial": null,
+			"customer_rating": 8.6,
 			"categories": [
 				"sightseeing"
 			],
@@ -328,6 +334,7 @@ export const customPlaceData = {
 		"categories": [],
 		"customer_rating": null,
 		"star_rating": null,
+		"star_rating_unofficial": null,
 		"tags": [],
 		"address": null,
 		"admission": null,

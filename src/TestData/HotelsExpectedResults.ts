@@ -14,6 +14,9 @@ export const hotels = [{
 			quadkey: '120212302033311321',
 			name: 'Charles Bridge',
 			nameSuffix: 'Prague, Czech Republic',
+			starRating: 4,
+			starRatingUnofficial: null,
+			customerRating: 8.6,
 			boundingBox: null,
 			perex: 'This 14-century bridge connects the Old Town with Lesser Town and the Prague Castle.' +
 			' With its length of 621 meters, solid Gothic stone…',

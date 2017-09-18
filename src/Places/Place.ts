@@ -17,6 +17,9 @@ export interface Place {
 	thumbnailUrl: string | null;
 	marker: string;
 	parents: string[];
+	starRating: number | null;
+	starRatingUnofficial: number | null;
+	customerRating: number | null;
 	detail: PlaceDetail | null;
 }
 

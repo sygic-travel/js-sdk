@@ -32,6 +32,9 @@ const place: Place = {
 	parents: [],
 	perex: '',
 	thumbnailUrl: 'http://example.com',
+	starRating: null,
+	starRatingUnofficial: null,
+	customerRating: null,
 	detail: null
 };
 const sizeConfigs: SpreadSizeConfig[] = [
