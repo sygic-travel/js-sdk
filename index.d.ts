@@ -330,7 +330,7 @@ export namespace Hotels {
 		maxPrice?: number | null;
 		minPrice?: number | null;
 		minReviewScore?: number | null;
-		places?: string[] | null;
+		placeIds?: string[] | null;
 		bounds?: Geo.Bounds | null;
 		mapTileBounds?: string[] | null;
 		stars?: number[] | null;

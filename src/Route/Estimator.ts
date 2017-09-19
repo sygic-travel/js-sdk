@@ -1,4 +1,4 @@
-import { encode } from 'polyline';
+import { encode } from '@mapbox/polyline';
 import { Direction } from '.';
 import { EARTH_RADIUS, getDistance, Location } from '../Geo';
 

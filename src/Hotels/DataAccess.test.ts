@@ -31,14 +31,14 @@ describe('HotelsDataAccess', () => {
 				adults: 2,
 				checkIn: '2017-11-11',
 				checkOut: '2017-11-12',
-				places: ['poi:1', 'poi:2']
+				placeIds: ['poi:1', 'poi:2']
 			});
 
 			chai.expect(await Dao.getHotels(hotelsFilter))
 				.to.deep.equal(HotelsResults.availableHotels);
 			chai.expect(apiStub.callCount).to.equal(1);
 			chai.expect(apiStub.getCall(0).args[0])
-				.to.equal('hotels/list/?adults=2&check_in=2017-11-11&check_out=2017-11-12&places=poi%3A1%7Cpoi%3A2');
+				.to.equal('hotels/list/?adults=2&check_in=2017-11-11&check_out=2017-11-12&place_ids=poi%3A1%7Cpoi%3A2');
 		});
 
 		it('should use map tiles if bounds and zoom are passed', async () => {
