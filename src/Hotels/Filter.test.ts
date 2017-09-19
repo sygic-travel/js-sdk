@@ -105,7 +105,7 @@ describe('HotelsFilter', () => {
 						north: 3,
 						east: 4,
 					},
-					places: ['poi:1', 'poi:2']
+					placeIds: ['poi:1', 'poi:2']
 				});
 			};
 			chai.expect(createFilter).to.throw(
@@ -140,7 +140,7 @@ describe('HotelsFilter', () => {
 					adults: 1,
 					checkIn: '2017-11-11',
 					checkOut: 'fdfdfd',
-					places: ['poi:1'],
+					placeIds: ['poi:1'],
 				});
 			};
 			chai.expect(createFilter).to.throw('Invalid checkOut date.');

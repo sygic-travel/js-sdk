@@ -10,7 +10,7 @@ export interface HotelsFilterJSON {
 	maxPrice?: number | null;
 	minPrice?: number | null;
 	minReviewScore?: number | null;
-	places?: string[] | null;
+	placeIds?: string[] | null;
 	bounds?: Bounds | null;
 	mapTileBounds?: string[] | null;
 	stars?: number[] | null;
@@ -30,7 +30,7 @@ export interface HotelsFilterQuery {
 	max_price?: number;
 	min_price?: number;
 	min_review_score?: number;
-	places?: string;
+	place_ids?: string;
 	bounds?: string;
 	map_tile_bounds?: string;
 	stars?: string;
@@ -50,7 +50,7 @@ export class HotelsFilter {
 	protected _maxPrice?: number | null;
 	protected _minPrice?: number | null;
 	protected _minReviewScore?: number | null;
-	protected _places?: string[] | null;
+	protected _placeIds?: string[] | null;
 	protected _bounds?: Bounds | null;
 	protected _mapTileBounds?: string[] | null;
 	protected _stars?: number[] | null;
@@ -70,7 +70,7 @@ export class HotelsFilter {
 		this._minPrice = filter.minPrice;
 		this._minReviewScore = filter.minReviewScore;
 		this._bounds = filter.bounds;
-		this._places = filter.places;
+		this._placeIds = filter.placeIds;
 		this._mapTileBounds = filter.mapTileBounds;
 		this._stars = filter.stars;
 		this._currency = filter.currency;
@@ -108,8 +108,8 @@ export class HotelsFilter {
 		if (this._minReviewScore) {
 			query.min_review_score = this._minReviewScore;
 		}
-		if (this._places) {
-			query.places = this._places.join('|');
+		if (this._placeIds) {
+			query.place_ids = this._placeIds.join('|');
 		}
 		if (this._bounds) {
 			query.bounds = this._bounds.south + ',' + this._bounds.west + ',' + this._bounds.north + ',' + this._bounds.east;
@@ -156,7 +156,7 @@ export class HotelsFilter {
 		if (!this._adults) {
 			throw new Error('Adults count is mandatory.');
 		}
-		if ([this._bounds, this._mapTileBounds, this._places].filter((it) => it).length !== 1) {
+		if ([this._bounds, this._mapTileBounds, this._placeIds].filter((it) => it).length !== 1) {
 			throw new Error('Bounds, mapTileBounds and places have to be used exclusively and one of them has to be present.');
 		}
 		const chInDate = new Date(this._checkIn);
