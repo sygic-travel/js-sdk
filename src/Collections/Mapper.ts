@@ -15,6 +15,7 @@ const mapCollection = (collection) => {
 	const tags: Tag[] = collection.tags.map((tag) => (tag as Tag));
 	return {
 		id: collection.id,
+		parentPlaceId: collection.parent_place_id,
 		nameLong: collection.name_long,
 		nameShort: collection.name_short,
 		description: collection.description,

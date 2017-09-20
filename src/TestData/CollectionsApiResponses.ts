@@ -2,6 +2,7 @@
 export const collection = {
 	collection: {
 		id: 1,
+		parent_place_id: 'city:1',
 		name_short: "What to See in London",
 		name_long: "What to See",
 		description: null,
@@ -35,6 +36,7 @@ export const collection = {
 export const collections = {
 	collections: [{
 		id: 1,
+		parent_place_id: 'city:1',
 		name_short: 'What to See in London',
 		name_long: 'What to See',
 		description: null,
@@ -65,6 +67,7 @@ export const collections = {
 		places: []
 	}, {
 		id: 2,
+		parent_place_id: 'city:14',
 		name_short: 'What to See in Paris',
 		name_long: 'What to See',
 		description: null,

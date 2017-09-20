@@ -2,6 +2,7 @@ import { Collection } from '../Collections/';
 
 export const collection = {
 	id: 1,
+	parentPlaceId: 'city:1',
 	nameShort: 'What to See in London',
 	nameLong: 'What to See',
 	description: null,
@@ -34,6 +35,7 @@ export const collection = {
 
 export const collections = [{
 		id: 1,
+		parentPlaceId: 'city:1',
 		nameShort: 'What to See in London',
 		nameLong: 'What to See',
 		description: null,
@@ -64,6 +66,7 @@ export const collections = [{
 		places: []
 	}, {
 		id: 2,
+		parentPlaceId: 'city:14',
 		nameShort: 'What to See in Paris',
 		nameLong: 'What to See',
 		description: null,
