@@ -1,9 +1,8 @@
 import { camelizeKeys } from 'humps';
 import { stringify } from 'query-string';
 
-import * as api from '../Api';
 import { placesDetailedCache as cache } from '../Cache';
-import { Bounds, Location, locationToMapTileKey } from '../Geo';
+import { Bounds, boundsToMapTileKeys, Location, locationToMapTileKey } from '../Geo';
 import { Medium } from '../Media/Media';
 import { Day, ItineraryItem } from '../Trip';
 import { ApiResponse, delete_, get, post, put } from '../Xhr';
@@ -26,7 +25,12 @@ import { PlacesStats } from './Stats';
 import { PlacesStatsFilter } from './StatsFilter';
 
 export async function getPlaces(filter: PlacesListFilter): Promise<Place[]> {
-	const apiResponse = await api.getPlaces(filter);
+	let apiResponse: ApiResponse;
+	if (filter.mapSpread) {
+		apiResponse = await getPlacesWithMapSpread(filter);
+	} else {
+		apiResponse = await get('places/list?' + filter.toQueryString());
+	}
 	if (!apiResponse.data.hasOwnProperty('places')) {
 		throw new Error('Wrong API response');
 	}
@@ -238,3 +242,37 @@ export async function getPlacesStats(filter: PlacesStatsFilter): Promise<PlacesS
 		tags: apiResponse.data.stats.tags.map((item) => camelizeKeys(item)),
 	} as PlacesStats;
 }
+
+async function getPlacesWithMapSpread(filter: PlacesListFilter): Promise<ApiResponse> {
+
+	const mapTiles: string[] = boundsToMapTileKeys(filter.bounds as Bounds, filter.zoom as number);
+
+	const apiResults: Promise<ApiResponse>[] = [];
+
+	for (const mapTile of mapTiles) {
+		let apiFilter = filter.cloneSetBounds(null);
+		apiFilter = apiFilter.cloneSetLimit(32);
+		apiFilter = apiFilter.cloneSetMapTiles([mapTile]);
+		const promise = new Promise(async (success) => {
+			try {
+				success(await get('places/list?' + apiFilter.toQueryString()));
+			} catch (error) {
+				success(new ApiResponse( 200, {places: []}));
+			}
+		});
+		apiResults.push(promise);
+	}
+
+	const responses = await Promise.all(apiResults);
+	const finalResponse: ApiResponse = responses.reduce((result: ApiResponse, response: ApiResponse): ApiResponse => {
+		result.statusCode = response.statusCode;
+		result.data.places = result.data.places.concat(response.data.places);
+		return result;
+	}, new ApiResponse(200, {places: []}));
+
+	finalResponse.data.places = finalResponse.data.places.sort((a, b) => {
+		if (a.rating > b.rating) { return -1; }
+		return 1;
+	});
+	return finalResponse;
+};
