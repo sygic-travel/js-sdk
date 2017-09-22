@@ -2,7 +2,7 @@ import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as cloneDeep from 'lodash.clonedeep';
 import * as sinon from 'sinon';
-import { SinonSandbox, SinonSpy, SinonStub } from 'sinon';
+import { SinonSandbox, SinonStub } from 'sinon';
 
 import * as TripController from '.';
 import * as TripDao from './DataAccess';
@@ -146,10 +146,10 @@ describe('TripController', () => {
 			inputTrip.days = null;
 
 			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => {resolve(inputTrip); }));
-			const spy: SinonSpy = sandbox.spy(TripDao, 'updateTrip');
+			const stub: SinonStub = sandbox.stub(TripDao, 'updateTrip').returnsArg(0);
 
 			await TripController.updateTrip('123', { isDeleted: true });
-			const tripToBeUpdated: Trip = spy.getCall(0).args[0] as Trip;
+			const tripToBeUpdated: Trip = stub.getCall(0).args[0] as Trip;
 			return chai.expect(tripToBeUpdated.isDeleted).to.be.true;
 		});
 
@@ -159,10 +159,10 @@ describe('TripController', () => {
 			inputTrip.isDeleted = true;
 
 			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => {resolve(inputTrip); }));
-			const spy: SinonSpy = sandbox.spy(TripDao, 'updateTrip');
+			const stub: SinonStub = sandbox.stub(TripDao, 'updateTrip').returnsArg(0);
 
 			await TripController.updateTrip('123', { isDeleted: false });
-			const tripToBeUpdated: Trip = spy.getCall(0).args[0] as Trip;
+			const tripToBeUpdated: Trip = stub.getCall(0).args[0] as Trip;
 			return chai.expect(tripToBeUpdated.isDeleted).to.be.false;
 		});
 	});
