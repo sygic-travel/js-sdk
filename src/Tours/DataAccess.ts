@@ -6,8 +6,8 @@ import { Tour } from './Tour';
 import { ToursQuery } from './ToursQuery';
 
 export async function getTours(toursQuery: ToursQuery): Promise<Tour[]> {
-	const apiResponse: ApiResponse = await get('tours?' + stringify({
-			destination_id: toursQuery.destinationId,
+	const apiResponse: ApiResponse = await get('tours/viator?' + stringify({
+			parent_place_id: toursQuery.parentPlaceId,
 			page: toursQuery.page,
 			sort_by: toursQuery.sortBy,
 			sort_direction: toursQuery.sortDirection
