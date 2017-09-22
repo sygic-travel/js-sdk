@@ -1,8 +1,8 @@
 import { stringify } from 'query-string';
 
 export interface CollectionsFilterJSON {
-	placeId?: string;
-	containedPlaceIds?: string[];
+	parentPlaceId?: string;
+	placeIds?: string[];
 	tags?: string[];
 	tagsNot?: string[];
 	query?: string;
@@ -11,8 +11,8 @@ export interface CollectionsFilterJSON {
 }
 
 export interface CollectionsFilterQuery {
-	place_id?: string | null;
-	contained_place_ids?: string;
+	parent_place_id?: string | null;
+	place_ids?: string;
 	tags?: string;
 	tags_not?: string;
 	query?: string | null;
@@ -21,8 +21,8 @@ export interface CollectionsFilterQuery {
 }
 
 export class CollectionsFilter {
-	protected _placeId?: string | null;
-	protected _containedPlaceIds?: string[];
+	protected _parentPlaceId?: string | null;
+	protected _placeIds?: string[];
 	protected _tags?: string[];
 	protected _tagsNot?: string[];
 	protected _query?: string | null;
@@ -30,8 +30,8 @@ export class CollectionsFilter {
 	protected _offset?: number | null;
 
 	constructor(filter: CollectionsFilterJSON) {
-		this._placeId = filter.placeId;
-		this._containedPlaceIds = filter.containedPlaceIds;
+		this._parentPlaceId = filter.parentPlaceId;
+		this._placeIds = filter.placeIds;
 		this._tags = filter.tags;
 		this._tagsNot = filter.tagsNot;
 		this._query = filter.query;
@@ -41,11 +41,11 @@ export class CollectionsFilter {
 
 	public toQueryObject(): CollectionsFilterQuery {
 		const query: CollectionsFilterQuery = {};
-		if (this._placeId) {
-			query.place_id = this._placeId;
+		if (this._parentPlaceId) {
+			query.parent_place_id = this._parentPlaceId;
 		}
-		if (this._containedPlaceIds) {
-			query.contained_place_ids = this._containedPlaceIds.join(',');
+		if (this._placeIds) {
+			query.place_ids = this._placeIds.join(',');
 		}
 		if (this._tags) {
 			query.tags = this._tags.join(',');
