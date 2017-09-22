@@ -165,7 +165,7 @@ async function handleIgnoredConflict(
 }
 
 export async function emptyTripsTrash(): Promise<string[]> {
-	const apiResponse = await StApi.post('trips/empty-trash', null);
+	const apiResponse = await StApi.delete_('trips/trash', null);
 	if (!apiResponse.data.hasOwnProperty('deleted_trip_ids')) {
 		throw new Error('Wrong API response');
 	}

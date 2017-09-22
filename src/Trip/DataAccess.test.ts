@@ -307,12 +307,13 @@ describe('TripDataAccess', () => {
 
 	describe('#emptyTripsTrash', () => {
 		it('should empty trips trash', () => {
-			sandbox.stub(StApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
+			const apiStub: SinonStub = sandbox.stub(StApi, 'delete_').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
 					deleted_trip_ids: ['poi:1', 'poi:2', 'poi:3']
 				}));
 			}));
 			chai.expect(Dao.emptyTripsTrash()).to.eventually.deep.equal(['poi:1', 'poi:2', 'poi:3']);
+			chai.expect(apiStub.getCall(0).args[0]).equal('trips/trash');
 		});
 	});
 
