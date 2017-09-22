@@ -36,7 +36,7 @@ describe('TripDataAccess', () => {
 			}));
 
 			const toursQuery: ToursQuery = {
-				destinationId: '123123',
+				parentPlaceId: '123123',
 				page: 1,
 				sortBy: 'price',
 				sortDirection: 'asc'

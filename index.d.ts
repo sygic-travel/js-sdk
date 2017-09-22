@@ -729,7 +729,7 @@ export namespace Tours {
 	}
 
 	export interface ToursQuery {
-		destinationId: string;
+		parentPlaceId: string;
 		page?: number;
 		sortBy?: ToursQuerySortBy;
 		sortDirection?: ToursQueryDirection;

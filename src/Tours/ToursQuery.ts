@@ -16,7 +16,7 @@ const toursSortDirectionValues = listToEnum([
 export type ToursQueryDirection = keyof typeof toursSortDirectionValues;
 
 export interface ToursQuery {
-	destinationId: string;
+	parentPlaceId: string;
 	page?: number;
 	sortBy?: ToursQuerySortBy;
 	sortDirection?: ToursQueryDirection;
