@@ -57,21 +57,21 @@ describe('CollectionsDataAccess', () => {
 			}));
 
 			let filter: CollectionsFilter = new CollectionsFilter({
-				placeId: 'city:1',
+				parentPlaceId: 'city:1',
 				limit: 5,
 				offset: 5
 			});
 			let result: Collection[] = await Dao.getCollections(filter, false, '100x100');
 			sinon.assert.calledOnce(apiStub);
-			sinon.assert.calledWith(apiStub, 'collections?limit=5&offset=5&place_id=city%3A1');
+			sinon.assert.calledWith(apiStub, 'collections?limit=5&offset=5&parent_place_id=city%3A1');
 			chai.expect(result).to.deep.equal(ExpectedResults.collections);
 
 			filter = new CollectionsFilter({
-				placeId: 'city:1',
+				parentPlaceId: 'city:1',
 				tags: ['Hotel', 'Historical']
 			});
 			result = await Dao.getCollections(filter, false, '100x100');
-			sinon.assert.calledWith(apiStub, 'collections?place_id=city%3A1&tags=Hotel%2CHistorical');
+			sinon.assert.calledWith(apiStub, 'collections?parent_place_id=city%3A1&tags=Hotel%2CHistorical');
 			chai.expect(result).to.deep.equal(ExpectedResults.collections);
 		});
 	});
