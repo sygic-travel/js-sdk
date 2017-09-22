@@ -4,10 +4,10 @@ import * as Moxios from 'moxios';
 import { SinonSandbox } from 'sinon';
 import * as sinon from 'sinon';
 
+import { ApiResponse, StApi } from '../Api';
 import { setEnvironment } from '../Settings';
 import * as TestApiResponses from '../TestData/CollaborationsApiResponses';
 import * as TestExpectedResults from '../TestData/CollaborationsExpectedResults';
-import * as Xhr from '../Xhr';
 
 import * as Dao from './DataAccess';
 
@@ -22,12 +22,12 @@ describe('CollaborationDataAccess', () => {
 
 	beforeEach(() => {
 		sandbox = sinon.sandbox.create();
-		Moxios.install(Xhr.axiosInstance);
+		Moxios.install(StApi.axiosInstance);
 	});
 
 	afterEach(() => {
 		sandbox.restore();
-		Moxios.uninstall(Xhr.axiosInstance);
+		Moxios.uninstall(StApi.axiosInstance);
 	});
 
 	describe('#followTrip', () => {
@@ -58,15 +58,15 @@ describe('CollaborationDataAccess', () => {
 
 	describe('#getTripCollaborations', () => {
 		it('should throw an error when response without collaborations came', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<Xhr.ApiResponse>((resolve) => {
-				resolve(new Xhr.ApiResponse(200, {}));
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, {}));
 			}));
 			return chai.expect(Dao.getTripCollaborations('')).to.be.rejected;
 		});
 
 		it('should correctly map collaborations api response', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<Xhr.ApiResponse>((resolve) => {
-				resolve(new Xhr.ApiResponse(200, TestApiResponses.collaborations));
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, TestApiResponses.collaborations));
 			}));
 			return chai.expect(Dao.getTripCollaborations('111'))
 				.to.eventually.deep.equal(TestExpectedResults.collaborations);
@@ -137,8 +137,8 @@ describe('CollaborationDataAccess', () => {
 		});
 
 		it('should return tripId', () => {
-			sandbox.stub(Xhr, 'put').returns(new Promise<Xhr.ApiResponse>((resolve) => {
-				resolve(new Xhr.ApiResponse(200, {
+			sandbox.stub(StApi, 'put').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, {
 					collaboration: TestApiResponses.collaborations.collaborations[0]
 				}));
 			}));

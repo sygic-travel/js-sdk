@@ -2,7 +2,7 @@ import * as chai from 'chai';
 import * as Moxios from 'moxios';
 
 import { setEnvironment, setUserSession } from '../Settings';
-import { axiosInstance, get, post, put } from './Xhr';
+import { axiosInstance, get, post, put } from './StApi';
 
 const testApiURL = 'https://test.api';
 const testClientKey = '987654321';
@@ -10,7 +10,7 @@ const testClientKey = '987654321';
 const apiKey = '1234567890';
 const accessToken = '0987654321';
 
-describe('Xhr', () => {
+describe('StApi', () => {
 	before((done) => {
 		setEnvironment(testApiURL, testClientKey);
 		done();

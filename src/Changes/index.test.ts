@@ -2,12 +2,11 @@ import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as sinon from 'sinon';
 import { SinonFakeTimers, SinonSandbox, SinonSpy, SinonStub } from 'sinon';
-import * as Xhr from '../Xhr';
+import { ApiResponse, StApi } from '../Api';
 
 import { initializeChangesWatching, setChangesCallback, stopChangesWatching } from '.';
 import { favoritesCache, tripsDetailedCache } from '../Cache';
 import { setEnvironment, setUserSession } from '../Settings';
-import { ApiResponse } from '../Xhr/ApiResponse';
 import { ChangeNotification } from './ChangeNotification';
 
 chai.use(chaiAsPromised);
@@ -41,7 +40,7 @@ describe('ChangesController', () => {
 		});
 
 		it('should start changes watch and check for changes multiple times', async () => {
-			const stub: SinonStub = sandbox.stub(Xhr, 'get').callsFake((): Promise<ApiResponse> => {
+			const stub: SinonStub = sandbox.stub(StApi, 'get').callsFake((): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, {
 						changes: ''
@@ -87,7 +86,7 @@ describe('ChangesController', () => {
 
 		it('should not handle changes after trip change is made locally', async () => {
 			tripsDetailedCache.set('xxx', { version: 3 });
-			sandbox.stub(Xhr, 'get').callsFake((): Promise<ApiResponse> => {
+			sandbox.stub(StApi, 'get').callsFake((): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, tripChangesResponses[0]));
 				});
@@ -101,7 +100,7 @@ describe('ChangesController', () => {
 		});
 
 		it('should handle changes after trip change is made remotely', async () => {
-			sandbox.stub(Xhr, 'get').callsFake((): Promise<ApiResponse> => {
+			sandbox.stub(StApi, 'get').callsFake((): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, tripChangesResponses[0]));
 				});
@@ -120,7 +119,7 @@ describe('ChangesController', () => {
 		});
 
 		it('should not handle changes after trip was deleted locally', async () => {
-			sandbox.stub(Xhr, 'get').callsFake((): Promise<ApiResponse> => {
+			sandbox.stub(StApi, 'get').callsFake((): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, tripChangesResponses[1]));
 				});
@@ -136,7 +135,7 @@ describe('ChangesController', () => {
 
 		it('should handle changes after trip was deleted remotely', async () => {
 			tripsDetailedCache.set('xxx', { version: 3 });
-			sandbox.stub(Xhr, 'get').callsFake((): Promise<ApiResponse> => {
+			sandbox.stub(StApi, 'get').callsFake((): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, tripChangesResponses[1]));
 				});
@@ -158,7 +157,7 @@ describe('ChangesController', () => {
 
 		it('should not handle changes after favorite was added locally', async () => {
 			favoritesCache.set('poi:530', 'poi:530');
-			sandbox.stub(Xhr, 'get').callsFake((): Promise<ApiResponse> => {
+			sandbox.stub(StApi, 'get').callsFake((): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, favoritesChangesResponses[0]));
 				});
@@ -173,7 +172,7 @@ describe('ChangesController', () => {
 		});
 
 		it('should handle changes after favorite was added remotely', async () => {
-			const stub: SinonStub = sandbox.stub(Xhr, 'get');
+			const stub: SinonStub = sandbox.stub(StApi, 'get');
 
 			stub.onFirstCall().callsFake((): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
@@ -213,7 +212,7 @@ describe('ChangesController', () => {
 		});
 
 		it('should not handle changes when favorite was removed locally', async () => {
-			sandbox.stub(Xhr, 'get').callsFake((): Promise<ApiResponse> => {
+			sandbox.stub(StApi, 'get').callsFake((): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, favoritesChangesResponses[1]));
 				});
@@ -229,7 +228,7 @@ describe('ChangesController', () => {
 
 		it('should handle changes when favorite was removed remotely', async () => {
 			favoritesCache.set('poi:530', 'poi:530');
-			sandbox.stub(Xhr, 'get').callsFake((): Promise<ApiResponse> => {
+			sandbox.stub(StApi, 'get').callsFake((): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, favoritesChangesResponses[1]));
 				});

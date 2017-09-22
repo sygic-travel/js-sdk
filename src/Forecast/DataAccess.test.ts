@@ -4,11 +4,10 @@ import { SinonSandbox } from 'sinon';
 import * as sinon from 'sinon';
 
 import * as ForecastController from '.';
+import { ApiResponse, StApi } from '../Api';
 import { setEnvironment } from '../Settings';
 import * as TestApiResponses from '../TestData/ForecastApiResponses';
 import * as TestExpectedResults from '../TestData/ForecastExpectedResults';
-import * as Xhr from '../Xhr';
-import { ApiResponse } from '../Xhr/ApiResponse';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
@@ -29,7 +28,7 @@ describe('ForecastController', () => {
 
 	describe('#getDestinationWeather', () => {
 		it('should throw and exception when response without forecast came', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
@@ -37,7 +36,7 @@ describe('ForecastController', () => {
 		});
 
 		it('should correctly map api respose', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, TestApiResponses.forecasts));
 			}));
 

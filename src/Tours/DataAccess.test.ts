@@ -4,11 +4,10 @@ import * as cloneDeep from 'lodash.clonedeep';
 import { SinonSandbox } from 'sinon';
 import * as sinon from 'sinon';
 
+import { ApiResponse, StApi } from '../Api';
 import { setEnvironment } from '../Settings';
 import * as ToursApiTestData from '../TestData/ToursApiResponses';
 import * as ToursExpectedResults from '../TestData/ToursExpectedResults';
-import * as Xhr from '../Xhr';
-import { ApiResponse } from '../Xhr/ApiResponse';
 import * as Dao from './DataAccess';
 import { ToursQuery } from './ToursQuery';
 
@@ -31,7 +30,7 @@ describe('TripDataAccess', () => {
 
 	describe('#getTours', () => {
 		it('should correctly map tours response', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, cloneDeep(ToursApiTestData.toursList)));
 			}));
 

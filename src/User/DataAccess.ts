@@ -1,8 +1,8 @@
 import { camelizeKeys, decamelizeKeys } from 'humps';
 
 import { UserSettings } from '.';
+import { StApi } from '../Api';
 import { userCache as userCache } from '../Cache';
-import { get, put } from '../Xhr';
 
 const SETTINGS_KEY = 'settings';
 
@@ -22,7 +22,7 @@ export async function getUserSettings(): Promise<UserSettings> {
 export async function updateUserSettings(settings: UserSettings): Promise<UserSettings> {
 	const settingsData = decamelizeKeys(settings);
 	await userCache.set(SETTINGS_KEY, settingsData);
-	await put('users/me', settingsData);
+	await StApi.put('users/me', settingsData);
 	return settings;
 }
 
@@ -31,7 +31,7 @@ export async function handleSettingsChange(): Promise<void> {
 }
 
 async function getFromApi(): Promise<object> {
-	const apiResponse = await get('users/me');
+	const apiResponse = await StApi.get('users/me');
 	if (!apiResponse.data.hasOwnProperty('settings')) {
 		throw new Error('Wrong API response');
 	}

@@ -1,2 +1,4 @@
-export { axiosInstance, get, delete_, post, put } from './Xhr';
+import * as StApi from './StApi';
 export { ApiResponse } from './ApiResponse';
+
+export { StApi };

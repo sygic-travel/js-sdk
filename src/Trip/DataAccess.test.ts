@@ -4,13 +4,12 @@ import * as cloneDeep from 'lodash.clonedeep';
 import { SinonFakeTimers, SinonSandbox, SinonStub } from 'sinon';
 import * as sinon from 'sinon';
 
+import { ApiResponse, StApi } from '../Api';
 import { placesDetailedCache as Cache, tripsDetailedCache } from '../Cache';
 import { setEnvironment, setTripConflictHandler } from '../Settings';
 import * as TripApiTestData from '../TestData/TripApiResponses';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
 import * as User from '../User';
-import * as Xhr from '../Xhr';
-import { ApiResponse } from '../Xhr/ApiResponse';
 import * as Dao from './DataAccess';
 import { Day, ItineraryItem, Trip, TripTemplate } from './Trip';
 
@@ -57,7 +56,7 @@ describe('TripDataAccess', () => {
 
 	describe('#getTrips', () => {
 		it('should just recallapi, compose parameter from and to and return trips', async () => {
-			const apiStub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			const apiStub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, TripApiTestData.tripsList));
 			}));
 
@@ -82,7 +81,7 @@ describe('TripDataAccess', () => {
 
 	describe('#getTripsInTrash', () => {
 		it('should just recall api and return trips which are deleted', async () => {
-			const apiStub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			const apiStub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, TripApiTestData.tripsList));
 			}));
 
@@ -95,7 +94,7 @@ describe('TripDataAccess', () => {
 
 	describe('#getTripDetailed', () => {
 		it('should get trip response from api if is not in cache', () => {
-			const stub: SinonStub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			const stub: SinonStub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, { trip: trip1FromApi }));
 			}));
 
@@ -106,7 +105,7 @@ describe('TripDataAccess', () => {
 		});
 
 		it('should get trip response from cache if it is already in cache', () => {
-			const stub: SinonStub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			const stub: SinonStub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
@@ -131,7 +130,7 @@ describe('TripDataAccess', () => {
 		it('should call put on api and save response to cache', (done) => {
 			const apiResponseTrip = cloneDeep(TripApiTestData.tripDetail.trip);
 			apiResponseTrip.name = 'API TRIP';
-			const apiPut: SinonStub = sandbox.stub(Xhr, 'put').returns(new Promise<ApiResponse>((resolve) => {
+			const apiPut: SinonStub = sandbox.stub(StApi, 'put').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, { trip: apiResponseTrip }));
 			}));
 			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
@@ -153,7 +152,7 @@ describe('TripDataAccess', () => {
 			const testUpdatedAt = new Date();
 			clock.tick(1000);
 			const apiResponseTrip = cloneDeep(TripApiTestData.tripDetail.trip);
-			const apiPut: SinonStub = sandbox.stub(Xhr, 'put').returns(new Promise<ApiResponse>((resolve) => {
+			const apiPut: SinonStub = sandbox.stub(StApi, 'put').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, { trip: apiResponseTrip }));
 			}));
 			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
@@ -168,7 +167,7 @@ describe('TripDataAccess', () => {
 		it('should call put on api after timeout', () => {
 			const apiResponseTrip = cloneDeep(TripApiTestData.tripDetail.trip);
 			apiResponseTrip.name = 'API TRIP';
-			const apiPut: SinonStub = sandbox.stub(Xhr, 'put').returns(new Promise<ApiResponse>((resolve) => {
+			const apiPut: SinonStub = sandbox.stub(StApi, 'put').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, { trip: apiResponseTrip }));
 			}));
 			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
@@ -184,7 +183,7 @@ describe('TripDataAccess', () => {
 		it('should should call api only once for consequent updates within timeout', () => {
 			const apiResponseTrip = cloneDeep(TripApiTestData.tripDetail.trip);
 			apiResponseTrip.name = 'API TRIP';
-			const apiPut: SinonStub = sandbox.stub(Xhr, 'put').returns(new Promise<ApiResponse>((resolve) => {
+			const apiPut: SinonStub = sandbox.stub(StApi, 'put').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, { trip: apiResponseTrip }));
 			}));
 			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
@@ -205,7 +204,7 @@ describe('TripDataAccess', () => {
 			let handlerCalled = false;
 			const handler = async (info, trip) => { handlerCalled = true; return 'server'; };
 			setTripConflictHandler(handler);
-			const apiPut: SinonStub = sandbox.stub(Xhr, 'put').returns(new Promise<ApiResponse>((resolve) => {
+			const apiPut: SinonStub = sandbox.stub(StApi, 'put').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
 					trip: TripApiTestData.tripDetail.trip,
 					conflict_resolution: 'ignored',
@@ -234,7 +233,7 @@ describe('TripDataAccess', () => {
 			let handlerCalled = false;
 			const handler = async (info, trip) => { handlerCalled = true; return 'local'; };
 			setTripConflictHandler(handler);
-			const apiPut: SinonStub = sandbox.stub(Xhr, 'put').returns(new Promise<ApiResponse>((resolve) => {
+			const apiPut: SinonStub = sandbox.stub(StApi, 'put').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
 					trip: TripApiTestData.tripDetail.trip,
 					conflict_resolution: 'ignored',
@@ -265,7 +264,7 @@ describe('TripDataAccess', () => {
 			tripFromApi.name = 'x';
 			tripsDetailedCache.set(tripInCache.id, tripInCache);
 
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, { trip: tripFromApi }));
 			}));
 
@@ -278,7 +277,7 @@ describe('TripDataAccess', () => {
 		it('should not call api for trip which is already up to date and return should return false', async () => {
 			const tripInCache = cloneDeep(trip1FromApi);
 			await tripsDetailedCache.set(tripInCache.id, tripInCache);
-			const apiStub = sandbox.stub(Xhr, 'get');
+			const apiStub = sandbox.stub(StApi, 'get');
 
 			const result = await Dao.shouldNotifyOnTripUpdate(tripInCache.id, 33);
 			chai.expect(apiStub.callCount).to.equal(0);
@@ -286,7 +285,7 @@ describe('TripDataAccess', () => {
 		});
 
 		it('should not call api when trip is not in cache and should return true', async () => {
-			const apiStub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			const apiStub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
@@ -308,7 +307,7 @@ describe('TripDataAccess', () => {
 
 	describe('#emptyTripsTrash', () => {
 		it('should empty trips trash', () => {
-			sandbox.stub(Xhr, 'post').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
 					deleted_trip_ids: ['poi:1', 'poi:2', 'poi:3']
 				}));
@@ -319,7 +318,7 @@ describe('TripDataAccess', () => {
 
 	describe('#getTripTemplates', () => {
 		it('should get trip templates', async () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
 					trip_templates: [{
 						id: 1234,
@@ -342,7 +341,7 @@ describe('TripDataAccess', () => {
 
 	describe('#applyTripTemplate', () => {
 		it('should apply a trip template (recall api) and return trip', async () => {
-			sandbox.stub(Xhr, 'put').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'put').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
 					trip: cloneDeep(trip1FromApi)
 				}));

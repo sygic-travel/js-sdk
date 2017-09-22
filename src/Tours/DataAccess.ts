@@ -1,12 +1,12 @@
 import { stringify } from 'query-string';
 
-import { ApiResponse, get } from '../Xhr';
+import { ApiResponse, StApi } from '../Api';
 import { mapToursApiResponseToTours } from './Mapper';
 import { Tour } from './Tour';
 import { ToursQuery } from './ToursQuery';
 
 export async function getTours(toursQuery: ToursQuery): Promise<Tour[]> {
-	const apiResponse: ApiResponse = await get('tours/viator?' + stringify({
+	const apiResponse: ApiResponse = await StApi.get('tours/viator?' + stringify({
 			parent_place_id: toursQuery.parentPlaceId,
 			page: toursQuery.page,
 			sort_by: toursQuery.sortBy,

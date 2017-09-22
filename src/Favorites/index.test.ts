@@ -3,11 +3,10 @@ import * as chaiAsPromised from 'chai-as-promised';
 import { SinonSandbox } from 'sinon';
 import * as sinon from 'sinon';
 
+import { ApiResponse, StApi } from '../Api';
 import * as FavoritesController from '../Favorites';
 import { Location } from '../Geo';
 import { setEnvironment } from '../Settings/index';
-import * as Xhr from '../Xhr';
-import { ApiResponse } from '../Xhr/ApiResponse';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
@@ -28,7 +27,7 @@ describe('FavoritesController', () => {
 
 	describe('#getFavoritesIds', () => {
 		it('should throw and exception when response without favorites came', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
@@ -36,7 +35,7 @@ describe('FavoritesController', () => {
 		});
 
 		it('should correctly get data from api response', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
 					favorites: [{
 						place_id: 'poi:530'
@@ -52,7 +51,7 @@ describe('FavoritesController', () => {
 
 	describe('#addPlaceToFavorites', () => {
 		it('should add place -> call api', (done) => {
-			const stub = sandbox.stub(Xhr, 'post'). returns(new Promise<ApiResponse>((resolve) => {
+			const stub = sandbox.stub(StApi, 'post'). returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
@@ -64,7 +63,7 @@ describe('FavoritesController', () => {
 
 	describe('#addCustomPlaceToFavorites', () => {
 		it('should add place -> call api and return true', () => {
-			sandbox.stub(Xhr, 'post'). returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'post'). returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
 					favorite: {
 						place_id: 'poi:530'
@@ -81,7 +80,7 @@ describe('FavoritesController', () => {
 
 	describe('#removePlaceFromFavorites', () => {
 		it('should remove place -> call api', (done) => {
-			const stub = sandbox.stub(Xhr, 'delete_'). returns(new Promise<ApiResponse>((resolve) => {
+			const stub = sandbox.stub(StApi, 'delete_'). returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
 

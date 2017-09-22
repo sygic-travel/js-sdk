@@ -4,9 +4,8 @@ import { SinonSandbox } from 'sinon';
 import * as sinon from 'sinon';
 
 import { PlacesListFilter, PlacesListFilterJSON } from '.';
+import { ApiResponse, StApi } from '../Api';
 import { setEnvironment } from '../Settings';
-import * as Xhr from '../Xhr';
-import { ApiResponse } from '../Xhr/ApiResponse';
 import * as PlacesController from './index';
 
 import * as TestData from '../TestData/PlacesApiResponses';
@@ -31,7 +30,7 @@ describe('PlacesController', () => {
 
 	describe('#getPlaceDetailed', () => {
 		it('should correctly map api response', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, TestData.placeDetailedEiffelTowerWithoutMedia));
 			}));
 
@@ -56,7 +55,7 @@ describe('PlacesController', () => {
 			expectedResult1.id = 'poi:1';
 			expectedResult2.id = 'poi:2';
 
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
 					places: [place1, place2]
 				}));
@@ -69,7 +68,7 @@ describe('PlacesController', () => {
 
 	describe('#getPlaces', () => {
 		it('should throw and exception when response without places came', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
@@ -84,7 +83,7 @@ describe('PlacesController', () => {
 		});
 
 		it('should return array of places', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, TestData.places));
 			}));
 
@@ -100,7 +99,7 @@ describe('PlacesController', () => {
 		});
 
 		it('should correctly map api response', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, TestData.places));
 			}));
 

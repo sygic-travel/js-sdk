@@ -1,6 +1,6 @@
 import { Mapper, Route, RouteRequest } from '.';
+import { ApiResponse, StApi } from '../Api';
 import { routesCache as cache } from '../Cache';
-import { ApiResponse, post } from '../Xhr';
 import { estimatePlaneDirection } from './Estimator';
 
 export async function getRoutes(requests: RouteRequest[]): Promise<Route[]> {
@@ -38,7 +38,7 @@ async function getFromApi(requests: RouteRequest[]): Promise<object[]> {
 		type: request.type,
 	}));
 
-	const response: ApiResponse = await post('/directions/path', apiRequestData);
+	const response: ApiResponse = await StApi.post('/directions/path', apiRequestData);
 	response.data.path.map( (routeData, index) => {
 		cache.set(createCacheKey(requests[index]), routeData);
 	});

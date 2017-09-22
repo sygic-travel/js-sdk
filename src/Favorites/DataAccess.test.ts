@@ -3,10 +3,10 @@ import * as chaiAsPromised from 'chai-as-promised';
 import { SinonSandbox, SinonStub } from 'sinon';
 import * as sinon from 'sinon';
 
+import { ApiResponse, StApi } from '../Api';
 import { favoritesCache } from '../Cache';
 import { setEnvironment } from '../Settings';
-import * as Xhr from '../Xhr';
-import { ApiResponse } from '../Xhr/ApiResponse';
+
 import * as Dao from './DataAccess';
 
 let sandbox: SinonSandbox;
@@ -38,7 +38,7 @@ describe('FavoritesDataAccess', () => {
 
 	describe('#shouldNotifyOnFavoritesUpdate', () => {
 		it('should reload all favorites guids from api', () => {
-			const stub: SinonStub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			const stub: SinonStub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, apiData));
 			}));
 
@@ -51,7 +51,7 @@ describe('FavoritesDataAccess', () => {
 
 	describe('#addPlaceToFavorites', () => {
 		it('should add place to favorites and also to cache', async () => {
-			sandbox.stub(Xhr, 'post');
+			sandbox.stub(StApi, 'post');
 			await Dao.addPlaceToFavorites('poi:530');
 			return chai.expect(favoritesCache.getAll()).to.eventually.deep.equal(['poi:530']);
 		});
@@ -59,7 +59,7 @@ describe('FavoritesDataAccess', () => {
 
 	describe('removePlaceFromFavorites', () => {
 		it('should remove a place from favorites and also from cache', async () => {
-			sandbox.stub(Xhr, 'delete_').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'delete_').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
 			favoritesCache.set('poi:530', 'poi:530');

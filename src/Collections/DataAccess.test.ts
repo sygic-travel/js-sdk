@@ -4,12 +4,12 @@ import * as Moxios from 'moxios';
 import { SinonSandbox } from 'sinon';
 import * as sinon from 'sinon';
 
+import { ApiResponse, StApi } from '../Api';
 import { Place } from '../Places';
 import * as PlacesDao from '../Places/DataAccess';
 import { setEnvironment } from '../Settings';
 import * as TestData from '../TestData/CollectionsApiResponses';
 import * as ExpectedResults from '../TestData/CollectionsExpectedResults';
-import * as Xhr from '../Xhr';
 import { Collection } from './Collection';
 import { CollectionsFilter } from './Filter';
 
@@ -26,18 +26,18 @@ describe('CollectionsDataAccess', () => {
 
 	beforeEach(() => {
 		sandbox = sinon.sandbox.create();
-		Moxios.install(Xhr.axiosInstance);
+		Moxios.install(StApi.axiosInstance);
 	});
 
 	afterEach(() => {
 		sandbox.restore();
-		Moxios.uninstall(Xhr.axiosInstance);
+		Moxios.uninstall(StApi.axiosInstance);
 	});
 
 	describe('#getCollection', () => {
 		it('should correctly get and return collection', async () => {
-			const apiStub = sandbox.stub(Xhr, 'get').returns(new Promise<Xhr.ApiResponse>((resolve) => {
-				resolve(new Xhr.ApiResponse(200, TestData.collection));
+			const apiStub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, TestData.collection));
 			}));
 			sandbox.stub(PlacesDao, 'getPlacesDetailed').returns(new Promise<Place[]>((resolve) => {
 				resolve([]);
@@ -52,8 +52,8 @@ describe('CollectionsDataAccess', () => {
 
 	describe('#getCollections', () => {
 		it('should correctly get and return collections', async () => {
-			const apiStub = sandbox.stub(Xhr, 'get').returns(new Promise<Xhr.ApiResponse>((resolve) => {
-				resolve(new Xhr.ApiResponse(200, TestData.collections));
+			const apiStub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, TestData.collections));
 			}));
 
 			let filter: CollectionsFilter = new CollectionsFilter({

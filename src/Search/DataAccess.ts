@@ -1,8 +1,7 @@
 import { stringify } from 'query-string';
 
+import { ApiResponse, StApi } from '../Api';
 import { Location } from '../Geo';
-import { get } from '../Xhr';
-import { ApiResponse } from '../Xhr/ApiResponse';
 import { mapSearchApiResponseToSearchResults, mapSearchTagsApiResponseToTags } from './Mapper';
 import { SearchResult, SearchTagsResult } from './SearchResult';
 
@@ -11,7 +10,7 @@ export async function search(query: string, location?: Location): Promise<Search
 		query,
 		location: [location.lat, location.lng].join(',')
 	}) : stringify({ query });
-	const apiResponse = await get('search?' +  queryString);
+	const apiResponse = await StApi.get('search?' +  queryString);
 
 	if (!apiResponse.data.hasOwnProperty('locations')) {
 		throw new Error('Wrong API response');
@@ -24,7 +23,7 @@ export async function searchReverse(location: Location): Promise<SearchResult[]>
 	const queryString: string = stringify({
 		location: [location.lat, location.lng].join(',')
 	});
-	const apiResponse = await get('search/reverse?' +  queryString);
+	const apiResponse = await StApi.get('search/reverse?' +  queryString);
 
 	if (!apiResponse.data.hasOwnProperty('locations')) {
 		throw new Error('Wrong API response');
@@ -34,7 +33,7 @@ export async function searchReverse(location: Location): Promise<SearchResult[]>
 }
 
 export async function searchTags(query: string): Promise<SearchTagsResult[]> {
-	const apiResponse: ApiResponse = await get(`tags?` + stringify({
+	const apiResponse: ApiResponse = await StApi.get(`tags?` + stringify({
 		query
 	}));
 	if (!apiResponse.data.hasOwnProperty('tags')) {

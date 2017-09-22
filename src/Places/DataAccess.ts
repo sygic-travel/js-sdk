@@ -1,11 +1,11 @@
 import { camelizeKeys } from 'humps';
 import { stringify } from 'query-string';
 
+import { ApiResponse, StApi } from '../Api';
 import { placesDetailedCache as cache } from '../Cache';
 import { Bounds, boundsToMapTileKeys, Location, locationToMapTileKey } from '../Geo';
 import { Medium } from '../Media/Media';
 import { Day, ItineraryItem } from '../Trip';
-import { ApiResponse, delete_, get, post, put } from '../Xhr';
 import { PlacesListFilter } from './ListFilter';
 import {
 	mapPlaceApiResponseToPlaces,
@@ -29,7 +29,7 @@ export async function getPlaces(filter: PlacesListFilter): Promise<Place[]> {
 	if (filter.mapSpread) {
 		apiResponse = await getPlacesWithMapSpread(filter);
 	} else {
-		apiResponse = await get('places/list?' + filter.toQueryString());
+		apiResponse = await StApi.get('places/list?' + filter.toQueryString());
 	}
 	if (!apiResponse.data.hasOwnProperty('places')) {
 		throw new Error('Wrong API response');
@@ -42,7 +42,7 @@ export async function getPlaceDetailed(id: string, photoSize: string): Promise<a
 	const fromCache = await cache.get(id);
 
 	if (!fromCache) {
-		const apiResponse = await get('places/' + id);
+		const apiResponse = await StApi.get('places/' + id);
 		if (!apiResponse.data.hasOwnProperty('place')) {
 			throw new Error('Wrong API response');
 		}
@@ -55,7 +55,7 @@ export async function getPlaceDetailed(id: string, photoSize: string): Promise<a
 }
 
 export async function createCustomPlace(data: CustomPlaceFormData): Promise<Place> {
-	const apiResponse: ApiResponse = await post('places', data);
+	const apiResponse: ApiResponse = await StApi.post('places', data);
 	if (!apiResponse.data.hasOwnProperty('place')) {
 		throw new Error('Wrong API response');
 	}
@@ -65,7 +65,7 @@ export async function createCustomPlace(data: CustomPlaceFormData): Promise<Plac
 }
 
 export async function updateCustomPlace(id: string, data: CustomPlaceFormData): Promise<Place> {
-	const apiResponse: ApiResponse = await put('places/' + id, data);
+	const apiResponse: ApiResponse = await StApi.put('places/' + id, data);
 	if (!apiResponse.data.hasOwnProperty('place')) {
 		throw new Error('Wrong API response');
 	}
@@ -75,7 +75,7 @@ export async function updateCustomPlace(id: string, data: CustomPlaceFormData): 
 }
 
 export async function deleteCustomPlace(id: string): Promise<void> {
-	await delete_('places/' + id, {});
+	await StApi.delete_('places/' + id, {});
 	await cache.remove(id);
 	return;
 }
@@ -131,7 +131,7 @@ export async function getPlacesFromTripDay(day: Day): Promise<Place[]> {
 }
 
 export async function getPlaceMedia(id: string): Promise<Medium[]> {
-	const apiResponse = await get('places/' + id + '/media');
+	const apiResponse = await StApi.get('places/' + id + '/media');
 	if (!apiResponse.data.hasOwnProperty('media')) {
 		throw new Error('Wrong API response');
 	}
@@ -139,7 +139,7 @@ export async function getPlaceMedia(id: string): Promise<Medium[]> {
 }
 
 async function getFromApi(toBeFetchedFromAPI: string[]): Promise<any> {
-	const apiResponse = await get('places?' + stringify({
+	const apiResponse = await StApi.get('places?' + stringify({
 		ids: toBeFetchedFromAPI.join('|')
 	}));
 
@@ -151,7 +151,7 @@ async function getFromApi(toBeFetchedFromAPI: string[]): Promise<any> {
 }
 
 export async function getPlaceGeometry(id: string): Promise<PlaceGeometry> {
-	const apiResponse = await get(`places/${id}/geometry`);
+	const apiResponse = await StApi.get(`places/${id}/geometry`);
 	if (!apiResponse.data.hasOwnProperty('geometry') || !apiResponse.data.hasOwnProperty('is_shape')) {
 		throw new Error('Wrong API response');
 	}
@@ -160,7 +160,7 @@ export async function getPlaceGeometry(id: string): Promise<PlaceGeometry> {
 }
 
 export async function getPlaceOpeningHours(id: string, from: string, to: string): Promise<PlaceOpeningHours> {
-	const apiResponse = await get(`places/${id}/opening-hours?` + stringify({
+	const apiResponse = await StApi.get(`places/${id}/opening-hours?` + stringify({
 		from,
 		to
 	}));
@@ -172,7 +172,7 @@ export async function getPlaceOpeningHours(id: string, from: string, to: string)
 }
 
 export async function addPlaceReview(placeId: string, rating: number, message: string): Promise<PlaceReview> {
-	const apiResponse = await post('reviews', {
+	const apiResponse = await StApi.post('reviews', {
 		item_guid: placeId,
 		rating,
 		message
@@ -184,11 +184,11 @@ export async function addPlaceReview(placeId: string, rating: number, message: s
 }
 
 export async function deletePlaceReview(reviewId: number): Promise<void> {
-	await delete_(`reviews/${reviewId}`, null);
+	await StApi.delete_(`reviews/${reviewId}`, null);
 }
 
 export async function getPlaceReviews(placeId: string, limit: number, page: number): Promise<PlaceReviewsData> {
-	const apiResponse = await get(`items/${placeId}/reviews?` + stringify({
+	const apiResponse = await StApi.get(`items/${placeId}/reviews?` + stringify({
 		limit,
 		page
 	}));
@@ -202,7 +202,7 @@ export async function getPlaceReviews(placeId: string, limit: number, page: numb
 }
 
 export async function voteOnReview(reviewId: number, voteValue: number): Promise<void> {
-	await put(`reviews/${reviewId}/votes`, {
+	await StApi.put(`reviews/${reviewId}/votes`, {
 		value: voteValue
 	});
 }
@@ -210,7 +210,7 @@ export async function voteOnReview(reviewId: number, voteValue: number): Promise
 export async function detectParentsByBounds(bounds: Bounds, zoom: number): Promise<Place[]> {
 	const swMapTile = locationToMapTileKey({lat: bounds.south, lng: bounds.west}, zoom);
 	const neMapTile = locationToMapTileKey({lat: bounds.north, lng: bounds.east}, zoom);
-	const apiResponse: ApiResponse = await get(`places/detect-parents/main-in-bounds?` + stringify({
+	const apiResponse: ApiResponse = await StApi.get(`places/detect-parents/main-in-bounds?` + stringify({
 		map_tile_bounds: swMapTile + ',' + neMapTile
 	}));
 	if (!apiResponse.data.hasOwnProperty('places')) {
@@ -220,7 +220,7 @@ export async function detectParentsByBounds(bounds: Bounds, zoom: number): Promi
 }
 
 export async function detectParentsByLocation(location: Location): Promise<Place[]> {
-	const apiResponse: ApiResponse = await get(`places/detect-parents?` + stringify({
+	const apiResponse: ApiResponse = await StApi.get(`places/detect-parents?` + stringify({
 		location: location.lat + ',' + location.lng
 	}));
 	if (!apiResponse.data.hasOwnProperty('places')) {
@@ -233,7 +233,7 @@ export async function getPlacesStats(filter: PlacesStatsFilter): Promise<PlacesS
 	if (filter.bounds) {
 		filter = filter.switchBoundsToMapTileBounds();
 	}
-	const apiResponse: ApiResponse = await get(`places/stats?` + filter.toQueryString());
+	const apiResponse: ApiResponse = await StApi.get(`places/stats?` + filter.toQueryString());
 	if (!apiResponse.data.hasOwnProperty('stats')) {
 		throw new Error('Wrong API response');
 	}
@@ -255,7 +255,7 @@ async function getPlacesWithMapSpread(filter: PlacesListFilter): Promise<ApiResp
 		apiFilter = apiFilter.cloneSetMapTiles([mapTile]);
 		const promise = new Promise(async (success) => {
 			try {
-				success(await get('places/list?' + apiFilter.toQueryString()));
+				success(await StApi.get('places/list?' + apiFilter.toQueryString()));
 			} catch (error) {
 				success(new ApiResponse( 200, {places: []}));
 			}

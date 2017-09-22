@@ -1,14 +1,14 @@
 import { camelizeKeys } from 'humps';
 
 import { AvailableHotels, Hotel, HotelsFilter } from '.';
+import { ApiResponse, StApi } from '../Api';
 import { mapPlace } from '../Places/Mapper';
-import { ApiResponse, get } from '../Xhr';
 
 export async function getHotels(filter: HotelsFilter): Promise<AvailableHotels> {
 	if (filter.bounds && filter.zoom) {
 		filter = filter.switchBoundsToMapTileBounds();
 	}
-	const apiResponse: ApiResponse = await get('hotels/list/?' + filter.toQueryString());
+	const apiResponse: ApiResponse = await StApi.get('hotels/list/?' + filter.toQueryString());
 	if (!apiResponse.data.hasOwnProperty('hotels')) {
 		throw new Error('Wrong API response');
 	}

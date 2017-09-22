@@ -3,10 +3,9 @@ import * as cloneDeep from 'lodash.clonedeep';
 import { SinonSandbox } from 'sinon';
 import * as sinon from 'sinon';
 
+import { ApiResponse, StApi } from '../Api';
 import * as HotelsApiData from '../TestData/HotelsApiReponses';
 import * as HotelsResults from '../TestData/HotelsExpectedResults';
-import * as Xhr from '../Xhr';
-import { ApiResponse } from '../Xhr/ApiResponse';
 import * as Dao from './DataAccess';
 import { HotelsFilter } from './Filter';
 
@@ -23,7 +22,7 @@ describe('HotelsDataAccess', () => {
 
 	describe('#getHotels', () => {
 		it('should correctly call api and map hotels response', async () => {
-			const apiStub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			const apiStub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, cloneDeep(HotelsApiData.hotels)));
 			}));
 
@@ -42,7 +41,7 @@ describe('HotelsDataAccess', () => {
 		});
 
 		it('should use map tiles if bounds and zoom are passed', async () => {
-			const apiStub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			const apiStub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, cloneDeep(HotelsApiData.hotels)));
 			}));
 

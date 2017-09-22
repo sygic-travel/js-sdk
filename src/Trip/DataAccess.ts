@@ -2,11 +2,11 @@ import { camelizeKeys } from 'humps';
 import * as cloneDeep from 'lodash.clonedeep';
 import { stringify } from 'query-string';
 
+import { ApiResponse, StApi } from '../Api';
 import { tripsDetailedCache as tripsDetailedCache } from '../Cache';
 import { getTripConflictHandler } from '../Settings';
 import { getUserSettings, UserSettings } from '../User';
 import { dateToW3CString } from '../Util';
-import { ApiResponse, get, post, put } from '../Xhr';
 import {
 	mapTripCreateRequestToApiFormat,
 	mapTripDetailedApiResponseToTrip,
@@ -29,7 +29,7 @@ export async function getTrips(dateFrom?: string | null, dateTo?: string | null)
 	if (dateTo !== null) {
 		query.to = dateTo;
 	}
-	const apiResponse = await get('trips/list?' + stringify(query));
+	const apiResponse = await StApi.get('trips/list?' + stringify(query));
 
 	if (!apiResponse.data.hasOwnProperty('trips')) {
 		throw new Error('Wrong API response');
@@ -39,7 +39,7 @@ export async function getTrips(dateFrom?: string | null, dateTo?: string | null)
 }
 
 export async function getTripsInTrash(): Promise<Trip[]> {
-	const apiResponse = await get('trips/trash');
+	const apiResponse = await StApi.get('trips/trash');
 
 	if (!apiResponse.data.hasOwnProperty('trips')) {
 		throw new Error('Wrong API response');
@@ -63,7 +63,7 @@ export async function getTripDetailed(id: string): Promise<Trip> {
 }
 
 export async function createTrip(tripRequest: TripCreateRequest): Promise<Trip> {
-	const apiResponse: ApiResponse = await post('trips', mapTripCreateRequestToApiFormat(tripRequest));
+	const apiResponse: ApiResponse = await StApi.post('trips', mapTripCreateRequestToApiFormat(tripRequest));
 	if (!apiResponse.data.hasOwnProperty('trip')) {
 		throw new Error('Wrong API response');
 	}
@@ -118,7 +118,7 @@ export async function deleteTripFromCache(id: string): Promise<void> {
 }
 
 export async function cloneTrip(id: string): Promise<string> {
-	const clone: ApiResponse = await post('trips/clone', { trip_id: id });
+	const clone: ApiResponse = await StApi.post('trips/clone', { trip_id: id });
 	if (!clone.data.hasOwnProperty('trip_id')) {
 		throw new Error('Wrong API response');
 	}
@@ -126,7 +126,7 @@ export async function cloneTrip(id: string): Promise<string> {
 }
 
 async function getTripFromApi(id: string): Promise<object> {
-	const apiResponse = await get('trips/' + id);
+	const apiResponse = await StApi.get('trips/' + id);
 	if (!apiResponse.data.hasOwnProperty('trip')) {
 		throw new Error('Wrong API response');
 	}
@@ -135,7 +135,7 @@ async function getTripFromApi(id: string): Promise<object> {
 }
 
 async function putTripToApi(requestData): Promise<ApiResponse> {
-	const tripResponse: ApiResponse = await put(
+	const tripResponse: ApiResponse = await StApi.put(
 		'trips/' + requestData.id,
 		requestData
 	);
@@ -165,7 +165,7 @@ async function handleIgnoredConflict(
 }
 
 export async function emptyTripsTrash(): Promise<string[]> {
-	const apiResponse = await post('trips/empty-trash', null);
+	const apiResponse = await StApi.post('trips/empty-trash', null);
 	if (!apiResponse.data.hasOwnProperty('deleted_trip_ids')) {
 		throw new Error('Wrong API response');
 	}
@@ -173,7 +173,7 @@ export async function emptyTripsTrash(): Promise<string[]> {
 }
 
 export async function getTripTemplates(placeId: string): Promise<TripTemplate[]> {
-	const apiResponse: ApiResponse = await get(`trip-templates?${stringify({
+	const apiResponse: ApiResponse = await StApi.get(`trip-templates?${stringify({
 		place_id: placeId
 	})}`);
 	if (!apiResponse.data.hasOwnProperty('trip_templates')) {
@@ -187,7 +187,7 @@ export async function getTripTemplates(placeId: string): Promise<TripTemplate[]>
 }
 
 export async function applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trip> {
-	const apiResponse: ApiResponse = await put(`/trips/${tripId}/apply-template`, {
+	const apiResponse: ApiResponse = await StApi.put(`/trips/${tripId}/apply-template`, {
 		template_id: templateId,
 		day_index: dayIndex
 	});

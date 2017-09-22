@@ -1,6 +1,6 @@
+import { ApiResponse, StApi } from '../Api';
 import { favoritesCache } from '../Cache';
 import { Location } from '../Geo';
-import { ApiResponse, delete_, get, post } from '../Xhr';
 
 export async function getFavorites(): Promise<string[]> {
 	const fromCache: string[] = await favoritesCache.getAll();
@@ -11,7 +11,7 @@ export async function getFavorites(): Promise<string[]> {
 }
 
 export async function addPlaceToFavorites(id: string): Promise<void> {
-	await post('favorites', {
+	await StApi.post('favorites', {
 		place_id: id
 	});
 	favoritesCache.set(id, id);
@@ -22,7 +22,7 @@ export async function addCustomPlaceToFavorites(
 	location: Location,
 	address: string
 ): Promise<string> {
-	const apiResponse = await post('favorites/custom', {
+	const apiResponse = await StApi.post('favorites/custom', {
 		name,
 		location,
 		address
@@ -31,7 +31,7 @@ export async function addCustomPlaceToFavorites(
 }
 
 export async function removePlaceFromFavorites(id: string): Promise<ApiResponse> {
-	const apiResponse: ApiResponse = await delete_('favorites', {
+	const apiResponse: ApiResponse = await StApi.delete_('favorites', {
 		place_id: id
 	});
 	await removeFavoriteFromCache(id);
@@ -56,7 +56,7 @@ export async function removeFavoriteFromCache(id: string): Promise<void> {
 }
 
 async function getFromApi(): Promise<string[]> {
-	const apiResponse: ApiResponse = await get('favorites');
+	const apiResponse: ApiResponse = await StApi.get('favorites');
 	if (!apiResponse.data.favorites) {
 		throw new Error('Wrong API response');
 	}
