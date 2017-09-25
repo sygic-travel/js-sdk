@@ -37,7 +37,7 @@ describe('CollaborationDataAccess', () => {
 			Moxios.wait(() => {
 				const request = Moxios.requests.mostRecent();
 				chai.expect(request.config.method).to.equal('post');
-				chai.expect(request.config.url).to.equal(`api/trip/${tripId}/subscription`);
+				chai.expect(request.config.url).to.equal(`api/trips/${tripId}/subscription`);
 				done();
 			});
 		});
@@ -50,7 +50,7 @@ describe('CollaborationDataAccess', () => {
 			Moxios.wait(() => {
 				const request = Moxios.requests.mostRecent();
 				chai.expect(request.config.method).to.equal('delete');
-				chai.expect(request.config.url).to.equal(`api/trip/${tripId}/subscription`);
+				chai.expect(request.config.url).to.equal(`api/trips/${tripId}/subscription`);
 				done();
 			});
 		});

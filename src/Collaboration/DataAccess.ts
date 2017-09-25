@@ -3,15 +3,15 @@ import { Collaboration } from './Collaboration';
 import { mapTripCollaborationsApiResponseToCollaborations } from './Mapper';
 
 export async function followTrip(tripId: string): Promise<void> {
-	await StApi.post(`trip/${tripId}/subscription`, null);
+	await StApi.post(`trips/${tripId}/subscription`, null);
 }
 
 export async function unfollowTrip(tripId: string): Promise<void> {
-	await StApi.delete_(`trip/${tripId}/subscription`, null);
+	await StApi.delete_(`trips/${tripId}/subscription`, null);
 }
 
 export async function getTripCollaborations(tripId: string): Promise<Collaboration[]> {
-	const apiResponse: ApiResponse = await StApi.get(`trip/${tripId}/collaborations`);
+	const apiResponse: ApiResponse = await StApi.get(`trips/${tripId}/collaborations`);
 	if (!apiResponse.data.hasOwnProperty('collaborations')) {
 		throw new Error('Wrong API response');
 	}
