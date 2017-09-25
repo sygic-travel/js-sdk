@@ -188,7 +188,7 @@ export async function deletePlaceReview(reviewId: number): Promise<void> {
 }
 
 export async function getPlaceReviews(placeId: string, limit: number, page: number): Promise<PlaceReviewsData> {
-	const apiResponse = await StApi.get(`items/${placeId}/reviews?` + stringify({
+	const apiResponse = await StApi.get(`places/${placeId}/reviews?` + stringify({
 		limit,
 		page
 	}));
