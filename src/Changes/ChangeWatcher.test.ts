@@ -3,11 +3,10 @@ import * as chaiAsPromised from 'chai-as-promised';
 // import * as cloneDeep from 'lodash.clonedeep';
 import * as sinon from 'sinon';
 import { SinonFakeTimers, SinonSandbox, SinonStub } from 'sinon';
-import * as Xhr from '../Xhr';
 
 import { Changes } from '../../index';
+import { ApiResponse, StApi } from '../Api';
 import { setEnvironment, setUserSession } from '../Settings';
-import { ApiResponse } from '../Xhr/ApiResponse';
 import ChangeWatcher from './ChangeWatcher';
 import ChangeNotification = Changes.ChangeNotification;
 
@@ -37,9 +36,9 @@ describe('ChangeWatcher', () => {
 
 	describe('#start', () => {
 		it('should start changes watch and check for changes on api multiple times', async () => {
-			changeWatcher = new ChangeWatcher(TICK_INTERVAL, (changeNotifications) => {});
+			changeWatcher = new ChangeWatcher(TICK_INTERVAL, () => {});
 
-			const stub: SinonStub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			const stub: SinonStub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
 					changes: ''
 				}));
@@ -71,7 +70,7 @@ describe('ChangeWatcher', () => {
 				done();
 			});
 
-			sandbox.stub(Xhr, 'get').callsFake((): Promise<ApiResponse> => {
+			sandbox.stub(StApi, 'get').callsFake((): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, {
 						changes: [{
@@ -98,7 +97,7 @@ describe('ChangeWatcher', () => {
 	describe('#kill', () => {
 		it('should stop changes watching', async () => {
 			changeWatcher = new ChangeWatcher(TICK_INTERVAL, () => {});
-			const stub: SinonStub = sandbox.stub(Xhr, 'get').callsFake((): Promise<ApiResponse> => {
+			const stub: SinonStub = sandbox.stub(StApi, 'get').callsFake((): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, {
 						changes: ''

@@ -1,12 +1,11 @@
+import { ApiResponse, StApi } from '../Api';
 import { getPlacesDetailed } from '../Places';
-import { get } from '../Xhr';
-import { ApiResponse } from '../Xhr/ApiResponse';
 import { Collection } from './Collection';
 import { CollectionsFilter } from './Filter';
 import { mapCollectionApiResponseToCollection, mapCollectionsApiResponseToCollections } from './Mapper';
 
 export async function getCollection(collectionId: number, photoSize: string): Promise<Collection> {
-	const apiResponse: ApiResponse = await get(`collections/${collectionId}`);
+	const apiResponse: ApiResponse = await StApi.get(`collections/${collectionId}`);
 	if (!apiResponse.data.hasOwnProperty('collection')) {
 		throw new Error('Wrong API response');
 	}
@@ -21,7 +20,7 @@ export async function getCollections(
 	loadPlaces: boolean,
 	photoSize: string
 ): Promise<Collection[]> {
-	const apiResponse: ApiResponse = await get('collections?' + filter.toQueryString());
+	const apiResponse: ApiResponse = await StApi.get('collections?' + filter.toQueryString());
 	if (!apiResponse.data.hasOwnProperty('collections')) {
 		throw new Error('Wrong API response');
 	}

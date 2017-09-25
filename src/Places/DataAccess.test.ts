@@ -4,12 +4,11 @@ import { camelizeKeys } from 'humps';
 import { SinonSandbox } from 'sinon';
 import * as sinon from 'sinon';
 
+import { ApiResponse, StApi } from '../Api';
 import { placesDetailedCache as Cache } from '../Cache';
 import { setEnvironment } from '../Settings';
 import * as TestData from '../TestData/PlacesApiResponses';
 import * as ExpectedResults from '../TestData/PlacesExpectedResults';
-import * as Xhr from '../Xhr';
-import { ApiResponse } from '../Xhr/ApiResponse';
 import * as Dao from './DataAccess';
 import { PlacesListFilter, PlacesListFilterJSON } from './ListFilter';
 import { CustomPlaceFormData, Place } from './Place';
@@ -39,7 +38,7 @@ describe('PlacesDataAccess', () => {
 
 	describe('#getPlaces', () => {
 		it('should just recall api and return places', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, TestData.places));
 			}));
 
@@ -55,7 +54,7 @@ describe('PlacesDataAccess', () => {
 		});
 
 		it('should call per tiles when map spread is required', (done) => {
-			const stub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			const stub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, { places: [] }));
 			}));
 			const filter = new PlacesListFilter({
@@ -76,7 +75,7 @@ describe('PlacesDataAccess', () => {
 		});
 
 		it('should not fail on api error', (done) => {
-			const stub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve, reject) => {
+			const stub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve, reject) => {
 				reject(new Error('Something went wrong'));
 			}));
 			const filter = new PlacesListFilter({
@@ -99,7 +98,7 @@ describe('PlacesDataAccess', () => {
 
 	describe('#getPlaceDetailed', () => {
 		it('should get place detailed response from api if it is not in Cache', () => {
-			const stub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			const stub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, TestData.placeDetailedEiffelTowerWithoutMedia));
 			}));
 			const guid = 'region:1948650';
@@ -111,7 +110,7 @@ describe('PlacesDataAccess', () => {
 		});
 
 		it('should get place detailed response from Cache if it is in Cache', () => {
-			const stub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			const stub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, TestData.placeDetailedEiffelTowerWithoutMedia));
 			}));
 
@@ -138,7 +137,7 @@ describe('PlacesDataAccess', () => {
 		}
 
 		it('should get all places responses from api if they are not in Cache', () => {
-			const stub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			const stub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
 					places: placesFromApi
 				}));
@@ -156,7 +155,7 @@ describe('PlacesDataAccess', () => {
 			Cache.set(placesFromApi[2].id, placesFromApi[2]);
 			Cache.set(placesFromApi[3].id, placesFromApi[3]);
 
-			const stub = sandbox.stub(Xhr, 'get');
+			const stub = sandbox.stub(StApi, 'get');
 
 			return Dao.getPlacesDetailed(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
 				sinon.assert.notCalled(stub);
@@ -168,7 +167,7 @@ describe('PlacesDataAccess', () => {
 			Cache.set(placesFromApi[0].id, placesFromApi[0]);
 			Cache.set(placesFromApi[1].id, placesFromApi[1]);
 
-			const stub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			const stub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
 					places: [placesFromApi[2], placesFromApi[3]]
 				}));
@@ -183,7 +182,7 @@ describe('PlacesDataAccess', () => {
 
 	describe('#getPlaceMedia', () => {
 		it('should just recall api and return media', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
 					media: TestData.placeDetailMedia.media
 				}));
@@ -196,7 +195,7 @@ describe('PlacesDataAccess', () => {
 
 	describe('#getPlaceGeometry', () => {
 		it('should just recall api and return geometry', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
 					geometry: {
 						type: 'Point',
@@ -225,7 +224,7 @@ describe('PlacesDataAccess', () => {
 
 	describe('#getPlaceOpeningHours', () => {
 		it('should just recall api and return opening hours', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
 					opening_hours: {
 						'2017-09-01': [{
@@ -259,7 +258,7 @@ describe('PlacesDataAccess', () => {
 
 	describe('#addPlaceReview', () => {
 		it('should correctly add item review', () => {
-			sandbox.stub(Xhr, 'post').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, TestData.placeReview));
 			}));
 			return chai.expect(Dao.addPlaceReview('poi:123', 1, 'test'))
@@ -269,7 +268,7 @@ describe('PlacesDataAccess', () => {
 
 	describe('#getPlaceReviews', () => {
 		it('should correctly get and map item reviews with additional data', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, TestData.placeReviewsData));
 			}));
 			return chai.expect(Dao.getPlaceReviews('poi:540', 1, 1))
@@ -279,7 +278,7 @@ describe('PlacesDataAccess', () => {
 
 	describe('#getPlacesStats', () => {
 		it('should correctly get and map stats data for places', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, TestData.placesStatsData));
 			}));
 			return chai.expect(Dao.getPlacesStats(new PlacesStatsFilter({query: 'test'})))
@@ -296,7 +295,7 @@ describe('PlacesDataAccess', () => {
 					lng: 47.51632
 				}
 			};
-			sandbox.stub(Xhr, 'post').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, TestData.customPlaceData));
 			}));
 			return chai.expect(Dao.createCustomPlace(formData))
@@ -313,7 +312,7 @@ describe('PlacesDataAccess', () => {
 					lng: 47.51632
 				}
 			};
-			sandbox.stub(Xhr, 'put').returns(new Promise<ApiResponse>((resolve) => {
+			sandbox.stub(StApi, 'put').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, TestData.customPlaceData));
 			}));
 			return chai.expect(Dao.updateCustomPlace('c:1', formData))
@@ -324,7 +323,7 @@ describe('PlacesDataAccess', () => {
 	describe('#deleteCustomPlace', () => {
 		it('should correctly call api delete and remove from cache', async () => {
 			const cacheSpy = sinon.spy(Cache, 'remove');
-			const apiStub = sandbox.stub(Xhr, 'delete_').returns(new Promise<ApiResponse>((resolve) => {
+			const apiStub = sandbox.stub(StApi, 'delete_').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
 			await Dao.deleteCustomPlace('c:1');
@@ -335,7 +334,7 @@ describe('PlacesDataAccess', () => {
 
 	describe('#detectParentsByLocation', () => {
 		it('should correctly get and return places', async () => {
-			const apiStub = sandbox.stub(Xhr, 'get').returns(new Promise<ApiResponse>((resolve) => {
+			const apiStub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, TestData.places));
 			}));
 

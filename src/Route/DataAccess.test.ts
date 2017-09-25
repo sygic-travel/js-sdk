@@ -4,10 +4,10 @@ import * as cloneDeep from 'lodash.clonedeep';
 import { SinonSandbox } from 'sinon';
 import * as sinon from 'sinon';
 import { RouteRequest } from '.';
+import { StApi } from '../Api';
 import { Location } from '../Geo';
 import { setEnvironment } from '../Settings';
 import { route } from '../TestData/DirectionsApiResponses';
-import * as xhr from '../Xhr';
 import * as dao from './DataAccess';
 import { Route } from './Route';
 
@@ -58,7 +58,7 @@ describe('RouteDataAccess', () => {
 
 			sandbox.stub(routesCache, 'getBatchMap').returns(new Promise((resolve) => (resolve(cacheMap))));
 
-			sandbox.stub(xhr, 'post').returns(
+			sandbox.stub(StApi, 'post').returns(
 				new Promise((resolve) => (resolve({data: { path: [routesData[1], routesData[3]]}})))
 			);
 

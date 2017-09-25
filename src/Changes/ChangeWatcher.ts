@@ -1,8 +1,7 @@
 import { stringify } from 'query-string';
 
+import { ApiResponse, StApi } from '../Api';
 import * as Settings from '../Settings';
-import { get } from '../Xhr';
-import { ApiResponse } from '../Xhr/ApiResponse';
 import { ChangeNotification } from './ChangeNotification';
 
 export default class ChangeWatcher {
@@ -40,7 +39,7 @@ export default class ChangeWatcher {
 				since: this.lastServerTimestamp
 			}) : 'changes';
 
-		const apiResponse: ApiResponse = await get(queryString);
+		const apiResponse: ApiResponse = await StApi.get(queryString);
 		if (apiResponse.serverTimestamp) {
 			this.lastServerTimestamp = apiResponse.serverTimestamp;
 		}

@@ -3,11 +3,11 @@ import * as chaiAsPromised from 'chai-as-promised';
 import { SinonSandbox } from 'sinon';
 import * as sinon from 'sinon';
 
+import { ApiResponse, StApi } from '../Api';
 import { Location } from '../Geo';
 import { setEnvironment } from '../Settings';
 import * as TestApiExpectedResults from '../TestData/SearchLocationExpectedResults';
 import * as TestApiResponses from '../TestData/SearchLocationsApiResponses';
-import * as Xhr from '../Xhr';
 import * as Dao from './DataAccess';
 import { SearchTagsResult } from './SearchResult';
 
@@ -36,16 +36,16 @@ describe('SearchDataAccess', () => {
 
 	describe('#search', () => {
 		it('should throw and exception when response without searched locations came', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<Xhr.ApiResponse>((resolve) => {
-				resolve(new Xhr.ApiResponse(200, {}));
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, {}));
 			}));
 
 			return chai.expect(Dao.search(query, location)).to.be.rejected;
 		});
 
 		it('should correctly map search response', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<Xhr.ApiResponse>((resolve) => {
-				resolve(new Xhr.ApiResponse(200, TestApiResponses.searchLocations));
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, TestApiResponses.searchLocations));
 			}));
 
 			return chai.expect(Dao.search(query, location))
@@ -55,16 +55,16 @@ describe('SearchDataAccess', () => {
 
 	describe('#searchReverse', () => {
 		it('should throw and exception when response without searched locations came', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<Xhr.ApiResponse>((resolve) => {
-				resolve(new Xhr.ApiResponse(200, {}));
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, {}));
 			}));
 
 			return chai.expect(Dao.searchReverse(location)).to.be.rejected;
 		});
 
 		it('should correctly map search response', () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<Xhr.ApiResponse>((resolve) => {
-				resolve(new Xhr.ApiResponse(200, TestApiResponses.searchLocations));
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, TestApiResponses.searchLocations));
 			}));
 
 			return chai.expect(Dao.searchReverse(location))
@@ -74,8 +74,8 @@ describe('SearchDataAccess', () => {
 
 	describe('#searchTags', () => {
 		it('should recall api and return search tags results', async () => {
-			sandbox.stub(Xhr, 'get').returns(new Promise<Xhr.ApiResponse>((resolve) => {
-				resolve(new Xhr.ApiResponse(200, {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, {
 					tags: [{
 						key: 'Dinner Theater',
 						name: 'Dinner Theater',
