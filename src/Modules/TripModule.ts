@@ -24,6 +24,7 @@ import {
 	TripConflictHandler,
 	TripTemplate,
 	TripUpdateData,
+	updateItineraryItemUserData,
 	updateTrip,
 } from '../Trip';
 
@@ -122,5 +123,16 @@ export default class TripModule {
 
 	public applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trip> {
 		return applyTripTemplate(tripId, templateId, dayIndex);
+	}
+
+	public updateItineraryItemUserData(
+		id: string,
+		dayIndex: number,
+		itemIndex: number,
+		startTime: number | null,
+		duration: number | null,
+		note: string | null,
+	): Promise<Trip> {
+		return updateItineraryItemUserData(id, dayIndex, itemIndex, startTime, duration, note);
 	}
 }

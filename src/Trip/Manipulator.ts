@@ -63,13 +63,7 @@ export function prependDayToTrip(tripToBeUpdated: Trip, userSettings: UserSettin
 }
 
 export function removeDayFromTrip(tripToBeUpdated: Trip, dayIndex: number, userSettings: UserSettings | null): Trip {
-	if (!tripToBeUpdated.days) {
-		throw new Error('days property in Trip cannot be null');
-	}
-
-	if (tripToBeUpdated.days.length < dayIndex) {
-		throw new Error('Invalid dayIndex');
-	}
+	checkDayExists(tripToBeUpdated, dayIndex);
 
 	const resultTrip = cloneDeep(tripToBeUpdated);
 
@@ -90,17 +84,8 @@ export function swapDaysInTrip(
 	secondDayIndex: number,
 	userSettings: UserSettings | null
 ): Trip {
-	if (!tripToBeUpdated.days) {
-		throw new Error('days property in Trip cannot be null');
-	}
-
-	if (!tripToBeUpdated.days[firstDayIndex]) {
-		throw new Error('Invalid firstDayIndex');
-	}
-
-	if (!tripToBeUpdated.days[secondDayIndex]) {
-		throw new Error('Invalid secondDayIndex');
-	}
+	checkDayExists(tripToBeUpdated, firstDayIndex, 'firstDayIndex');
+	checkDayExists(tripToBeUpdated, secondDayIndex, 'secondDayIndex');
 
 	const resultTrip = cloneDeep(tripToBeUpdated);
 	const firstDay: Day = resultTrip.days[firstDayIndex];
@@ -111,20 +96,27 @@ export function swapDaysInTrip(
 }
 
 export function setTransport(trip: Trip, dayIndex: number, itemIndex: number, settings: TransportSettings|null): Trip {
-	if (!trip.days) {
-		throw new Error('days property in Trip cannot be null');
-	}
-
-	if (!trip.days[dayIndex]) {
-		throw new Error('Invalid dayIndex');
-	}
-
-	if (itemIndex && !trip.days[dayIndex].itinerary[itemIndex]) {
-		throw new Error('Invalid itemIndex');
-	}
+	checkItemExists(trip, dayIndex, itemIndex);
 
 	const resultTrip = cloneDeep(trip);
 	resultTrip.days[dayIndex].itinerary[itemIndex].transportFromPrevious = settings;
+	return resultTrip;
+}
+
+export function updateItineraryItemUserData(
+	trip: Trip,
+	dayIndex: number,
+	itemIndex: number,
+	startTime: number | null,
+	duration: number | null,
+	note: string | null
+): Trip {
+	checkItemExists(trip, dayIndex, itemIndex);
+
+	const resultTrip = cloneDeep(trip);
+	resultTrip.days[dayIndex].itinerary[itemIndex].startTime = startTime;
+	resultTrip.days[dayIndex].itinerary[itemIndex].duration = duration;
+	resultTrip.days[dayIndex].itinerary[itemIndex].note = note;
 	return resultTrip;
 }
 
@@ -136,18 +128,12 @@ export function addPlaceToDay(
 	userSettings: UserSettings | null,
 	positionInDay?: number
 ): Trip {
-	if (!tripToBeUpdated.days) {
-		throw new Error('days property in Trip cannot be null');
-	}
-
-	if (!tripToBeUpdated.days[dayIndex]) {
-		throw new Error('Invalid dayIndex');
-	}
+	checkDayExists(tripToBeUpdated, dayIndex);
 
 	if (
 		typeof positionInDay !== 'undefined' &&
 		positionInDay !== null &&
-		(tripToBeUpdated.days[dayIndex].itinerary.length < positionInDay || positionInDay < 0)
+		(tripToBeUpdated.days![dayIndex].itinerary.length < positionInDay || positionInDay < 0)
 	) {
 		throw new Error('Invalid positionInDay');
 	}
@@ -178,21 +164,9 @@ export function movePlaceInDay(
 	positionTo: number,
 	userSettings: UserSettings | null
 ): Trip {
-	if (!tripToBeUpdated.days) {
-		throw new Error('days property in Trip cannot be null');
-	}
+	checkItemExists(tripToBeUpdated, dayIndex, positionFrom, 'positionFrom');
+	checkItemExists(tripToBeUpdated, dayIndex, positionTo, 'positionTo');
 
-	if (!tripToBeUpdated.days[dayIndex]) {
-		throw new Error('Invalid dayIndex');
-	}
-
-	if (!tripToBeUpdated.days[dayIndex].itinerary[positionFrom]) {
-		throw new Error('Invalid positionFrom');
-	}
-
-	if (!tripToBeUpdated.days[dayIndex].itinerary[positionTo]) {
-		throw new Error('Invalid positionTo');
-	}
 	const resultTrip = cloneDeep(tripToBeUpdated);
 	const itemToBeMoved: ItineraryItem = resultTrip.days[dayIndex].itinerary[positionFrom];
 	resultTrip.days[dayIndex].itinerary.splice(positionFrom, 1);
@@ -206,13 +180,7 @@ export function removePlacesFromDay(
 	positionsInDay: number[],
 	userSettings: UserSettings | null
 ): Trip {
-	if (!tripToBeUpdated.days) {
-		throw new Error('days property in Trip cannot be null');
-	}
-
-	if (!tripToBeUpdated.days[dayIndex]) {
-		throw new Error('Invalid dayIndex');
-	}
+	checkDayExists(tripToBeUpdated, dayIndex);
 
 	positionsInDay.forEach((positionInDay: number) => {
 		if (tripToBeUpdated.days && !tripToBeUpdated.days[dayIndex].itinerary[positionInDay]) {
@@ -233,13 +201,7 @@ export function removeAllPlacesFromDay(
 	dayIndex: number,
 	userSettings: UserSettings | null
 ): Trip {
-	if (!tripToBeUpdated.days) {
-		throw new Error('days property in Trip cannot be null');
-	}
-
-	if (!tripToBeUpdated.days[dayIndex]) {
-		throw new Error('Invalid dayIndex');
-	}
+	checkDayExists(tripToBeUpdated, dayIndex);
 
 	const resultTrip = cloneDeep(tripToBeUpdated);
 	resultTrip.days[dayIndex].itinerary = [];
@@ -252,17 +214,12 @@ export function replaceLastStickyPlace(
 	dayIndex: number,
 	userSettings: UserSettings | null
 ): Trip {
-	if (!trip.days) {
-		throw new Error('days property in Trip cannot be null');
-	}
+	checkDayExists(trip, dayIndex);
 
-	if (!trip.days[dayIndex]) {
-		throw new Error('Invalid dayIndex');
-	}
 	let resultTrip = cloneDeep(trip);
 	if (
-		trip.days[dayIndex].itinerary.length &&
-		trip.days[dayIndex].itinerary[trip.days[dayIndex].itinerary.length - 1].isSticky
+		trip.days![dayIndex].itinerary.length &&
+		trip.days![dayIndex].itinerary[trip.days![dayIndex].itinerary.length - 1].isSticky
 	) {
 		resultTrip = removePlacesFromDay(
 			resultTrip,
@@ -274,9 +231,9 @@ export function replaceLastStickyPlace(
 	}
 	const nextDayIndex = dayIndex + 1;
 	if (
-		trip.days[nextDayIndex] &&
-		trip.days[nextDayIndex].itinerary.length &&
-		trip.days[nextDayIndex].itinerary[0].isSticky
+		trip.days![nextDayIndex] &&
+		trip.days![nextDayIndex].itinerary.length &&
+		trip.days![nextDayIndex].itinerary[0].isSticky
 	) {
 		resultTrip = removePlacesFromDay(resultTrip, nextDayIndex, [0], userSettings);
 		resultTrip = addPlaceToDay(resultTrip, place, nextDayIndex, userSettings, 0);
@@ -290,18 +247,13 @@ export function addOrReplaceOvernightPlace(
 	dayIndex: number,
 	userSettings: UserSettings | null
 ): Trip {
-	if (!trip.days) {
-		throw new Error('days property in Trip cannot be null');
-	}
+	checkDayExists(trip, dayIndex);
 
-	if (!trip.days[dayIndex]) {
-		throw new Error('Invalid dayIndex');
-	}
 	let resultTrip = cloneDeep(trip);
 	// Remove old sticky places
 	if (
-		trip.days[dayIndex].itinerary.length &&
-		trip.days[dayIndex].itinerary[trip.days[dayIndex].itinerary.length - 1].isSticky
+		trip.days![dayIndex].itinerary.length &&
+		trip.days![dayIndex].itinerary[trip.days![dayIndex].itinerary.length - 1].isSticky
 	) {
 		resultTrip = removePlacesFromDay(
 			resultTrip,
@@ -312,9 +264,9 @@ export function addOrReplaceOvernightPlace(
 	}
 	const nextDayIndex = dayIndex + 1;
 	if (
-		trip.days[nextDayIndex] &&
-		trip.days[nextDayIndex].itinerary.length &&
-		trip.days[nextDayIndex].itinerary[0].isSticky
+		trip.days![nextDayIndex] &&
+		trip.days![nextDayIndex].itinerary.length &&
+		trip.days![nextDayIndex].itinerary[0].isSticky
 	) {
 		resultTrip = removePlacesFromDay(resultTrip, nextDayIndex, [0], userSettings);
 	}
@@ -368,4 +320,32 @@ export function replaceSiblingParentDestination(
 	}
 
 	return trip;
+}
+
+function checkDayExists(
+	trip: Trip,
+	dayIndex: number,
+	propertyName: string = 'dayIndex'
+): boolean {
+	if (!trip.days) {
+		throw new Error('days property in Trip cannot be null');
+	}
+
+	if (!trip.days[dayIndex]) {
+		throw new Error('Invalid ' + propertyName);
+	}
+	return true;
+}
+
+function checkItemExists(
+	trip: Trip,
+	dayIndex: number,
+	itemIndex: number,
+	propertyName: string = 'itemIndex'
+): boolean {
+	checkDayExists(trip, dayIndex);
+	if (!trip.days![dayIndex].itinerary[itemIndex]) {
+		throw new Error('Invalid ' + propertyName);
+	}
+	return true;
 }

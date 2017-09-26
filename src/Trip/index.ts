@@ -148,6 +148,19 @@ export async function setTransport(
 	return Dao.updateTrip(TripManipulator.setTransport(await getTripDetailed(tripId), dayIndex, itemIndex, settings));
 }
 
+export async function updateItineraryItemUserData(
+	tripId: string,
+	dayIndex: number,
+	itemIndex: number,
+	startTime: number | null,
+	duration: number | null,
+	note: string | null,
+	): Promise<Trip>  {
+	return Dao.updateTrip(
+		TripManipulator.updateItineraryItemUserData(await getTripDetailed(tripId), dayIndex, itemIndex, startTime, duration, note)
+	);
+}
+
 export async function movePlaceInDay(
 	id: string,
 	dayIndex: number,
