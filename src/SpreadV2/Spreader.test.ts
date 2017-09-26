@@ -26,6 +26,7 @@ const place: Place = {
 	boundingBox: null,
 	name: 'Poi1',
 	nameSuffix: '',
+	originalName: null,
 	url: '',
 	marker: 'resataurant',
 	categories: [],

@@ -14,6 +14,7 @@ export const hotels = {
 				"bounding_box": null,
 				"name": "Charles Bridge",
 				"name_suffix": "Prague, Czech Republic",
+				"original_name": null,
 				"url": "https://alpha.travel.sygic.com/go/poi:345430",
 				"marker": "sightseeing:art:artwork",
 				"star_rating": 4,

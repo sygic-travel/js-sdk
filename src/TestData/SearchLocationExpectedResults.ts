@@ -59,6 +59,7 @@ export const searchLocations = [{
 		boundingBox: null,
 		name: 'eiffel optic',
 		nameSuffix: 'Ostrava, Czech Republic',
+		originalName: 'eiffel optic',
 		perex: null,
 		url: 'https://travel.sygic.com/go/poi:203997',
 		thumbnailUrl: null,

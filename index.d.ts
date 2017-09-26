@@ -166,6 +166,7 @@ export namespace Places {
 		boundingBox: Geo.Bounds | null;
 		name: string;
 		nameSuffix: string | null;
+		originalName: string | null;
 		perex: string | null;
 		url: string;
 		thumbnailUrl: string | null;

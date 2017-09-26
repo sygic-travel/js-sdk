@@ -39,6 +39,7 @@ export const mapPlace = (place, detail: PlaceDetail | null) => {
 		quadkey: place.quadkey,
 		name: place.name,
 		nameSuffix: place.name_suffix,
+		originalName: place.original_name,
 		boundingBox: place.bounding_box as Bounds,
 		perex: place.perex,
 		url: place.url,
