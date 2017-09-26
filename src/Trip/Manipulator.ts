@@ -119,12 +119,39 @@ export function setTransport(trip: Trip, dayIndex: number, itemIndex: number, se
 		throw new Error('Invalid dayIndex');
 	}
 
-	if (itemIndex && !trip.days[dayIndex].itinerary[itemIndex]) {
+	if (!trip.days[dayIndex].itinerary[itemIndex]) {
 		throw new Error('Invalid itemIndex');
 	}
 
 	const resultTrip = cloneDeep(trip);
 	resultTrip.days[dayIndex].itinerary[itemIndex].transportFromPrevious = settings;
+	return resultTrip;
+}
+
+export function updateItineraryItemUserData(
+	trip: Trip,
+	dayIndex: number,
+	itemIndex: number,
+	startTime: number | null,
+	duration: number | null,
+	note: string | null
+): Trip {
+	if (!trip.days) {
+		throw new Error('days property in Trip cannot be null');
+	}
+
+	if (!trip.days[dayIndex]) {
+		throw new Error('Invalid dayIndex');
+	}
+
+	if (!trip.days[dayIndex].itinerary[itemIndex]) {
+		throw new Error('Invalid itemIndex');
+	}
+
+	const resultTrip = cloneDeep(trip);
+	resultTrip.days[dayIndex].itinerary[itemIndex].startTime = startTime;
+	resultTrip.days[dayIndex].itinerary[itemIndex].duration = duration;
+	resultTrip.days[dayIndex].itinerary[itemIndex].note = note;
 	return resultTrip;
 }
 

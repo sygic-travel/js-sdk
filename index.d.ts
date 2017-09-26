@@ -118,6 +118,14 @@ declare class TripModule {
 	public emptyTripsTrash(): Promise<string[]>;
 	public getTripTemplates(placeId: string): Promise<Trips.TripTemplate[]>
 	public applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trips.Trip>;
+	public updateItineraryItemUserData(
+		tripId: string,
+		dayIndex: number,
+		itemIndex: number,
+		startTime: number | null,
+		duration: number | null,
+		note: string | null
+	): Promise<Trips.Trip>;
 }
 
 declare class UserModule {

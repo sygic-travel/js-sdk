@@ -422,6 +422,36 @@ describe('TripManipulator', () => {
 
 	});
 
+	describe('#updateItineraryItemUserData', () => {
+		it('should throw an error when invalid dayIndex is passed', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+
+			return chai.expect(() => Manipulator.updateItineraryItemUserData(inputTrip, 100, 999, null, null, null))
+				.to.throw(Error, 'Invalid dayIndex');
+		});
+
+		it('should throw an error when invalid itemIndex is passed', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+
+			return chai.expect(() => Manipulator.updateItineraryItemUserData(inputTrip, 0, 999, null, null, null))
+				.to.throw(Error, 'Invalid itemIndex');
+		});
+
+		it('should immutably set correct usr data', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const resultTrip =  Manipulator.updateItineraryItemUserData(inputTrip, 0, 1, 1000, 2000, 'test');
+			chai.expect(resultTrip.days && resultTrip.days[0].itinerary[1].startTime).to.equal(1000);
+			chai.expect(resultTrip.days && resultTrip.days[0].itinerary[1].duration).to.equal(2000);
+			chai.expect(resultTrip.days && resultTrip.days[0].itinerary[1].note).to.equal('test');
+
+			const resultNulled =  Manipulator.updateItineraryItemUserData(resultTrip, 0, 1, null, null, null);
+			chai.expect(resultNulled.days && resultNulled.days[0].itinerary[1].startTime).to.be.null;
+			chai.expect(resultNulled.days && resultNulled.days[0].itinerary[1].duration).to.be.null;
+			chai.expect(resultNulled.days && resultNulled.days[0].itinerary[1].note).to.be.null;
+		});
+
+	});
+
 	describe('#addOrReplaceOvernightPlace', () => {
 		it('should throw an error when invalid dayIndex is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
