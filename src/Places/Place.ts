@@ -12,6 +12,7 @@ export interface Place {
 	boundingBox: Bounds | null;
 	name: string;
 	nameSuffix: string | null;
+	originalName: string | null;
 	perex: string | null;
 	url: string | null;
 	thumbnailUrl: string | null;

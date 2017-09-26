@@ -14,6 +14,7 @@ export const hotels = [{
 			quadkey: '120212302033311321',
 			name: 'Charles Bridge',
 			nameSuffix: 'Prague, Czech Republic',
+			originalName: null,
 			starRating: 4,
 			starRatingUnofficial: null,
 			customerRating: 8.6,

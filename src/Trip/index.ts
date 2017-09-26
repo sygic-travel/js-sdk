@@ -157,7 +157,14 @@ export async function updateItineraryItemUserData(
 	note: string | null,
 	): Promise<Trip>  {
 	return Dao.updateTrip(
-		TripManipulator.updateItineraryItemUserData(await getTripDetailed(tripId), dayIndex, itemIndex, startTime, duration, note)
+		TripManipulator.updateItineraryItemUserData(
+			await getTripDetailed(tripId),
+			dayIndex,
+			itemIndex,
+			startTime,
+			duration,
+			note
+		)
 	);
 }
 
