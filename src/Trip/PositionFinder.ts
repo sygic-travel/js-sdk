@@ -4,6 +4,7 @@ import { isStickyByDefault, Place } from '../Places';
 
 export function findOptimalPosition(
 	place: Place,
+	previousDayLastItem: ItineraryItem|null,
 	itinerary: ItineraryItem[]
 ): number {
 
@@ -29,6 +30,9 @@ export function findOptimalPosition(
 
 	if (itinerary[0] && itinerary[0].isSticky) {
 		blockedIndexes.push(0);
+		if (previousDayLastItem && previousDayLastItem.isSticky) {
+			minDistanceIndex = 1;
+		}
 	}
 
 	if (itinerary.length && itinerary[itinerary.length - 1].isSticky) {
