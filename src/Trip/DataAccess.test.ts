@@ -180,7 +180,7 @@ describe('TripDataAccess', () => {
 			});
 		});
 
-		it('should should call api only once for consequent updates within timeout', () => {
+		it('should call api only once for consequent updates within timeout', () => {
 			const apiResponseTrip = cloneDeep(TripApiTestData.tripDetail.trip);
 			apiResponseTrip.name = 'API TRIP';
 			const apiPut: SinonStub = sandbox.stub(StApi, 'put').returns(new Promise<ApiResponse>((resolve) => {
@@ -200,7 +200,7 @@ describe('TripDataAccess', () => {
 			});
 		});
 
-		it('should should call conflict handler on ignored conflict and leave server response', (done) => {
+		it('should call conflict handler on ignored conflict and leave server response', (done) => {
 			let handlerCalled = false;
 			const handler = async (info, trip) => { handlerCalled = true; return 'server'; };
 			setTripConflictHandler(handler);
@@ -229,7 +229,7 @@ describe('TripDataAccess', () => {
 			});
 		});
 
-		it('should should call update with newer updated_at when user select local changes', (done) => {
+		it('should call update with newer updated_at when user select local changes', (done) => {
 			let handlerCalled = false;
 			const handler = async (info, trip) => { handlerCalled = true; return 'local'; };
 			setTripConflictHandler(handler);
