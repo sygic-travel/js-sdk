@@ -5,6 +5,7 @@ export interface Hotel {
 	bookingCom: {
 		price: number;
 		hotelId: string;
+		availableRoomsCount: number;
 	};
 }
 

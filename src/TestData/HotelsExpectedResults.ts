@@ -30,7 +30,8 @@ export const hotels = [{
 		} as Place,
 		bookingCom: {
 			price: 169.47,
-			hotelId: '1201343'
+			hotelId: '1201343',
+			availableRoomsCount: 5
 		}
 	} as Hotel
 ];
