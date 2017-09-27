@@ -35,7 +35,8 @@ export const hotels = {
 			},
 			"booking_com": {
 				"hotel_id": "1201343",
-				"price": 169.47
+				"price": 169.47,
+				"available_rooms_count": 5
 			}
 		}
 	],
