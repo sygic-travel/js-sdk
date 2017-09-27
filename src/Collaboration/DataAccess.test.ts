@@ -84,7 +84,7 @@ describe('CollaborationDataAccess', () => {
 				const request = Moxios.requests.mostRecent();
 				chai.expect(request.config.method).to.equal('post');
 				const data = JSON.parse(request.config.data);
-				chai.expect(data.trip_guid).to.equal(tripId);
+				chai.expect(data.trip_id).to.equal(tripId);
 				chai.expect(data.user_email).to.equal(userEmail);
 				chai.expect(data.access_level).to.equal(accessLevel);
 				done();

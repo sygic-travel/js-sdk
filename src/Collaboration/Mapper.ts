@@ -11,7 +11,7 @@ export const mapTripCollaborationsApiResponseToCollaborations = (collaborations:
 			accessLevel: collaboration.access_level,
 			createdAt: collaboration.created_at,
 			updatedAt: collaboration.updated_at,
-			tripId: collaboration.trip_guid
+			tripId: collaboration.trip_id
 		} as Collaboration;
 	});
 };

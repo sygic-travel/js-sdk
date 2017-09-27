@@ -20,7 +20,7 @@ export async function getTripCollaborations(tripId: string): Promise<Collaborati
 
 export async function addTripCollaboration(tripId: string, userEmail: string, accessLevel: string): Promise<void> {
 	await StApi.post(`trip-collaborations`, {
-		trip_guid: tripId,
+		trip_id: tripId,
 		user_email: userEmail,
 		access_level: accessLevel
 	});
@@ -43,7 +43,7 @@ export async function acceptTripCollaboration(collaborationId: string, hash: str
 		throw new Error('Wrong API response');
 	}
 
-	return apiResponse.data.collaboration.trip_guid as string;
+	return apiResponse.data.collaboration.trip_id as string;
 }
 
 export async function resendInvitation(collaborationId: string): Promise<void> {
