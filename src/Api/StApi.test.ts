@@ -12,7 +12,10 @@ const accessToken = '0987654321';
 
 describe('StApi', () => {
 	before((done) => {
-		setEnvironment(testApiURL, testClientKey);
+		setEnvironment({
+			stApiUrl: testApiURL,
+			integratorApiKey: testClientKey
+		});
 		done();
 	});
 

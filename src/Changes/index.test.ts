@@ -16,7 +16,7 @@ let clock: SinonFakeTimers;
 
 describe('ChangesController', () => {
 	before((done) => {
-		setEnvironment('api', '987654321');
+		setEnvironment({ stApiUrl: 'api', integratorApiKey: '987654321' });
 		setUserSession(null, '12345');
 		done();
 	});

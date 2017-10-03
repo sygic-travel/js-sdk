@@ -23,7 +23,7 @@ const photoSize = '300x300';
 
 describe('PlacesDataAccess', () => {
 	before((done) => {
-		setEnvironment('api', '987654321');
+		setEnvironment({ stApiUrl: 'api', integratorApiKey: '987654321' });
 		done();
 	});
 

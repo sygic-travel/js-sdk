@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { getAccessToken, getApiKey, getApiUrl, getClientKey } from '../Settings';
+import { getAccessToken, getApiKey, getIntegratorKey, getStApiUrl } from '../Settings';
 import { ApiResponse } from './ApiResponse';
 
 export const axiosInstance: AxiosInstance = axios.create();
@@ -33,7 +33,7 @@ export async function put(url: string, requestData): Promise<ApiResponse> {
 
 function buildRequestConfig(requestData?: any): AxiosRequestConfig {
 	const requestConfig: AxiosRequestConfig = {
-		baseURL: getApiUrl(),
+		baseURL: getStApiUrl(),
 		headers: buildHeaders()
 	};
 
@@ -60,7 +60,7 @@ function buildHeaders() {
 	const accessToken = getAccessToken();
 	const headers = {};
 
-	const clientKey = getClientKey();
+	const clientKey = getIntegratorKey();
 
 	if (clientKey) {
 		headers['x-api-key'] = clientKey;

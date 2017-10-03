@@ -19,7 +19,7 @@ const TICK_INTERVAL = 5000;
 
 describe('ChangeWatcher', () => {
 	before((done) => {
-		setEnvironment('api', '987654321');
+		setEnvironment({ stApiUrl: 'api', integratorApiKey: '987654321' });
 		setUserSession(null, '12345');
 		done();
 	});

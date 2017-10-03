@@ -1,15 +1,26 @@
 import { TripConflictHandler } from '../Trip';
+import { Settings } from './Settings';
 
-let apiUrl: string;
-let clientKey: string;
+export { Settings } from './Settings';
 
+let stApiUrl: string;
+let ssoApiUrl: string;
+let integratorApiKey: string;
+
+let tripConflictHandler: null | TripConflictHandler;
 let apiKey: string | null;
 let accessToken: string | null;
-let tripConflictHandler: null | TripConflictHandler;
 
-export function setEnvironment(url: string, key: string): void {
-	apiUrl = url;
-	clientKey = key;
+export function setEnvironment(settings: Settings): void {
+	if (settings.stApiUrl) {
+		stApiUrl = settings.stApiUrl;
+	}
+	if (settings.ssoApiUrl) {
+		ssoApiUrl = settings.ssoApiUrl;
+	}
+	if (settings.integratorApiKey) {
+		integratorApiKey = settings.integratorApiKey;
+	}
 }
 
 export function setUserSession(key: string | null, token: string | null): void {
@@ -21,12 +32,12 @@ export function setUserSession(key: string | null, token: string | null): void {
 	}
 }
 
-export function getApiUrl() {
-	return apiUrl;
+export function getStApiUrl() {
+	return stApiUrl;
 }
 
-export function getClientKey() {
-	return clientKey;
+export function getIntegratorKey() {
+	return integratorApiKey;
 }
 
 export function getApiKey() {

@@ -1,4 +1,4 @@
-export function create(apiUrl: string, clientKey: string): StSDK;
+export function create(settings: Settings): StSDK;
 
 declare class ChangesModule {
 	public initializeChangesWatching(tickInterval: number): Promise<void>;
@@ -769,4 +769,11 @@ export namespace Collections {
 		limit?: number;
 		offset?: number;
 	}
+}
+
+export interface Settings {
+	stApiUrl?: string;
+	ssoApiUrl?: string;
+	ssoClientId?: string;
+	integratorApiKey?: string;
 }

@@ -13,7 +13,7 @@ chai.use(chaiAsPromised);
 
 describe('FavoritesController', () => {
 	before((done) => {
-		setEnvironment('api', '987654321');
+		setEnvironment({ stApiUrl: 'api', integratorApiKey: '987654321' });
 		done();
 	});
 
