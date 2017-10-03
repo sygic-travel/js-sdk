@@ -96,7 +96,7 @@ const mapTripDays = (trip): Day[] => trip.days.map((day) => ({
 } as Day));
 
 /**
- * @link https://confluence.sygic.com/display/STV/Sticky+Places+in+Itinerary
+ * See {@link https://confluence.sygic.com/display/STV/Sticky+Places+in+Itinerary}
  */
 export const resolveStickiness = (inputTrip: Trip, userSettings: UserSettings | null): Trip => {
 	const trip = cloneDeep(inputTrip);

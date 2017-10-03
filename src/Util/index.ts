@@ -26,7 +26,7 @@ function formatDate(inputDate: Date): string {
 }
 
 /**
- * @link https://gist.github.com/tristanlins/6585391
+ * See {@link https://gist.github.com/tristanlins/6585391}
  */
 export function dateToW3CString(date: Date): string {
 	const year: string = date.getFullYear().toString();
