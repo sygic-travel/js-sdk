@@ -9,8 +9,6 @@ let ssoClientId: string;
 let integratorApiKey: string;
 
 let tripConflictHandler: null | TripConflictHandler;
-let apiKey: string | null;
-let accessToken: string | null;
 
 export function setEnvironment(settings: Settings): void {
 	if (settings.stApiUrl) {
@@ -24,15 +22,6 @@ export function setEnvironment(settings: Settings): void {
 	}
 	if (settings.integratorApiKey) {
 		integratorApiKey = settings.integratorApiKey;
-	}
-}
-
-export function setUserSession(key: string | null, token: string | null): void {
-	if (key && token) {
-		throw Error('Can\'t set session with both key and token.');
-	} else {
-		apiKey = key;
-		accessToken = token;
 	}
 }
 

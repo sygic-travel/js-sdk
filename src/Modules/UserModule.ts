@@ -1,8 +1,15 @@
-import { getUserSettings, setUserSession, updateUserSettings, UserSettings } from '../User';
+import {
+	getUserSettings,
+	loginUserByDeviceId,
+	setUserSession,
+	updateUserSettings,
+	UserSession,
+	UserSettings,
+} from '../User';
 
 export default class UserModule {
-	public setUserSession(key: string | null, token: string | null): Promise<void> {
-		return setUserSession(key, token);
+	public setUserSession(userSession: UserSession|null): Promise<void> {
+		return setUserSession(userSession);
 	}
 
 	/**

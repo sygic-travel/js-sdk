@@ -6,7 +6,8 @@ import { SinonFakeTimers, SinonSandbox, SinonStub } from 'sinon';
 
 import { Changes } from '../../index';
 import { ApiResponse, StApi } from '../Api';
-import { setEnvironment, setUserSession } from '../Settings';
+import { setEnvironment } from '../Settings';
+import { setSession } from '../User/UserSession';
 import ChangeWatcher from './ChangeWatcher';
 import ChangeNotification = Changes.ChangeNotification;
 
@@ -20,7 +21,10 @@ const TICK_INTERVAL = 5000;
 describe('ChangeWatcher', () => {
 	before((done) => {
 		setEnvironment({ stApiUrl: 'api', integratorApiKey: '987654321' });
-		setUserSession(null, '12345');
+		setSession({
+			accessToken: '12345',
+			refreshToken: '54321',
+		});
 		done();
 	});
 

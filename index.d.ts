@@ -129,7 +129,7 @@ declare class TripModule {
 }
 
 declare class UserModule {
-	public setUserSession(key: string | null, token: string | null): Promise<void>;
+	public setUserSession(session: User.UserSession|null): Promise<void>;
 	public getUserSettings(): Promise<User.UserSettings>;
 	public updateUserSettings(settings: User.UserSettings): Promise<User.UserSettings>;
 }
@@ -712,6 +712,10 @@ export namespace User {
 	export interface UserSettings {
 		homePlaceId: string | null;
 		workPlaceId: string | null;
+	}
+	export interface UserSession {
+		accessToken: string;
+		refreshToken: string;
 	}
 }
 

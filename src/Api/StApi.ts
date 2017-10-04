@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { getAccessToken, getApiKey, getIntegratorKey, getStApiUrl } from '../Settings';
+import { getIntegratorKey, getStApiUrl } from '../Settings';
+import { getSession } from '../User';
 import { ApiResponse } from './ApiResponse';
 
 export const axiosInstance: AxiosInstance = axios.create();
@@ -12,22 +13,22 @@ axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
 });
 
 export async function get(url: string): Promise<ApiResponse> {
-	const response = await axiosInstance.get(decorateUrl(url, 'GET'), buildRequestConfig());
+	const response = await axiosInstance.get(url, buildRequestConfig());
 	return buildApiResponse(response);
 }
 
 export async function post(url: string, requestData): Promise<ApiResponse> {
-	const response = await axiosInstance.post(decorateUrl(url, 'POST'), requestData, buildRequestConfig());
+	const response = await axiosInstance.post(url, requestData, buildRequestConfig());
 	return buildApiResponse(response);
 }
 
 export async function delete_(url: string, requestData): Promise<ApiResponse> {
-	const response = await axiosInstance.delete(decorateUrl(url, 'DELETE'), buildRequestConfig(requestData));
+	const response = await axiosInstance.delete(url, buildRequestConfig(requestData));
 	return buildApiResponse(response);
 }
 
 export async function put(url: string, requestData): Promise<ApiResponse> {
-	const response = await axiosInstance.put(decorateUrl(url, 'PUT'), requestData, buildRequestConfig());
+	const response = await axiosInstance.put(url, requestData, buildRequestConfig());
 	return buildApiResponse(response);
 }
 
@@ -43,21 +44,8 @@ function buildRequestConfig(requestData?: any): AxiosRequestConfig {
 	return requestConfig;
 }
 
-function decorateUrl(url: string, method: string): string {
-	const apiKey: string | null = getApiKey();
-	if (!apiKey || (url.indexOf('places') > -1 && method === 'GET')) {
-		return url;
-	}
-
-	if (url.indexOf('?') > -1) {
-		return url + '&api_key=' + apiKey;
-	} else {
-		return url + '?api_key=' + apiKey;
-	}
-}
-
 function buildHeaders() {
-	const accessToken = getAccessToken();
+	const userSession = getSession();
 	const headers = {};
 
 	const clientKey = getIntegratorKey();
@@ -66,8 +54,8 @@ function buildHeaders() {
 		headers['x-api-key'] = clientKey;
 	}
 
-	if (accessToken) {
-		headers['Authorization'] = 'Bearer ' + accessToken;
+	if (userSession) {
+		headers['Authorization'] = 'Bearer ' + userSession.accessToken;
 	}
 
 	return headers;

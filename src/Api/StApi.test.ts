@@ -1,13 +1,12 @@
 import * as chai from 'chai';
 import * as Moxios from 'moxios';
 
-import { setEnvironment, setUserSession } from '../Settings';
+import { setEnvironment } from '../Settings';
+import { setUserSession } from '../User';
 import { axiosInstance, get, post, put } from './StApi';
 
 const testApiURL = 'https://test.api';
 const testClientKey = '987654321';
-
-const apiKey = '1234567890';
 const accessToken = '0987654321';
 
 describe('StApi', () => {
@@ -46,29 +45,16 @@ describe('StApi', () => {
 			});
 		});
 
-		it('should correctly set api key and call api with it', (done) => {
-			setUserSession(apiKey, null);
-			get('/');
-			Moxios.wait(() => {
-				const request = Moxios.requests.mostRecent();
-				chai.expect(request.url).to.equal(testApiURL + '/?api_key=' + apiKey);
-				done();
+		it('should correctly set access token and call api with it', async () => {
+			await setUserSession({
+				accessToken,
+				refreshToken: 'refresh_token'
 			});
-		});
-
-		it('should correctly set access token and call api with it', (done) => {
-			setUserSession(null, accessToken);
 			get('/');
 			Moxios.wait(() => {
 				const request = Moxios.requests.mostRecent();
 				chai.expect(request.headers['Authorization']).to.equal('Bearer ' + accessToken);
-				done();
 			});
-		});
-
-		it('should throw error when api key and access token set passed together', () => {
-			return chai.expect(() => setUserSession(apiKey, accessToken))
-				.to.throw('Can\'t set session with both key and token.');
 		});
 	});
 
@@ -91,18 +77,11 @@ describe('StApi', () => {
 			});
 		});
 
-		it('should correctly set api key and call api with it', (done) => {
-			setUserSession(apiKey, null);
-			post('/', null);
-			Moxios.wait(() => {
-				const request = Moxios.requests.mostRecent();
-				chai.expect(request.url).to.equal(testApiURL + '/?api_key=' + apiKey);
-				done();
-			});
-		});
-
 		it('should correctly set access token and call api with it', (done) => {
-			setUserSession(null, accessToken);
+			setUserSession({
+				accessToken,
+				refreshToken: 'refresh_token'
+			});
 			post('/', null);
 			Moxios.wait(() => {
 				const request = Moxios.requests.mostRecent();
@@ -131,18 +110,11 @@ describe('StApi', () => {
 			});
 		});
 
-		it('should correctly set api key and call api with it', (done) => {
-			setUserSession(apiKey, null);
-			put('/', null);
-			Moxios.wait(() => {
-				const request = Moxios.requests.mostRecent();
-				chai.expect(request.url).to.equal(testApiURL + '/?api_key=' + apiKey);
-				done();
-			});
-		});
-
 		it('should correctly set access token and call api with it', (done) => {
-			setUserSession(null, accessToken);
+			setUserSession({
+				accessToken,
+				refreshToken: 'refresh_token'
+			});
 			put('/', null);
 			Moxios.wait(() => {
 				const request = Moxios.requests.mostRecent();
