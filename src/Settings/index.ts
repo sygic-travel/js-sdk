@@ -5,6 +5,7 @@ export { Settings } from './Settings';
 
 let stApiUrl: string;
 let ssoApiUrl: string;
+let ssoClientId: string;
 let integratorApiKey: string;
 
 let tripConflictHandler: null | TripConflictHandler;
@@ -17,6 +18,9 @@ export function setEnvironment(settings: Settings): void {
 	}
 	if (settings.ssoApiUrl) {
 		ssoApiUrl = settings.ssoApiUrl;
+	}
+	if (settings.ssoClientId) {
+		ssoClientId = settings.ssoClientId;
 	}
 	if (settings.integratorApiKey) {
 		integratorApiKey = settings.integratorApiKey;
@@ -36,16 +40,16 @@ export function getStApiUrl() {
 	return stApiUrl;
 }
 
+export function getSsoApiUrl() {
+	return ssoApiUrl;
+}
+
+export function getSsoClientId() {
+	return ssoClientId;
+}
+
 export function getIntegratorKey() {
 	return integratorApiKey;
-}
-
-export function getApiKey() {
-	return apiKey;
-}
-
-export function getAccessToken() {
-	return accessToken;
 }
 
 export function setTripConflictHandler(handler: null | TripConflictHandler) {
