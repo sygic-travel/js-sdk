@@ -4,6 +4,7 @@ import {
 	loginUserByFacebook,
 	loginUserByGoogle,
 	loginUserByPassword,
+	registerUser,
 	setUserSession,
 	updateUserSettings,
 	Session,
@@ -65,5 +66,16 @@ export default class UserModule {
 		devicePlatform?: string
 	): Promise<void> {
 		return loginUserByGoogle(accessToken, authorizationCode, deviceId, devicePlatform);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public registerUser(
+		email: string,
+		password: string,
+		name: string
+	): Promise<void> {
+		return registerUser(email, password, name);
 	}
 }

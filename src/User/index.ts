@@ -70,3 +70,11 @@ export async function loginUserByGoogle(
 	);
 	setUserSession(session);
 }
+
+export async function registerUser(
+	email: string,
+	password: string,
+	name: string
+): Promise<void> {
+	await Dao.registerUser(email, password, name);
+}

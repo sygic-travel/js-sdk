@@ -74,6 +74,15 @@ describe('StApi', () => {
 				done();
 			});
 		});
+
+		it('should add Authorozation header if session is passed', (done) => {
+			post('/', {}, {accessToken: '123', refreshToken: '321'});
+			Moxios.wait(() => {
+				const request = Moxios.requests.mostRecent();
+				chai.expect(request.headers['Authorization']).to.equal('Bearer 123');
+				done();
+			});
+		});
 	});
 
 });

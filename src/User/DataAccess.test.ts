@@ -15,7 +15,7 @@ chai.use(chaiAsPromised);
 
 describe('UserDataAccess', () => {
 	before((done) => {
-		setEnvironment({ stApiUrl: 'api', integratorApiKey: '987654321' });
+		setEnvironment({ stApiUrl: 'api', integratorApiKey: '987654321', ssoClientId: 'sso_client_id' });
 		done();
 	});
 
@@ -198,6 +198,34 @@ describe('UserDataAccess', () => {
 					chai.expect(e.message).to.equal('Only one of accessToken, authorizationCode must be provided');
 					done();
 				});
+		});
+	});
+
+	describe('#registerUser', () => {
+		it('should call api properly', () => {
+			const response = {id: '132456'};
+			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post');
+
+			apiStub.withArgs('oauth2/token', { grant_type : 'client_credentials'})
+				.returns(new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(200, tokenData));
+				}));
+
+			apiStub.withArgs('user/register', {})
+				.returns(new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(200, response));
+				}));
+
+			return Dao.registerUser('email@example.com', '12345678', 'name').then((data) => {
+				chai.expect(apiStub.callCount).to.equal(2);
+				chai.expect(apiStub.getCall(0).args[0]).to.equal('oauth2/token');
+				chai.expect(apiStub.getCall(0).args[1]['grant_type']).to.equal('client_credentials');
+				chai.expect(apiStub.getCall(1).args[1]['username']).to.equal('email@example.com');
+				chai.expect(apiStub.getCall(1).args[1]['email']).to.equal('email@example.com');
+				chai.expect(apiStub.getCall(1).args[1]['password']).to.equal('12345678');
+				chai.expect(apiStub.getCall(1).args[1]['name']).to.equal('name');
+				chai.expect(apiStub.getCall(1).args[1]['email_is_verified']).to.be.false;
+			});
 		});
 	});
 });

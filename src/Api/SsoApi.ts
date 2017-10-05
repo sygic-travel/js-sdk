@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { getSsoApiUrl, getSsoClientId } from '../Settings';
+import { Session } from '../User/Session';
 import { ApiResponse } from './ApiResponse';
 
 export const axiosInstance: AxiosInstance = axios.create();
@@ -16,19 +17,25 @@ export async function get(url: string): Promise<ApiResponse> {
 	return buildApiResponse(response);
 }
 
-export async function post(url: string, requestData): Promise<ApiResponse> {
+export async function post(url: string, requestData, session?: Session): Promise<ApiResponse> {
 	if (requestData && !requestData.client_id) {
 		requestData.client_id = getSsoClientId();
 	}
-	const response = await axiosInstance.post(url, requestData, buildRequestConfig());
+	const response = await axiosInstance.post(url, requestData, buildRequestConfig(session));
 	return buildApiResponse(response);
 }
 
-function buildRequestConfig(): AxiosRequestConfig {
-	return {
+function buildRequestConfig(session?: Session): AxiosRequestConfig {
+	const config: AxiosRequestConfig = {
 		baseURL: getSsoApiUrl(),
-		headers: {'content-type': 'application/json'}
-	} as AxiosRequestConfig;
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	};
+	if (session) {
+		config.headers['Authorization'] =  `Bearer ${session.accessToken}`;
+	}
+	return config;
 }
 
 function buildApiResponse(response: AxiosResponse): ApiResponse {

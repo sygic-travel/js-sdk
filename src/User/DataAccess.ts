@@ -3,6 +3,7 @@ import { camelizeKeys, decamelizeKeys } from 'humps';
 import { Session, ThirdPartyAuthType, UserSettings } from '.';
 import { ApiResponse, SsoApi, StApi } from '../Api';
 import { userCache as userCache } from '../Cache';
+import { getClientSession as getClientSessionFromCache, setClientSession } from './Session';
 
 const SETTINGS_KEY = 'settings';
 
@@ -95,6 +96,22 @@ export async function getSessionByPassword(
 	return getSessionFromSso(request);
 }
 
+export async function registerUser(
+	email: string,
+	password: string,
+	name: string
+): Promise<void> {
+	const clientSession: Session = await getClientSession();
+	const request: any = {
+		username: email,
+		email_is_verified: false,
+		email,
+		password,
+		name
+	};
+	await SsoApi.post('user/register', request, clientSession);
+}
+
 async function getSessionFromSso(request): Promise<Session> {
 	const response: ApiResponse = await SsoApi.post('oauth2/token', request);
 	return {
@@ -111,4 +128,13 @@ async function getUserSettingsFromApi(): Promise<object> {
 	const result = apiResponse.data.settings;
 	await userCache.set(SETTINGS_KEY, result);
 	return result;
+}
+
+async function getClientSession(): Promise<Session> {
+	let clientSession: Session|null = getClientSessionFromCache();
+	if (!clientSession) {
+		clientSession = await getSessionFromSso({grant_type: 'client_credentials'});
+	}
+	setClientSession(clientSession);
+	return clientSession;
 }
