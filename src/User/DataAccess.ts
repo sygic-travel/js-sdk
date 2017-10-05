@@ -40,6 +40,32 @@ export async function getSessionByDeviceId(deviceId: string, devicePlatform?: st
 		request.device_platform = devicePlatform;
 	}
 
+	return getSessionFromSso(request);
+}
+
+export async function getSessionByPassword(
+	email: string,
+	password: string,
+	deviceId?: string,
+	devicePlatform?: string
+): Promise<UserSession> {
+	const request: any = {
+		grant_type: 'password',
+		username: email,
+		password
+	};
+
+	if (devicePlatform) {
+		request.device_platform = devicePlatform;
+	}
+	if (deviceId) {
+		request.device_code = deviceId;
+	}
+
+	return getSessionFromSso(request);
+}
+
+async function getSessionFromSso(request): Promise<UserSession> {
 	const response: ApiResponse = await SsoApi.post('oauth2/token', request);
 	return {
 		accessToken: response.data.access_token,

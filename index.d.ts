@@ -132,6 +132,8 @@ declare class UserModule {
 	public setUserSession(session: User.UserSession|null): Promise<void>;
 	public getUserSettings(): Promise<User.UserSettings>;
 	public updateUserSettings(settings: User.UserSettings): Promise<User.UserSettings>;
+	public loginUserByDeviceId(deviceId: string, devideCode?: string): Promise<void>;
+	public loginUserByPassword(email: string, password: string, deviceId?: string, devideCode?: string): Promise<void>;
 }
 
 declare class UtilityModule {

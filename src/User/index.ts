@@ -35,3 +35,15 @@ export async function loginUserByDeviceId(deviceId: string, devicePlatform?: str
 	const session: UserSession = await Dao.getSessionByDeviceId(deviceId, devicePlatform);
 	setUserSession(session);
 }
+
+export async function loginUserByPassword(
+	email: string,
+	password: string,
+	deviceId?: string,
+	devicePlatform?: string
+): Promise<void> {
+	const session: UserSession = await Dao.getSessionByPassword(email, password, deviceId, devicePlatform);
+	setUserSession(session);
+}
+	setUserSession(session);
+}

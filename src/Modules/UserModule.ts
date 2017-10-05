@@ -1,6 +1,7 @@
 import {
 	getUserSettings,
 	loginUserByDeviceId,
+	loginUserByPassword,
 	setUserSession,
 	updateUserSettings,
 	UserSession,
@@ -31,5 +32,12 @@ export default class UserModule {
 	 */
 	public loginUserByDeviceId(deviceId: string, devideCode?: string): Promise<void> {
 		return loginUserByDeviceId(deviceId, devideCode);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public loginUserByPassword(email: string, password: string, deviceId?: string, devideCode?: string): Promise<void> {
+		return loginUserByPassword(email, password, deviceId, devideCode);
 	}
 }
