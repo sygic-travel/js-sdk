@@ -25,4 +25,11 @@ export default class UserModule {
 	public updateUserSettings(settings: UserSettings): Promise<UserSettings> {
 		return updateUserSettings(settings);
 	}
+
+	/**
+	 * @experimental
+	 */
+	public loginUserByDeviceId(deviceId: string, devideCode?: string): Promise<void> {
+		return loginUserByDeviceId(deviceId, devideCode);
+	}
 }

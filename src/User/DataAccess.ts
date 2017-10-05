@@ -1,7 +1,7 @@
 import { camelizeKeys, decamelizeKeys } from 'humps';
 
-import { UserSettings } from '.';
-import { StApi } from '../Api';
+import { UserSession, UserSettings } from '.';
+import { ApiResponse, SsoApi, StApi } from '../Api';
 import { userCache as userCache } from '../Cache';
 
 const SETTINGS_KEY = 'settings';
@@ -11,7 +11,7 @@ export async function getUserSettings(): Promise<UserSettings> {
 	const fromCache: any = await userCache.get(SETTINGS_KEY);
 
 	if (!fromCache) {
-		result = await getFromApi();
+		result = await getUserSettingsFromApi();
 	} else {
 		result = fromCache;
 	}
@@ -27,10 +27,27 @@ export async function updateUserSettings(settings: UserSettings): Promise<UserSe
 }
 
 export async function handleSettingsChange(): Promise<void> {
-	await getFromApi();
+	await getUserSettingsFromApi();
 }
 
-async function getFromApi(): Promise<object> {
+export async function getSessionByDeviceId(deviceId: string, devicePlatform?: string): Promise<UserSession> {
+	const request: any = {
+		grant_type: 'client_credentials',
+		device_code: deviceId
+	};
+
+	if (devicePlatform) {
+		request.device_platform = devicePlatform;
+	}
+
+	const response: ApiResponse = await SsoApi.post('oauth2/token', request);
+	return {
+		accessToken: response.data.access_token,
+		refreshToken: response.data.refresh_token
+	} as UserSession;
+}
+
+async function getUserSettingsFromApi(): Promise<object> {
 	const apiResponse = await StApi.get('users/me');
 	if (!apiResponse.data.hasOwnProperty('settings')) {
 		throw new Error('Wrong API response');

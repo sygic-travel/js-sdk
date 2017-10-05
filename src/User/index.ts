@@ -30,3 +30,8 @@ export async function setUserSession(userSession: UserSession|null): Promise<voi
 export async function handleSettingsChange(): Promise<void> {
 	return Dao.handleSettingsChange();
 }
+
+export async function loginUserByDeviceId(deviceId: string, devicePlatform?: string): Promise<void> {
+	const session: UserSession = await Dao.getSessionByDeviceId(deviceId, devicePlatform);
+	setUserSession(session);
+}
