@@ -1,6 +1,6 @@
 import { camelizeKeys, decamelizeKeys } from 'humps';
 
-import { UserSession, UserSettings } from '.';
+import { ThirdPartyAuthType, UserSession, UserSettings } from '.';
 import { ApiResponse, SsoApi, StApi } from '../Api';
 import { userCache as userCache } from '../Cache';
 
@@ -38,6 +38,36 @@ export async function getSessionByDeviceId(deviceId: string, devicePlatform?: st
 
 	if (devicePlatform) {
 		request.device_platform = devicePlatform;
+	}
+
+	return getSessionFromSso(request);
+}
+
+export async function getSessionByThirdPartyAuth(
+	type: ThirdPartyAuthType,
+	accessToken: string|null,
+	authorizationCode: string|null,
+	deviceId?: string,
+	devicePlatform?: string
+): Promise<UserSession> {
+	if (accessToken && authorizationCode) {
+		throw new Error('Only one of accessToken, authorizationCode must be provided');
+	}
+
+	const request: any = {
+		grant_type: type
+	};
+	if (accessToken) {
+		request.access_token = accessToken;
+	}
+	if (authorizationCode) {
+		request.authorization_code = authorizationCode;
+	}
+	if (devicePlatform) {
+		request.device_platform = devicePlatform;
+	}
+	if (deviceId) {
+		request.device_code = deviceId;
 	}
 
 	return getSessionFromSso(request);

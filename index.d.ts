@@ -134,6 +134,18 @@ declare class UserModule {
 	public updateUserSettings(settings: User.UserSettings): Promise<User.UserSettings>;
 	public loginUserByDeviceId(deviceId: string, devideCode?: string): Promise<void>;
 	public loginUserByPassword(email: string, password: string, deviceId?: string, devideCode?: string): Promise<void>;
+	public loginUserByFacebook(
+		accessToken: string|null,
+		authorizationCode: string|null,
+		deviceId?: string,
+		devicePlatform?: string
+	): Promise<void>;
+	public loginUserByGoogle(
+		accessToken: string|null,
+		authorizationCode: string|null,
+		deviceId?: string,
+		devicePlatform?: string
+	): Promise<void>;
 }
 
 declare class UtilityModule {

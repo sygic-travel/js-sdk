@@ -1,11 +1,12 @@
 import { favoritesCache, tripsDetailedCache, userCache } from '../Cache';
 import { reset as resetChanges } from '../Changes';
 import * as Dao from './DataAccess';
-import { UserSettings } from './User';
+import { ThirdPartyAuthType, UserSettings } from './User';
 import { UserSession } from './UserSession';
 import * as UserSessionManager from './UserSession';
 
 export {
+	ThirdPartyAuthType,
 	UserSession,
 	UserSettings,
 };
@@ -45,5 +46,27 @@ export async function loginUserByPassword(
 	const session: UserSession = await Dao.getSessionByPassword(email, password, deviceId, devicePlatform);
 	setUserSession(session);
 }
+
+export async function loginUserByFacebook(
+	accessToken: string|null,
+	authorizationCode: string|null,
+	deviceId?: string,
+	devicePlatform?: string
+): Promise<void> {
+	const session: UserSession = await Dao.getSessionByThirdPartyAuth(
+		'facebook', accessToken, authorizationCode, deviceId, devicePlatform
+	);
+	setUserSession(session);
+}
+
+export async function loginUserByGoogle(
+	accessToken: string|null,
+	authorizationCode: string|null,
+	deviceId?: string,
+	devicePlatform?: string
+): Promise<void> {
+	const session: UserSession = await Dao.getSessionByThirdPartyAuth(
+		'google', accessToken, authorizationCode, deviceId, devicePlatform
+	);
 	setUserSession(session);
 }
