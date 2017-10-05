@@ -3,7 +3,7 @@ import * as chaiAsPromised from 'chai-as-promised';
 import { SinonSandbox, SinonStub } from 'sinon';
 import * as sinon from 'sinon';
 
-import { UserSession, UserSettings } from '.';
+import { Session, UserSettings } from '.';
 import { ApiResponse, SsoApi, StApi } from '../Api';
 import { userCache } from '../Cache';
 import { setEnvironment } from '../Settings';
@@ -85,7 +85,7 @@ describe('UserDataAccess', () => {
 			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, tokenData));
 			}));
-			const testSession: UserSession = {
+			const testSession: Session = {
 				accessToken: tokenData.access_token,
 				refreshToken: tokenData.refresh_token
 			};
@@ -114,7 +114,7 @@ describe('UserDataAccess', () => {
 			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, tokenData));
 			}));
-			const testSession: UserSession = {
+			const testSession: Session = {
 				accessToken: tokenData.access_token,
 				refreshToken: tokenData.refresh_token
 			};
@@ -146,7 +146,7 @@ describe('UserDataAccess', () => {
 			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, tokenData));
 			}));
-			const testSession: UserSession = {
+			const testSession: Session = {
 				accessToken: tokenData.access_token,
 				refreshToken: tokenData.refresh_token
 			};
@@ -166,7 +166,7 @@ describe('UserDataAccess', () => {
 			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, tokenData));
 			}));
-			const testSession: UserSession = {
+			const testSession: Session = {
 				accessToken: tokenData.access_token,
 				refreshToken: tokenData.refresh_token
 			};

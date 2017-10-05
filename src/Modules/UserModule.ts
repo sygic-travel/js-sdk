@@ -6,12 +6,12 @@ import {
 	loginUserByPassword,
 	setUserSession,
 	updateUserSettings,
-	UserSession,
+	Session,
 	UserSettings,
 } from '../User';
 
 export default class UserModule {
-	public setUserSession(userSession: UserSession|null): Promise<void> {
+	public setUserSession(userSession: Session|null): Promise<void> {
 		return setUserSession(userSession);
 	}
 

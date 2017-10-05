@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { getIntegratorKey, getStApiUrl } from '../Settings';
-import { getSession } from '../User';
+import { getUserSession } from '../User/Session';
 import { ApiResponse } from './ApiResponse';
 
 export const axiosInstance: AxiosInstance = axios.create();
@@ -45,7 +45,7 @@ function buildRequestConfig(requestData?: any): AxiosRequestConfig {
 }
 
 function buildHeaders() {
-	const userSession = getSession();
+	const userSession = getUserSession();
 	const headers = {};
 
 	const clientKey = getIntegratorKey();

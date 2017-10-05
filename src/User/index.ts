@@ -1,16 +1,16 @@
 import { favoritesCache, tripsDetailedCache, userCache } from '../Cache';
 import { reset as resetChanges } from '../Changes';
 import * as Dao from './DataAccess';
+import { Session } from './Session';
+import * as UserSessionManager from './Session';
 import { ThirdPartyAuthType, UserSettings } from './User';
-import { UserSession } from './UserSession';
-import * as UserSessionManager from './UserSession';
 
 export {
 	ThirdPartyAuthType,
-	UserSession,
+	Session,
 	UserSettings,
 };
-export { getSession } from './UserSession';
+export { getUserSession } from './Session';
 
 export async function getUserSettings(): Promise<UserSettings> {
 	return await Dao.getUserSettings();
@@ -20,12 +20,12 @@ export async function updateUserSettings(settings: UserSettings): Promise<UserSe
 	return await Dao.updateUserSettings(settings);
 }
 
-export async function setUserSession(userSession: UserSession|null): Promise<void> {
+export async function setUserSession(userSession: Session|null): Promise<void> {
 	await userCache.reset();
 	await favoritesCache.reset();
 	await tripsDetailedCache.reset();
 	resetChanges();
-	return UserSessionManager.setSession(userSession);
+	return UserSessionManager.setUserSession(userSession);
 }
 
 export async function handleSettingsChange(): Promise<void> {
@@ -33,7 +33,7 @@ export async function handleSettingsChange(): Promise<void> {
 }
 
 export async function loginUserByDeviceId(deviceId: string, devicePlatform?: string): Promise<void> {
-	const session: UserSession = await Dao.getSessionByDeviceId(deviceId, devicePlatform);
+	const session: Session = await Dao.getSessionByDeviceId(deviceId, devicePlatform);
 	setUserSession(session);
 }
 
@@ -43,7 +43,7 @@ export async function loginUserByPassword(
 	deviceId?: string,
 	devicePlatform?: string
 ): Promise<void> {
-	const session: UserSession = await Dao.getSessionByPassword(email, password, deviceId, devicePlatform);
+	const session: Session = await Dao.getSessionByPassword(email, password, deviceId, devicePlatform);
 	setUserSession(session);
 }
 
@@ -53,7 +53,7 @@ export async function loginUserByFacebook(
 	deviceId?: string,
 	devicePlatform?: string
 ): Promise<void> {
-	const session: UserSession = await Dao.getSessionByThirdPartyAuth(
+	const session: Session = await Dao.getSessionByThirdPartyAuth(
 		'facebook', accessToken, authorizationCode, deviceId, devicePlatform
 	);
 	setUserSession(session);
@@ -65,7 +65,7 @@ export async function loginUserByGoogle(
 	deviceId?: string,
 	devicePlatform?: string
 ): Promise<void> {
-	const session: UserSession = await Dao.getSessionByThirdPartyAuth(
+	const session: Session = await Dao.getSessionByThirdPartyAuth(
 		'google', accessToken, authorizationCode, deviceId, devicePlatform
 	);
 	setUserSession(session);

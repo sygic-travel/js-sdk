@@ -1,7 +1,7 @@
 import { stringify } from 'query-string';
 
 import { ApiResponse, StApi } from '../Api';
-import { getSession} from '../User';
+import { getUserSession} from '../User/Session';
 import { ChangeNotification } from './ChangeNotification';
 
 export default class ChangeWatcher {
@@ -24,7 +24,7 @@ export default class ChangeWatcher {
 	}
 
 	private async checkChanges(): Promise<void> {
-		if (!getSession()) {
+		if (!getUserSession()) {
 			return;
 		}
 		const changesNotifications: ChangeNotification[] = await this.getChangesFromApi();

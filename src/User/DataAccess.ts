@@ -1,6 +1,6 @@
 import { camelizeKeys, decamelizeKeys } from 'humps';
 
-import { ThirdPartyAuthType, UserSession, UserSettings } from '.';
+import { Session, ThirdPartyAuthType, UserSettings } from '.';
 import { ApiResponse, SsoApi, StApi } from '../Api';
 import { userCache as userCache } from '../Cache';
 
@@ -30,7 +30,7 @@ export async function handleSettingsChange(): Promise<void> {
 	await getUserSettingsFromApi();
 }
 
-export async function getSessionByDeviceId(deviceId: string, devicePlatform?: string): Promise<UserSession> {
+export async function getSessionByDeviceId(deviceId: string, devicePlatform?: string): Promise<Session> {
 	const request: any = {
 		grant_type: 'client_credentials',
 		device_code: deviceId
@@ -49,7 +49,7 @@ export async function getSessionByThirdPartyAuth(
 	authorizationCode: string|null,
 	deviceId?: string,
 	devicePlatform?: string
-): Promise<UserSession> {
+): Promise<Session> {
 	if (accessToken && authorizationCode) {
 		throw new Error('Only one of accessToken, authorizationCode must be provided');
 	}
@@ -78,7 +78,7 @@ export async function getSessionByPassword(
 	password: string,
 	deviceId?: string,
 	devicePlatform?: string
-): Promise<UserSession> {
+): Promise<Session> {
 	const request: any = {
 		grant_type: 'password',
 		username: email,
@@ -95,12 +95,12 @@ export async function getSessionByPassword(
 	return getSessionFromSso(request);
 }
 
-async function getSessionFromSso(request): Promise<UserSession> {
+async function getSessionFromSso(request): Promise<Session> {
 	const response: ApiResponse = await SsoApi.post('oauth2/token', request);
 	return {
 		accessToken: response.data.access_token,
 		refreshToken: response.data.refresh_token
-	} as UserSession;
+	} as Session;
 }
 
 async function getUserSettingsFromApi(): Promise<object> {

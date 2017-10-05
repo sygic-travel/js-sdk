@@ -7,7 +7,7 @@ import { ApiResponse, StApi } from '../Api';
 import { initializeChangesWatching, setChangesCallback, stopChangesWatching } from '.';
 import { favoritesCache, tripsDetailedCache } from '../Cache';
 import { setEnvironment } from '../Settings';
-import { setSession } from '../User/UserSession';
+import { setUserSession } from '../User/Session';
 import { ChangeNotification } from './ChangeNotification';
 
 chai.use(chaiAsPromised);
@@ -18,7 +18,7 @@ let clock: SinonFakeTimers;
 describe('ChangesController', () => {
 	before((done) => {
 		setEnvironment({ stApiUrl: 'api', integratorApiKey: '987654321' });
-		setSession({
+		setUserSession({
 			accessToken: '12345',
 			refreshToken: '54321'
 		});

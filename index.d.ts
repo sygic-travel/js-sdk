@@ -129,11 +129,12 @@ declare class TripModule {
 }
 
 declare class UserModule {
-	public setUserSession(session: User.UserSession|null): Promise<void>;
+	public setUserSession(session: User.Session|null): Promise<void>;
 	public getUserSettings(): Promise<User.UserSettings>;
 	public updateUserSettings(settings: User.UserSettings): Promise<User.UserSettings>;
 	public loginUserByDeviceId(deviceId: string, devideCode?: string): Promise<void>;
 	public loginUserByPassword(email: string, password: string, deviceId?: string, devideCode?: string): Promise<void>;
+	public registerUser(email: string, password: string, name: string): Promise<void>;
 	public loginUserByFacebook(
 		accessToken: string|null,
 		authorizationCode: string|null,
@@ -727,7 +728,7 @@ export namespace User {
 		homePlaceId: string | null;
 		workPlaceId: string | null;
 	}
-	export interface UserSession {
+	export interface Session {
 		accessToken: string;
 		refreshToken: string;
 	}
