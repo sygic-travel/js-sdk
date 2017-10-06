@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { getIntegratorKey, getStApiUrl } from '../Settings';
-import { getUserSession } from '../User/Session';
+import { getUserSession } from '../User';
 import { ApiResponse } from './ApiResponse';
 
 export const axiosInstance: AxiosInstance = axios.create();
@@ -13,29 +13,29 @@ axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
 });
 
 export async function get(url: string): Promise<ApiResponse> {
-	const response = await axiosInstance.get(url, buildRequestConfig());
+	const response = await axiosInstance.get(url, await buildRequestConfig());
 	return buildApiResponse(response);
 }
 
 export async function post(url: string, requestData): Promise<ApiResponse> {
-	const response = await axiosInstance.post(url, requestData, buildRequestConfig());
+	const response = await axiosInstance.post(url, requestData, await buildRequestConfig());
 	return buildApiResponse(response);
 }
 
 export async function delete_(url: string, requestData): Promise<ApiResponse> {
-	const response = await axiosInstance.delete(url, buildRequestConfig(requestData));
+	const response = await axiosInstance.delete(url, await buildRequestConfig(requestData));
 	return buildApiResponse(response);
 }
 
 export async function put(url: string, requestData): Promise<ApiResponse> {
-	const response = await axiosInstance.put(url, requestData, buildRequestConfig());
+	const response = await axiosInstance.put(url, requestData, await buildRequestConfig());
 	return buildApiResponse(response);
 }
 
-function buildRequestConfig(requestData?: any): AxiosRequestConfig {
+async function buildRequestConfig(requestData?: any): Promise<AxiosRequestConfig> {
 	const requestConfig: AxiosRequestConfig = {
 		baseURL: getStApiUrl(),
-		headers: buildHeaders()
+		headers: await buildHeaders()
 	};
 
 	if (requestData) {
@@ -44,8 +44,8 @@ function buildRequestConfig(requestData?: any): AxiosRequestConfig {
 	return requestConfig;
 }
 
-function buildHeaders() {
-	const userSession = getUserSession();
+async function buildHeaders(): Promise<any> {
+	const userSession = await getUserSession();
 	const headers = {};
 
 	const clientKey = getIntegratorKey();

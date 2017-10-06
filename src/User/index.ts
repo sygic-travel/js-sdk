@@ -2,7 +2,6 @@ import { favoritesCache, tripsDetailedCache, userCache } from '../Cache';
 import { reset as resetChanges } from '../Changes';
 import * as Dao from './DataAccess';
 import { Session } from './Session';
-import * as UserSessionManager from './Session';
 import { ThirdPartyAuthType, UserSettings } from './User';
 
 export {
@@ -10,7 +9,7 @@ export {
 	Session,
 	UserSettings,
 };
-export { getUserSession } from './Session';
+export { getUserSession } from './DataAccess';
 
 export async function getUserSettings(): Promise<UserSettings> {
 	return await Dao.getUserSettings();
@@ -25,7 +24,7 @@ export async function setUserSession(userSession: Session|null): Promise<void> {
 	await favoritesCache.reset();
 	await tripsDetailedCache.reset();
 	resetChanges();
-	return UserSessionManager.setUserSession(userSession);
+	await Dao.setUserSession(userSession);
 }
 
 export async function handleSettingsChange(): Promise<void> {

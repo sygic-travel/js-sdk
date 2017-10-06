@@ -2,10 +2,11 @@ import { camelizeKeys, decamelizeKeys } from 'humps';
 
 import { Session, ThirdPartyAuthType, UserSettings } from '.';
 import { ApiResponse, SsoApi, StApi } from '../Api';
-import { userCache as userCache } from '../Cache';
-import { getClientSession as getClientSessionFromCache, setClientSession } from './Session';
+import { sessionCache, userCache } from '../Cache';
 
 const SETTINGS_KEY = 'settings';
+const CLIENT_SESSION_KEY = 'client_session';
+const USER_SESSION_KEY = 'user_session';
 
 export async function getUserSettings(): Promise<UserSettings> {
 	let result: any = null;
@@ -18,6 +19,14 @@ export async function getUserSettings(): Promise<UserSettings> {
 	}
 
 	return camelizeKeys(result) as UserSettings;
+}
+
+export async function getUserSession(): Promise<Session|null> {
+	return sessionCache.get(USER_SESSION_KEY);
+}
+
+export async function setUserSession(session: Session|null): Promise<void> {
+	return sessionCache.set(USER_SESSION_KEY, session);
 }
 
 export async function updateUserSettings(settings: UserSettings): Promise<UserSettings> {
@@ -131,10 +140,10 @@ async function getUserSettingsFromApi(): Promise<object> {
 }
 
 async function getClientSession(): Promise<Session> {
-	let clientSession: Session|null = getClientSessionFromCache();
+	let clientSession: Session = await sessionCache.get(CLIENT_SESSION_KEY);
 	if (!clientSession) {
 		clientSession = await getSessionFromSso({grant_type: 'client_credentials'});
 	}
-	setClientSession(clientSession);
+	await sessionCache.set(CLIENT_SESSION_KEY, clientSession);
 	return clientSession;
 }

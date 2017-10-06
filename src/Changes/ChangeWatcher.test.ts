@@ -7,7 +7,7 @@ import { SinonFakeTimers, SinonSandbox, SinonStub } from 'sinon';
 import { Changes } from '../../index';
 import { ApiResponse, StApi } from '../Api';
 import { setEnvironment } from '../Settings';
-import { setUserSession } from '../User/Session';
+import { setUserSession } from '../User/DataAccess';
 import ChangeWatcher from './ChangeWatcher';
 import ChangeNotification = Changes.ChangeNotification;
 
@@ -19,13 +19,12 @@ let changeWatcher: ChangeWatcher;
 const TICK_INTERVAL = 5000;
 
 describe('ChangeWatcher', () => {
-	before((done) => {
+	before(async () => {
 		setEnvironment({ stApiUrl: 'api', integratorApiKey: '987654321' });
-		setUserSession({
+		await setUserSession({
 			accessToken: '12345',
 			refreshToken: '54321',
 		});
-		done();
 	});
 
 	beforeEach(() => {
@@ -39,18 +38,26 @@ describe('ChangeWatcher', () => {
 	});
 
 	describe('#start', () => {
-		it('should start changes watch and check for changes on api multiple times', async () => {
+		it('should start changes watch and check for changes on api multiple times', (done) => {
 			changeWatcher = new ChangeWatcher(TICK_INTERVAL, () => {});
-
-			const stub: SinonStub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
-				resolve(new ApiResponse(200, {
-					changes: ''
+			let callCount = 0;
+			const stub: SinonStub = sandbox.stub(StApi, 'get').callsFake(() => {
+				callCount++;
+				return(new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(200, {
+						changes: ''
+					}));
 				}));
-			}));
+			});
 
-			await changeWatcher.start();
-			clock.tick(24000);
-			return chai.expect(stub.callCount).to.be.eq(5);
+			changeWatcher.start().then(() => {
+				clock.tick(24000);
+				clock.restore();
+				setTimeout(() => {
+					chai.expect(stub.callCount).to.be.equal(5);
+					done();
+				}, 100);
+			});
 		});
 
 		it('should start changes watch and get initial changes', (done) => {
@@ -99,7 +106,7 @@ describe('ChangeWatcher', () => {
 	});
 
 	describe('#kill', () => {
-		it('should stop changes watching', async () => {
+		it('should stop changes watching', (done) => {
 			changeWatcher = new ChangeWatcher(TICK_INTERVAL, () => {});
 			const stub: SinonStub = sandbox.stub(StApi, 'get').callsFake((): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
@@ -109,12 +116,17 @@ describe('ChangeWatcher', () => {
 				});
 			});
 
-			await changeWatcher.start();
-			clock.tick(24000);
-			chai.expect(stub.callCount).to.be.eq(5);
-			changeWatcher.kill();
-			clock.tick(10000);
-			return chai.expect(stub.callCount).to.be.eq(5);
+			changeWatcher.start().then(() => {
+				clock.tick(24000);
+				changeWatcher.kill();
+				clock.tick(10000);
+				clock.restore();
+				setTimeout(() => {
+					chai.expect(stub.callCount).to.be.eq(5);
+					done();
+				}, 100);
+
+			});
 		});
 	});
 });

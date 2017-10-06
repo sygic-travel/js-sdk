@@ -5,7 +5,7 @@ import { setEnvironment } from '../Settings';
 import { axiosInstance, get, post } from './SsoApi';
 
 const testApiURL = 'https://test.api/';
-const ssoClient = 'sso_client'
+const ssoClient = 'sso_client';
 
 describe('StApi', () => {
 	before((done) => {
