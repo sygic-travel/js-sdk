@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "webpack-dev-server",
     "build": "webpack --config ./webpack.prod.config.js",
-    "test": "mocha-webpack --webpack-config webpack.config.js \"src/**/*.test.ts\" --reporter \"list\"",
+    "test": "mocha-webpack --webpack-config webpack.config.js \"src/**/*.test.ts\" --reporter \"list\" --timeout 5000",
     "test-watch": "mocha-webpack --watch --webpack-config webpack.config.js \"src/**/*.test.ts\" --reporter \"list\"",
     "doc": "typedoc --out ./doc --excludeExternals --exclude \"**/*+(.test).ts\""
   },
