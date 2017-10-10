@@ -15,7 +15,7 @@ export function isThirdPartyAuthType(val: any): val is ThirdPartyAuthType {
 export type ThirdPartyAuthType = keyof typeof thirdPartyAuthTypes;
 
 export interface UserInfo {
-	id: number;
+	id: string;
 	name: string|null;
 	email: string|null;
 	roles: string[];
@@ -29,5 +29,5 @@ export interface UserInfo {
 export interface UserLicence {
 	isActive: boolean;
 	name: string;
-	expirationAt: string;
+	expirationAt: string|null;
 }

@@ -2,12 +2,14 @@ import { favoritesCache, tripsDetailedCache, userCache } from '../Cache';
 import { reset as resetChanges } from '../Changes';
 import * as Dao from './DataAccess';
 import { Session } from './Session';
-import { ThirdPartyAuthType, UserSettings } from './User';
+import { ThirdPartyAuthType, UserInfo, UserLicence, UserSettings } from './User';
 
 export {
 	ThirdPartyAuthType,
 	Session,
-	UserSettings,
+	UserInfo,
+	UserLicence,
+	UserSettings
 };
 export { getUserSession } from './DataAccess';
 
@@ -76,4 +78,12 @@ export async function registerUser(
 	name: string
 ): Promise<void> {
 	await Dao.registerUser(email, password, name);
+}
+
+export async function getUserInfo(): Promise<UserInfo> {
+	const session = await Dao.getUserSession();
+	if (!session) {
+		throw new Error('User session is not set');
+	}
+	return Dao.getUserInfo();
 }

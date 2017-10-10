@@ -1,13 +1,15 @@
 import {
+	getUserInfo,
 	getUserSettings,
 	loginUserWithDeviceId,
 	loginUserWithFacebook,
 	loginUserWithGoogle,
 	loginUserWithPassword,
 	registerUser,
+	Session,
 	setUserSession,
 	updateUserSettings,
-	Session,
+	UserInfo,
 	UserSettings,
 } from '../User';
 
@@ -77,5 +79,12 @@ export default class UserModule {
 		name: string
 	): Promise<void> {
 		return registerUser(email, password, name);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public getUserInfo(): Promise<UserInfo> {
+		return getUserInfo();
 	}
 }
