@@ -40,7 +40,7 @@ export async function handleSettingsChange(): Promise<void> {
 	await getUserSettingsFromApi();
 }
 
-export async function getSessionByDeviceId(deviceId: string, devicePlatform?: string): Promise<Session> {
+export async function getSessionWithDeviceId(deviceId: string, devicePlatform?: string): Promise<Session> {
 	const request: any = {
 		grant_type: 'client_credentials',
 		device_code: deviceId
@@ -53,7 +53,7 @@ export async function getSessionByDeviceId(deviceId: string, devicePlatform?: st
 	return getSessionFromSso(request);
 }
 
-export async function getSessionByThirdPartyAuth(
+export async function getSessionWithThirdPartyAuth(
 	type: ThirdPartyAuthType,
 	accessToken: string|null,
 	authorizationCode: string|null,
@@ -83,7 +83,7 @@ export async function getSessionByThirdPartyAuth(
 	return getSessionFromSso(request);
 }
 
-export async function getSessionByPassword(
+export async function getSessionWithPassword(
 	email: string,
 	password: string,
 	deviceId?: string,

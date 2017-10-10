@@ -1,9 +1,9 @@
 import {
 	getUserSettings,
-	loginUserByDeviceId,
-	loginUserByFacebook,
-	loginUserByGoogle,
-	loginUserByPassword,
+	loginUserWithDeviceId,
+	loginUserWithFacebook,
+	loginUserWithGoogle,
+	loginUserWithPassword,
 	registerUser,
 	setUserSession,
 	updateUserSettings,
@@ -33,39 +33,39 @@ export default class UserModule {
 	/**
 	 * @experimental
 	 */
-	public loginUserByDeviceId(deviceId: string, devideCode?: string): Promise<void> {
-		return loginUserByDeviceId(deviceId, devideCode);
+	public loginUserWithDeviceId(deviceId: string, devideCode?: string): Promise<void> {
+		return loginUserWithDeviceId(deviceId, devideCode);
 	}
 
 	/**
 	 * @experimental
 	 */
-	public loginUserByPassword(email: string, password: string, deviceId?: string, devideCode?: string): Promise<void> {
-		return loginUserByPassword(email, password, deviceId, devideCode);
+	public loginUserWithPassword(email: string, password: string, deviceId?: string, devideCode?: string): Promise<void> {
+		return loginUserWithPassword(email, password, deviceId, devideCode);
 	}
 
 	/**
 	 * @experimental
 	 */
-	public loginUserByFacebook(
+	public loginUserWithFacebook(
 		accessToken: string|null,
 		authorizationCode: string|null,
 		deviceId?: string,
 		devicePlatform?: string
 	): Promise<void> {
-		return loginUserByFacebook(accessToken, authorizationCode, deviceId, devicePlatform);
+		return loginUserWithFacebook(accessToken, authorizationCode, deviceId, devicePlatform);
 	}
 
 	/**
 	 * @experimental
 	 */
-	public loginUserByGoogle(
+	public loginUserWithGoogle(
 		accessToken: string|null,
 		authorizationCode: string|null,
 		deviceId?: string,
 		devicePlatform?: string
 	): Promise<void> {
-		return loginUserByGoogle(accessToken, authorizationCode, deviceId, devicePlatform);
+		return loginUserWithGoogle(accessToken, authorizationCode, deviceId, devicePlatform);
 	}
 
 	/**

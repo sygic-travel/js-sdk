@@ -132,16 +132,16 @@ declare class UserModule {
 	public setUserSession(session: User.Session|null): Promise<void>;
 	public getUserSettings(): Promise<User.UserSettings>;
 	public updateUserSettings(settings: User.UserSettings): Promise<User.UserSettings>;
-	public loginUserByDeviceId(deviceId: string, devideCode?: string): Promise<void>;
-	public loginUserByPassword(email: string, password: string, deviceId?: string, devideCode?: string): Promise<void>;
+	public loginUserWithDeviceId(deviceId: string, devideCode?: string): Promise<void>;
+	public loginUserWithPassword(email: string, password: string, deviceId?: string, devideCode?: string): Promise<void>;
 	public registerUser(email: string, password: string, name: string): Promise<void>;
-	public loginUserByFacebook(
+	public loginUserWithFacebook(
 		accessToken: string|null,
 		authorizationCode: string|null,
 		deviceId?: string,
 		devicePlatform?: string
 	): Promise<void>;
-	public loginUserByGoogle(
+	public loginUserWithGoogle(
 		accessToken: string|null,
 		authorizationCode: string|null,
 		deviceId?: string,
