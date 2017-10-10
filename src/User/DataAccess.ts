@@ -1,6 +1,6 @@
 import { camelizeKeys, decamelizeKeys } from 'humps';
 
-import { Session, ThirdPartyAuthType, UserSettings } from '.';
+import { Session, ThirdPartyAuthType, UserInfo, UserLicence, UserSettings } from '.';
 import { ApiResponse, SsoApi, StApi } from '../Api';
 import { sessionCache, userCache } from '../Cache';
 
@@ -119,6 +119,31 @@ export async function registerUser(
 		name
 	};
 	await SsoApi.post('user/register', request, clientSession);
+}
+
+export async function getUserInfo(): Promise<UserInfo> {
+	const apiResponse = await StApi.get('user/info');
+	if (!apiResponse.data.hasOwnProperty('user')) {
+		throw new Error('Wrong API response');
+	}
+	const userData = apiResponse.data.user;
+	const licence: UserLicence|null = userData.premium ? {
+		name: userData.premium.name,
+		expirationAt: userData.premium.expiration_at,
+		isActive: userData.premium.is_active,
+	} : null;
+
+	return {
+		id: userData.id,
+		name: userData.name,
+		email: userData.email,
+		isEmailSubscribed: userData.is_email_subscribed,
+		isRegistered: userData.is_registered,
+		photoUrl: userData.photo ? userData.photo.url : null,
+		dateCreated: userData.created_date,
+		roles: userData.roles,
+		licence
+	} as UserInfo;
 }
 
 async function getSessionFromSso(request): Promise<Session> {

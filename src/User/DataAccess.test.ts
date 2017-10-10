@@ -8,7 +8,10 @@ import { ApiResponse, SsoApi, StApi } from '../Api';
 import { userCache } from '../Cache';
 import { setEnvironment } from '../Settings';
 import { tokenData } from '../TestData/SsoApiResponses';
+import { userInfo as userInfoApiResponse } from '../TestData/UserInfoApiResponse';
+import { userInfo as userInfoResult } from '../TestData/UserInfoExpectedResults';
 import * as Dao from './DataAccess';
+import {UserInfo} from "./User";
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
@@ -226,6 +229,21 @@ describe('UserDataAccess', () => {
 				chai.expect(apiStub.getCall(1).args[1]['name']).to.equal('name');
 				chai.expect(apiStub.getCall(1).args[1]['email_is_verified']).to.be.false;
 			});
+		});
+	});
+
+	describe('#getUserInfo', () => {
+		it('should call api and handle result for active session', async () => {
+			await Dao.setUserSession({
+				accessToken: '123',
+				refreshToken: '321'
+			});
+			sandbox.stub(StApi, 'get').withArgs('user/info')
+				.returns(new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(200, userInfoApiResponse));
+				}));
+			const userInfo: UserInfo|null = await Dao.getUserInfo();
+			chai.expect(userInfo).deep.equal(userInfoResult);
 		});
 	});
 });
