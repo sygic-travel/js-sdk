@@ -1,4 +1,4 @@
-export function create(apiUrl: string, clientKey: string): StSDK;
+export function create(settings: Settings): StSDK;
 
 declare class ChangesModule {
 	public initializeChangesWatching(tickInterval: number): Promise<void>;
@@ -129,9 +129,24 @@ declare class TripModule {
 }
 
 declare class UserModule {
-	public setUserSession(key: string | null, token: string | null): Promise<void>;
+	public setUserSession(session: User.Session|null): Promise<void>;
 	public getUserSettings(): Promise<User.UserSettings>;
 	public updateUserSettings(settings: User.UserSettings): Promise<User.UserSettings>;
+	public loginUserWithDeviceId(deviceId: string, devideCode?: string): Promise<void>;
+	public loginUserWithPassword(email: string, password: string, deviceId?: string, devideCode?: string): Promise<void>;
+	public registerUser(email: string, password: string, name: string): Promise<void>;
+	public loginUserWithFacebook(
+		accessToken: string|null,
+		authorizationCode: string|null,
+		deviceId?: string,
+		devicePlatform?: string
+	): Promise<void>;
+	public loginUserWithGoogle(
+		accessToken: string|null,
+		authorizationCode: string|null,
+		deviceId?: string,
+		devicePlatform?: string
+	): Promise<void>;
 }
 
 declare class UtilityModule {
@@ -713,6 +728,10 @@ export namespace User {
 		homePlaceId: string | null;
 		workPlaceId: string | null;
 	}
+	export interface Session {
+		accessToken: string;
+		refreshToken: string;
+	}
 }
 
 export namespace Changes {
@@ -769,4 +788,11 @@ export namespace Collections {
 		limit?: number;
 		offset?: number;
 	}
+}
+
+export interface Settings {
+	stApiUrl?: string;
+	ssoApiUrl?: string;
+	ssoClientId?: string;
+	integratorApiKey?: string;
 }

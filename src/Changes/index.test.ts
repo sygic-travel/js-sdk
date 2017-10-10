@@ -6,7 +6,8 @@ import { ApiResponse, StApi } from '../Api';
 
 import { initializeChangesWatching, setChangesCallback, stopChangesWatching } from '.';
 import { favoritesCache, tripsDetailedCache } from '../Cache';
-import { setEnvironment, setUserSession } from '../Settings';
+import { setEnvironment } from '../Settings';
+import { setUserSession } from '../User/DataAccess';
 import { ChangeNotification } from './ChangeNotification';
 
 chai.use(chaiAsPromised);
@@ -16,8 +17,11 @@ let clock: SinonFakeTimers;
 
 describe('ChangesController', () => {
 	before((done) => {
-		setEnvironment('api', '987654321');
-		setUserSession(null, '12345');
+		setEnvironment({ stApiUrl: 'api', integratorApiKey: '987654321' });
+		setUserSession({
+			accessToken: '12345',
+			refreshToken: '54321'
+		});
 		done();
 	});
 
@@ -39,7 +43,7 @@ describe('ChangesController', () => {
 			return chai.expect(initializeChangesWatching(1000)).to.be.rejected;
 		});
 
-		it('should start changes watch and check for changes multiple times', async () => {
+		it('should start changes watch and check for changes multiple times', (done) => {
 			const stub: SinonStub = sandbox.stub(StApi, 'get').callsFake((): Promise<ApiResponse> => {
 				return new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, {
@@ -47,9 +51,14 @@ describe('ChangesController', () => {
 					}));
 				});
 			});
-			await initializeChangesWatching(5000);
-			clock.tick(24000);
-			chai.expect(stub.callCount).to.be.eq(5);
+			initializeChangesWatching(5000).then(() => {
+				clock.tick(24000);
+				clock.restore();
+				setTimeout(() => {
+					chai.expect(stub.callCount).to.be.eq(5);
+					done();
+				}, 100);
+			});
 		});
 	});
 

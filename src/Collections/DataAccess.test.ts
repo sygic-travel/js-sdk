@@ -20,7 +20,7 @@ chai.use(chaiAsPromised);
 
 describe('CollectionsDataAccess', () => {
 	before((done) => {
-		setEnvironment('api', '987654321');
+		setEnvironment({ stApiUrl: 'api', integratorApiKey: '987654321' });
 		done();
 	});
 

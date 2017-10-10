@@ -1,7 +1,7 @@
-import { setEnvironment } from './Settings';
+import { setEnvironment, Settings } from './Settings';
 
 export abstract class BaseSDK {
-	constructor(apiUrl: string, clientKey: string) {
-		setEnvironment(apiUrl, clientKey);
+	constructor(settings: Settings) {
+		setEnvironment(settings);
 	}
 }

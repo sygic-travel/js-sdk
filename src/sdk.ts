@@ -1,5 +1,6 @@
+import { Settings } from './Settings';
 import StSDK from './StSDK';
 
-export function create(apiUrl: string, clientKey: string): StSDK {
-	return new StSDK(apiUrl, clientKey);
+export function create(settings: Settings): StSDK {
+	return new StSDK(settings);
 }

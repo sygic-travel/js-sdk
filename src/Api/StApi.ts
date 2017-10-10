@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { getAccessToken, getApiKey, getApiUrl, getClientKey } from '../Settings';
+import { getIntegratorKey, getStApiUrl } from '../Settings';
+import { getUserSession } from '../User';
 import { ApiResponse } from './ApiResponse';
 
 export const axiosInstance: AxiosInstance = axios.create();
@@ -12,29 +13,29 @@ axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
 });
 
 export async function get(url: string): Promise<ApiResponse> {
-	const response = await axiosInstance.get(decorateUrl(url, 'GET'), buildRequestConfig());
+	const response = await axiosInstance.get(url, await buildRequestConfig());
 	return buildApiResponse(response);
 }
 
 export async function post(url: string, requestData): Promise<ApiResponse> {
-	const response = await axiosInstance.post(decorateUrl(url, 'POST'), requestData, buildRequestConfig());
+	const response = await axiosInstance.post(url, requestData, await buildRequestConfig());
 	return buildApiResponse(response);
 }
 
 export async function delete_(url: string, requestData): Promise<ApiResponse> {
-	const response = await axiosInstance.delete(decorateUrl(url, 'DELETE'), buildRequestConfig(requestData));
+	const response = await axiosInstance.delete(url, await buildRequestConfig(requestData));
 	return buildApiResponse(response);
 }
 
 export async function put(url: string, requestData): Promise<ApiResponse> {
-	const response = await axiosInstance.put(decorateUrl(url, 'PUT'), requestData, buildRequestConfig());
+	const response = await axiosInstance.put(url, requestData, await buildRequestConfig());
 	return buildApiResponse(response);
 }
 
-function buildRequestConfig(requestData?: any): AxiosRequestConfig {
+async function buildRequestConfig(requestData?: any): Promise<AxiosRequestConfig> {
 	const requestConfig: AxiosRequestConfig = {
-		baseURL: getApiUrl(),
-		headers: buildHeaders()
+		baseURL: getStApiUrl(),
+		headers: await buildHeaders()
 	};
 
 	if (requestData) {
@@ -43,31 +44,18 @@ function buildRequestConfig(requestData?: any): AxiosRequestConfig {
 	return requestConfig;
 }
 
-function decorateUrl(url: string, method: string): string {
-	const apiKey: string | null = getApiKey();
-	if (!apiKey || (url.indexOf('places') > -1 && method === 'GET')) {
-		return url;
-	}
-
-	if (url.indexOf('?') > -1) {
-		return url + '&api_key=' + apiKey;
-	} else {
-		return url + '?api_key=' + apiKey;
-	}
-}
-
-function buildHeaders() {
-	const accessToken = getAccessToken();
+async function buildHeaders(): Promise<any> {
+	const userSession = await getUserSession();
 	const headers = {};
 
-	const clientKey = getClientKey();
+	const clientKey = getIntegratorKey();
 
 	if (clientKey) {
 		headers['x-api-key'] = clientKey;
 	}
 
-	if (accessToken) {
-		headers['Authorization'] = 'Bearer ' + accessToken;
+	if (userSession) {
+		headers['Authorization'] = 'Bearer ' + userSession.accessToken;
 	}
 
 	return headers;
