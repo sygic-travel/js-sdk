@@ -130,6 +130,7 @@ declare class TripModule {
 
 declare class UserModule {
 	public setUserSession(session: User.Session|null): Promise<void>;
+	public getUserSession(): Promise<User.Session|null>;
 	public getUserSettings(): Promise<User.UserSettings>;
 	public updateUserSettings(settings: User.UserSettings): Promise<User.UserSettings>;
 	public loginUserWithDeviceId(deviceId: string, devideCode?: string): Promise<void>;

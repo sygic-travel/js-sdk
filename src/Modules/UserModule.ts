@@ -1,5 +1,6 @@
 import {
 	getUserInfo,
+	getUserSession,
 	getUserSettings,
 	loginUserWithDeviceId,
 	loginUserWithFacebook,
@@ -14,8 +15,18 @@ import {
 } from '../User';
 
 export default class UserModule {
+	/**
+	 * @experimental
+	 */
 	public setUserSession(userSession: Session|null): Promise<void> {
 		return setUserSession(userSession);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public getUserSession(): Promise<Session|null> {
+		return getUserSession();
 	}
 
 	/**
