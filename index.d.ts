@@ -130,6 +130,7 @@ declare class TripModule {
 
 declare class UserModule {
 	public setUserSession(session: User.Session|null): Promise<void>;
+	public getUserSession(): Promise<User.Session|null>;
 	public getUserSettings(): Promise<User.UserSettings>;
 	public updateUserSettings(settings: User.UserSettings): Promise<User.UserSettings>;
 	public loginUserWithDeviceId(deviceId: string, devideCode?: string): Promise<void>;
@@ -147,6 +148,7 @@ declare class UserModule {
 		deviceId?: string,
 		devicePlatform?: string
 	): Promise<void>;
+	public getUserinfo(): Promise<User.UserInfo>;
 }
 
 declare class UtilityModule {
@@ -731,6 +733,22 @@ export namespace User {
 	export interface Session {
 		accessToken: string;
 		refreshToken: string;
+	}
+	export interface UserInfo {
+		id: string;
+		name: string|null;
+		email: string|null;
+		roles: string[];
+		dateCreated: string;
+		isEmailSubscribed: boolean;
+		isRegistered: boolean;
+		photoUrl: string|null;
+		licence: UserLicence|null;
+	}
+	export interface UserLicence {
+		isActive: boolean;
+		name: string;
+		expirationAt: string|null;
 	}
 }
 
