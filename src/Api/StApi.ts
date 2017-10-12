@@ -13,28 +13,34 @@ axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
 });
 
 export async function get(url: string): Promise<ApiResponse> {
-	const response = await axiosInstance.get(url, await buildRequestConfig());
+	const response = await axiosInstance.get(url, await buildRequestConfig(url));
 	return buildApiResponse(response);
 }
 
 export async function post(url: string, requestData): Promise<ApiResponse> {
-	const response = await axiosInstance.post(url, requestData, await buildRequestConfig());
+	const response = await axiosInstance.post(url, requestData, await buildRequestConfig(url));
 	return buildApiResponse(response);
 }
 
 export async function delete_(url: string, requestData): Promise<ApiResponse> {
-	const response = await axiosInstance.delete(url, await buildRequestConfig(requestData));
+	const response = await axiosInstance.delete(url, await buildRequestConfig(url, requestData));
 	return buildApiResponse(response);
 }
 
 export async function put(url: string, requestData): Promise<ApiResponse> {
-	const response = await axiosInstance.put(url, requestData, await buildRequestConfig());
+	const response = await axiosInstance.put(url, requestData, await buildRequestConfig(url));
 	return buildApiResponse(response);
 }
 
-async function buildRequestConfig(requestData?: any): Promise<AxiosRequestConfig> {
+async function buildRequestConfig(url: string, requestData?: any): Promise<AxiosRequestConfig> {
+	let baseUrl = getStApiUrl();
+
+	if (url.indexOf('places/list') === -1) {
+		baseUrl = baseUrl.replace('api-cdn', 'api');
+	}
+
 	const requestConfig: AxiosRequestConfig = {
-		baseURL: getStApiUrl(),
+		baseURL: baseUrl,
 		headers: await buildHeaders()
 	};
 
