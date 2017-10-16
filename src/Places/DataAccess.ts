@@ -173,7 +173,7 @@ export async function getPlaceOpeningHours(id: string, from: string, to: string)
 
 export async function addPlaceReview(placeId: string, rating: number, message: string): Promise<PlaceReview> {
 	const apiResponse = await StApi.post('reviews', {
-		item_guid: placeId,
+		place_id: placeId,
 		rating,
 		message
 	});

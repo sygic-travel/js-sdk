@@ -304,7 +304,7 @@ export namespace Places {
 		id: number;
 		userId: string;
 		userName: string;
-		itemGuid: string;
+		placeId: string;
 		message: string | null;
 		rating: number | null;
 		votesUp: number;

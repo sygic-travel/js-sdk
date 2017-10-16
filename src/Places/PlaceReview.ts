@@ -2,7 +2,7 @@ export interface PlaceReview {
 	id: number;
 	userId: string;
 	userName: string;
-	itemGuid: string;
+	placeId: string;
 	message: string | null;
 	rating: number | null;
 	votesUp: number;
