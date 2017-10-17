@@ -23,10 +23,10 @@ export interface UserInfo {
 	isEmailSubscribed: boolean;
 	isRegistered: boolean;
 	photoUrl: string|null;
-	licence: UserLicence|null;
+	license: UserLicense|null;
 }
 
-export interface UserLicence {
+export interface UserLicense {
 	isActive: boolean;
 	name: string;
 	expirationAt: string|null;

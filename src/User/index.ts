@@ -2,13 +2,13 @@ import { favoritesCache, tripsDetailedCache, userCache } from '../Cache';
 import { reset as resetChanges } from '../Changes';
 import * as Dao from './DataAccess';
 import { Session } from './Session';
-import { ThirdPartyAuthType, UserInfo, UserLicence, UserSettings } from './User';
+import { ThirdPartyAuthType, UserInfo, UserLicense, UserSettings } from './User';
 
 export {
 	ThirdPartyAuthType,
 	Session,
 	UserInfo,
-	UserLicence,
+	UserLicense,
 	UserSettings
 };
 export { getUserSession } from './DataAccess';

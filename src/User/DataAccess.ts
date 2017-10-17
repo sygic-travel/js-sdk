@@ -1,6 +1,6 @@
 import { camelizeKeys, decamelizeKeys } from 'humps';
 
-import { Session, ThirdPartyAuthType, UserInfo, UserLicence, UserSettings } from '.';
+import { Session, ThirdPartyAuthType, UserInfo, UserLicense, UserSettings } from '.';
 import { ApiResponse, SsoApi, StApi } from '../Api';
 import { sessionCache, userCache } from '../Cache';
 
@@ -127,7 +127,7 @@ export async function getUserInfo(): Promise<UserInfo> {
 		throw new Error('Wrong API response');
 	}
 	const userData = apiResponse.data.user;
-	const licence: UserLicence|null = userData.premium ? {
+	const license: UserLicense|null = userData.premium ? {
 		name: userData.premium.name,
 		expirationAt: userData.premium.expiration_at,
 		isActive: userData.premium.is_active,
@@ -142,7 +142,7 @@ export async function getUserInfo(): Promise<UserInfo> {
 		photoUrl: userData.photo ? userData.photo.url : null,
 		dateCreated: userData.created_date,
 		roles: userData.roles,
-		licence
+		license
 	} as UserInfo;
 }
 

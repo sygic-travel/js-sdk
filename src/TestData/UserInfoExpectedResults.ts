@@ -1,4 +1,4 @@
-import { UserInfo, UserLicence } from '../User';
+import { UserInfo, UserLicense } from '../User';
 
 export const userInfo: UserInfo = {
 	id: '5665644fa0269',
@@ -9,9 +9,9 @@ export const userInfo: UserInfo = {
 	roles: ['default', 'admin'],
 	dateCreated: '2015-12-07T10:49:51+00:00',
 	photoUrl: 'http://example.com/avatar.png',
-	licence: {
+	license: {
 		name: 'Sygic Travel Premium',
 		expirationAt: null,
 		isActive: true
-	} as UserLicence
+	} as UserLicense
 };

@@ -3,7 +3,7 @@ import * as chaiAsPromised from 'chai-as-promised';
 import { SinonSandbox, SinonStub } from 'sinon';
 import * as sinon from 'sinon';
 
-import { Session, UserSettings } from '.';
+import { Session, UserInfo, UserSettings } from '.';
 import { ApiResponse, SsoApi, StApi } from '../Api';
 import { userCache } from '../Cache';
 import { setEnvironment } from '../Settings';
@@ -11,7 +11,6 @@ import { tokenData } from '../TestData/SsoApiResponses';
 import { userInfo as userInfoApiResponse } from '../TestData/UserInfoApiResponse';
 import { userInfo as userInfoResult } from '../TestData/UserInfoExpectedResults';
 import * as Dao from './DataAccess';
-import {UserInfo} from "./User";
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
