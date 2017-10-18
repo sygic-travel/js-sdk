@@ -8,6 +8,7 @@ export interface CollectionsFilterJSON {
 	query?: string;
 	limit?: number;
 	offset?: number;
+	preferUnique?: number;
 }
 
 export interface CollectionsFilterQuery {
@@ -18,6 +19,7 @@ export interface CollectionsFilterQuery {
 	query?: string | null;
 	limit?: number | null;
 	offset?: number | null;
+	prefer_unique?: number | null;
 }
 
 export class CollectionsFilter {
@@ -28,6 +30,7 @@ export class CollectionsFilter {
 	protected _query?: string | null;
 	protected _limit?: number | null;
 	protected _offset?: number | null;
+	protected _preferUnique?: number | null;
 
 	constructor(filter: CollectionsFilterJSON) {
 		this._parentPlaceId = filter.parentPlaceId;
@@ -37,6 +40,7 @@ export class CollectionsFilter {
 		this._query = filter.query;
 		this._limit = filter.limit;
 		this._offset = filter.offset;
+		this._preferUnique = filter.preferUnique;
 	}
 
 	public toQueryObject(): CollectionsFilterQuery {
@@ -61,6 +65,9 @@ export class CollectionsFilter {
 		}
 		if (this._offset) {
 			query.offset = this._offset;
+		}
+		if (this._preferUnique) {
+			query.prefer_unique = this._preferUnique;
 		}
 		return query;
 	}
