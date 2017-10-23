@@ -4,7 +4,7 @@ import { Dao as tripsDao, Day, ItineraryItem, Trip } from '../Trip';
 import * as Dao from './DataAccess';
 import * as Mapper from './Mapper';
 import * as ModeSelector from './ModeSelector';
-import { Direction, DirectionSource, ModeDirections, Route, RouteRequest } from './Route';
+import { Direction, DirectionSource, ModeDirections, Route, RouteRequest, TripDayRoutes } from './Route';
 
 export {
 	Direction,
@@ -14,9 +14,10 @@ export {
 	Route,
 	RouteRequest,
 	Mapper,
+	TripDayRoutes,
 }
 
-export async function getRoutesForTripDay(tripId: string, dayIndex: number): Promise<Route[]>  {
+export async function getRoutesForTripDay(tripId: string, dayIndex: number): Promise<TripDayRoutes>  {
 	const trip: Trip = await tripsDao.getTripDetailed(tripId);
 	if (trip === null) {
 		throw new Error('Trip not found.');
@@ -31,7 +32,12 @@ export async function getRoutesForTripDay(tripId: string, dayIndex: number): Pro
 
 	const places: Place[] = await placesDao.getPlacesFromTripDay(day);
 	const routes: Route[] = await Dao.getRoutes(createRequests(places, day));
-	return filterRoutesDirections(routes);
+	return {
+		routes: filterRoutesDirections(routes),
+		isExplicitFlags: day.itinerary.slice(1).map(
+			(item: ItineraryItem) => (item.transportFromPrevious !== null)
+		)
+	} as TripDayRoutes;
 }
 
 const createRequests = (places: Place[], day: Day): RouteRequest[] => {

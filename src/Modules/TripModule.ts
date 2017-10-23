@@ -1,4 +1,3 @@
-import { getRoutesForTripDay, Route } from '../Route';
 import * as Settings from '../Settings';
 import {
 	addDaysToTrip,
@@ -32,10 +31,6 @@ import {
  * @experimental
  */
 export default class TripModule {
-	public getRoutesForTripDay(tripId: string, dayIndex: number): Promise<Route[]> {
-		return getRoutesForTripDay(tripId, dayIndex);
-	}
-
 	public getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trip[]> {
 		return getTrips(dateFrom, dateTo);
 	}
