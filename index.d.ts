@@ -79,6 +79,7 @@ declare class PlacesModule {
 
 declare class RoutesModule {
 	public getDirections(origin: Location, destination: Location): Promise<Route.Route>
+	public getRoutesForTripDay(tripId: string, dayIndex: number): Promise<Route.TripDayRoutes>
 }
 
 declare class SearchModule {
@@ -92,7 +93,6 @@ declare class ToursModule {
 }
 
 declare class TripModule {
-	public getRoutesForTripDay(tripId: string, dayIndex: number): Promise<Route.Route[]>;
 	public getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trips.Trip[]>;
 	public getTripsInTrash(): Promise<Trips.Trip[]>;
 	public getTripDetailed(id: string): Promise<Trips.Trip>;
@@ -634,6 +634,11 @@ export namespace Trips {
 }
 
 export namespace Route {
+	export interface TripDayRoutes {
+		routes: Route[];
+		isExplicitFlags: boolean[];
+	}
+
 	export interface Route {
 		origin: Location;
 		destination: Location;

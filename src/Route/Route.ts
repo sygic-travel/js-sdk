@@ -1,6 +1,11 @@
 import { Location } from '../Geo';
 import { TransportAvoid, TransportMode, TransportType } from '../Trip';
 
+export interface TripDayRoutes {
+	routes: Route[];
+	isExplicitFlags: boolean[];
+}
+
 export interface Route {
 	origin: Location;
 	destination: Location;
