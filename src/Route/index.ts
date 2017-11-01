@@ -1,10 +1,10 @@
 import { Location } from '../Geo';
 import { Dao as placesDao, Place } from '../Places';
-import { Dao as tripsDao, Day, ItineraryItem, Trip } from '../Trip';
+import { Dao as tripsDao, Day, ItineraryItem, TransportAvoid, Trip } from '../Trip';
 import * as Dao from './DataAccess';
 import * as Mapper from './Mapper';
 import * as ModeSelector from './ModeSelector';
-import { Direction, DirectionSource, ModeDirections, Route, RouteRequest, TripDayRoutes } from './Route';
+import { Direction, DirectionSource, ModeDirections, Route, RouteRequest, TripDayRoutes, Waypoint } from './Route';
 
 export {
 	Direction,
@@ -15,6 +15,7 @@ export {
 	RouteRequest,
 	Mapper,
 	TripDayRoutes,
+	Waypoint
 }
 
 export async function getRoutesForTripDay(tripId: string, dayIndex: number): Promise<TripDayRoutes>  {
@@ -51,13 +52,25 @@ const createRequests = (places: Place[], day: Day): RouteRequest[] => {
 		if (!currentPlace || !previousPlace) {
 			throw new Error('Place not found!');
 		}
-		requests.push(Mapper.createRouteRequest(currentPlace.location, previousPlace.location, currentItem));
+
+		if (currentItem.transportFromPrevious) {
+			requests.push(Mapper.createRouteRequest(
+				currentPlace.location,
+				previousPlace.location,
+				currentItem.transportFromPrevious.waypoints,
+				currentItem.transportFromPrevious.avoid,
+				currentItem.transportFromPrevious.mode
+			));
+		} else {
+			requests.push(Mapper.createRouteRequest(currentPlace.location, previousPlace.location));
+		}
+
 		return requests;
 	}, []);
 };
 
-export async function getDirections(origin: Location, destination: Location): Promise<Route | null> {
-	let routes: Route[] = await Dao.getRoutes([Mapper.createRouteRequest(destination, origin)]);
+export async function getDirections(origin: Location, destination: Location, waypoints: Waypoint[], avoids: TransportAvoid[]): Promise<Route | null> {
+	let routes: Route[] = await Dao.getRoutes([Mapper.createRouteRequest(destination, origin, waypoints, avoids)]);
 	routes = filterRoutesDirections(routes);
 	return routes.length > 0 ? routes[0] : null;
 }

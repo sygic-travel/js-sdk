@@ -32,7 +32,7 @@ export interface ModeDirections {
 export interface RouteRequest {
 	origin: Location;
 	destination: Location;
-	waypoints?: Location[];
+	waypoints?: Waypoint[];
 	avoid: TransportAvoid[];
 	type: TransportType;
 	chosenMode: TransportMode;
@@ -42,3 +42,8 @@ export type DirectionSource =
 	'osrm' |
 	'estimator' |
 	'lbs';
+
+export interface Waypoint {
+	placeId: string|null;
+	location: Location;
+}

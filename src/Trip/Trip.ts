@@ -1,6 +1,6 @@
-import { Location } from '../Geo';
 import { Place } from '../Places';
 import { listToEnum } from '../Util';
+import { Waypoint } from '../Route/Route';
 
 const transportModeValues = listToEnum([
 	'car',
@@ -132,7 +132,7 @@ export interface TransportSettings {
 	startTime: number | null; // Number of seconds from midnight.
 	duration: number | null; // Time in seconds spent on the transport.
 	note: string | null;
-	waypoints: Location[];
+	waypoints: Waypoint[];
 }
 
 export interface TripPrivileges {

@@ -54,7 +54,9 @@ const createCacheKey = (request: RouteRequest): string => {
 	parts.push(request.destination.lng.toString());
 	parts.push(request.avoid.join('-'));
 	if (request.waypoints) {
-		parts.push(request.waypoints.map((waypoint) => (waypoint.lat.toString() + '-' + waypoint.lng.toString())).join('-'));
+		parts.push(request.waypoints.map((waypoint) => (
+			waypoint.location.lat.toString() + '-' + waypoint.location.lng.toString()
+		)).join('-'));
 	}
 	return parts.join('-');
 };

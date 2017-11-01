@@ -404,7 +404,13 @@ describe('TripManipulator', () => {
 				startTime: 7200,
 				duration: 3600,
 				note: 'Run Forest Run',
-				waypoints: [{lat: 1, lng: 1}],
+				waypoints: [{
+					placeId: 'abc',
+					location: {
+						lat: 1,
+						lng: 1
+					}
+				}]
 			};
 			const resultTrip =  Manipulator.setTransport(inputTrip, 0, 1, transportSettings);
 			chai.expect(
