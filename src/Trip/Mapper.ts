@@ -90,7 +90,8 @@ const mapTripDays = (trip): Day[] => trip.days.map((day) => ({
 			duration: itineraryItem.transport_from_previous.duration,
 			note: itineraryItem.transport_from_previous.note,
 			waypoints: itineraryItem.transport_from_previous.waypoints.map((waypoint) => ({
-				location: waypoint as Location
+				placeId: waypoint.place_id,
+				location: waypoint.location as Location
 			}))
 		} : null
 	} as ItineraryItem))
