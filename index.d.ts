@@ -78,7 +78,12 @@ declare class PlacesModule {
 }
 
 declare class RoutesModule {
-	public getDirections(origin: Location, destination: Location): Promise<Route.Route>
+	public getDirections(
+		origin: Location,
+		destination: Location,
+		waypoints: Route.Waypoint[],
+		avoids: Trips.TransportAvoid[]
+	): Promise<Route.Route>
 	public getRoutesForTripDay(tripId: string, dayIndex: number): Promise<Route.TripDayRoutes>
 }
 
@@ -675,6 +680,11 @@ export namespace Route {
 		'osrm' |
 		'estimator' |
 		'lbs';
+
+	export interface Waypoint {
+		placeId: string|null;
+		location: Location;
+	}
 }
 
 export namespace Search {
