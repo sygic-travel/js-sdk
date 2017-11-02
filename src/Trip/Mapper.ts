@@ -2,6 +2,7 @@ import { camelizeKeys, decamelizeKeys } from 'humps';
 import * as cloneDeep from 'lodash.clonedeep';
 
 import { Place } from '../Places';
+import { Waypoint } from '../Route';
 import { UserSettings } from '../User';
 import { Day, ItineraryItem, Trip, TripCreateRequest, TripMedia, TripPrivileges, TripTemplate } from './Trip';
 import { decorateDaysWithDate } from './Utility';
@@ -207,7 +208,10 @@ const mapTripDayToApiFormat = (day: Day): object => {
 				start_time: itineraryItem.transportFromPrevious.startTime,
 				duration: itineraryItem.transportFromPrevious.duration,
 				note: itineraryItem.transportFromPrevious.note,
-				waypoints: itineraryItem.transportFromPrevious.waypoints
+				waypoints: itineraryItem.transportFromPrevious.waypoints.map((waypoint: Waypoint) => ({
+					place_id: waypoint.placeId,
+					location: waypoint.location
+				}))
 			} : null
 		})),
 	};
