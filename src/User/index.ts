@@ -33,7 +33,7 @@ export async function handleSettingsChange(): Promise<void> {
 	return Dao.handleSettingsChange();
 }
 
-export async function loginUserWithDeviceId(deviceId: string, devicePlatform?: string): Promise<void> {
+export async function loginUserWithDeviceId(deviceId: string, devicePlatform: string): Promise<void> {
 	const session: Session = await Dao.getSessionWithDeviceId(deviceId, devicePlatform);
 	setUserSession(session);
 }
@@ -68,6 +68,17 @@ export async function loginUserWithGoogle(
 ): Promise<void> {
 	const session: Session = await Dao.getSessionWithThirdPartyAuth(
 		'google', accessToken, authorizationCode, deviceId, devicePlatform
+	);
+	setUserSession(session);
+}
+
+export async function loginUserWithJwt(
+	jwt: string,
+	deviceId?: string,
+	devicePlatform?: string
+): Promise<void> {
+	const session: Session = await Dao.getSessionWithJwt(
+		jwt, deviceId, devicePlatform
 	);
 	setUserSession(session);
 }

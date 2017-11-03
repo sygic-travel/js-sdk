@@ -40,14 +40,27 @@ export async function handleSettingsChange(): Promise<void> {
 	await getUserSettingsFromApi();
 }
 
-export async function getSessionWithDeviceId(deviceId: string, devicePlatform?: string): Promise<Session> {
+export async function getSessionWithDeviceId(deviceId: string, devicePlatform: string): Promise<Session> {
 	const request: any = {
 		grant_type: 'client_credentials',
-		device_code: deviceId
+		device_code: deviceId,
+		device_platform: devicePlatform,
+	};
+
+	return getSessionFromSso(request);
+}
+
+export async function getSessionWithJwt(jwt: string, deviceId?: string, devicePlatform?: string): Promise<Session> {
+	const request: any = {
+		grant_type: 'external',
+		token: jwt
 	};
 
 	if (devicePlatform) {
 		request.device_platform = devicePlatform;
+	}
+	if (deviceId) {
+		request.device_code = deviceId;
 	}
 
 	return getSessionFromSso(request);

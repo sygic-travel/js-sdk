@@ -5,6 +5,7 @@ import {
 	loginUserWithDeviceId,
 	loginUserWithFacebook,
 	loginUserWithGoogle,
+	loginUserWithJwt,
 	loginUserWithPassword,
 	registerUser,
 	Session,
@@ -46,8 +47,15 @@ export default class UserModule {
 	/**
 	 * @experimental
 	 */
-	public loginUserWithDeviceId(deviceId: string, devideCode?: string): Promise<void> {
+	public loginUserWithDeviceId(deviceId: string, devideCode: string): Promise<void> {
 		return loginUserWithDeviceId(deviceId, devideCode);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public loginUserWithJwt(jwt: string, deviceId?: string, devideCode?: string): Promise<void> {
+		return loginUserWithJwt(jwt, deviceId, devideCode);
 	}
 
 	/**
