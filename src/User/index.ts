@@ -72,6 +72,17 @@ export async function loginUserWithGoogle(
 	setUserSession(session);
 }
 
+export async function loginUserWithJwt(
+	jwt: string,
+	deviceId?: string,
+	devicePlatform?: string
+): Promise<void> {
+	const session: Session = await Dao.getSessionWithJwt(
+		jwt, deviceId, devicePlatform
+	);
+	setUserSession(session);
+}
+
 export async function registerUser(
 	email: string,
 	password: string,

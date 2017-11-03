@@ -139,6 +139,7 @@ declare class UserModule {
 	public getUserSettings(): Promise<User.UserSettings>;
 	public updateUserSettings(settings: User.UserSettings): Promise<User.UserSettings>;
 	public loginUserWithDeviceId(deviceId: string, devideCode: string): Promise<void>;
+	public loginUserWithJwt(jwt: string, deviceId?: string, devideCode?: string): Promise<void>;
 	public loginUserWithPassword(email: string, password: string, deviceId?: string, devideCode?: string): Promise<void>;
 	public registerUser(email: string, password: string, name: string): Promise<void>;
 	public loginUserWithFacebook(

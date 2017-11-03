@@ -134,6 +134,35 @@ describe('UserDataAccess', () => {
 		});
 	});
 
+	describe('#getSessionWithJwt', () => {
+		it('should get the token from api', () => {
+			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, tokenData));
+			}));
+			const testSession: Session = {
+				accessToken: tokenData.access_token,
+				refreshToken: tokenData.refresh_token
+			};
+			return Dao.getSessionWithJwt('asdfg.xxx.asdfg').then((data) => {
+				chai.expect(data).to.deep.equal(testSession);
+				chai.expect(apiStub.callCount).to.equal(1);
+				chai.expect(apiStub.getCall(0).args[0]).to.equal('oauth2/token');
+				chai.expect(apiStub.getCall(0).args[1]['token']).to.equal('asdfg.xxx.asdfg');
+				chai.expect(apiStub.getCall(0).args[1]['grant_type']).to.equal('external');
+			});
+		});
+
+		it('should call the api with optional parameters', () => {
+			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, tokenData));
+			}));
+			return Dao.getSessionWithJwt('asdfg.xxx.asdfg', 'deviceId', 'devicePlatform').then((data) => {
+				chai.expect(apiStub.getCall(0).args[1]['device_code']).to.equal('deviceId');
+				chai.expect(apiStub.getCall(0).args[1]['device_platform']).to.equal('devicePlatform');
+			});
+		});
+	});
+
 	describe('#getSessionWithThirdPartyAuth', () => {
 		it('should get the token from api by access token', () => {
 			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
