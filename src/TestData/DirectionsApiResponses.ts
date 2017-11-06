@@ -14,6 +14,7 @@ export const route = {
 			"duration": 300,
 			"polyline": "emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvA",
 			"mode": "walking",
+			"route_id": null,
 			"source": "osrm",
 			"iso_codes": [ 'CZ', 'SK' ]
 		},
@@ -21,6 +22,7 @@ export const route = {
 			"distance": 800,
 			"duration": 30,
 			"polyline": "emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe",
+			"route_id": "30:800",
 			"mode": "driving",
 			"source": "lbs",
 			"iso_codes": [ 'CZ', 'SK' ]
@@ -28,10 +30,10 @@ export const route = {
 		{
 			"distance": 700,
 			"duration": 30,
+			"route_id": "30:700",
 			"polyline": "emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe",
 			"mode": "driving",
 			"source": "lbs",
-			"type": "shortest",
 			"iso_codes": [ 'CZ', 'SK' ]
 		}
 	]

@@ -1,9 +1,9 @@
 import { Location } from '../Geo';
-import { TransportAvoid, TransportMode, TransportType } from '../Trip';
+import { TransportAvoid, TransportMode, TransportSettings } from '../Trip';
 
 export interface TripDayRoutes {
 	routes: Route[];
-	isExplicitFlags: boolean[];
+	userTransportSettings: (TransportSettings|null)[];
 }
 
 export interface Route {
@@ -17,8 +17,8 @@ export interface Direction {
 	distance: number;
 	duration: number;
 	polyline: string;
+	routeId: string|null;
 	mode: TransportMode;
-	type: TransportType;
 	avoid: TransportAvoid[];
 	source: DirectionSource;
 	isoCodes: string[];
@@ -32,10 +32,10 @@ export interface ModeDirections {
 export interface RouteRequest {
 	origin: Location;
 	destination: Location;
-	waypoints?: Waypoint[];
 	avoid: TransportAvoid[];
-	type: TransportType;
 	chosenMode: TransportMode;
+	waypoints?: Waypoint[];
+	routeId?: string|null;
 }
 
 export type DirectionSource =

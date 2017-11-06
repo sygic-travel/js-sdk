@@ -1,7 +1,7 @@
 import { camelizeKeys } from 'humps';
 import { Direction, ModeDirections, ModeSelector, Route, RouteRequest } from '.';
 import { Location } from '../Geo';
-import { TransportAvoid, TransportMode, TransportType } from '../Trip';
+import { TransportAvoid, TransportMode } from '../Trip';
 import { Waypoint } from './Route';
 
 const toTranspotModesMapping = {
@@ -18,15 +18,11 @@ const MODES_ORDER: TransportMode[] = [
 export const mapRouteFromApiResponse = (
 	data,
 	transportAvoid: TransportAvoid[],
-	transportMode: TransportMode,
-	transportType: TransportType|null
+	transportMode: TransportMode
 ): Route => {
 	const routeBuild: any = camelizeKeys(data);
 	routeBuild.directions = routeBuild.directions.map((direction): Direction => {
 		direction.mode = toTranspotModesMapping[direction.mode] ? toTranspotModesMapping[direction.mode] : direction.mode;
-		if (!direction.type) {
-			direction.type = direction.mode === 'car' ? transportType : null;
-		}
 		if (!direction.avoid) {
 			direction.avoid = direction.mode === 'car' ? transportAvoid : [];
 		}
@@ -55,42 +51,44 @@ export const mapRouteFromApiResponse = (
 	});
 	delete routeBuild.directions;
 	const route = routeBuild as Route;
-	route.chosenDirection = choseDirection(route.modeDirections, transportMode, transportType);
+	route.chosenDirection = chooseDirection(route.modeDirections, transportMode);
 	return route as Route;
 };
 
 export const createRouteRequest = (
 	destination: Location,
 	origin: Location,
+	routeId: string|null = null,
 	waypoints?: Waypoint[],
 	avoid?: TransportAvoid[],
-	mode?: TransportMode
+	mode?: TransportMode,
 ): RouteRequest => {
 	return {
 		origin,
 		destination,
 		waypoints: waypoints ? waypoints : [],
 		avoid: avoid ? avoid : ['unpaved'],
-		type: 'fastest',
 		chosenMode: mode ? mode : ModeSelector.selectOptimalMode(origin, destination),
+		routeId
 	} as RouteRequest;
 };
 
-export const choseDirection = (
+export const chooseDirection = (
 	modeDirectionsSet: ModeDirections[],
 	mode: TransportMode,
-	type: TransportType|null
+	routeId: string|null = null,
 ): Direction => {
-	return modeDirectionsSet.reduce((chosen: Direction|null, modeDirection: ModeDirections): Direction => {
-		if (chosen === null || (modeDirection.mode === mode && !type)) {
+	let chosen: Direction|null = null;
+	for (const modeDirection of modeDirectionsSet) {
+		if (chosen === null || (modeDirection.mode === mode && !routeId)) {
 			chosen = modeDirection.directions[0];
 		}
-		if (modeDirection.mode === mode && type) {
-			const found = modeDirection.directions.find((direction: Direction) => (type === direction.type));
+		if (modeDirection.mode === mode && routeId) {
+			const found = modeDirection.directions.find((direction: Direction) => (routeId === direction.routeId));
 			if (found) {
 				chosen = found;
 			}
 		}
-		return chosen;
-	}, null) as Direction;
+	}
+	return chosen!;
 };

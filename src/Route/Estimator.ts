@@ -15,5 +15,6 @@ export const estimatePlaneDirection = (origin: Location, destination: Location):
 		avoid: [],
 		source: 'estimator',
 		isoCodes: [],
+		routeId: null,
 	} as Direction;
 };

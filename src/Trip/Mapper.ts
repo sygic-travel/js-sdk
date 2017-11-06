@@ -204,7 +204,6 @@ const mapTripDayToApiFormat = (day: Day): object => {
 			note: itineraryItem.note,
 			transport_from_previous: itineraryItem.transportFromPrevious ? {
 				mode: itineraryItem.transportFromPrevious.mode,
-				type: itineraryItem.transportFromPrevious.type,
 				avoid: itineraryItem.transportFromPrevious.avoid,
 				start_time: itineraryItem.transportFromPrevious.startTime,
 				duration: itineraryItem.transportFromPrevious.duration,

@@ -17,14 +17,17 @@ export async function getRoutes(requests: RouteRequest[]): Promise<Route[]> {
 		const route = Mapper.mapRouteFromApiResponse(
 			routeData,
 			requests[index].avoid,
-			requests[index].chosenMode,
-			requests[index].type
+			requests[index].chosenMode
 		);
 		route.modeDirections.push({
 			mode: 'plane',
 			directions: [estimatePlaneDirection(route.origin, route.destination)]
 		});
-		route.chosenDirection = Mapper.choseDirection(route.modeDirections, requests[index].chosenMode, requests[index].type);
+		route.chosenDirection = Mapper.chooseDirection(
+			route.modeDirections,
+			requests[index].chosenMode,
+			requests[index].routeId
+		);
 		return route;
 	});
 }
@@ -35,7 +38,6 @@ async function getFromApi(requests: RouteRequest[]): Promise<object[]> {
 		destination: request.destination,
 		waypoints: request.waypoints,
 		avoid: request.avoid,
-		type: request.type,
 	}));
 
 	const response: ApiResponse = await StApi.post('/directions/path', apiRequestData);
@@ -47,7 +49,6 @@ async function getFromApi(requests: RouteRequest[]): Promise<object[]> {
 
 const createCacheKey = (request: RouteRequest): string => {
 	const parts: string[] = [];
-	parts.push(request.type);
 	parts.push(request.origin.lat.toString());
 	parts.push(request.origin.lng.toString());
 	parts.push(request.destination.lat.toString());
