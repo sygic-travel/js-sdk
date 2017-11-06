@@ -51,7 +51,7 @@ export const mapRouteFromApiResponse = (
 	});
 	delete routeBuild.directions;
 	const route = routeBuild as Route;
-	route.chosenDirection = choseDirection(route.modeDirections, transportMode);
+	route.chosenDirection = chooseDirection(route.modeDirections, transportMode);
 	return route as Route;
 };
 
@@ -73,22 +73,22 @@ export const createRouteRequest = (
 	} as RouteRequest;
 };
 
-export const choseDirection = (
+export const chooseDirection = (
 	modeDirectionsSet: ModeDirections[],
 	mode: TransportMode,
 	routeId: string|null = null,
 ): Direction => {
-	let choosen: Direction|null = null;
+	let chosen: Direction|null = null;
 	for (const modeDirection of modeDirectionsSet) {
-		if (choosen === null || (modeDirection.mode === mode && !routeId)) {
-			choosen = modeDirection.directions[0];
+		if (chosen === null || (modeDirection.mode === mode && !routeId)) {
+			chosen = modeDirection.directions[0];
 		}
 		if (modeDirection.mode === mode && routeId) {
 			const found = modeDirection.directions.find((direction: Direction) => (routeId === direction.routeId));
 			if (found) {
-				choosen = found;
+				chosen = found;
 			}
 		}
 	}
-	return choosen!;
+	return chosen!;
 };
