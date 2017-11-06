@@ -2,7 +2,7 @@
 import { EARTH_RADIUS, getDistance, Location } from '../Geo';
 import { TransportMode } from '../Trip';
 
-const PEDESTRIAN_OPTIMAL_MAX: number = 5000;
+const PEDESTRIAN_OPTIMAL_MAX: number = 2000;
 const CAR_OPTIMAL_MAX: number = 1000000;
 
 const PEDESTRIAN_LIMIT_MAX: number = 50000;
