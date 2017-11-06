@@ -120,6 +120,14 @@ export function updateItineraryItemUserData(
 	return resultTrip;
 }
 
+export function updateDayNote(trip: Trip, dayIndex: number, note: string): Trip {
+	checkDayExists(trip, dayIndex);
+
+	const resultTrip: Trip = cloneDeep(trip);
+	resultTrip.days![dayIndex].note = note;
+	return resultTrip;
+}
+
 // Item methods
 export function addPlaceToDay(
 	tripToBeUpdated: Trip,

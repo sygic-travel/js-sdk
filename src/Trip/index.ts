@@ -168,6 +168,16 @@ export async function updateItineraryItemUserData(
 	);
 }
 
+export async function updateDayNote(
+	tripId: string,
+	dayIndex: number,
+	note: string
+): Promise<Trip> {
+	return Dao.updateTrip(
+		TripManipulator.updateDayNote(await getTripDetailed(tripId), dayIndex, note)
+	);
+}
+
 export async function movePlaceInDay(
 	id: string,
 	dayIndex: number,
