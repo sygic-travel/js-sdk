@@ -402,6 +402,7 @@ describe('TripManipulator', () => {
 				avoid: ['tolls'],
 				startTime: 7200,
 				duration: 3600,
+				routeId: '3600:7200',
 				note: 'Run Forest Run',
 				waypoints: [{
 					placeId: 'abc',

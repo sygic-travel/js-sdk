@@ -58,9 +58,10 @@ export const mapRouteFromApiResponse = (
 export const createRouteRequest = (
 	destination: Location,
 	origin: Location,
+	routeId: string|null = null,
 	waypoints?: Waypoint[],
 	avoid?: TransportAvoid[],
-	mode?: TransportMode
+	mode?: TransportMode,
 ): RouteRequest => {
 	return {
 		origin,
@@ -68,17 +69,26 @@ export const createRouteRequest = (
 		waypoints: waypoints ? waypoints : [],
 		avoid: avoid ? avoid : ['unpaved'],
 		chosenMode: mode ? mode : ModeSelector.selectOptimalMode(origin, destination),
+		routeId
 	} as RouteRequest;
 };
 
 export const choseDirection = (
 	modeDirectionsSet: ModeDirections[],
-	mode: TransportMode
+	mode: TransportMode,
+	routeId: string|null = null,
 ): Direction => {
-	return modeDirectionsSet.reduce((chosen: Direction|null, modeDirection: ModeDirections): Direction => {
-		if (chosen === null || (modeDirection.mode === mode)) {
-			chosen = modeDirection.directions[0];
+	let choosen: Direction|null = null;
+	for (const modeDirection of modeDirectionsSet) {
+		if (choosen === null || (modeDirection.mode === mode && !routeId)) {
+			choosen = modeDirection.directions[0];
 		}
-		return chosen;
-	}, null) as Direction;
+		if (modeDirection.mode === mode && routeId) {
+			const found = modeDirection.directions.find((direction: Direction) => (routeId === direction.routeId));
+			if (found) {
+				choosen = found;
+			}
+		}
+	}
+	return choosen!;
 };

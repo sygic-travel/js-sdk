@@ -13,6 +13,7 @@ export const route = {
 	chosenDirection: {
 		distance: 800,
 		duration: 30,
+		routeId: '30:800',
 		polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
 		mode: 'car',
 		avoid: [],
@@ -26,6 +27,7 @@ export const route = {
 				{
 					distance: 530,
 					duration: 300,
+					routeId: null,
 					polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvA',
 					mode: 'pedestrian',
 					source: 'osrm',
@@ -40,6 +42,7 @@ export const route = {
 				{
 					distance: 800,
 					duration: 30,
+					routeId: '30:800',
 					polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
 					mode: 'car',
 					source: 'lbs',
@@ -49,6 +52,7 @@ export const route = {
 				{
 					distance: 700,
 					duration: 30,
+					routeId: '30:700',
 					polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
 					mode: 'car',
 					source: 'lbs',

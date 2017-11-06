@@ -23,7 +23,11 @@ export async function getRoutes(requests: RouteRequest[]): Promise<Route[]> {
 			mode: 'plane',
 			directions: [estimatePlaneDirection(route.origin, route.destination)]
 		});
-		route.chosenDirection = Mapper.choseDirection(route.modeDirections, requests[index].chosenMode);
+		route.chosenDirection = Mapper.choseDirection(
+			route.modeDirections,
+			requests[index].chosenMode,
+			requests[index].routeId
+		);
 		return route;
 	});
 }

@@ -17,6 +17,7 @@ export interface Direction {
 	distance: number;
 	duration: number;
 	polyline: string;
+	routeId: string|null;
 	mode: TransportMode;
 	avoid: TransportAvoid[];
 	source: DirectionSource;
@@ -31,9 +32,10 @@ export interface ModeDirections {
 export interface RouteRequest {
 	origin: Location;
 	destination: Location;
-	waypoints?: Waypoint[];
 	avoid: TransportAvoid[];
 	chosenMode: TransportMode;
+	waypoints?: Waypoint[];
+	routeId?: string|null;
 }
 
 export type DirectionSource =

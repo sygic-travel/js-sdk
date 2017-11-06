@@ -122,6 +122,7 @@ export interface TransportSettings {
 	duration: number | null; // Time in seconds spent on the transport.
 	note: string | null;
 	waypoints: Waypoint[];
+	routeId: string|null;
 }
 
 export interface TripPrivileges {

@@ -30,6 +30,7 @@ describe('RoutesController', () => {
 				duration: null,
 				startTime: null,
 				mode: 'pedestrian',
+				routeId: null,
 				avoid: [],
 				note: null,
 				waypoints: [],

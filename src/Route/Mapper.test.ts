@@ -32,6 +32,7 @@ describe('RouteMapper', () => {
 			const expected: RouteRequest = {
 				origin,
 				destination,
+				routeId: '30:50',
 				avoid: ['highways'],
 				chosenMode: 'car',
 				waypoints: [{
@@ -45,6 +46,7 @@ describe('RouteMapper', () => {
 			chai.expect(Mapper.createRouteRequest(
 				destination,
 				origin,
+				'30:50',
 				[{
 					placeId: 'abc',
 					location: {
@@ -68,6 +70,7 @@ describe('RouteMapper', () => {
 			const expected: RouteRequest = {
 				origin,
 				destination,
+				routeId: null,
 				avoid: ['unpaved'],
 				chosenMode: 'pedestrian',
 				waypoints: [],
