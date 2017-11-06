@@ -69,7 +69,12 @@ const createRequests = (places: Place[], day: Day): RouteRequest[] => {
 	}, []);
 };
 
-export async function getDirections(origin: Location, destination: Location, waypoints: Waypoint[], avoids: TransportAvoid[]): Promise<Route | null> {
+export async function getDirections(
+	origin: Location,
+	destination: Location,
+	waypoints: Waypoint[],
+	avoids: TransportAvoid[]
+): Promise<Route | null> {
 	let routes: Route[] = await Dao.getRoutes([Mapper.createRouteRequest(destination, origin, waypoints, avoids)]);
 	routes = filterRoutesDirections(routes);
 	return routes.length > 0 ? routes[0] : null;
