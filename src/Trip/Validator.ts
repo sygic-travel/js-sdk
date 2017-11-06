@@ -1,13 +1,9 @@
-import { isTransportAvoid, isTransportMode, isTransportType } from '.';
+import { isTransportAvoid, isTransportMode } from '.';
 
 export function validateTransportSettings(settings): void {
 
 	if (!isTransportMode(settings.mode)) {
 		throw new Error('Invalid transport mode ' + settings.mode);
-	}
-
-	if (!isTransportType(settings.type)) {
-		throw new Error('Invalid transport type ' + settings.type);
 	}
 
 	if (!settings.hasOwnProperty('avoid') && !(settings.avoid instanceof Array)) {

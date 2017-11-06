@@ -27,7 +27,6 @@ describe('RoutesController', () => {
 		it('should build explicit flags correctly', async () => {
 			const trip = cloneDeep(tripDetailed);
 			trip.days[0].itinerary[1].transportFromPrevious = {
-				type: 'fastest',
 				duration: null,
 				mode: 'pedestrian',
 				avoid: [],

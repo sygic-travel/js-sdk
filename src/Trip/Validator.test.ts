@@ -9,24 +9,18 @@ describe('Validator', () => {
 			chai.expect(() => Validator.validateTransportSettings({mode: 'nonSenseValue'}))
 				.to.throw(Error, 'Invalid transport mode nonSenseValue');
 		});
-		it('should throw an error when invalid type is passed', () => {
-			chai.expect(() => Validator.validateTransportSettings({mode: 'car'}))
-				.to.throw(Error, 'Invalid transport type undefined');
-			chai.expect(() => Validator.validateTransportSettings({mode: 'car', type: 'nonSenseValue'}))
-				.to.throw(Error, 'Invalid transport type nonSenseValue');
-		});
 		it('should throw an error when invalid avoid is passed', () => {
-			chai.expect(() => Validator.validateTransportSettings({mode: 'car', type: 'fastest'}))
+			chai.expect(() => Validator.validateTransportSettings({mode: 'car'}))
 				.to.throw(Error, 'avoid must be an array');
-			chai.expect(() => Validator.validateTransportSettings({mode: 'car', type: 'fastest', avoid: ['xxx']}))
+			chai.expect(() => Validator.validateTransportSettings({mode: 'car', avoid: ['xxx']}))
 				.to.throw(Error, 'Invalid avoid value xxx');
 		});
 		it('should throw an error when invalid startTime is passed', () => {
-			chai.expect(() => Validator.validateTransportSettings({mode: 'car', type: 'fastest', avoid: []}))
+			chai.expect(() => Validator.validateTransportSettings({mode: 'car', avoid: []}))
 				.to.throw(Error, 'Missing startTime');
-			chai.expect(() => Validator.validateTransportSettings({mode: 'car', type: 'fastest', avoid: [], startTime: -1}))
+			chai.expect(() => Validator.validateTransportSettings({mode: 'car', avoid: [], startTime: -1}))
 				.to.throw(Error, 'Invalid startTime value -1');
-			chai.expect(() => Validator.validateTransportSettings({mode: 'car', type: 'fastest', avoid: [], startTime: 1000000}))
+			chai.expect(() => Validator.validateTransportSettings({mode: 'car', avoid: [], startTime: 1000000}))
 				.to.throw(Error, 'Invalid startTime value 1000000');
 		});
 		it('should throw an error when invalid duration is passed', () => {

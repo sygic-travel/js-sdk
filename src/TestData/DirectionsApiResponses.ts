@@ -31,7 +31,6 @@ export const route = {
 			"polyline": "emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe",
 			"mode": "driving",
 			"source": "lbs",
-			"type": "shortest",
 			"iso_codes": [ 'CZ', 'SK' ]
 		}
 	]

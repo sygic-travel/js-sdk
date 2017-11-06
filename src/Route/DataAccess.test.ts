@@ -45,16 +45,15 @@ describe('RouteDataAccess', () => {
 				destination: data.destination,
 				waypoints: [],
 				avoid: [],
-				type: 'fastest',
 				chosenMode: 'car',
 			});
 
 			const requests = routesData.map(buildRequest);
 			const cacheMap = new Map<string, any>();
-			cacheMap.set('fastest-1-1-49.2080844-16.582545--', routesData[0]);
-			cacheMap.set('fastest-2-2-49.2080844-16.582545--', null);
-			cacheMap.set('fastest-3-3-49.2080844-16.582545--', routesData[2]);
-			cacheMap.set('fastest-4-4-49.2080844-16.582545--', null);
+			cacheMap.set('1-1-49.2080844-16.582545--', routesData[0]);
+			cacheMap.set('2-2-49.2080844-16.582545--', null);
+			cacheMap.set('3-3-49.2080844-16.582545--', routesData[2]);
+			cacheMap.set('4-4-49.2080844-16.582545--', null);
 
 			sandbox.stub(routesCache, 'getBatchMap').returns(new Promise((resolve) => (resolve(cacheMap))));
 

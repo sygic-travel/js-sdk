@@ -16,16 +16,6 @@ export function isTransportMode(val: any): val is TransportMode {
 }
 export type TransportMode = keyof typeof transportModeValues;
 
-const transportTypeValues = listToEnum([
-	'fastest',
-	'shortest',
-	'economic'
-]);
-export type TransportType = keyof typeof transportTypeValues;
-export function isTransportType(val: any): val is TransportType {
-	return typeof val === 'string' && transportTypeValues[val] === val;
-}
-
 const transportAvoidValues = listToEnum([
 	'tolls',
 	'highways',
@@ -127,7 +117,6 @@ export interface ItineraryItem {
 
 export interface TransportSettings {
 	mode: TransportMode;
-	type: TransportType;
 	avoid: TransportAvoid[];
 	startTime: number | null; // Number of seconds from midnight.
 	duration: number | null; // Time in seconds spent on the transport.

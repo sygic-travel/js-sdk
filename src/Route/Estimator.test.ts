@@ -13,7 +13,6 @@ describe('Estimator', () => {
 			const destination: Location = {lat: 11, lng: 11};
 			const direction: Direction = Estimator.estimatePlaneDirection(origin, destination);
 			chai.expect(direction.polyline).to.equal('_c`|@_c`|@_ibE_ibE');
-			chai.expect(direction.type).to.equal('fastest');
 			chai.expect(direction.distance).to.equal(156116);
 			chai.expect(direction.duration).to.equal(7824);
 			chai.expect(direction.avoid).to.deep.equal([]);

@@ -1,5 +1,5 @@
 import { Location } from '../Geo';
-import { Route } from '../Route';
+import { Direction, Route } from '../Route';
 
 export const route = {
 	origin: {
@@ -15,11 +15,10 @@ export const route = {
 		duration: 30,
 		polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
 		mode: 'car',
-		type: 'fastest',
 		avoid: [],
 		source: 'lbs',
 		isoCodes: [ 'CZ', 'SK' ]
-	},
+	} as Direction,
 	modeDirections: [
 		{
 			mode: 'pedestrian',
@@ -30,10 +29,9 @@ export const route = {
 					polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvA',
 					mode: 'pedestrian',
 					source: 'osrm',
-					type: null,
 					avoid: [],
 					isoCodes: [ 'CZ', 'SK' ]
-				}
+				} as Direction
 			]
 		},
 		{
@@ -45,20 +43,18 @@ export const route = {
 					polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
 					mode: 'car',
 					source: 'lbs',
-					type: 'fastest',
 					avoid: [],
 					isoCodes: [ 'CZ', 'SK' ]
-				},
+				} as Direction,
 				{
 					distance: 700,
 					duration: 30,
 					polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
 					mode: 'car',
 					source: 'lbs',
-					type: 'shortest',
 					avoid: [],
 					isoCodes: [ 'CZ', 'SK' ]
-				}
+				} as Direction
 			]
 		},
 	]

@@ -399,7 +399,6 @@ describe('TripManipulator', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			const transportSettings: TransportSettings = {
 				mode: 'car',
-				type: 'fastest',
 				avoid: ['tolls'],
 				startTime: 7200,
 				duration: 3600,
