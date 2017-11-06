@@ -679,5 +679,19 @@ describe('TripManipulator', () => {
 			return chai.expect(Manipulator.replaceSiblingParentDestination(inputTrip, 0, 3, ['city:14'], null))
 				.to.deep.equal(expectedTrip);
 		});
+
+		it('should correctly update trip day note', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const updatedTrip: Trip = Manipulator.updateDayNote(inputTrip, 1, 'This is a test note');
+
+			return chai.expect(updatedTrip.days![1].note).to.equal('This is a test note');
+		});
+
+		it('should throw an exception when updating day note with wrong dayIndex ', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			return chai.expect(
+				() => Manipulator.updateDayNote(inputTrip, 10, 'This is a test note')
+			).to.throw('Invalid dayIndex');
+		});
 	});
 });

@@ -1,6 +1,6 @@
 import { Place } from '../Places';
-import { listToEnum } from '../Util';
 import { Waypoint } from '../Route/Route';
+import { listToEnum } from '../Util';
 
 const transportModeValues = listToEnum([
 	'car',

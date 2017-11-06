@@ -131,6 +131,7 @@ declare class TripModule {
 		duration: number | null,
 		note: string | null
 	): Promise<Trips.Trip>;
+	public updateDayNote(tripId: string, dayIndex: number, note: string): Promise<Trips.Trip>
 }
 
 declare class UserModule {
