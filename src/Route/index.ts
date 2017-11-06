@@ -35,8 +35,8 @@ export async function getRoutesForTripDay(tripId: string, dayIndex: number): Pro
 	const routes: Route[] = await Dao.getRoutes(createRequests(places, day));
 	return {
 		routes: filterRoutesDirections(routes),
-		isExplicitFlags: day.itinerary.slice(1).map(
-			(item: ItineraryItem) => (item.transportFromPrevious !== null)
+		userTransportSettings: day.itinerary.slice(1).map(
+			(item: ItineraryItem) => (item.transportFromPrevious)
 		)
 	} as TripDayRoutes;
 }

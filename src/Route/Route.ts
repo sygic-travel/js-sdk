@@ -1,9 +1,9 @@
 import { Location } from '../Geo';
-import { TransportAvoid, TransportMode } from '../Trip';
+import { TransportAvoid, TransportMode, TransportSettings } from '../Trip';
 
 export interface TripDayRoutes {
 	routes: Route[];
-	isExplicitFlags: boolean[];
+	userTransportSettings: (TransportSettings|null)[];
 }
 
 export interface Route {
