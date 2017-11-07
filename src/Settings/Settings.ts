@@ -3,4 +3,5 @@ export interface Settings {
 	ssoApiUrl?: string;
 	ssoClientId?: string;
 	integratorApiKey?: string;
+	kiwiPartnerId?: string;
 }
