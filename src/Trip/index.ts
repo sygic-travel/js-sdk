@@ -230,23 +230,7 @@ export async function addPlaceToDay(
 		if (firstPlaceInDay && hasDayStickyPlaceFromBothSides(trip, dayIndex) && firstPlaceInDay.id !== place.id) {
 			trip = TripManipulator.addPlaceToDay(trip, firstPlaceInDay, dayIndex, userSettings, 1);
 		}
-
-		if (dayIndex === 0 && (placeId === userSettings.homePlaceId || placeId === userSettings.workPlaceId)) {
-			positionInDay = 0;
-		} else if (
-			trip.days && dayIndex === trip.days.length - 1 &&
-			(placeId === userSettings.homePlaceId || placeId === userSettings.workPlaceId)
-		) {
-			positionInDay = trip.days[dayIndex].itinerary.length;
-		} else {
-			const prevItinerary: ItineraryItem[]|null = trip.days && dayIndex !== 0 ? trip.days[dayIndex - 1].itinerary : null;
-
-			positionInDay = PositionFinder.findOptimalPosition(
-				place,
-				prevItinerary ? prevItinerary[prevItinerary.length - 1] : null,
-				trip.days ? trip.days[dayIndex].itinerary : []
-			);
-		}
+		positionInDay = PositionFinder.findOptimalPosition(place, userSettings, dayIndex, trip);
 	}
 
 	trip = TripManipulator.addPlaceToDay(trip, place, dayIndex, userSettings, positionInDay);
