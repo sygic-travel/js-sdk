@@ -1,8 +1,9 @@
-import { ItineraryItem } from '.';
+import { ItineraryItem, Trip } from '.';
 import { EARTH_RADIUS, getDistance, Location } from '../Geo';
 import { isStickyByDefault, Place } from '../Places';
+import { UserSettings } from '../User';
 
-export function findOptimalPosition(
+export function findOptimalPositionInDay(
 	place: Place,
 	previousDayLastItem: ItineraryItem|null,
 	itinerary: ItineraryItem[]
@@ -63,4 +64,27 @@ export function findOptimalPosition(
 		checkIndex++;
 	}
 	return minDistanceIndex;
+}
+
+export function findOptimalPosition(
+	place: Place,
+	userSettings: UserSettings,
+	dayIndex: number,
+	trip: Trip
+): number {
+	if (dayIndex === 0 && (place.id === userSettings.homePlaceId || place.id === userSettings.workPlaceId)) {
+		return 0;
+	} else if (
+		trip.days && dayIndex === trip.days.length - 1 &&
+		(place.id === userSettings.homePlaceId || place.id === userSettings.workPlaceId)
+	) {
+		return trip.days[dayIndex].itinerary.length;
+	}
+	const prevItinerary: ItineraryItem[]|null = trip.days && dayIndex !== 0 ? trip.days[dayIndex - 1].itinerary : null;
+
+	return findOptimalPositionInDay(
+		place,
+		prevItinerary ? prevItinerary[prevItinerary.length - 1] : null,
+		trip.days ? trip.days[dayIndex].itinerary : []
+	);
 }

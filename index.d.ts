@@ -116,6 +116,13 @@ declare class TripModule {
 	public removePlacesFromDay(id: string, dayIndex: number, positionsInDay: number[]): Promise<Trips.Trip>;
 	public removeAllPlacesFromDay(id: string, dayIndex: number): Promise<Trips.Trip>;
 	public addPlaceToDay(tripId: string, placeId: string, dayIndex: number, positionInDay?: number): Promise<Trips.Trip>;
+	public addSequenceToDay(
+		tripId: string,
+		dayIndex: number,
+		placeIds: string[],
+		transports?: (Trips.TransportSettings|null)[],
+		positionInDay?: number
+	): Promise<Trips.Trip>;
 	public setOvernightPlace(tripId: string, placeId: string, dayIndex: number): Promise<Trips.Trip>;
 	public setTransport(
 		id: string,
