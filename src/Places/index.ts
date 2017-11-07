@@ -2,7 +2,7 @@ import { Bounds, Location } from '../Geo';
 import { Medium } from '../Media/Media';
 import * as Dao from './DataAccess';
 import { PlacesListFilter, PlacesListFilterJSON } from './ListFilter';
-import { CustomPlaceFormData, isStickyByDefault, Place } from './Place';
+import { CustomPlaceFormData, hasTag, isStickyByDefault, Place } from './Place';
 import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
 import { DayOpeningHours, PlaceOpeningHours } from './PlaceOpeningHours';
@@ -13,6 +13,7 @@ import { PlacesStatsFilter, PlacesStatsFilterJSON } from './StatsFilter';
 
 export {
 	CustomPlaceFormData,
+	hasTag,
 	isStickyByDefault,
 	DayOpeningHours,
 	PlacesListFilter,

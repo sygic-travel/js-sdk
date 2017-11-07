@@ -7,6 +7,7 @@ let stApiUrl: string;
 let ssoApiUrl: string;
 let ssoClientId: string;
 let integratorApiKey: string;
+let kiwiPartnerId: string = 'sygictravel';
 
 let tripConflictHandler: null | TripConflictHandler;
 
@@ -22,6 +23,9 @@ export function setEnvironment(settings: Settings): void {
 	}
 	if (settings.integratorApiKey) {
 		integratorApiKey = settings.integratorApiKey;
+	}
+	if (settings.kiwiPartnerId) {
+		kiwiPartnerId = settings.kiwiPartnerId;
 	}
 }
 
@@ -47,4 +51,8 @@ export function setTripConflictHandler(handler: null | TripConflictHandler) {
 
 export function getTripConflictHandler(): null | TripConflictHandler {
 	return tripConflictHandler;
+}
+
+export function getKiwiParnerId() {
+	return kiwiPartnerId;
 }

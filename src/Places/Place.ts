@@ -1,6 +1,6 @@
 import { Location } from '../Geo';
 import { Bounds } from '../Geo/Bounds';
-import { PlaceDetail} from './PlaceDetail';
+import { PlaceDetail, Tag } from './PlaceDetail';
 
 export interface Place {
 	id: string;
@@ -37,4 +37,9 @@ export interface CustomPlaceFormData {
 
 export function isStickyByDefault(place: Place): boolean {
 	return place.categories.indexOf('sleeping') !== -1;
+}
+
+export function hasTag(key: string, detail: PlaceDetail): boolean {
+	const found = detail.tags.find((tag: Tag) => tag.key === key);
+	return !!found;
 }

@@ -43,6 +43,10 @@ declare class ForecastModule {
 	public getDestinationWeather(destinationId: string): Promise<Forecast.Forecast[]>
 }
 
+declare class FlightsModule {
+	public getFlights(query: Flights.FlightsQuery): Promise<Flights.FlightSearchResult[]>
+}
+
 declare class HotelsModule {
 	public getHotels(filter: Hotels.HotelsFilterJSON): Promise<Hotels.AvailableHotels>
 }
@@ -830,4 +834,56 @@ export interface Settings {
 	ssoApiUrl?: string;
 	ssoClientId?: string;
 	integratorApiKey?: string;
+}
+
+export namespace Flights {
+	export interface FlightSearchResult {
+		price: number;
+		currency: string;
+		deepLink: string;
+		outbound: Flight;
+		inbound: Flight|null;
+	}
+
+	export interface Airport {
+		location: Location;
+		name: string;
+		cityName: string;
+		iata: string;
+	}
+
+	export interface Flight {
+		origin: Airport;
+		destination: Airport;
+		routes: Route[];
+		duration: number;
+	}
+
+	export interface Route {
+		origin: Airport;
+		destination: Airport;
+		flightNo: number;
+		airline: Airline;
+		departureTime: Date;
+		arrivalTime: Date;
+		polyline: string;
+		stopOver: number|null;
+	}
+
+	export interface FlightsQuery {
+		origin: Location;
+		destination: Location;
+		date: string;
+		returnDate: string;
+		currency?: string;
+		language?: string;
+		adults?: number;
+		infants?: number;
+	}
+
+	export interface Airline {
+		name: string;
+		logo: string;
+		id: string;
+	}
 }
