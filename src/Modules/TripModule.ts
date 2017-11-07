@@ -2,6 +2,7 @@ import * as Settings from '../Settings';
 import {
 	addDaysToTrip,
 	addPlaceToDay,
+	addSequenceToDay,
 	applyTripTemplate,
 	cloneTrip,
 	createTrip,
@@ -90,6 +91,16 @@ export default class TripModule {
 		dayIndex: number,
 		positionInDay?: number): Promise<Trip> {
 		return addPlaceToDay(tripId, placeId, dayIndex, positionInDay);
+	}
+
+	public addSequenceToDay(
+		tripId: string,
+		dayIndex: number,
+		placeIds: string[],
+		transports?: (TransportSettings|null)[],
+		positionInDay?: number
+	): Promise<Trip> {
+		return addSequenceToDay(tripId, dayIndex, placeIds, transports, positionInDay);
 	}
 
 	public setOvernightPlace(

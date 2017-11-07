@@ -1,6 +1,6 @@
 import { ChangeNotification } from '../Changes';
 import { getPlaceDetailed, getPlacesDetailed, Place } from '../Places';
-import { getUserSettings } from '../User';
+import { getUserSettings, UserSettings } from '../User';
 import { addDaysToDate } from '../Util/index';
 import * as Dao from './DataAccess';
 import * as TripManipulator from './Manipulator';
@@ -235,6 +235,47 @@ export async function addPlaceToDay(
 
 	trip = TripManipulator.addPlaceToDay(trip, place, dayIndex, userSettings, positionInDay);
 	trip = TripManipulator.replaceSiblingParentDestination(trip, dayIndex, positionInDay, place.parents, userSettings);
+	return Dao.updateTrip(trip);
+}
+
+export async function addSequenceToDay(
+	tripId: string,
+	dayIndex: number,
+	placeIds: string[],
+	transports?: (TransportSettings|null)[],
+	positionInDay?: number
+): Promise<Trip> {
+	const initialLoadings = await Promise.all([
+		getTripDetailed(tripId),
+		getPlacesDetailed(placeIds, '300x300'),
+		getUserSettings(),
+	]);
+	let trip: Trip = initialLoadings[0];
+	const places: Place[] = initialLoadings[1];
+	const userSettings: UserSettings = initialLoadings[2];
+
+	if (!trip.days || trip.days.length <= dayIndex) {
+		throw new Error('Trip does not have day on index ' + dayIndex);
+	}
+
+	if (typeof positionInDay === 'undefined' || positionInDay === null) {
+		positionInDay = PositionFinder.findOptimalPosition(places[0], userSettings, dayIndex, trip);
+	}
+
+	let sequenceIndex = 0;
+	for (const place of places) {
+		trip = TripManipulator.addPlaceToDay(
+			trip,
+			place,
+			dayIndex,
+			userSettings,
+			positionInDay + sequenceIndex
+		);
+		if (transports && transports[sequenceIndex]) {
+			trip = TripManipulator.setTransport(trip, dayIndex, positionInDay + sequenceIndex, transports[sequenceIndex]);
+		}
+		sequenceIndex++;
+	}
 	return Dao.updateTrip(trip);
 }
 
