@@ -221,7 +221,7 @@ export async function addPlaceToDay(
 	const place: Place = await getPlaceDetailed(placeId, '300x300');
 	const userSettings = await getUserSettings();
 
-	if (!trip.days || trip.days.length <= dayIndex) {
+	if (!trip.days || !trip.days[dayIndex]) {
 		throw new Error('Trip does not have day on index ' + dayIndex);
 	}
 
@@ -254,7 +254,7 @@ export async function addSequenceToDay(
 	const places: Place[] = initialLoadings[1];
 	const userSettings: UserSettings = initialLoadings[2];
 
-	if (!trip.days || trip.days.length <= dayIndex) {
+	if (!trip.days || !trip.days[dayIndex]) {
 		throw new Error('Trip does not have day on index ' + dayIndex);
 	}
 
