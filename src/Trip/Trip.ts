@@ -139,37 +139,6 @@ export interface TripUpdateData {
 	isDeleted?: boolean;
 }
 
-export function hasDayStickyPlaceFromBothSides(trip: Trip, dayIndex: number): boolean {
-	if (dayIndex === 0 || (trip.days && dayIndex === trip.days.length - 1)) {
-		return false;
-	}
-
-	if (!trip.days) {
-		throw new Error('Trip is not fully loaded');
-	}
-
-	const itinerary: ItineraryItem[] = trip.days[dayIndex].itinerary;
-
-	if (itinerary.length !== 1 || !itinerary[0].isSticky) {
-		return false;
-	}
-
-	const nextItinerary: ItineraryItem[]  = trip.days[dayIndex + 1].itinerary;
-	const previousItinerary: ItineraryItem[]  = trip.days[dayIndex - 1].itinerary;
-
-	if (nextItinerary.length === 0 || previousItinerary.length === 0) {
-		return false;
-	}
-
-	if (nextItinerary[0].placeId === itinerary[0].placeId &&
-		previousItinerary[previousItinerary.length - 1].placeId === itinerary[0].placeId
-	) {
-		return true;
-	}
-
-	return false;
-}
-
 export interface TripTemplate {
 	id: number;
 	description: string;

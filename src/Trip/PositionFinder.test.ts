@@ -5,7 +5,6 @@ import { Place } from '../Places';
 import { placeDetailedEiffelTowerWithoutMedia as place } from '../TestData/PlacesExpectedResults';
 import { itineratyItem as itineratyItemTemplate, tripDetailed } from '../TestData/TripExpectedResults';
 import { UserSettings } from '../User';
-import { AddToTripInstructions, findOptimalPositionInDay, getAddToTripInstructions } from './PositionFinder';
 import { ItineraryItem, TransportMode, TransportSettings } from './Trip';
 
 const tripTemplate = cloneDeep(tripDetailed);
@@ -16,87 +15,6 @@ const userSettings: UserSettings = {
 };
 
 describe('PositionFinder', () => {
-	describe('#findOptimalPositionInDay', () => {
-		it('should find ok position for empty day', () => {
-			chai.expect(findOptimalPositionInDay(place, null, [])).to.equal(0);
-		});
-
-		it('should add as second place when one place is present', () => {
-			chai.expect(
-				findOptimalPositionInDay(buildPlace(0, 0, 'p:1'), null, [buildItem(0, 1, 'p:2', false)])
-			).to.equal(1);
-		});
-
-		it('should add at correct place by air distance ', () => {
-			const placeIn = buildPlace(0, 1, 'p:1');
-			const places = [
-				buildItem(0, 0, 'p:0', false),
-				buildItem(0, 2, 'p:2', false),
-				buildItem(0, 3, 'p:3', false),
-			];
-			chai.expect(findOptimalPositionInDay(placeIn, null, places)).to.equal(1);
-		});
-
-		it('should add at correct place by air distance and respect sticky at beginning', () => {
-			const placeIn = buildPlace(0, 0, 'p:1');
-			const stickyItineraryItem = buildItem(0, 1, 'p:5', true);
-			const places = [
-				buildItem(0, 1, 'p:0', true),
-				buildItem(0, 2, 'p:2', false),
-				buildItem(0, 3, 'p:3', false),
-			];
-			chai.expect(findOptimalPositionInDay(placeIn, stickyItineraryItem, places)).to.equal(1);
-		});
-
-		it('should add at correct place by air distance and respect sticky at the and', () => {
-			const placeIn = buildPlace(0, 4, 'p:1');
-			const places = [
-				buildItem(0, 1, 'p:0', false),
-				buildItem(0, 2, 'p:2', false),
-				buildItem(0, 3, 'p:3', true),
-			];
-			chai.expect(findOptimalPositionInDay(placeIn, null, places)).to.equal(2);
-		});
-
-		it('should add by default sticky place as last', () => {
-			const placeIn = buildPlace(0, 0, 'p:2');
-			placeIn.categories = ['sleeping'];
-			const places = [
-				buildItem(0, 1, 'p:0', false),
-				buildItem(0, 3, 'p:1', false),
-			];
-			chai.expect(findOptimalPositionInDay(placeIn, null, places)).to.equal(2);
-		});
-
-		it('should add by default sticky place to order when other sticky is present', () => {
-			const placeIn = buildPlace(0, 0, 'p:2');
-			placeIn.categories = ['sleeping'];
-			const places = [
-				buildItem(0, 1, 'p:0', false),
-				buildItem(0, 2, 'p:2', false),
-				buildItem(0, 3, 'p:3', true),
-			];
-			chai.expect(findOptimalPositionInDay(placeIn, null, places)).to.equal(0);
-		});
-
-		it('should respect sticky place from previous day', () => {
-			const placeIn = buildPlace(0, 0, 'p:2');
-			const stickyItineraryItem = buildItem(0, 1, 'p:5', true);
-			const places = [
-				buildItem(0, 1, 'p:0', true),
-			];
-			chai.expect(findOptimalPositionInDay(placeIn, stickyItineraryItem, places)).to.equal(1);
-		});
-
-		it('should respect sticky place from next day', () => {
-			const placeIn = buildPlace(0, 0, 'p:2');
-			const places = [
-				buildItem(0, 1, 'p:0', true),
-			];
-			chai.expect(findOptimalPositionInDay(placeIn, null, places)).to.equal(0);
-		});
-	});
-
 	describe('#getAddToTripInstructions', () => {
 		it('should return correct result for empty trip day', () => {
 			const placeIn = buildPlace(0, 0, 'poi:1');
