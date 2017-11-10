@@ -170,6 +170,7 @@ export function addPlaceToDay(
 		!UNBREAKABLE_TRANSPORT_MODES.includes(nextItem.transportFromPrevious.mode)
 	) {
 		itineraryItem.transportFromPrevious = cloneDeep(nextItem.transportFromPrevious);
+		itineraryItem.transportFromPrevious!.waypoints = []; // Quickfix for waypoints duplication
 	}
 
 	resultTrip.days[dayIndex].itinerary.splice(positionInDay, 0, itineraryItem);
