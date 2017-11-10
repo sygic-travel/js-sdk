@@ -28,6 +28,14 @@ export function getAddToTripInstructions(
 	let previousDestinationMatch = false;
 	const itinerary = trip.days![dayIndex].itinerary;
 
+	// Adding hotel
+	if (isStickyByDefault(place) && (!itinerary.length || !itinerary[itinerary.length - 1].isSticky)) {
+		return {
+			position: itinerary.length,
+			shouldDuplicate: false
+		};
+	}
+
 	// Adding home/work to first day
 	if (dayIndex === 0 && (place.id === userSettings.homePlaceId || place.id === userSettings.workPlaceId)) {
 		return {

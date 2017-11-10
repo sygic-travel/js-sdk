@@ -5,6 +5,7 @@ import { Place } from '../Places';
 import { placeDetailedEiffelTowerWithoutMedia as place } from '../TestData/PlacesExpectedResults';
 import { itineratyItem as itineratyItemTemplate, tripDetailed } from '../TestData/TripExpectedResults';
 import { UserSettings } from '../User';
+import { AddToTripInstructions, getAddToTripInstructions } from './PositionFinder';
 import { ItineraryItem, TransportMode, TransportSettings } from './Trip';
 
 const tripTemplate = cloneDeep(tripDetailed);
@@ -273,6 +274,40 @@ describe('PositionFinder', () => {
 			const result2: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
 			chai.expect(result2.position).to.equal(1);
 			chai.expect(result2.shouldDuplicate).to.be.false;
+		});
+
+		it('should correctly add hotel if there is no sticky place', () => {
+			const placeIn = buildPlace(0, 0, 'poi:1');
+			placeIn.categories = ['sleeping'];
+			const trip = cloneDeep(tripTemplate);
+			trip.days = [{
+				note: null,
+				date: null,
+				itinerary: [
+					buildItem(0, 0, 'poi:2', false, ['city:1']),
+					buildItem(0, 1, 'poi:3', false, ['city:1']),
+				]
+			}];
+			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
+			chai.expect(result.position).to.equal(2);
+			chai.expect(result.shouldDuplicate).to.be.false;
+		});
+
+		it('should correctly add hotel if there is already hotel', () => {
+			const placeIn = buildPlace(0, 0, 'poi:1');
+			placeIn.categories = ['sleeping'];
+			const trip = cloneDeep(tripTemplate);
+			trip.days = [{
+				note: null,
+				date: null,
+				itinerary: [
+					buildItem(0, 0, 'poi:2', false, ['city:1']),
+					buildItem(0, 1, 'poi:3', true, ['city:1']),
+				]
+			}];
+			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
+			chai.expect(result.position).to.equal(1);
+			chai.expect(result.shouldDuplicate).to.be.false;
 		});
 	});
 });
