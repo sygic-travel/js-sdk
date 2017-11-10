@@ -1,6 +1,6 @@
 import * as cloneDeep from 'lodash.clonedeep';
 
-import { Day, Trip } from '.';
+import { Day, Trip, UNBREAKABLE_TRANSPORT_MODES } from '.';
 import { isStickyByDefault, Place } from '../Places';
 import { UserSettings } from '../User';
 import { addDaysToDate, subtractDaysFromDate } from '../Util';
@@ -137,7 +137,6 @@ export function addPlaceToDay(
 	positionInDay?: number
 ): Trip {
 	checkDayExists(tripToBeUpdated, dayIndex);
-
 	if (
 		typeof positionInDay !== 'undefined' &&
 		positionInDay !== null &&
@@ -157,12 +156,40 @@ export function addPlaceToDay(
 		transportFromPrevious: null
 	};
 
-	if (typeof positionInDay !== 'undefined' && positionInDay !== null) {
-		resultTrip.days[dayIndex].itinerary.splice(positionInDay, 0, itineraryItem);
-	} else {
-		resultTrip.days[dayIndex].itinerary.push(itineraryItem);
+	if (typeof positionInDay === 'undefined' || positionInDay === null) {
+		positionInDay = resultTrip.days[dayIndex].itinerary.length;
 	}
+
+	let nextItem: ItineraryItem|null = null;
+	if (tripToBeUpdated.days![dayIndex].itinerary[positionInDay!]) {
+		nextItem = tripToBeUpdated.days![dayIndex].itinerary[positionInDay!];
+	}
+
+	if (nextItem &&
+		nextItem.transportFromPrevious &&
+		!UNBREAKABLE_TRANSPORT_MODES.includes(nextItem.transportFromPrevious.mode)
+	) {
+		itineraryItem.transportFromPrevious = cloneDeep(nextItem.transportFromPrevious);
+	}
+
+	resultTrip.days[dayIndex].itinerary.splice(positionInDay, 0, itineraryItem);
 	return resolveStickiness(resultTrip, userSettings);
+}
+
+export function duplicateItineraryItem(
+	tripToBeUpdated: Trip,
+	dayIndex: number,
+	itemIndex: number,
+	resetTransport: boolean = false
+): Trip {
+	checkItemExists(tripToBeUpdated, dayIndex, itemIndex);
+	const trip: Trip = cloneDeep(tripToBeUpdated);
+	const itemToAdd = cloneDeep(trip.days![dayIndex].itinerary[itemIndex]);
+	if (resetTransport) {
+		itemToAdd.transportFromPrevious = null;
+	}
+	trip.days![dayIndex].itinerary.splice(itemIndex + 1, 0, itemToAdd);
+	return trip;
 }
 
 export function movePlaceInDay(
@@ -297,37 +324,6 @@ export function addOrReplaceOvernightPlace(
 		resultTrip = addPlaceToDay(resultTrip, place, nextDayIndex, userSettings, 0);
 	}
 	return resolveStickiness(resultTrip, userSettings);
-}
-
-export function replaceSiblingParentDestination(
-	trip: Trip,
-	dayIndex: number,
-	positionInDay: number,
-	parentIdsOfAddedPlace: string[],
-	userSettings: UserSettings | null
-): Trip {
-	if (!trip.days) {
-		return trip;
-	}
-	const itinerary: ItineraryItem[] = trip.days[dayIndex].itinerary;
-	const addedPlace: Place | null = itinerary[positionInDay].place;
-	const leftSiblingItineraryItem: ItineraryItem = itinerary[positionInDay - 1];
-	const rightSiblingItineraryItem: ItineraryItem = itinerary[positionInDay + 1];
-	const placeIndexesToBeRemoved: number[] = [];
-
-	if (leftSiblingItineraryItem && parentIdsOfAddedPlace.indexOf(leftSiblingItineraryItem.placeId) >= 0) {
-		placeIndexesToBeRemoved.push(positionInDay - 1);
-	}
-
-	if (rightSiblingItineraryItem && parentIdsOfAddedPlace.indexOf(rightSiblingItineraryItem.placeId) >= 0) {
-		placeIndexesToBeRemoved.push(positionInDay + 1);
-	}
-
-	if (placeIndexesToBeRemoved.length > 0 && addedPlace) {
-		trip = removePlacesFromDay(trip, dayIndex, placeIndexesToBeRemoved, userSettings);
-	}
-
-	return trip;
 }
 
 function checkDayExists(

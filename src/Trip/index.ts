@@ -5,10 +5,10 @@ import { addDaysToDate } from '../Util/index';
 import * as Dao from './DataAccess';
 import * as TripManipulator from './Manipulator';
 import { mapTripCreateRequest, putPlacesToTrip } from './Mapper';
-import * as PositionFinder from './PositionFinder';
+import { AddToTripInstructions, DESTINATION_BREAK_LEVELS, getAddToTripInstructions } from './PositionFinder';
+
 import {
 	Day,
-	hasDayStickyPlaceFromBothSides,
 	isTransportAvoid,
 	isTransportMode,
 	ItineraryItem,
@@ -23,7 +23,8 @@ import {
 	TripMedia,
 	TripPrivileges,
 	TripTemplate,
-	TripUpdateData
+	TripUpdateData,
+	UNBREAKABLE_TRANSPORT_MODES,
 } from './Trip';
 
 export {
@@ -43,7 +44,8 @@ export {
 	TripMedia,
 	TripPrivileges,
 	TripTemplate,
-	TripUpdateData
+	TripUpdateData,
+	UNBREAKABLE_TRANSPORT_MODES,
 };
 
 export async function createTrip(startDate: string, name: string, placeId: string): Promise<Trip> {
@@ -217,25 +219,7 @@ export async function addPlaceToDay(
 	dayIndex: number,
 	positionInDay?: number
 ): Promise<Trip> {
-	let trip: Trip = await getTripDetailed(tripId);
-	const place: Place = await getPlaceDetailed(placeId, '300x300');
-	const userSettings = await getUserSettings();
-
-	if (!trip.days || !trip.days[dayIndex]) {
-		throw new Error('Trip does not have day on index ' + dayIndex);
-	}
-
-	if (typeof positionInDay === 'undefined' || positionInDay === null) {
-		const firstPlaceInDay: Place|null = trip.days[dayIndex].itinerary[0] && trip.days[dayIndex].itinerary[0].place;
-		if (firstPlaceInDay && hasDayStickyPlaceFromBothSides(trip, dayIndex) && firstPlaceInDay.id !== place.id) {
-			trip = TripManipulator.addPlaceToDay(trip, firstPlaceInDay, dayIndex, userSettings, 1);
-		}
-		positionInDay = PositionFinder.findOptimalPosition(place, userSettings, dayIndex, trip);
-	}
-
-	trip = TripManipulator.addPlaceToDay(trip, place, dayIndex, userSettings, positionInDay);
-	trip = TripManipulator.replaceSiblingParentDestination(trip, dayIndex, positionInDay, place.parents, userSettings);
-	return Dao.updateTrip(trip);
+	return addSequenceToDay(tripId, dayIndex, [placeId], [null], positionInDay);
 }
 
 export async function addSequenceToDay(
@@ -259,7 +243,20 @@ export async function addSequenceToDay(
 	}
 
 	if (typeof positionInDay === 'undefined' || positionInDay === null) {
-		positionInDay = PositionFinder.findOptimalPosition(places[0], userSettings, dayIndex, trip);
+		const destinations = await getPlacesDetailed(places[0].parents, '300x300');
+		const suitableDestinations = destinations.filter((place) => DESTINATION_BREAK_LEVELS.includes(place.level));
+		const addToTripInstructions: AddToTripInstructions = getAddToTripInstructions(
+			places[0],
+			trip,
+			dayIndex,
+			suitableDestinations.map((destination) => destination.id),
+			userSettings
+		);
+		positionInDay = addToTripInstructions.position;
+		if (addToTripInstructions.shouldDuplicate) {
+			trip = TripManipulator.duplicateItineraryItem(trip, dayIndex, addToTripInstructions.position, true);
+			positionInDay++;
+		}
 	}
 
 	let sequenceIndex = 0;
