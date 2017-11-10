@@ -12,6 +12,7 @@ import { Day, ItineraryItem, Trip } from './Trip';
 import { ApiResponse, StApi } from '../Api';
 import { tripsDetailedCache } from '../Cache';
 import * as PlaceController from '../Places';
+import { Place } from '../Places';
 import { setEnvironment } from '../Settings';
 import * as PlaceTestData from '../TestData/PlacesApiResponses';
 import * as PlaceExpectedResults from '../TestData/PlacesExpectedResults';
@@ -252,7 +253,7 @@ describe('TripController', () => {
 			// Stubs for fetching trip
 			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => {resolve(inputTrip); }));
 			sandbox.stub(Mapper, 'putPlacesToTrip').returns(new Promise<Trip>((resolve) => {resolve(inputTrip); }));
-			sandbox.stub(PlaceController, 'getPlacesDetailed');
+			sandbox.stub(PlaceController, 'getPlacesDetailed').returns(new Promise<Place[]>((resolve) => {resolve([]); }));
 
 			// Update trip stub
 			sandbox.stub(TripDao, 'updateTrip').callsFake((trip) => {
@@ -291,7 +292,7 @@ describe('TripController', () => {
 			// Stubs for fetching trip
 			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => { resolve(inputTrip); }));
 			sandbox.stub(Mapper, 'putPlacesToTrip').returns(new Promise<Trip>((resolve) => { resolve(inputTrip); }));
-			sandbox.stub(PlaceController, 'getPlacesDetailed');
+			sandbox.stub(PlaceController, 'getPlacesDetailed').returns(new Promise<Place[]>((resolve) => {resolve([]); }));
 
 			// Update trip stub
 			sandbox.stub(TripDao, 'updateTrip').callsFake((trip) => {

@@ -5,10 +5,10 @@ import { addDaysToDate } from '../Util/index';
 import * as Dao from './DataAccess';
 import * as TripManipulator from './Manipulator';
 import { mapTripCreateRequest, putPlacesToTrip } from './Mapper';
-import * as PositionFinder from './PositionFinder';
+import { AddToTripInstructions, DESTINATION_BREAK_LEVELS, getAddToTripInstructions } from './PositionFinder';
+
 import {
 	Day,
-	hasDayStickyPlaceFromBothSides,
 	isTransportAvoid,
 	isTransportMode,
 	ItineraryItem,
@@ -228,13 +228,21 @@ export async function addPlaceToDay(
 	}
 
 	if (typeof positionInDay === 'undefined' || positionInDay === null) {
-		const firstPlaceInDay: Place|null = trip.days[dayIndex].itinerary[0] && trip.days[dayIndex].itinerary[0].place;
-		if (firstPlaceInDay && hasDayStickyPlaceFromBothSides(trip, dayIndex) && firstPlaceInDay.id !== place.id) {
-			trip = TripManipulator.addPlaceToDay(trip, firstPlaceInDay, dayIndex, userSettings, 1);
+		const destinations = await getPlacesDetailed(place.parents, '300x300')
+		const suitableDestinations = destinations.filter((dest) => DESTINATION_BREAK_LEVELS.includes(dest.level));
+		const addToTripInstructions: AddToTripInstructions = getAddToTripInstructions(
+			place,
+			trip,
+			dayIndex,
+			suitableDestinations.map((destination) => destination.id),
+			userSettings
+		);
+		positionInDay = addToTripInstructions.position;
+		if (addToTripInstructions.shouldDuplicate) {
+			trip = TripManipulator.duplicateItineraryItem(trip, dayIndex, addToTripInstructions.position, true);
+			positionInDay++;
 		}
-		positionInDay = PositionFinder.findOptimalPosition(place, userSettings, dayIndex, trip);
 	}
-
 	trip = TripManipulator.addPlaceToDay(trip, place, dayIndex, userSettings, positionInDay);
 	return Dao.updateTrip(trip);
 }
@@ -260,7 +268,20 @@ export async function addSequenceToDay(
 	}
 
 	if (typeof positionInDay === 'undefined' || positionInDay === null) {
-		positionInDay = PositionFinder.findOptimalPosition(places[0], userSettings, dayIndex, trip);
+		const destinations = await getPlacesDetailed(places[0].parents, '300x300');
+		const suitableDestinations = destinations.filter((place) => DESTINATION_BREAK_LEVELS.includes(place.level));
+		const addToTripInstructions: AddToTripInstructions = getAddToTripInstructions(
+			places[0],
+			trip,
+			dayIndex,
+			suitableDestinations.map((destination) => destination.id),
+			userSettings
+		);
+		positionInDay = addToTripInstructions.position;
+		if (addToTripInstructions.shouldDuplicate) {
+			trip = TripManipulator.duplicateItineraryItem(trip, dayIndex, addToTripInstructions.position);
+			positionInDay++;
+		}
 	}
 
 	let sequenceIndex = 0;
