@@ -467,6 +467,33 @@ describe('TripManipulator', () => {
 
 	});
 
+	describe('#duplicateItineraryItem', () => {
+		it('should throw an error when invalid dayIndex is passed', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			chai.expect(() => Manipulator.duplicateItineraryItem(inputTrip, 100, 0))
+				.to.throw(Error, 'Invalid dayIndex');
+		});
+		it('should throw an error when invalid itemIndex is passed', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			chai.expect(() => Manipulator.duplicateItineraryItem(inputTrip, 0, 1000))
+				.to.throw(Error, 'Invalid itemIndex');
+		});
+		it('should duplicate place correctly', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			inputTrip.days![0].itinerary[1].transportFromPrevious = cloneDeep(TripExpectedResults.transportSettings);
+			const trip = Manipulator.duplicateItineraryItem(inputTrip, 0, 1);
+			chai.expect(trip.days![0].itinerary[1]).to.deep.equal(trip.days![0].itinerary[2]);
+		});
+		it('should duplicate place and reset transport correctly', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			inputTrip.days![0].itinerary[1].transportFromPrevious = cloneDeep(TripExpectedResults.transportSettings);
+			const trip = Manipulator.duplicateItineraryItem(inputTrip, 0, 1, true);
+			chai.expect(trip.days![0].itinerary[1].placeId).to.equal(trip.days![0].itinerary[2].placeId);
+			chai.expect(trip.days![0].itinerary[1].transportFromPrevious).to.deep.equal(TripExpectedResults.transportSettings);
+			chai.expect(trip.days![0].itinerary[2].transportFromPrevious).to.be.null;
+		});
+	});
+
 	describe('#addOrReplaceOvernightPlace', () => {
 		it('should throw an error when invalid dayIndex is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);

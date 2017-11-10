@@ -176,6 +176,22 @@ export function addPlaceToDay(
 	return resolveStickiness(resultTrip, userSettings);
 }
 
+export function duplicateItineraryItem(
+	tripToBeUpdated: Trip,
+	dayIndex: number,
+	itemIndex: number,
+	resetTransport: boolean = false
+): Trip {
+	checkItemExists(tripToBeUpdated, dayIndex, itemIndex);
+	const trip: Trip = cloneDeep(tripToBeUpdated);
+	const itemToAdd = cloneDeep(trip.days![dayIndex].itinerary[itemIndex]);
+	if (resetTransport) {
+		itemToAdd.transportFromPrevious = null;
+	}
+	trip.days![dayIndex].itinerary.splice(itemIndex + 1, 0, itemToAdd);
+	return trip;
+}
+
 export function movePlaceInDay(
 	tripToBeUpdated: Trip,
 	dayIndex: number,
