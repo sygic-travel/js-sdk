@@ -167,7 +167,7 @@ export function addPlaceToDay(
 
 	if (nextItem &&
 		nextItem.transportFromPrevious &&
-		UNBREAKABLE_TRANSPORT_MODES.includes(nextItem.transportFromPrevious.mode)
+		!UNBREAKABLE_TRANSPORT_MODES.includes(nextItem.transportFromPrevious.mode)
 	) {
 		itineraryItem.transportFromPrevious = cloneDeep(nextItem.transportFromPrevious);
 	}
