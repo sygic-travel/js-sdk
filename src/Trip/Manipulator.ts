@@ -299,37 +299,6 @@ export function addOrReplaceOvernightPlace(
 	return resolveStickiness(resultTrip, userSettings);
 }
 
-export function replaceSiblingParentDestination(
-	trip: Trip,
-	dayIndex: number,
-	positionInDay: number,
-	parentIdsOfAddedPlace: string[],
-	userSettings: UserSettings | null
-): Trip {
-	if (!trip.days) {
-		return trip;
-	}
-	const itinerary: ItineraryItem[] = trip.days[dayIndex].itinerary;
-	const addedPlace: Place | null = itinerary[positionInDay].place;
-	const leftSiblingItineraryItem: ItineraryItem = itinerary[positionInDay - 1];
-	const rightSiblingItineraryItem: ItineraryItem = itinerary[positionInDay + 1];
-	const placeIndexesToBeRemoved: number[] = [];
-
-	if (leftSiblingItineraryItem && parentIdsOfAddedPlace.indexOf(leftSiblingItineraryItem.placeId) >= 0) {
-		placeIndexesToBeRemoved.push(positionInDay - 1);
-	}
-
-	if (rightSiblingItineraryItem && parentIdsOfAddedPlace.indexOf(rightSiblingItineraryItem.placeId) >= 0) {
-		placeIndexesToBeRemoved.push(positionInDay + 1);
-	}
-
-	if (placeIndexesToBeRemoved.length > 0 && addedPlace) {
-		trip = removePlacesFromDay(trip, dayIndex, placeIndexesToBeRemoved, userSettings);
-	}
-
-	return trip;
-}
-
 function checkDayExists(
 	trip: Trip,
 	dayIndex: number,

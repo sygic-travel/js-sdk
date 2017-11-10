@@ -234,7 +234,6 @@ export async function addPlaceToDay(
 	}
 
 	trip = TripManipulator.addPlaceToDay(trip, place, dayIndex, userSettings, positionInDay);
-	trip = TripManipulator.replaceSiblingParentDestination(trip, dayIndex, positionInDay, place.parents, userSettings);
 	return Dao.updateTrip(trip);
 }
 
