@@ -15,6 +15,7 @@ export function isTransportMode(val: any): val is TransportMode {
 	return typeof val === 'string' && transportModeValues[val] === val;
 }
 export type TransportMode = keyof typeof transportModeValues;
+export const UNBREAKABLE_TRANSPORT_MODES = ['plane', 'bus', 'train', 'boat'];
 
 const transportAvoidValues = listToEnum([
 	'tolls',

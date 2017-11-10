@@ -23,7 +23,8 @@ import {
 	TripMedia,
 	TripPrivileges,
 	TripTemplate,
-	TripUpdateData
+	TripUpdateData,
+	UNBREAKABLE_TRANSPORT_MODES,
 } from './Trip';
 
 export {
@@ -43,7 +44,8 @@ export {
 	TripMedia,
 	TripPrivileges,
 	TripTemplate,
-	TripUpdateData
+	TripUpdateData,
+	UNBREAKABLE_TRANSPORT_MODES,
 };
 
 export async function createTrip(startDate: string, name: string, placeId: string): Promise<Trip> {

@@ -1,6 +1,6 @@
 import * as cloneDeep from 'lodash.clonedeep';
 
-import { Day, Trip } from '.';
+import { Day, Trip, UNBREAKABLE_TRANSPORT_MODES } from '.';
 import { isStickyByDefault, Place } from '../Places';
 import { UserSettings } from '../User';
 import { addDaysToDate, subtractDaysFromDate } from '../Util';
@@ -137,7 +137,6 @@ export function addPlaceToDay(
 	positionInDay?: number
 ): Trip {
 	checkDayExists(tripToBeUpdated, dayIndex);
-
 	if (
 		typeof positionInDay !== 'undefined' &&
 		positionInDay !== null &&
@@ -157,11 +156,23 @@ export function addPlaceToDay(
 		transportFromPrevious: null
 	};
 
-	if (typeof positionInDay !== 'undefined' && positionInDay !== null) {
-		resultTrip.days[dayIndex].itinerary.splice(positionInDay, 0, itineraryItem);
-	} else {
-		resultTrip.days[dayIndex].itinerary.push(itineraryItem);
+	if (typeof positionInDay === 'undefined' || positionInDay === null) {
+		positionInDay = resultTrip.days[dayIndex].itinerary.length;
 	}
+
+	let nextItem: ItineraryItem|null = null;
+	if (tripToBeUpdated.days![dayIndex].itinerary[positionInDay!]) {
+		nextItem = tripToBeUpdated.days![dayIndex].itinerary[positionInDay!];
+	}
+
+	if (nextItem &&
+		nextItem.transportFromPrevious &&
+		UNBREAKABLE_TRANSPORT_MODES.includes(nextItem.transportFromPrevious.mode)
+	) {
+		itineraryItem.transportFromPrevious = cloneDeep(nextItem.transportFromPrevious);
+	}
+
+	resultTrip.days[dayIndex].itinerary.splice(positionInDay, 0, itineraryItem);
 	return resolveStickiness(resultTrip, userSettings);
 }
 
