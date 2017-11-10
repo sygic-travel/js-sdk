@@ -219,32 +219,7 @@ export async function addPlaceToDay(
 	dayIndex: number,
 	positionInDay?: number
 ): Promise<Trip> {
-	let trip: Trip = await getTripDetailed(tripId);
-	const place: Place = await getPlaceDetailed(placeId, '300x300');
-	const userSettings = await getUserSettings();
-
-	if (!trip.days || !trip.days[dayIndex]) {
-		throw new Error('Trip does not have day on index ' + dayIndex);
-	}
-
-	if (typeof positionInDay === 'undefined' || positionInDay === null) {
-		const destinations = await getPlacesDetailed(place.parents, '300x300')
-		const suitableDestinations = destinations.filter((dest) => DESTINATION_BREAK_LEVELS.includes(dest.level));
-		const addToTripInstructions: AddToTripInstructions = getAddToTripInstructions(
-			place,
-			trip,
-			dayIndex,
-			suitableDestinations.map((destination) => destination.id),
-			userSettings
-		);
-		positionInDay = addToTripInstructions.position;
-		if (addToTripInstructions.shouldDuplicate) {
-			trip = TripManipulator.duplicateItineraryItem(trip, dayIndex, addToTripInstructions.position, true);
-			positionInDay++;
-		}
-	}
-	trip = TripManipulator.addPlaceToDay(trip, place, dayIndex, userSettings, positionInDay);
-	return Dao.updateTrip(trip);
+	return addSequenceToDay(tripId, dayIndex, [placeId], [null], positionInDay);
 }
 
 export async function addSequenceToDay(
@@ -279,7 +254,7 @@ export async function addSequenceToDay(
 		);
 		positionInDay = addToTripInstructions.position;
 		if (addToTripInstructions.shouldDuplicate) {
-			trip = TripManipulator.duplicateItineraryItem(trip, dayIndex, addToTripInstructions.position);
+			trip = TripManipulator.duplicateItineraryItem(trip, dayIndex, addToTripInstructions.position, true);
 			positionInDay++;
 		}
 	}

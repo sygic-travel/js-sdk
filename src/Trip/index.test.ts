@@ -205,12 +205,14 @@ describe('TripController', () => {
 
 			sandbox.stub(TripDao, 'updateTrip').returnsArg(0);
 
-			sandbox.stub(PlaceController, 'getPlaceDetailed').returns(new Promise<PlaceController.Place>((resolve) => {
-				resolve(cloneDeep(hotel));
-			}));
-			sandbox.stub(PlaceController, 'getPlacesDetailed').returns(
+			const getPlacesStub = sandbox.stub(PlaceController, 'getPlacesDetailed');
+			getPlacesStub.withArgs(['poi:123456']).returns(
+				new Promise<(PlaceController.Place | null)[]>((resolve) => { resolve([hotel]); })
+			);
+
+			getPlacesStub.returns(
 				new Promise<(PlaceController.Place | null)[]>((resolve) => {
-					const places: (PlaceController.Place | null)[] = [];
+					const places: (PlaceController.Place | null)[] = [cloneDeep(hotel)];
 
 					if (expectedTrip.days) {
 						expectedTrip.days.forEach((days: Day) => {
@@ -253,7 +255,8 @@ describe('TripController', () => {
 			// Stubs for fetching trip
 			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => {resolve(inputTrip); }));
 			sandbox.stub(Mapper, 'putPlacesToTrip').returns(new Promise<Trip>((resolve) => {resolve(inputTrip); }));
-			sandbox.stub(PlaceController, 'getPlacesDetailed').returns(new Promise<Place[]>((resolve) => {resolve([]); }));
+			const getPlacesStub = sandbox.stub(PlaceController, 'getPlacesDetailed');
+			getPlacesStub.returns(new Promise<Place[]>((resolve) => {resolve([]); }));
 
 			// Update trip stub
 			sandbox.stub(TripDao, 'updateTrip').callsFake((trip) => {
@@ -265,9 +268,9 @@ describe('TripController', () => {
 			// Place to add
 			const placeToAdd: PlaceController.Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
 			placeToAdd.id = 'poi:2';
-			sandbox.stub(PlaceController, 'getPlaceDetailed').returns(new Promise<PlaceController.Place>((resolve) => {
-				resolve(placeToAdd);
-			}));
+			getPlacesStub.withArgs(['poi:2']).returns(
+				new Promise<(PlaceController.Place | null)[]>((resolve) => { resolve([placeToAdd]); })
+			);
 
 			const resultTrip: Trip = await TripController.addPlaceToDay('xxx', 'poi:2', 1);
 			chai.expect(resultTrip.days && resultTrip.days.length).to.equal(3);
@@ -292,7 +295,8 @@ describe('TripController', () => {
 			// Stubs for fetching trip
 			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => { resolve(inputTrip); }));
 			sandbox.stub(Mapper, 'putPlacesToTrip').returns(new Promise<Trip>((resolve) => { resolve(inputTrip); }));
-			sandbox.stub(PlaceController, 'getPlacesDetailed').returns(new Promise<Place[]>((resolve) => {resolve([]); }));
+			const getPlacesStub = sandbox.stub(PlaceController, 'getPlacesDetailed');
+			getPlacesStub.returns(new Promise<Place[]>((resolve) => {resolve([]); }));
 
 			// Update trip stub
 			sandbox.stub(TripDao, 'updateTrip').callsFake((trip) => {
@@ -304,9 +308,9 @@ describe('TripController', () => {
 			// Place to add
 			const placeToAdd: PlaceController.Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
 			placeToAdd.id = 'poi:100';
-			sandbox.stub(PlaceController, 'getPlaceDetailed').returns(new Promise<PlaceController.Place>((resolve) => {
-				resolve(placeToAdd);
-			}));
+			getPlacesStub.withArgs(['poi:100']).returns(
+				new Promise<(PlaceController.Place | null)[]>((resolve) => { resolve([placeToAdd]); })
+			);
 
 			// Test home in first day
 			userSettingsStub.resetBehavior();
