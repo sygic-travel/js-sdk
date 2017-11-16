@@ -1,5 +1,5 @@
 import * as chai from 'chai';
-import { locationToCanvasCoordinate, locationToTileCoordinate, normalizeLng } from './Location';
+import { isLocationInBounds, locationToCanvasCoordinate, locationToTileCoordinate, normalizeLng } from './Location';
 
 describe('Location', () => {
 	describe('#locationToTileCoordinate', () => {
@@ -41,6 +41,49 @@ describe('Location', () => {
 			chai.expect(normalizeLng(541)).to.equal(-179);
 			chai.expect(normalizeLng(-181)).to.equal(179);
 			chai.expect(normalizeLng(-541)).to.equal(179);
+		});
+	});
+
+	describe('#isLocationInBounds', () => {
+		it('should return true if location is in bounds', () => {
+			chai.expect(isLocationInBounds({
+				lat: 5,
+				lng: 6,
+			}, {
+				south: 4,
+				west: 4,
+				north: 7,
+				east: 7
+			})).to.be.true;
+			chai.expect(isLocationInBounds({
+				lat: 4,
+				lng: 4,
+			}, {
+				south: 4,
+				west: 4,
+				north: 7,
+				east: 7
+			})).to.be.true;
+			chai.expect(isLocationInBounds({
+				lat: 7,
+				lng: 7,
+			}, {
+				south: 4,
+				west: 4,
+				north: 7,
+				east: 7
+			})).to.be.true;
+		});
+		it('should return false if location is not in bounds', () => {
+			chai.expect(isLocationInBounds({
+				lat: 5,
+				lng: 6,
+			}, {
+				south: 7,
+				west: 7,
+				north: 8,
+				east: 8
+			})).to.be.false;
 		});
 	});
 });

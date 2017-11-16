@@ -55,3 +55,10 @@ export function normalizeLng(lng: number) {
 const clip = (n: number, min: number, max: number): number => {
 	return Math.max(min, Math.min(n, max));
 };
+
+export function isLocationInBounds(location: Location, bounds: Bounds): boolean {
+	return location.lat >= bounds.south
+		&& location.lat <= bounds.north
+		&& location.lng >= bounds.west
+		&& location.lng <= bounds.east;
+}

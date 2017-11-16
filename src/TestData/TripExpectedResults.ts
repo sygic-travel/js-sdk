@@ -89,7 +89,7 @@ export const tripDetailed = {
 		{
 			itinerary: [{
 					placeId: 'poi:1',
-					place: itineraryPlace1,
+					place: cloneDeep(itineraryPlace1),
 					startTime: null,
 					duration: null,
 					note: null,
@@ -98,7 +98,7 @@ export const tripDetailed = {
 				} as ItineraryItem,
 				{
 					placeId: 'poi:2',
-					place: itineraryPlace2,
+					place: cloneDeep(itineraryPlace2),
 					startTime: null,
 					duration: null,
 					note: null,
@@ -112,7 +112,7 @@ export const tripDetailed = {
 		{
 			itinerary: [{
 					placeId: 'poi:2',
-					place: itineraryPlace2,
+					place: cloneDeep(itineraryPlace2),
 					startTime: null,
 					duration: null,
 					note: null,
@@ -121,7 +121,7 @@ export const tripDetailed = {
 				} as ItineraryItem,
 				{
 					placeId: 'poi:3',
-					place: itineraryPlace3,
+					place: cloneDeep(itineraryPlace3),
 					startTime: null,
 					duration: null,
 					note: null,
@@ -135,7 +135,7 @@ export const tripDetailed = {
 		{
 			itinerary: [{
 					placeId: 'poi:4',
-					place: itineraryPlace4,
+					place: cloneDeep(itineraryPlace4),
 					startTime: null,
 					duration: null,
 					note: null,
@@ -144,7 +144,7 @@ export const tripDetailed = {
 				} as ItineraryItem,
 				{
 					placeId: 'poi:5',
-					place: itineraryPlace5,
+					place: cloneDeep(itineraryPlace5),
 					startTime: null,
 					duration: null,
 					note: null,
