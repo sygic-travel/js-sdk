@@ -1,6 +1,7 @@
 export { Bounds, getZoomFromBounds } from './Bounds';
 export { Coordinate } from './Coordinate';
 export {
+	calculateLocationsBounds,
 	Location,
 	locationToCanvasCoordinate,
 	locationToTileCoordinate,

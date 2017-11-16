@@ -8,6 +8,7 @@ import FavoritesModule from './Modules/FavoritesModule';
 import FlightsModule from './Modules/FlightsModule';
 import ForecastModule from './Modules/ForecastModule';
 import HotelsModule from './Modules/HotelsModule';
+import PdfModule from './Modules/PdfModule';
 import PlacesModule from './Modules/PlacesModule';
 import RoutesModule from './Modules/RoutesModule';
 import SearchModule from './Modules/SearchModule';
@@ -24,6 +25,7 @@ export default class StSDK extends BaseSDK {
 	public favorites: FavoritesModule = new FavoritesModule();
 	public flights: FlightsModule = new FlightsModule();
 	public forecast: ForecastModule = new ForecastModule();
+	public pdf: PdfModule = new PdfModule();
 	public places: PlacesModule = new PlacesModule();
 	public hotels: HotelsModule = new HotelsModule();
 	public routes: RoutesModule = new RoutesModule();

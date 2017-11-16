@@ -1,5 +1,8 @@
 import * as chai from 'chai';
-import { isLocationInBounds, locationToCanvasCoordinate, locationToTileCoordinate, normalizeLng } from './Location';
+import {
+	calculateLocationsBounds, isLocationInBounds, Location, locationToCanvasCoordinate, locationToTileCoordinate,
+	normalizeLng
+} from './Location';
 
 describe('Location', () => {
 	describe('#locationToTileCoordinate', () => {
@@ -84,6 +87,37 @@ describe('Location', () => {
 				north: 8,
 				east: 8
 			})).to.be.false;
+		});
+	});
+
+	describe('#calculateLocationsBounds', () => {
+		it('should correctly calculate bounds of locations array', () => {
+			const location1: Location = { lat: 1, lng: 1 };
+			const location2: Location = { lat: 2, lng: 2 };
+			const location3: Location = { lat: 3, lng: 3 };
+			const location4: Location = { lat: 4, lng: 4 };
+
+			chai.expect(calculateLocationsBounds([
+				location1,
+				location2,
+				location3,
+				location4
+			])).to.deep.equal({
+				south: 1,
+				west: 1,
+				north: 4,
+				east: 4
+			});
+		});
+
+		it('should correctly calculate bounds of a single location' , () => {
+			const location1: Location = { lat: 1, lng: 1 };
+			chai.expect(calculateLocationsBounds([location1])).to.not.deep.equal({
+				south: 1,
+				west: 1,
+				north: 4,
+				east: 4
+			});
 		});
 	});
 });

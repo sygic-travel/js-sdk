@@ -15,3 +15,10 @@ export async function getCollections(
 ): Promise<Collection[]> {
 	return Dao.getCollections(filter, loadPlaces, photoSize);
 }
+
+export async function getCollectionsForDestinationId(destinationId: string): Promise<Collection[]> {
+	const collectionsFilter: CollectionsFilter = new CollectionsFilter({
+		parentPlaceId: destinationId
+	});
+	return getCollections(collectionsFilter, true, '100x100');
+}
