@@ -1,66 +1,72 @@
-import { Bounds, calculateLocationsBounds, isLocationInBounds, Location } from '../Geo';
+import { Bounds, isLocationInBounds, Location } from '../Geo';
 import { Place } from '../Places';
 import { getStaticMap } from './DataAccess';
-import { PdfQuery, StaticMap, StaticMapSector } from './PdfData';
+import { PdfQuery, PdfStaticMap, PdfStaticMapSector, StaticMap } from './PdfData';
 
 export async function generateDestinationMainMap(
 	destinationPlaces: Place[],
 	query: PdfQuery
-): Promise<StaticMap> {
+): Promise<PdfStaticMap> {
 	const destinationPlacesLocations: Location[] = destinationPlaces.map((place: Place) => place.location);
-	const mainMap: StaticMap = await getStaticMap(
-		'main',
+	const staticMap: StaticMap = await getStaticMap(
 		query.mainMapWidth,
 		query.mainMapHeight,
-		destinationPlacesLocations,
-		calculateLocationsBounds(destinationPlacesLocations)
+		destinationPlacesLocations
 	);
 
-	mainMap.sectors = calculateMapGrid(
-		mainMap.bounds,
+	let sectors: PdfStaticMapSector[] = calculateMapGrid(
+		staticMap.bounds,
 		query.gridColumnsCount,
 		query.gridRowsCount
 	);
 
-	mainMap.sectors.forEach((sector: StaticMapSector) => {
+	sectors.forEach((sector: PdfStaticMapSector) => {
 		sector.places = destinationPlaces.filter((place: Place) => (
 			isLocationInBounds(place.location, sector.bounds)
 		));
 	});
 
 	// delete sectors without places
-	mainMap.sectors = mainMap.sectors.filter((sector: StaticMapSector) => {
+	sectors = sectors.filter((sector: PdfStaticMapSector) => {
 		return sector.places.length > 0;
 	});
 
-	return mainMap;
+	return {
+		...staticMap,
+		id: 'main',
+		sectors
+	};
 }
 
 export async function generateDestinationSecondaryMaps(
 	destinationPlaces: Place[],
 	query: PdfQuery,
-	sectorsForSecondaryMaps: StaticMapSector[],
-): Promise<StaticMap[]> {
-	return await Promise.all(sectorsForSecondaryMaps.map(async (sector: StaticMapSector) => {
+	sectorsForSecondaryMaps: PdfStaticMapSector[],
+): Promise<PdfStaticMap[]> {
+	return await Promise.all(sectorsForSecondaryMaps.map(async (sector: PdfStaticMapSector) => {
 		const sectorPlaces: Place[] = sector!.places.map((sectorPlace: Place) => {
 			const place: Place|undefined = destinationPlaces.find((p: Place) => p.id === sectorPlace.id);
 			return place!;
 		});
-		return await getStaticMap(
-			sector!.id,
+		const staticMap: StaticMap = await getStaticMap(
 			query.secondaryMapWidth,
 			query.secondaryMapHeight,
 			sectorPlaces.map((place: Place, index: number) => ({
 				lat: place.location.lat,
 				lng: place.location.lng,
 				image: `http://a.twobits.cz/i/1x/b/${index + 1}.png`
-			})),
-			calculateLocationsBounds(sectorPlaces.map((p: Place) => p.location))
+			}))
 		);
+
+		return {
+			...staticMap,
+			id: sector!.id,
+			sectors: [],
+		};
 	}));
 }
 
-export function calculateMapGrid(generatedMapsBounds: Bounds, columnsCount, rowsCount): StaticMapSector[] {
+export function calculateMapGrid(generatedMapsBounds: Bounds, columnsCount, rowsCount): PdfStaticMapSector[] {
 	const zeroPoint: Location = {
 		lat: generatedMapsBounds.north,
 		lng: generatedMapsBounds.west
@@ -69,7 +75,7 @@ export function calculateMapGrid(generatedMapsBounds: Bounds, columnsCount, rows
 	const sectorWidth: number = (generatedMapsBounds.east - generatedMapsBounds.west) / columnsCount;
 	const sectorHeight: number = (generatedMapsBounds.north - generatedMapsBounds.south) / rowsCount;
 
-	const mapGrid: StaticMapSector[]  = [];
+	const mapGrid: PdfStaticMapSector[]  = [];
 
 	for (let i = 0; i < rowsCount; i++) {
 		for (let j = 0; j < columnsCount; j++) {

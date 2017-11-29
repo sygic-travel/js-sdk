@@ -69,3 +69,11 @@ export function dateToW3CString(date: Date): string {
 		'T' + hours + ':' + minutes + ':' + seconds +
 		offsetSign + offsetHours + ':' + offsetMinutes;
 }
+
+export function toRadians(degrees: number): number {
+	return degrees * Math.PI / 180;
+}
+
+export function toDegrees(radians: number): number {
+	return radians * 180 / Math.PI;
+}

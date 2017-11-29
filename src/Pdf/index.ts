@@ -3,7 +3,7 @@ import { getPlacesDestinationMap, getPlacesMapFromTrip, mergePlacesArrays, Place
 import { getRoutesForTripDay } from '../Route';
 import { Day, getTripDetailed, Trip } from '../Trip';
 import { generateDestinationMainMap, generateDestinationSecondaryMaps } from './MapGenerator';
-import { PdfData, PdfQuery, StaticMap, StaticMapSector } from './PdfData';
+import { PdfData, PdfQuery, PdfStaticMap, PdfStaticMapSector } from './PdfData';
 
 export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 	const trip: Trip = await getTripDetailed(query.tripId);
@@ -13,7 +13,7 @@ export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 	};
 
 	if (!trip.days) {
-		return pdfData;
+		throw new Error('Can\'t generate PDF data for trip without days');
 	}
 
 	const placesMapFromTrip: Map<string, Place> = await getPlacesMapFromTrip(trip);
@@ -81,14 +81,14 @@ export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<
 }
 
 async function generateDestinationMaps(destinationPlaces: Place[], query: PdfQuery): Promise<{
-	mainMap: StaticMap,
-	secondaryMaps: StaticMap[]
+	mainMap: PdfStaticMap,
+	secondaryMaps: PdfStaticMap[]
 }> {
-	const mainMap: StaticMap = await generateDestinationMainMap(destinationPlaces, query);
-	const sectorsForSecondaryMaps: StaticMapSector[] = mainMap.sectors.filter((sector: StaticMapSector) => {
+	const mainMap: PdfStaticMap = await generateDestinationMainMap(destinationPlaces, query);
+	const sectorsForSecondaryMaps: PdfStaticMapSector[] = mainMap.sectors.filter((sector: PdfStaticMapSector) => {
 		return sector.places.length > 5;
 	});
-	const secondaryMaps: StaticMap[] = await generateDestinationSecondaryMaps(
+	const secondaryMaps: PdfStaticMap[] = await generateDestinationSecondaryMaps(
 		destinationPlaces,
 		query,
 		sectorsForSecondaryMaps

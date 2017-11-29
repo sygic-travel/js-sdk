@@ -10,7 +10,7 @@ import { setEnvironment } from '../Settings/';
 import { placeDetailedEiffelTowerWithoutMedia as placeMock } from '../TestData/PlacesExpectedResults';
 import * as Dao from './DataAccess';
 import { calculateMapGrid, generateDestinationMainMap, generateDestinationSecondaryMaps } from './MapGenerator';
-import { PdfQuery, StaticMap, StaticMapSector } from './PdfData';
+import { PdfQuery, PdfStaticMap, PdfStaticMapSector } from './PdfData';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
@@ -80,13 +80,13 @@ describe('MapGeneratorController', () => {
 				sectors: []
 			});
 
-			const map: StaticMap = await generateDestinationMainMap(destinationPlaces, query);
+			const map: PdfStaticMap = await generateDestinationMainMap(destinationPlaces, query);
 			chai.expect(map.sectors.length).to.be.eq(4);
 
-			const sectorA0: StaticMapSector|undefined = map.sectors.find((s: StaticMapSector) => s.id === 'A0');
-			const sectorA1: StaticMapSector|undefined = map.sectors.find((s: StaticMapSector) => s.id === 'A1');
-			const sectorB0: StaticMapSector|undefined = map.sectors.find((s: StaticMapSector) => s.id === 'B0');
-			const sectorB1: StaticMapSector|undefined = map.sectors.find((s: StaticMapSector) => s.id === 'B1');
+			const sectorA0: PdfStaticMapSector|undefined = map.sectors.find((s: PdfStaticMapSector) => s.id === 'A0');
+			const sectorA1: PdfStaticMapSector|undefined = map.sectors.find((s: PdfStaticMapSector) => s.id === 'A1');
+			const sectorB0: PdfStaticMapSector|undefined = map.sectors.find((s: PdfStaticMapSector) => s.id === 'B0');
+			const sectorB1: PdfStaticMapSector|undefined = map.sectors.find((s: PdfStaticMapSector) => s.id === 'B1');
 
 			chai.expect(sectorA0!.bounds).to.be.deep.eq({
 				south: 20,
@@ -168,7 +168,7 @@ describe('MapGeneratorController', () => {
 				sectors: []
 			});
 
-			const mainMapSectors: StaticMapSector[] = [{
+			const mainMapSectors: PdfStaticMapSector[] = [{
 				id: 'A0',
 				places: [place1],
 				bounds: {
@@ -206,7 +206,7 @@ describe('MapGeneratorController', () => {
 				}
 			}];
 
-			const secondaryMaps: StaticMap[] = await generateDestinationSecondaryMaps(
+			const secondaryMaps: PdfStaticMap[] = await generateDestinationSecondaryMaps(
 				destinationPlaces,
 				query,
 				mainMapSectors
@@ -229,7 +229,7 @@ describe('MapGeneratorController', () => {
 				east: 4
 			};
 
-			const result: StaticMapSector[] = [{
+			const result: PdfStaticMapSector[] = [{
 				id: 'A0',
 				bounds: {
 					south: 3,

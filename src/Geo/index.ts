@@ -1,12 +1,10 @@
-export { Bounds, getZoomFromBounds } from './Bounds';
+export { calculateLocationsBounds, Bounds, getZoomFromBounds, isLocationInBounds } from './Bounds';
 export { Coordinate } from './Coordinate';
 export {
-	calculateLocationsBounds,
 	Location,
 	locationToCanvasCoordinate,
 	locationToTileCoordinate,
-	normalizeLng,
-	isLocationInBounds
+	normalizeLng
 } from './Location';
 export { boundsToMapTileKeys, locationToMapTileKey } from './MapTile';
 export { getDistance, EARTH_RADIUS } from './Sphere';

@@ -1,9 +1,9 @@
 import * as chai from 'chai';
+import { calculateLocationsBounds, isLocationInBounds } from './Bounds';
 import {
-	calculateLocationsBounds, isLocationInBounds, Location, locationToCanvasCoordinate, locationToTileCoordinate,
+	Location, locationToCanvasCoordinate, locationToTileCoordinate,
 	normalizeLng
 } from './Location';
-
 describe('Location', () => {
 	describe('#locationToTileCoordinate', () => {
 		it('should return correct tile coordinates', () => {

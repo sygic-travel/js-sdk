@@ -19,24 +19,27 @@ export interface PdfData {
 
 export interface PdfDestination {
 	destination: Place;
-	mainMap: StaticMap|null;
-	secondaryMaps: StaticMap[];
+	mainMap: PdfStaticMap|null;
+	secondaryMaps: PdfStaticMap[];
 	places: Place[];
 }
 
-export interface StaticMapSector {
+export interface PdfStaticMapSector {
 	id: string;
 	bounds: Bounds;
 	places: Place[];
 }
 
-export interface StaticMap {
+export interface PdfStaticMap extends StaticMap{
 	id: string;
-	url: string;
-	bounds: Bounds;
-	sectors: StaticMapSector[];
+	sectors: PdfStaticMapSector[];
 }
 
 export interface StaticMapPoint extends Location {
 	image?: string;
+}
+
+export interface StaticMap {
+	url: string;
+	bounds: Bounds;
 }

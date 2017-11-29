@@ -104,7 +104,7 @@ export async function getPlacesMapFromTrip(trip: Trip): Promise<Map<string, Plac
 	const placesMapFromTrip: Map<string, Place> = new Map<string, Place>();
 
 	if (!trip.days) {
-		return placesMapFromTrip;
+		throw new Error('Can\'t generate PDF data for trip without days');
 	}
 
 	const placesForDays: Place[][] = await Promise.all(
