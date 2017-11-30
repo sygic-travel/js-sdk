@@ -154,22 +154,27 @@ declare class UserModule {
 	public getUserSession(): Promise<User.Session|null>;
 	public getUserSettings(): Promise<User.UserSettings>;
 	public updateUserSettings(settings: User.UserSettings): Promise<User.UserSettings>;
-	public loginUserWithDeviceId(deviceId: string, devideCode: string): Promise<void>;
-	public loginUserWithJwt(jwt: string, deviceId?: string, devideCode?: string): Promise<void>;
-	public loginUserWithPassword(email: string, password: string, deviceId?: string, devideCode?: string): Promise<void>;
-	public registerUser(email: string, password: string, name: string): Promise<void>;
+	public loginUserWithDeviceId(deviceId: string, devideCode: string): Promise<User.AuthenticationResponseCode>;
+	public loginUserWithJwt(jwt: string, deviceId?: string, devideCode?: string): Promise<User.AuthenticationResponseCode>;
+	public loginUserWithPassword(
+		email: string,
+		password: string,
+		deviceId?: string,
+		devideCode?: string
+	): Promise<User.AuthenticationResponseCode>;
+	public registerUser(email: string, password: string, name: string): Promise<User.RegistrationResponseCode>;
 	public loginUserWithFacebook(
 		accessToken: string|null,
 		authorizationCode: string|null,
 		deviceId?: string,
 		devicePlatform?: string
-	): Promise<void>;
+	): Promise<User.AuthenticationResponseCode>;
 	public loginUserWithGoogle(
 		accessToken: string|null,
 		authorizationCode: string|null,
 		deviceId?: string,
 		devicePlatform?: string
-	): Promise<void>;
+	): Promise<User.AuthenticationResponseCode>;
 	public getUserinfo(): Promise<User.UserInfo>;
 }
 
@@ -782,6 +787,13 @@ export namespace User {
 		name: string;
 		expirationAt: string|null;
 	}
+
+	export type AuthenticationResponseCode = 'OK' | 'ERROR_INVALID_CREDENTIALS' | 'ERROR';
+	export type RegistrationResponseCode = 'OK' |
+		'ERROR_ALREADY_REGISTERED' |
+		'ERROR_EMAIL_INVALID_FORMAT' |
+		'ERROR_PASSWORD_MIN_LENGTH';
+
 }
 
 export namespace Changes {

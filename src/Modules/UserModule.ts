@@ -1,4 +1,6 @@
 import {
+	AuthenticationResponseCode,
+	RegistrationResponseCode,
 	getUserInfo,
 	getUserSession,
 	getUserSettings,
@@ -47,21 +49,26 @@ export default class UserModule {
 	/**
 	 * @experimental
 	 */
-	public loginUserWithDeviceId(deviceId: string, devideCode: string): Promise<void> {
+	public loginUserWithDeviceId(deviceId: string, devideCode: string): Promise<AuthenticationResponseCode> {
 		return loginUserWithDeviceId(deviceId, devideCode);
 	}
 
 	/**
 	 * @experimental
 	 */
-	public loginUserWithJwt(jwt: string, deviceId?: string, devideCode?: string): Promise<void> {
+	public loginUserWithJwt(jwt: string, deviceId?: string, devideCode?: string): Promise<AuthenticationResponseCode> {
 		return loginUserWithJwt(jwt, deviceId, devideCode);
 	}
 
 	/**
 	 * @experimental
 	 */
-	public loginUserWithPassword(email: string, password: string, deviceId?: string, devideCode?: string): Promise<void> {
+	public loginUserWithPassword(
+		email: string,
+		password: string,
+		deviceId?: string,
+		devideCode?: string
+	): Promise<AuthenticationResponseCode> {
 		return loginUserWithPassword(email, password, deviceId, devideCode);
 	}
 
@@ -73,7 +80,7 @@ export default class UserModule {
 		authorizationCode: string|null,
 		deviceId?: string,
 		devicePlatform?: string
-	): Promise<void> {
+	): Promise<AuthenticationResponseCode> {
 		return loginUserWithFacebook(accessToken, authorizationCode, deviceId, devicePlatform);
 	}
 
@@ -85,7 +92,7 @@ export default class UserModule {
 		authorizationCode: string|null,
 		deviceId?: string,
 		devicePlatform?: string
-	): Promise<void> {
+	): Promise<AuthenticationResponseCode> {
 		return loginUserWithGoogle(accessToken, authorizationCode, deviceId, devicePlatform);
 	}
 
@@ -96,7 +103,7 @@ export default class UserModule {
 		email: string,
 		password: string,
 		name: string
-	): Promise<void> {
+	): Promise<RegistrationResponseCode> {
 		return registerUser(email, password, name);
 	}
 

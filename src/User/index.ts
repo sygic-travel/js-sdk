@@ -1,10 +1,23 @@
 import { favoritesCache, tripsDetailedCache, userCache } from '../Cache';
 import { reset as resetChanges } from '../Changes';
 import * as Dao from './DataAccess';
-import { Session } from './Session';
-import { ThirdPartyAuthType, UserInfo, UserLicense, UserSettings } from './User';
+import {
+	AuthenticationResponseCode,
+	AuthResponse,
+	RegistrationResponseCode,
+	Session
+} from './Session';
+import {
+	ThirdPartyAuthType,
+	UserInfo,
+	UserLicense,
+	UserSettings
+} from './User';
 
 export {
+	AuthenticationResponseCode,
+	AuthResponse,
+	RegistrationResponseCode,
 	ThirdPartyAuthType,
 	Session,
 	UserInfo,
@@ -33,9 +46,15 @@ export async function handleSettingsChange(): Promise<void> {
 	return Dao.handleSettingsChange();
 }
 
-export async function loginUserWithDeviceId(deviceId: string, devicePlatform: string): Promise<void> {
-	const session: Session = await Dao.getSessionWithDeviceId(deviceId, devicePlatform);
-	setUserSession(session);
+export async function loginUserWithDeviceId(
+	deviceId: string,
+	devicePlatform: string
+): Promise<AuthenticationResponseCode> {
+	const authResponse: AuthResponse = await Dao.getSessionWithDeviceId(deviceId, devicePlatform);
+	if (authResponse.code === 'OK') {
+		setUserSession(authResponse.session);
+	}
+	return authResponse.code;
 }
 
 export async function loginUserWithPassword(
@@ -43,9 +62,12 @@ export async function loginUserWithPassword(
 	password: string,
 	deviceId?: string,
 	devicePlatform?: string
-): Promise<void> {
-	const session: Session = await Dao.getSessionWithPassword(email, password, deviceId, devicePlatform);
-	setUserSession(session);
+): Promise<AuthenticationResponseCode> {
+	const authResponse: AuthResponse = await Dao.getSessionWithPassword(email, password, deviceId, devicePlatform);
+	if (authResponse.code === 'OK') {
+		setUserSession(authResponse.session);
+	}
+	return authResponse.code;
 }
 
 export async function loginUserWithFacebook(
@@ -53,11 +75,14 @@ export async function loginUserWithFacebook(
 	authorizationCode: string|null,
 	deviceId?: string,
 	devicePlatform?: string
-): Promise<void> {
-	const session: Session = await Dao.getSessionWithThirdPartyAuth(
+): Promise<AuthenticationResponseCode> {
+	const authResponse: AuthResponse = await Dao.getSessionWithThirdPartyAuth(
 		'facebook', accessToken, authorizationCode, deviceId, devicePlatform
 	);
-	setUserSession(session);
+	if (authResponse.code === 'OK') {
+		setUserSession(authResponse.session);
+	}
+	return authResponse.code;
 }
 
 export async function loginUserWithGoogle(
@@ -65,30 +90,37 @@ export async function loginUserWithGoogle(
 	authorizationCode: string|null,
 	deviceId?: string,
 	devicePlatform?: string
-): Promise<void> {
-	const session: Session = await Dao.getSessionWithThirdPartyAuth(
+): Promise<AuthenticationResponseCode> {
+	const authResponse: AuthResponse = await Dao.getSessionWithThirdPartyAuth(
 		'google', accessToken, authorizationCode, deviceId, devicePlatform
 	);
-	setUserSession(session);
+	if (authResponse.code === 'OK') {
+		setUserSession(authResponse.session);
+	}
+	return authResponse.code;
 }
 
 export async function loginUserWithJwt(
 	jwt: string,
 	deviceId?: string,
 	devicePlatform?: string
-): Promise<void> {
-	const session: Session = await Dao.getSessionWithJwt(
+): Promise<AuthenticationResponseCode> {
+	const authResponse: AuthResponse = await Dao.getSessionWithJwt(
 		jwt, deviceId, devicePlatform
 	);
-	setUserSession(session);
+	if (authResponse.code === 'OK') {
+		setUserSession(authResponse.session);
+	}
+	return authResponse.code;
 }
 
 export async function registerUser(
 	email: string,
 	password: string,
 	name: string
-): Promise<void> {
+): Promise<RegistrationResponseCode> {
 	await Dao.registerUser(email, password, name);
+	return 'OK';
 }
 
 export async function getUserInfo(): Promise<UserInfo> {

@@ -1,6 +1,15 @@
 import { camelizeKeys, decamelizeKeys } from 'humps';
 
-import { Session, ThirdPartyAuthType, UserInfo, UserLicense, UserSettings } from '.';
+import {
+	AuthenticationResponseCode,
+	AuthResponse,
+	RegistrationResponseCode,
+	Session,
+	ThirdPartyAuthType,
+	UserInfo,
+	UserLicense,
+	UserSettings
+} from '.';
 import { ApiResponse, SsoApi, StApi } from '../Api';
 import { sessionCache, userCache } from '../Cache';
 
@@ -40,17 +49,24 @@ export async function handleSettingsChange(): Promise<void> {
 	await getUserSettingsFromApi();
 }
 
-export async function getSessionWithDeviceId(deviceId: string, devicePlatform: string): Promise<Session> {
+export async function getSessionWithDeviceId(
+	deviceId: string,
+	devicePlatform: string
+): Promise<AuthResponse> {
 	const request: any = {
 		grant_type: 'client_credentials',
 		device_code: deviceId,
 		device_platform: devicePlatform,
 	};
 
-	return getSessionFromSso(request);
+	return authOnSso(request);
 }
 
-export async function getSessionWithJwt(jwt: string, deviceId?: string, devicePlatform?: string): Promise<Session> {
+export async function getSessionWithJwt(
+	jwt: string,
+	deviceId?: string,
+	devicePlatform?: string
+): Promise<AuthResponse> {
 	const request: any = {
 		grant_type: 'external',
 		token: jwt
@@ -63,7 +79,7 @@ export async function getSessionWithJwt(jwt: string, deviceId?: string, devicePl
 		request.device_code = deviceId;
 	}
 
-	return getSessionFromSso(request);
+	return authOnSso(request);
 }
 
 export async function getSessionWithThirdPartyAuth(
@@ -72,7 +88,7 @@ export async function getSessionWithThirdPartyAuth(
 	authorizationCode: string|null,
 	deviceId?: string,
 	devicePlatform?: string
-): Promise<Session> {
+): Promise<AuthResponse> {
 	if (accessToken && authorizationCode) {
 		throw new Error('Only one of accessToken, authorizationCode must be provided');
 	}
@@ -93,7 +109,7 @@ export async function getSessionWithThirdPartyAuth(
 		request.device_code = deviceId;
 	}
 
-	return getSessionFromSso(request);
+	return authOnSso(request);
 }
 
 export async function getSessionWithPassword(
@@ -101,7 +117,7 @@ export async function getSessionWithPassword(
 	password: string,
 	deviceId?: string,
 	devicePlatform?: string
-): Promise<Session> {
+): Promise<AuthResponse> {
 	const request: any = {
 		grant_type: 'password',
 		username: email,
@@ -115,14 +131,14 @@ export async function getSessionWithPassword(
 		request.device_code = deviceId;
 	}
 
-	return getSessionFromSso(request);
+	return authOnSso(request);
 }
 
 export async function registerUser(
 	email: string,
 	password: string,
 	name: string
-): Promise<void> {
+): Promise<RegistrationResponseCode> {
 	const clientSession: Session = await getClientSession();
 	const request: any = {
 		username: email,
@@ -131,7 +147,31 @@ export async function registerUser(
 		password,
 		name
 	};
-	await SsoApi.post('user/register', request, clientSession);
+	const response: ApiResponse = await SsoApi.post('user/register', request, clientSession);
+	if (response.statusCode === 200) {
+		return 'OK';
+	}
+	if (response.statusCode === 401) {
+		// client session is expired, let's reinitialize it
+		await getClientSession();
+		return registerUser(email, password, name);
+	}
+	if (response.statusCode === 409) {
+		return 'ERROR_ALREADY_REGISTERED';
+	}
+	if (response.data && response.data.type) {
+		switch (response.data.type) {
+			case 'validation.password.min_length':
+				return 'ERROR_PASSWORD_MIN_LENGTH';
+			case 'validation.username.min_length':
+			case 'validation.email.invalid_format':
+				return 'ERROR_EMAIL_INVALID_FORMAT';
+			default:
+				return 'ERROR';
+		}
+	}
+	return 'ERROR';
+
 }
 
 export async function getUserInfo(): Promise<UserInfo> {
@@ -159,12 +199,26 @@ export async function getUserInfo(): Promise<UserInfo> {
 	} as UserInfo;
 }
 
-async function getSessionFromSso(request): Promise<Session> {
+async function authOnSso(request): Promise<AuthResponse> {
 	const response: ApiResponse = await SsoApi.post('oauth2/token', request);
+	if (response.statusCode === 200) {
+		return {
+			code: 'OK',
+			session: {
+				accessToken: response.data.access_token,
+				refreshToken: response.data.refresh_token
+			} as Session
+		};
+	}
+	let code: AuthenticationResponseCode = 'ERROR';
+	if (response.statusCode === 401) {
+		code = 'ERROR_INVALID_CREDENTIALS';
+	}
 	return {
-		accessToken: response.data.access_token,
-		refreshToken: response.data.refresh_token
-	} as Session;
+		code,
+		session: null
+	};
+
 }
 
 async function getUserSettingsFromApi(): Promise<object> {
@@ -180,7 +234,11 @@ async function getUserSettingsFromApi(): Promise<object> {
 async function getClientSession(): Promise<Session> {
 	let clientSession: Session = await sessionCache.get(CLIENT_SESSION_KEY);
 	if (!clientSession) {
-		clientSession = await getSessionFromSso({grant_type: 'client_credentials'});
+		const authResult: AuthResponse = await authOnSso({grant_type: 'client_credentials'});
+		if (!authResult.session) {
+			throw new Error('Unable to login client. Please check ssoClientId in settings.');
+		}
+		clientSession = authResult.session;
 	}
 	await sessionCache.set(CLIENT_SESSION_KEY, clientSession);
 	return clientSession;
