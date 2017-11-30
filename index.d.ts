@@ -51,6 +51,10 @@ declare class HotelsModule {
 	public getHotels(filter: Hotels.HotelsFilterJSON): Promise<Hotels.AvailableHotels>
 }
 
+declare class PdfModule {
+	public getPdfData(query: Pdf.PdfQuery): Promise<Pdf.PdfData>
+}
+
 declare class PlacesModule {
 	public getPlaces(filter: Places.PlacesListFilterJSON): Promise<Places.Place[]>;
 	public getPlaceDetailed(id: string, photoSize: string): Promise<Places.Place>;
@@ -892,5 +896,45 @@ export namespace Flights {
 		name: string;
 		logo: string;
 		id: string;
+	}
+}
+
+export namespace Pdf {
+	export interface PdfQuery {
+		tripId: string;
+		mainMapWidth: number;
+		mainMapHeight: number;
+		gridRowsCount: number;
+		gridColumnsCount: number;
+		secondaryMapWidth: number;
+		secondaryMapHeight: number;
+	}
+
+	export interface PdfData {
+		destinations: PdfDestination[];
+		routes: Route.TripDayRoutes[];
+	}
+
+	export interface PdfDestination {
+		destination: Places.Place;
+		mainMap: PdfStaticMap|null;
+		secondaryMaps: PdfStaticMap[];
+		places: Places.Place[];
+	}
+
+	export interface PdfStaticMapSector {
+		id: string;
+		bounds: Geo.Bounds;
+		places: Places.Place[];
+	}
+
+	export interface PdfStaticMap extends StaticMap {
+		id: string;
+		sectors: PdfStaticMapSector[];
+	}
+
+	export interface StaticMap {
+		url: string;
+		bounds: Geo.Bounds;
 	}
 }
