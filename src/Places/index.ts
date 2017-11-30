@@ -1,5 +1,6 @@
 import { Bounds, Location } from '../Geo';
 import { Medium } from '../Media/Media';
+import { Day, Trip } from '../Trip/';
 import * as Dao from './DataAccess';
 import { PlacesListFilter, PlacesListFilterJSON } from './ListFilter';
 import { CustomPlaceFormData, hasTag, isStickyByDefault, Place } from './Place';
@@ -32,6 +33,8 @@ export {
 	Description,
 	Dao,
 }
+
+export const DESTINATION_BREAK_LEVELS = ['city', 'town', 'village', 'island'];
 
 export async function getPlaces(filter: PlacesListFilter): Promise<Place[]> {
 	return await Dao.getPlaces(filter);
@@ -95,4 +98,80 @@ export async function detectParentsByBounds(bounds: Bounds, zoom: number): Promi
 
 export async function detectParentsByLocation(location: Location): Promise<Place[]> {
 	return Dao.detectParentsByLocation(location);
+}
+
+export async function getPlacesMapFromTrip(trip: Trip): Promise<Map<string, Place>> {
+	const placesMapFromTrip: Map<string, Place> = new Map<string, Place>();
+
+	if (!trip.days) {
+		throw new Error('Can\'t generate PDF data for trip without days');
+	}
+
+	const placesForDays: Place[][] = await Promise.all(
+		trip.days.map((day: Day) => Dao.getPlacesFromTripDay(day))
+	);
+	const placesFromTrips: Place[] = ([] as Place[]).concat(...placesForDays);
+
+	placesFromTrips.forEach((place: Place) => {
+		placesMapFromTrip.set(place.id, place);
+	});
+
+	return placesMapFromTrip;
+}
+
+export async function getPlacesDestinationMap(placesIds: string[]): Promise<Map<string, Place>> {
+	const places: Place[] = await Dao.getPlacesDetailed(placesIds, '100x100');
+
+	const placesParentIds: Set<string> = new Set<string>();
+	places.forEach((place: Place) => {
+		place.parents.forEach((parentId: string) => placesParentIds.add(parentId));
+	});
+
+	const parentPlaces: Place[] = await Dao.getPlacesDetailed(Array.from(placesParentIds), '100x100');
+	const parentPlacesMap: Map<string, Place> = new Map<string, Place>();
+	parentPlaces.forEach((parentPlace: Place) => {
+		parentPlacesMap.set(parentPlace.id, parentPlace);
+	});
+
+	const destinationsMap: Map<string, Place> = new Map<string, Place>();
+	places.forEach((place: Place) => {
+		const placeDestination: Place = getPlaceDestination(place, parentPlacesMap);
+		destinationsMap.set(place.id, placeDestination);
+	});
+
+	return destinationsMap;
+}
+
+export function getPlaceDestination(place: Place, parentPlacesMap: Map<string, Place>): Place {
+	if (isPlaceDestination(place)) {
+		return place;
+	}
+
+	const reversedPlaceParentIds = place.parents.slice().reverse();
+
+	for (const parentId of reversedPlaceParentIds) {
+		const parentPlace: Place|undefined = parentPlacesMap.get(parentId);
+		if (parentPlace && isPlaceDestination(parentPlace)) {
+			return parentPlace;
+		}
+	}
+
+	return parentPlacesMap.get(reversedPlaceParentIds[0])!;
+}
+
+export function isPlaceDestination(place: Place): boolean {
+	return DESTINATION_BREAK_LEVELS.includes(place.level);
+}
+
+export function mergePlacesArrays(places1: Place[], places2: Place[]): Place[] {
+	return places2.reduce(
+		(acc: Place[], placeFromPlaces1: Place) => {
+			const placeFromPlaces2: Place | undefined = acc.find((p: Place) => p.id === placeFromPlaces1.id);
+			if (placeFromPlaces2 === undefined) {
+				acc.push(placeFromPlaces1);
+			}
+			return acc;
+		},
+		places1
+	);
 }

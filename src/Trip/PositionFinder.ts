@@ -3,8 +3,6 @@ import { EARTH_RADIUS, getDistance, Location } from '../Geo';
 import { isStickyByDefault, Place } from '../Places';
 import { UserSettings } from '../User';
 
-export const DESTINATION_BREAK_LEVELS = ['city', 'town', 'village', 'island'];
-
 export interface AddToTripInstructions {
 	position: number;
 	shouldDuplicate: boolean;

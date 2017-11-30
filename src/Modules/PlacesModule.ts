@@ -11,6 +11,7 @@ import {
 	getPlaceOpeningHours,
 	getPlaceReviews,
 	getPlaces,
+	getPlacesDestinationMap,
 	getPlacesDetailed,
 	getPlacesStats,
 	Place,
@@ -107,5 +108,9 @@ export default class PlacesModule {
 		categoriesCoefficients?: CategoriesCoefficients | null
 	): SpreadResultV2 {
 		return spreadV2(places, vipPlaces, bounds, canvas, sizesConfig, categoriesCoefficients);
+	}
+
+	public getPlacesDestinationMap(placeIds: string[]): Promise<Map<string, Place>> {
+		return getPlacesDestinationMap(placeIds);
 	}
 }

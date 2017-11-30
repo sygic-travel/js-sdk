@@ -1,11 +1,11 @@
 import { ChangeNotification } from '../Changes';
-import { getPlaceDetailed, getPlacesDetailed, Place } from '../Places';
+import { DESTINATION_BREAK_LEVELS, getPlaceDetailed, getPlacesDetailed, Place } from '../Places';
 import { getUserSettings, UserSettings } from '../User';
 import { addDaysToDate } from '../Util/index';
 import * as Dao from './DataAccess';
 import * as TripManipulator from './Manipulator';
 import { mapTripCreateRequest, putPlacesToTrip } from './Mapper';
-import { AddToTripInstructions, DESTINATION_BREAK_LEVELS, getAddToTripInstructions } from './PositionFinder';
+import { AddToTripInstructions, getAddToTripInstructions } from './PositionFinder';
 
 import {
 	Day,

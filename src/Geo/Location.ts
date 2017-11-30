@@ -1,5 +1,6 @@
-import { Bounds, Coordinate } from '.';
+import { Bounds, Coordinate, EARTH_RADIUS } from '.';
 import { CanvasSize } from '../Spread';
+import { toDegrees, toRadians } from '../Util';
 
 export interface Location {
 	lat: number;
@@ -55,3 +56,20 @@ export function normalizeLng(lng: number) {
 const clip = (n: number, min: number, max: number): number => {
 	return Math.max(min, Math.min(n, max));
 };
+
+export function locationWithOffset(location: Location, distance: number, heading: number): Location {
+	heading = toRadians(heading);
+	const latRad: number = toRadians(location.lat);
+	const lngRad: number = toRadians(location.lng);
+	const dR: number = distance / EARTH_RADIUS;
+	const finalLat: number = Math.asin(
+		Math.sin(latRad) * Math.cos(dR) + Math.cos(latRad) * Math.sin(dR) * Math.cos(heading)
+	);
+	const finalLng: number = lngRad + Math.atan2(
+		Math.sin(heading) * Math.sin(dR) * Math.cos(latRad), Math.cos(dR) - Math.sin(latRad) * Math.sin(finalLat)
+	);
+	return {
+		lat: toDegrees(finalLat),
+		lng: toDegrees(finalLng)
+	};
+}

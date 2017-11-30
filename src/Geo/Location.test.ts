@@ -1,6 +1,9 @@
 import * as chai from 'chai';
-import { locationToCanvasCoordinate, locationToTileCoordinate, normalizeLng } from './Location';
-
+import { calculateLocationsBounds, isLocationInBounds } from './Bounds';
+import {
+	Location, locationToCanvasCoordinate, locationToTileCoordinate,
+	normalizeLng
+} from './Location';
 describe('Location', () => {
 	describe('#locationToTileCoordinate', () => {
 		it('should return correct tile coordinates', () => {
@@ -41,6 +44,80 @@ describe('Location', () => {
 			chai.expect(normalizeLng(541)).to.equal(-179);
 			chai.expect(normalizeLng(-181)).to.equal(179);
 			chai.expect(normalizeLng(-541)).to.equal(179);
+		});
+	});
+
+	describe('#isLocationInBounds', () => {
+		it('should return true if location is in bounds', () => {
+			chai.expect(isLocationInBounds({
+				lat: 5,
+				lng: 6,
+			}, {
+				south: 4,
+				west: 4,
+				north: 7,
+				east: 7
+			})).to.be.true;
+			chai.expect(isLocationInBounds({
+				lat: 4,
+				lng: 4,
+			}, {
+				south: 4,
+				west: 4,
+				north: 7,
+				east: 7
+			})).to.be.true;
+			chai.expect(isLocationInBounds({
+				lat: 7,
+				lng: 7,
+			}, {
+				south: 4,
+				west: 4,
+				north: 7,
+				east: 7
+			})).to.be.true;
+		});
+		it('should return false if location is not in bounds', () => {
+			chai.expect(isLocationInBounds({
+				lat: 5,
+				lng: 6,
+			}, {
+				south: 7,
+				west: 7,
+				north: 8,
+				east: 8
+			})).to.be.false;
+		});
+	});
+
+	describe('#calculateLocationsBounds', () => {
+		it('should correctly calculate bounds of locations array', () => {
+			const location1: Location = { lat: 1, lng: 1 };
+			const location2: Location = { lat: 2, lng: 2 };
+			const location3: Location = { lat: 3, lng: 3 };
+			const location4: Location = { lat: 4, lng: 4 };
+
+			chai.expect(calculateLocationsBounds([
+				location1,
+				location2,
+				location3,
+				location4
+			])).to.deep.equal({
+				south: 1,
+				west: 1,
+				north: 4,
+				east: 4
+			});
+		});
+
+		it('should correctly calculate bounds of a single location' , () => {
+			const location1: Location = { lat: 1, lng: 1 };
+			chai.expect(calculateLocationsBounds([location1])).to.not.deep.equal({
+				south: 1,
+				west: 1,
+				north: 4,
+				east: 4
+			});
 		});
 	});
 });
