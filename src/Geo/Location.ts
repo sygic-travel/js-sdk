@@ -1,5 +1,4 @@
-import { Bounds, Coordinate } from '.';
-import { EARTH_RADIUS } from '.';
+import { Bounds, Coordinate, EARTH_RADIUS } from '.';
 import { CanvasSize } from '../Spread';
 import { toDegrees, toRadians } from '../Util';
 
