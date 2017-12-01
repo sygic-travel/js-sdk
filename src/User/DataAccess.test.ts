@@ -3,7 +3,7 @@ import * as chaiAsPromised from 'chai-as-promised';
 import { SinonSandbox, SinonStub } from 'sinon';
 import * as sinon from 'sinon';
 
-import { Session, UserInfo, UserSettings } from '.';
+import { AuthResponse, RegistrationResponseCode, Session, UserInfo, UserSettings } from '.';
 import { ApiResponse, SsoApi, StApi } from '../Api';
 import { userCache } from '../Cache';
 import { setEnvironment } from '../Settings';
@@ -92,7 +92,7 @@ describe('UserDataAccess', () => {
 				refreshToken: tokenData.refresh_token
 			};
 			return Dao.getSessionWithDeviceId('id', 'platform').then((data) => {
-				chai.expect(data).to.deep.equal(testSession);
+				chai.expect(data).to.deep.equal({code: 'OK', session: testSession});
 				chai.expect(apiStub.callCount).to.equal(1);
 				chai.expect(apiStub.getCall(0).args[0]).to.equal('oauth2/token');
 				chai.expect(apiStub.getCall(0).args[1]['device_code']).to.equal('id');
@@ -112,7 +112,7 @@ describe('UserDataAccess', () => {
 				refreshToken: tokenData.refresh_token
 			};
 			return Dao.getSessionWithPassword('name', 'pass').then((data) => {
-				chai.expect(data).to.deep.equal(testSession);
+				chai.expect(data).to.deep.equal({code: 'OK', session: testSession});
 				chai.expect(apiStub.callCount).to.equal(1);
 				chai.expect(apiStub.getCall(0).args[0]).to.equal('oauth2/token');
 				chai.expect(apiStub.getCall(0).args[1]['username']).to.equal('name');
@@ -132,6 +132,24 @@ describe('UserDataAccess', () => {
 				chai.expect(apiStub.getCall(0).args[1]['device_platform']).to.equal('ios');
 			});
 		});
+
+		it('should handle the invalid credentials auth error', async () => {
+			sandbox.stub(SsoApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(401, tokenData));
+			}));
+			const result: AuthResponse = await Dao.getSessionWithPassword('name', 'pass', 'id', 'ios');
+			chai.expect(result.session).to.be.null;
+			chai.expect(result.code).to.equal('ERROR_INVALID_CREDENTIALS');
+		});
+
+		it('should handle the other errors', async () => {
+			sandbox.stub(SsoApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(500, tokenData));
+			}));
+			const result: AuthResponse = await Dao.getSessionWithPassword('name', 'pass', 'id', 'ios');
+			chai.expect(result.session).to.be.null;
+			chai.expect(result.code).to.equal('ERROR');
+		});
 	});
 
 	describe('#getSessionWithJwt', () => {
@@ -144,7 +162,7 @@ describe('UserDataAccess', () => {
 				refreshToken: tokenData.refresh_token
 			};
 			return Dao.getSessionWithJwt('asdfg.xxx.asdfg').then((data) => {
-				chai.expect(data).to.deep.equal(testSession);
+				chai.expect(data).to.deep.equal({code: 'OK', session: testSession});
 				chai.expect(apiStub.callCount).to.equal(1);
 				chai.expect(apiStub.getCall(0).args[0]).to.equal('oauth2/token');
 				chai.expect(apiStub.getCall(0).args[1]['token']).to.equal('asdfg.xxx.asdfg');
@@ -173,7 +191,7 @@ describe('UserDataAccess', () => {
 				refreshToken: tokenData.refresh_token
 			};
 			return Dao.getSessionWithThirdPartyAuth('facebook', 'facebook_token', null).then((data) => {
-				chai.expect(data).to.deep.equal(testSession);
+				chai.expect(data).to.deep.equal({code: 'OK', session: testSession});
 				chai.expect(apiStub.callCount).to.equal(1);
 				chai.expect(apiStub.getCall(0).args[0]).to.equal('oauth2/token');
 				chai.expect(apiStub.getCall(0).args[1]['access_token']).to.equal('facebook_token');
@@ -193,7 +211,7 @@ describe('UserDataAccess', () => {
 				refreshToken: tokenData.refresh_token
 			};
 			return Dao.getSessionWithThirdPartyAuth('facebook', null, 'auth_code').then((data) => {
-				chai.expect(data).to.deep.equal(testSession);
+				chai.expect(data).to.deep.equal({code: 'OK', session: testSession});
 				chai.expect(apiStub.callCount).to.equal(1);
 				chai.expect(apiStub.getCall(0).args[0]).to.equal('oauth2/token');
 				chai.expect(apiStub.getCall(0).args[1]['access_token']).to.be.undefined;
@@ -223,31 +241,104 @@ describe('UserDataAccess', () => {
 		});
 	});
 
+	const regRequest = {
+		username: 'email@example.com',
+		email_is_verified: false,
+		email: 'email@example.com',
+		password: '12345678',
+		name: 'name'
+	};
+
+	const clientSession: Session = {
+		accessToken: tokenData.access_token,
+		refreshToken: tokenData.refresh_token
+	};
+
 	describe('#registerUser', () => {
-		it('should call api properly', () => {
+		it('should call api properly', async () => {
 			const response = {id: '132456'};
 			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post');
 
-			apiStub.withArgs('oauth2/token', { grant_type : 'client_credentials'})
+			apiStub.withArgs('oauth2/token', {grant_type: 'client_credentials'})
 				.returns(new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, tokenData));
 				}));
 
-			apiStub.withArgs('user/register', {})
+			apiStub.withArgs('user/register', regRequest, clientSession)
 				.returns(new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, response));
 				}));
 
-			return Dao.registerUser('email@example.com', '12345678', 'name').then((data) => {
-				chai.expect(apiStub.callCount).to.equal(2);
-				chai.expect(apiStub.getCall(0).args[0]).to.equal('oauth2/token');
-				chai.expect(apiStub.getCall(0).args[1]['grant_type']).to.equal('client_credentials');
-				chai.expect(apiStub.getCall(1).args[1]['username']).to.equal('email@example.com');
-				chai.expect(apiStub.getCall(1).args[1]['email']).to.equal('email@example.com');
-				chai.expect(apiStub.getCall(1).args[1]['password']).to.equal('12345678');
-				chai.expect(apiStub.getCall(1).args[1]['name']).to.equal('name');
-				chai.expect(apiStub.getCall(1).args[1]['email_is_verified']).to.be.false;
-			});
+			await Dao.registerUser(regRequest.email, regRequest.password, regRequest.name);
+			chai.expect(apiStub.callCount).to.equal(2);
+			chai.expect(apiStub.getCall(0).args[0]).to.equal('oauth2/token');
+			chai.expect(apiStub.getCall(0).args[1]['grant_type']).to.equal('client_credentials');
+			chai.expect(apiStub.getCall(1).args[1]['username']).to.equal('email@example.com');
+			chai.expect(apiStub.getCall(1).args[1]['email']).to.equal('email@example.com');
+			chai.expect(apiStub.getCall(1).args[1]['password']).to.equal('12345678');
+			chai.expect(apiStub.getCall(1).args[1]['name']).to.equal('name');
+			chai.expect(apiStub.getCall(1).args[1]['email_is_verified']).to.be.false;
+
+		});
+
+		it('should handle the already registered error', async () => {
+			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post');
+			apiStub.withArgs('oauth2/token', { grant_type : 'client_credentials'})
+				.returns(new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(200, tokenData));
+				}));
+			apiStub.withArgs('user/register', regRequest, clientSession)
+				.returns(new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(409, {type: ''}));
+				}));
+			const result: RegistrationResponseCode =
+				await Dao.registerUser(regRequest.email, regRequest.password, regRequest.name);
+			chai.expect(result).to.equal('ERROR_ALREADY_REGISTERED');
+		});
+
+		it('should handle minimal password error', async () => {
+			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post');
+			apiStub.withArgs('oauth2/token', { grant_type : 'client_credentials'})
+				.returns(new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(200, tokenData));
+				}));
+			apiStub.withArgs('user/register', regRequest, clientSession)
+				.returns(new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(422, {type: 'validation.password.min_length'}));
+				}));
+			const result: RegistrationResponseCode =
+				await Dao.registerUser(regRequest.email, regRequest.password, regRequest.name);
+			chai.expect(result).to.equal('ERROR_PASSWORD_MIN_LENGTH');
+		});
+
+		it('should handle minimal password error', async () => {
+			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post');
+			apiStub.withArgs('oauth2/token', { grant_type : 'client_credentials'})
+				.returns(new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(200, tokenData));
+				}));
+			apiStub.withArgs('user/register', regRequest, clientSession)
+				.returns(new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(422, {type: 'validation.email.invalid_format'}));
+				}));
+			const result: RegistrationResponseCode =
+				await Dao.registerUser(regRequest.email, regRequest.password, regRequest.name);
+			chai.expect(result).to.equal('ERROR_EMAIL_INVALID_FORMAT');
+		});
+
+		it('should handle the other errors', async () => {
+			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post');
+			apiStub.withArgs('oauth2/token', { grant_type : 'client_credentials'})
+				.returns(new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(200, tokenData));
+				}));
+			apiStub.withArgs('user/register', regRequest, clientSession)
+				.returns(new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(500, {type: ''}));
+				}));
+			const result: RegistrationResponseCode =
+				await Dao.registerUser(regRequest.email, regRequest.password, regRequest.name);
+			chai.expect(result).to.equal('ERROR');
 		});
 	});
 

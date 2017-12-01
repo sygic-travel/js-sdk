@@ -14,15 +14,30 @@ axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
 
 export async function get(url: string): Promise<ApiResponse> {
 	const response = await axiosInstance.get(url, buildRequestConfig());
-	return buildApiResponse(response);
+	return buildOkApiResponse(response);
 }
 
 export async function post(url: string, requestData, session?: Session): Promise<ApiResponse> {
 	if (requestData && !requestData.client_id) {
 		requestData.client_id = getSsoClientId();
 	}
-	const response = await axiosInstance.post(url, requestData, buildRequestConfig(session));
-	return buildApiResponse(response);
+	try {
+		const response = await axiosInstance.post(url, requestData, buildRequestConfig(session));
+		return buildOkApiResponse(response);
+	} catch (e) {
+		if (e.response && e.response.data && e.response.data.status) {
+			return new ApiResponse(
+				e.response.data.status,
+				e.response.data
+			);
+		} else {
+			return new ApiResponse(
+				500,
+				{type: 'error'}
+			);
+		}
+
+	}
 }
 
 function buildRequestConfig(session?: Session): AxiosRequestConfig {
@@ -38,7 +53,7 @@ function buildRequestConfig(session?: Session): AxiosRequestConfig {
 	return config;
 }
 
-function buildApiResponse(response: AxiosResponse): ApiResponse {
+function buildOkApiResponse(response: AxiosResponse): ApiResponse {
 	return new ApiResponse(
 		200,
 		response.data
