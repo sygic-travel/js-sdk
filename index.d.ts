@@ -52,7 +52,8 @@ declare class HotelsModule {
 }
 
 declare class PdfModule {
-	public getPdfData(query: Pdf.PdfQuery): Promise<Pdf.PdfData>
+	public getPdfData(query: Pdf.PdfQuery): Promise<Pdf.PdfData>;
+	public generatePdf(tripId: string): Promise<Pdf.GeneratingState>;
 }
 
 declare class PlacesModule {
@@ -948,5 +949,11 @@ export namespace Pdf {
 	export interface StaticMap {
 		url: string;
 		bounds: Geo.Bounds;
+	}
+
+	export interface GeneratingState {
+		generatingId: string;
+		state: 'generating' | 'done' | 'not_found' | 'timeout';
+		url: string|null;
 	}
 }

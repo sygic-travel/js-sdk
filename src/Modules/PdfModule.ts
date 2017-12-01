@@ -1,5 +1,4 @@
-import { getPdfData} from '../Pdf';
-import { PdfData, PdfQuery } from '../Pdf/PdfData';
+import { generatePdf, GeneratingState, getPdfData, PdfData, PdfQuery } from '../Pdf';
 
 /**
  * @experimental
@@ -7,5 +6,9 @@ import { PdfData, PdfQuery } from '../Pdf/PdfData';
 export default class PdfModule {
 	public async getPdfData(query: PdfQuery): Promise<PdfData> {
 		return getPdfData(query);
+	}
+
+	public async generatePdf(tripId: string): Promise<GeneratingState> {
+		return generatePdf(tripId);
 	}
 }
