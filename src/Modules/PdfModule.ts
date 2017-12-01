@@ -1,5 +1,4 @@
-import { generatePdf, getPdfData } from '../Pdf';
-import { GeneratingState, PdfData, PdfQuery } from '../Pdf/PdfData';
+import { generatePdf, GeneratingState, getPdfData, PdfData, PdfQuery } from '../Pdf';
 
 /**
  * @experimental

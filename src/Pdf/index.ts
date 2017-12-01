@@ -7,6 +7,14 @@ import * as Dao from './DataAccess';
 import { generateDestinationMainMap, generateDestinationSecondaryMaps } from './MapGenerator';
 import { GeneratingState, PdfData, PdfQuery, PdfStaticMap, PdfStaticMapSector } from './PdfData';
 
+export {
+	GeneratingState,
+	PdfData,
+	PdfQuery,
+	PdfStaticMap,
+	PdfStaticMapSector
+};
+
 const GENERATING_STATE_REFRESH_INTERVAL = 5000; // 5 seconds
 const GENERATING_STATE_CHECK_ATTEMPTS = 60;
 

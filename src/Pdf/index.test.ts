@@ -8,7 +8,7 @@ import { Place } from '../Places';
 import * as PlacesController from '../Places';
 
 import * as PdfController from '.';
-import { GeneratingState } from './PdfData';
+import { GeneratingState } from '.';
 
 import { setEnvironment } from '../Settings/';
 import * as pdfApiResponses from '../TestData/PdfApiResponses';
