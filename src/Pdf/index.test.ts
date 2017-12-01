@@ -1,14 +1,18 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as cloneDeep from 'lodash.clonedeep';
-import { SinonSandbox } from 'sinon';
+import { SinonSandbox, SinonStub } from 'sinon';
 import * as sinon from 'sinon';
+import { ApiResponse, StApi } from '../Api';
 import { Place } from '../Places';
-
-import * as PdfController from '.';
 import * as PlacesController from '../Places';
 
+import * as PdfController from '.';
+import { GeneratingState } from './PdfData';
+
 import { setEnvironment } from '../Settings/';
+import * as pdfApiResponses from '../TestData/PdfApiResponses';
+import * as pdfResults from '../TestData/PdfExpectedResults';
 import { placeDetailedEiffelTowerWithoutMedia as placeMock } from '../TestData/PlacesExpectedResults';
 
 let sandbox: SinonSandbox;
@@ -75,6 +79,30 @@ describe('PdfController', () => {
 			chai.expect(Array.from(destinationIdsWithPlaces.keys())).to.deep.eq(['city:1', 'city:2']);
 			chai.expect(destinationIdsWithPlaces.get('city:1')).to.deep.eq([placeFromTrip1]);
 			chai.expect(destinationIdsWithPlaces.get('city:2')).to.deep.eq([placeFromTrip2, placeFromTrip3]);
+		});
+	});
+
+	describe('#generatePdf', () => {
+		it('should return init state if is already done', async () => {
+			const apiPostStub: SinonStub = sandbox.stub(StApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, pdfApiResponses.pdfDone));
+			}));
+			const apiGetStub: SinonStub = sandbox.stub(StApi, 'get');
+			const state: GeneratingState = await PdfController.generatePdf('xyz');
+			chai.expect(apiPostStub.callCount).to.equal(1);
+			chai.expect(apiGetStub.callCount).to.equal(0);
+			chai.expect(state).to.deep.equal(pdfResults.pdfDoneResult);
+		});
+
+		it('should return init state if is not found', async () => {
+			const apiPostStub: SinonStub = sandbox.stub(StApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, pdfApiResponses.pdfNotFound));
+			}));
+			const apiGetStub: SinonStub = sandbox.stub(StApi, 'get');
+			const state: GeneratingState = await PdfController.generatePdf('xyz');
+			chai.expect(apiPostStub.callCount).to.equal(1);
+			chai.expect(apiGetStub.callCount).to.equal(0);
+			chai.expect(state).to.deep.equal(pdfResults.pdfNotFoundResult);
 		});
 	});
 });
