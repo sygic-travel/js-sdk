@@ -1,6 +1,6 @@
 import { Collection, getCollectionsForDestinationId } from '../Collections';
 import { getPlacesDestinationMap, getPlacesMapFromTrip, mergePlacesArrays, Place } from '../Places';
-import { getRoutesForTripDay } from '../Route';
+import { getRoutesForTripDay, TripDayRoutes } from '../Route';
 import { Day, getTripDetailed, Trip } from '../Trip';
 import { generateDestinationMainMap, generateDestinationSecondaryMaps } from './MapGenerator';
 import { PdfData, PdfQuery, PdfStaticMap, PdfStaticMapSector } from './PdfData';
@@ -16,6 +16,10 @@ export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 		throw new Error('Can\'t generate PDF data for trip without days');
 	}
 
+	const routesPromise: Promise<TripDayRoutes[]> = Promise.all(trip.days.map((day: Day, dayIndex: number) => (
+		getRoutesForTripDay(trip.id, dayIndex)
+	)));
+
 	const placesMapFromTrip: Map<string, Place> = await getPlacesMapFromTrip(trip);
 	const {
 		destinationIdsWithDestinations,
@@ -24,7 +28,7 @@ export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 
 	const destinationIds: string[] = Array.from(destinationIdsWithPlaces.keys());
 
-	Promise.all(destinationIds.map(async (destinationId: string) => {
+	const destinationsPromise: Promise<void[]> = Promise.all(destinationIds.map(async (destinationId: string) => {
 		const collectionsForDestination: Collection[] = await getCollectionsForDestinationId(destinationId);
 		const mergedCollectionsAndPlacesFromDestination: Place[] = mergePlacesArrays(
 			collectionsForDestination[0].places,
@@ -46,9 +50,8 @@ export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 		});
 	}));
 
-	pdfData.routes = await Promise.all(trip.days.map((day: Day, dayIndex: number) => (
-		getRoutesForTripDay(trip.id, dayIndex)
-	)));
+	const [routes] = await Promise.all([routesPromise, destinationsPromise]);
+	pdfData.routes = routes;
 
 	return pdfData;
 }
