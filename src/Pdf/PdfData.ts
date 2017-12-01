@@ -43,3 +43,9 @@ export interface StaticMap {
 	url: string;
 	bounds: Bounds;
 }
+
+export interface GeneratingState {
+	generatingId: string;
+	state: 'generating' | 'done' | 'not_found' | 'timeout';
+	url: string|null;
+}

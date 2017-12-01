@@ -2,8 +2,34 @@ import { Collection, getCollectionsForDestinationId } from '../Collections';
 import { getPlacesDestinationMap, getPlacesMapFromTrip, mergePlacesArrays, Place } from '../Places';
 import { getRoutesForTripDay, TripDayRoutes } from '../Route';
 import { Day, getTripDetailed, Trip } from '../Trip';
+import { sleep } from '../Util';
+import * as Dao from './DataAccess';
 import { generateDestinationMainMap, generateDestinationSecondaryMaps } from './MapGenerator';
-import { PdfData, PdfQuery, PdfStaticMap, PdfStaticMapSector } from './PdfData';
+import { GeneratingState, PdfData, PdfQuery, PdfStaticMap, PdfStaticMapSector } from './PdfData';
+
+const GENERATING_STATE_REFRESH_INTERVAL = 5000; // 5 seconds
+const GENERATING_STATE_CHECK_ATTEMPTS = 60;
+
+export async function generatePdf(tripId: string): Promise<GeneratingState> {
+	const initState: GeneratingState = await Dao.generatePdf(tripId);
+	if (initState.state !== 'generating' ) {
+		return initState;
+	}
+	let checkCount = 0;
+	while (checkCount < GENERATING_STATE_CHECK_ATTEMPTS) {
+		checkCount++;
+		await sleep(GENERATING_STATE_REFRESH_INTERVAL);
+		const state: GeneratingState = await Dao.getGeneratingState(tripId, initState.generatingId);
+		if (state.state !== 'generating') {
+			return state;
+		}
+	}
+	return {
+		generatingId: initState.generatingId,
+		state: 'timeout',
+		url: null
+	} as GeneratingState;
+}
 
 export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 	const trip: Trip = await getTripDetailed(query.tripId);

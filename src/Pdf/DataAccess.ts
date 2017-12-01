@@ -1,6 +1,7 @@
+import { camelizeKeys } from 'humps';
 import { ApiResponse, StApi } from '../Api';
 import { Bounds, calculateLocationsBounds } from '../Geo';
-import { StaticMap, StaticMapPoint } from './PdfData';
+import { GeneratingState, StaticMap, StaticMapPoint } from './PdfData';
 
 export async function getStaticMap(
 	width: number,
@@ -18,4 +19,26 @@ export async function getStaticMap(
 		url: apiResponse.data.url as string,
 		bounds: apiResponse.data.bounds as Bounds
 	};
+}
+
+export async function generatePdf(tripId: string): Promise<GeneratingState> {
+
+	const apiResponse: ApiResponse = await StApi.post('trips/' + tripId + '/pdf', {});
+
+	if (!apiResponse.data.hasOwnProperty('pdf')) {
+		throw new Error('Wrong API response');
+	}
+
+	return camelizeKeys(apiResponse.data.pdf) as GeneratingState;
+}
+
+export async function getGeneratingState(tripId: string, generatingId: string): Promise<GeneratingState> {
+
+	const apiResponse: ApiResponse = await StApi.get('trips/' + tripId + '/pdf?generating_id=' + generatingId);
+
+	if (!apiResponse.data.hasOwnProperty('pdf')) {
+		throw new Error('Wrong API response');
+	}
+
+	return camelizeKeys(apiResponse.data.pdf) as GeneratingState;
 }
