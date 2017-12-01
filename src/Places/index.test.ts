@@ -183,6 +183,16 @@ describe('PlacesController', () => {
 				place1, place2, place3, place4, place5
 			]);
 		});
+
+		it('should correctly merge empty array with array of Places', () => {
+			const place1: Place = cloneDeep(ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			place1.id = 'poi:1';
+			const place2: Place = cloneDeep(ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			place2.id = 'poi:2';
+
+			chai.expect(mergePlacesArrays([place1, place2], [])).to.deep.eq([place1, place2]);
+			chai.expect(mergePlacesArrays([], [place1, place2])).to.deep.eq([place1, place2]);
+		});
 	});
 
 });

@@ -65,7 +65,7 @@ export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 	const destinationsPromise: Promise<void[]> = Promise.all(destinationIds.map(async (destinationId: string) => {
 		const collectionsForDestination: Collection[] = await getCollectionsForDestinationId(destinationId);
 		const mergedCollectionsAndPlacesFromDestination: Place[] = mergePlacesArrays(
-			collectionsForDestination[0].places,
+			collectionsForDestination.length > 0 ? collectionsForDestination[0].places : [],
 			destinationIdsWithPlaces.get(destinationId)!
 		);
 
