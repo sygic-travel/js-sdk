@@ -4,6 +4,10 @@ export function addDaysToDate(date: string, count: number): string {
 	return formatDate(d);
 }
 
+export function sleep(ms: number): Promise<void> {
+	return new Promise<void>((resolve) => setTimeout(resolve, ms));
+}
+
 export function subtractDaysFromDate(date: string, count: number): string {
 	const d = new Date(date);
 	d.setDate(d.getDate() - count);
