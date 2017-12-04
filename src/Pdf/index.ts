@@ -1,3 +1,4 @@
+import { Places } from '../../index';
 import { Collection, getCollectionsForDestinationId } from '../Collections';
 import { getPlacesDestinationMap, getPlacesMapFromTrip, mergePlacesArrays, Place } from '../Places';
 import { getRoutesForTripDay, TripDayRoutes } from '../Route';
@@ -7,6 +8,7 @@ import { sleep } from '../Util';
 import * as Dao from './DataAccess';
 import { generateDestinationMainMap, generateDestinationSecondaryMaps } from './MapGenerator';
 import { GeneratingState, PdfData, PdfQuery, PdfStaticMap, PdfStaticMapSector } from './PdfData';
+import Tag = Places.Tag;
 
 export {
 	GeneratingState,
@@ -60,12 +62,6 @@ export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 		destinationIdsWithDestinations,
 		destinationIdsWithPlaces
 	} = await buildDestinationsAndPlaces(placesMapFromTrip);
-
-	const homeDestinationId: string|null = await getHomeDestinationId();
-	if (homeDestinationId)  {
-		destinationIdsWithDestinations.delete(homeDestinationId);
-		destinationIdsWithPlaces.delete(homeDestinationId);
-	}
 
 	const destinationIds: string[] = Array.from(destinationIdsWithPlaces.keys());
 
@@ -121,7 +117,10 @@ export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<
 		}
 	});
 
-	return { destinationIdsWithDestinations, destinationIdsWithPlaces };
+	return await filterUnnecessaryDestinations(
+		destinationIdsWithDestinations,
+		destinationIdsWithPlaces
+	);
 }
 
 async function generateDestinationMaps(destinationPlaces: Place[], query: PdfQuery): Promise<{
@@ -150,4 +149,36 @@ async function getHomeDestinationId(): Promise<string|null> {
 	const homeDestinationMap: Map<string, Place> = await getPlacesDestinationMap([userSettings.homePlaceId]);
 	const homeDestination: Place|undefined = homeDestinationMap.get(userSettings.homePlaceId);
 	return homeDestination ? homeDestination.id : null;
+}
+
+async function filterUnnecessaryDestinations(
+	destinationIdsWithDestinations: Map<string, Place>,
+	destinationIdsWithPlaces: Map<string, Place[]>
+): Promise<{
+	destinationIdsWithDestinations: Map<string, Place>,
+	destinationIdsWithPlaces: Map<string, Place[]>
+}> {
+	const homeDestinationId: string|null = await getHomeDestinationId();
+	if (homeDestinationId) {
+		destinationIdsWithDestinations.delete(homeDestinationId);
+		destinationIdsWithPlaces.delete(homeDestinationId);
+	}
+
+	const destinationIdsToBeDeleted: string[] = [];
+	destinationIdsWithPlaces.forEach((places: Place[], destinationId) => {
+		if (places.length === 1) {
+			const singlePlace: Place = places[0];
+			const airportTag: Tag|undefined = singlePlace.detail!.tags.find((tag: Tag) => (tag.name === 'Airport'));
+			if (airportTag) {
+				destinationIdsToBeDeleted.push(destinationId);
+			}
+		}
+	});
+
+	destinationIdsToBeDeleted.forEach((destinationIdToBeDeleted: string) => {
+		destinationIdsWithDestinations.delete(destinationIdToBeDeleted);
+		destinationIdsWithPlaces.delete(destinationIdToBeDeleted);
+	});
+
+	return { destinationIdsWithDestinations, destinationIdsWithPlaces };
 }
