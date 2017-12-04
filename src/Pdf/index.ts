@@ -2,6 +2,7 @@ import { Collection, getCollectionsForDestinationId } from '../Collections';
 import { getPlacesDestinationMap, getPlacesMapFromTrip, mergePlacesArrays, Place } from '../Places';
 import { getRoutesForTripDay, TripDayRoutes } from '../Route';
 import { Day, getTripDetailed, Trip } from '../Trip';
+import { getUserSettings, UserSettings } from '../User';
 import { sleep } from '../Util';
 import * as Dao from './DataAccess';
 import { generateDestinationMainMap, generateDestinationSecondaryMaps } from './MapGenerator';
@@ -59,6 +60,12 @@ export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 		destinationIdsWithDestinations,
 		destinationIdsWithPlaces
 	} = await buildDestinationsAndPlaces(placesMapFromTrip);
+
+	const homeDestinationId: string|null = await getHomeDestinationId();
+	if (homeDestinationId)  {
+		destinationIdsWithDestinations.delete(homeDestinationId);
+		destinationIdsWithPlaces.delete(homeDestinationId);
+	}
 
 	const destinationIds: string[] = Array.from(destinationIdsWithPlaces.keys());
 
@@ -131,4 +138,16 @@ async function generateDestinationMaps(destinationPlaces: Place[], query: PdfQue
 		sectorsForSecondaryMaps
 	);
 	return { mainMap, secondaryMaps };
+}
+
+async function getHomeDestinationId(): Promise<string|null> {
+	const userSettings: UserSettings = await getUserSettings();
+
+	if (!userSettings.homePlaceId) {
+		return null;
+	}
+
+	const homeDestinationMap: Map<string, Place> = await getPlacesDestinationMap([userSettings.homePlaceId]);
+	const homeDestination: Place|undefined = homeDestinationMap.get(userSettings.homePlaceId);
+	return homeDestination ? homeDestination.id : null;
 }
