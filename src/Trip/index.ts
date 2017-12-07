@@ -109,17 +109,12 @@ export async function updateTrip(id: string, dataToUpdate: TripUpdateData): Prom
 	return await Dao.updateTrip(tripToBeUpdated);
 }
 
-export async function addDaysToTrip(id: string, count: number): Promise<Trip> {
+export async function addDaysToTrip(id: string, appendCount: number, prependCount: number): Promise<Trip> {
 	let tripToBeUpdated = await getTripDetailed(id);
-	for (let i = 0; i < count; i++) {
+	for (let i = 0; i < appendCount; i++) {
 		tripToBeUpdated = TripManipulator.addDay(tripToBeUpdated, await getUserSettings());
 	}
-	return Dao.updateTrip(tripToBeUpdated);
-}
-
-export async function prependDaysToTrip(id: string, count: number): Promise<Trip> {
-	let tripToBeUpdated = await getTripDetailed(id);
-	for (let i = 0; i < count; i++) {
+	for (let i = 0; i < prependCount; i++) {
 		tripToBeUpdated = TripManipulator.prependDayToTrip(tripToBeUpdated, await getUserSettings());
 	}
 	return Dao.updateTrip(tripToBeUpdated);

@@ -12,7 +12,6 @@ import {
 	getTripsInTrash,
 	getTripTemplates,
 	movePlaceInDay,
-	prependDaysToTrip,
 	removeAllPlacesFromDay,
 	removeDayFromTrip,
 	removePlacesFromDay,
@@ -57,12 +56,8 @@ export default class TripModule {
 		return cloneTrip(id);
 	}
 
-	public addDaysToTrip(id: string, count: number): Promise<Trip> {
-		return addDaysToTrip(id, count);
-	}
-
-	public prependDaysToTrip(id: string, count: number): Promise<Trip> {
-		return prependDaysToTrip(id, count);
+	public addDaysToTrip(id: string, appendCount: number, prependCount: number): Promise<Trip> {
+		return addDaysToTrip(id, appendCount, prependCount);
 	}
 
 	public removeDayFromTrip(id: string, dayIndex: number): Promise<Trip> {
