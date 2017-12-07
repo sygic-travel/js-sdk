@@ -101,8 +101,8 @@ export default class TripModule {
 	public setOvernightPlace(
 		tripId: string,
 		placeId: string,
-		dayIndex: number): Promise<Trip> {
-		return setOvernightPlace(tripId, placeId, dayIndex);
+		dayIndexes: number[]): Promise<Trip> {
+		return setOvernightPlace(tripId, placeId, dayIndexes);
 	}
 
 	public setTransport(id: string, dayIndex: number, itemIndex: number, settings: TransportSettings): Promise<Trip> {
