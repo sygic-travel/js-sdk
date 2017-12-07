@@ -127,7 +127,7 @@ declare class TripModule {
 		transports?: (Trips.TransportSettings|null)[],
 		positionInDay?: number
 	): Promise<Trips.Trip>;
-	public setOvernightPlace(tripId: string, placeId: string, dayIndex: number): Promise<Trips.Trip>;
+	public setOvernightPlace(tripId: string, placeId: string, dayIndexes: number[]): Promise<Trips.Trip>;
 	public setTransport(
 		id: string,
 		dayIndex: number,
