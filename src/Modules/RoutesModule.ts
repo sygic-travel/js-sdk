@@ -12,7 +12,7 @@ export default class RoutesModule {
 		destination: Location,
 		waypoints: Waypoint[],
 		avoids: TransportAvoid[]
-	): Promise<Route> {
+	): Promise<Route | null> {
 		return getDirections(origin, destination, waypoints, avoids);
 	}
 }

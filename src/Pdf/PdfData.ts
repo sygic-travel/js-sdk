@@ -30,7 +30,7 @@ export interface PdfStaticMapSector {
 	places: Place[];
 }
 
-export interface PdfStaticMap extends StaticMap{
+export interface PdfStaticMap extends StaticMap {
 	id: string;
 	sectors: PdfStaticMapSector[];
 }
