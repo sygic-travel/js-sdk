@@ -1,6 +1,5 @@
 import {
 	AuthenticationResponseCode,
-	RegistrationResponseCode,
 	getUserInfo,
 	getUserSession,
 	getUserSettings,
@@ -10,6 +9,7 @@ import {
 	loginUserWithJwt,
 	loginUserWithPassword,
 	registerUser,
+	RegistrationResponseCode,
 	Session,
 	setUserSession,
 	updateUserSettings,

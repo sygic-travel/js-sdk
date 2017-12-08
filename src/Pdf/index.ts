@@ -1,14 +1,16 @@
-import { Places } from '../../index';
 import { Collection, getCollectionsForDestinationId } from '../Collections';
-import { getPlacesDestinationMap, getPlacesMapFromTrip, mergePlacesArrays, Place } from '../Places';
+import { getFavoritesIds } from '../Favorites';
+import {
+	getPlacesDestinationMap, getPlacesDetailedMap, getPlacesMapFromTrip, mergePlacesArrays,
+	Place, Tag
+} from '../Places';
 import { getRoutesForTripDay, TripDayRoutes } from '../Route';
 import { Day, getTripDetailed, Trip } from '../Trip';
 import { getUserSettings, UserSettings } from '../User';
 import { sleep } from '../Util';
 import * as Dao from './DataAccess';
 import { generateDestinationMainMap, generateDestinationSecondaryMaps } from './MapGenerator';
-import { GeneratingState, PdfData, PdfQuery, PdfStaticMap, PdfStaticMapSector } from './PdfData';
-import Tag = Places.Tag;
+import { GeneratingState, PdfData, PdfQuery, PdfStaticMap, PdfStaticMapSector, PlaceSource } from './PdfData';
 
 export {
 	GeneratingState,
@@ -17,6 +19,8 @@ export {
 	PdfStaticMap,
 	PdfStaticMapSector
 };
+
+const imageSize: string = '100x100';
 
 const GENERATING_STATE_REFRESH_INTERVAL = 5000; // 5 seconds
 const GENERATING_STATE_CHECK_ATTEMPTS = 60;
@@ -60,7 +64,8 @@ export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 	const placesMapFromTrip: Map<string, Place> = await getPlacesMapFromTrip(trip);
 	const {
 		destinationIdsWithDestinations,
-		destinationIdsWithPlaces
+		destinationIdsWithPlaces,
+		placeIdsWithPlaceType
 	} = await buildDestinationsAndPlaces(placesMapFromTrip);
 
 	const destinationIds: string[] = Array.from(destinationIdsWithPlaces.keys());
@@ -72,6 +77,13 @@ export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 			destinationIdsWithPlaces.get(destinationId)!
 		);
 
+		const placesWihoutTypeSet: Place[] = mergedCollectionsAndPlacesFromDestination.filter((place: Place) => {
+			return !placeIdsWithPlaceType.has(place.id);
+		});
+		placesWihoutTypeSet.forEach((placeWithoutTypeSet: Place) => {
+			placeIdsWithPlaceType.set(placeWithoutTypeSet.id, PlaceSource.FROM_COLLECTION);
+		});
+
 		destinationIdsWithPlaces.set(destinationId, mergedCollectionsAndPlacesFromDestination);
 
 		const {
@@ -82,6 +94,7 @@ export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 		pdfData.destinations.push({
 			destination: destinationIdsWithDestinations.get(destinationId)!,
 			places: destinationIdsWithPlaces.get(destinationId)!,
+			placeSources: placeIdsWithPlaceType,
 			mainMap,
 			secondaryMaps
 		});
@@ -95,15 +108,19 @@ export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 
 export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<string, Place>): Promise<{
 	destinationIdsWithDestinations: Map<string, Place>,
-	destinationIdsWithPlaces: Map<string, Place[]>
+	destinationIdsWithPlaces: Map<string, Place[]>,
+	placeIdsWithPlaceType: Map<string, PlaceSource>
 }> {
 	const placeIdsWithDestinations: Map<string, Place> = await getPlacesDestinationMap(
 		Array.from(placeIdsAndPlacesFromTrip.keys())
 	);
 	const destinationIdsWithDestinations: Map<string, Place> = new Map<string, Place>();
 	const destinationIdsWithPlaces: Map<string, Place[]> = new Map<string, Place[]>();
+	const placeIdsWithPlaceType: Map<string, PlaceSource> = new Map<string, PlaceSource>();
 
 	placeIdsWithDestinations.forEach((destination: Place, placeId: string) => {
+		placeIdsWithPlaceType.set(placeId, PlaceSource.FROM_TRIP);
+
 		if (!destinationIdsWithDestinations.has(destination.id)) {
 			destinationIdsWithDestinations.set(destination.id, destination);
 		}
@@ -117,10 +134,31 @@ export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<
 		}
 	});
 
-	return await filterUnnecessaryDestinations(
-		destinationIdsWithDestinations,
-		destinationIdsWithPlaces
+	const userFavoritesMap: Map<string, Place> = await getPlacesDetailedMap(
+		await getFavoritesIds(),
+		imageSize
 	);
+
+	const favoritesIdsWithDestinations: Map<string, Place> = await getPlacesDestinationMap(
+		Array.from(userFavoritesMap.keys())
+	);
+
+	favoritesIdsWithDestinations.forEach((destination: Place, favoriteId: string) => {
+		if (destination && destinationIdsWithPlaces.has(destination.id)) {
+			placeIdsWithPlaceType.set(favoriteId, PlaceSource.FROM_FAVORITES);
+			const favorite: Place|undefined = userFavoritesMap.get(favoriteId);
+			const placesToBeMerged: Place[]|undefined = destinationIdsWithPlaces.get(destination.id);
+			destinationIdsWithPlaces.set(destination.id, mergePlacesArrays(
+				placesToBeMerged!,
+				[favorite!]
+			));
+		}
+	});
+
+	return { ...await filterUnnecessaryDestinations(
+			destinationIdsWithDestinations,
+			destinationIdsWithPlaces
+		), placeIdsWithPlaceType };
 }
 
 async function generateDestinationMaps(destinationPlaces: Place[], query: PdfQuery): Promise<{
