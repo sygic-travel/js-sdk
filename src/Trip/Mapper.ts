@@ -7,6 +7,8 @@ import { UserSettings } from '../User';
 import { Day, ItineraryItem, Trip, TripCreateRequest, TripMedia, TripPrivileges, TripTemplate } from './Trip';
 import { decorateDaysWithDate } from './Utility';
 
+const MAX_TRIP_DAYS_COUNT = 81;
+
 export const mapTripListApiResponseToTripsList = (trips: any): Trip[] => {
 	return trips.map((trip) => {
 		return mapTrip(trip, null, null);
@@ -31,22 +33,33 @@ export const mapTripCreateRequestToApiFormat = (request: TripCreateRequest): obj
 	return data;
 };
 
-export const mapTripCreateRequest = (startsOn: string, name: string, placeId: string): TripCreateRequest => {
+export const mapTripCreateRequest = (
+	startsOn: string,
+	name: string,
+	daysCount: number,
+	placeId?: string
+): TripCreateRequest => {
+	if (daysCount < 1 || daysCount > MAX_TRIP_DAYS_COUNT) {
+		throw new Error(`Invalid trip days count. Value between 1 and ${MAX_TRIP_DAYS_COUNT} expected.`);
+	}
+
+	const days: Day[] = Array(daysCount).fill(null).map(() => ({note: null, date: null, itinerary: []}));
+	if (placeId) {
+		days[0].itinerary = [{
+			placeId,
+			place: null,
+			note: null,
+			duration: null,
+			startTime: null,
+			transportFromPrevious: null,
+			isSticky: false
+		}];
+	}
+
 	return {
 		name,
 		startsOn,
-		days: [{
-			note: null,
-			date: null,
-			itinerary: [{
-				placeId,
-				place: null,
-				note: null,
-				duration: null,
-				startTime: null,
-				transportFromPrevious: null,
-			}]}
-		],
+		days,
 		privacyLevel: 'private',
 		endsOn: startsOn,
 		isDeleted: false,
