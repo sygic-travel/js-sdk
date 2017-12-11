@@ -48,8 +48,8 @@ export {
 	UNBREAKABLE_TRANSPORT_MODES,
 };
 
-export async function createTrip(startDate: string, name: string, placeId: string): Promise<Trip> {
-	return await Dao.createTrip(mapTripCreateRequest(startDate, name, placeId));
+export async function createTrip(startDate: string, name: string, daysCount: number, placeId?: string): Promise<Trip> {
+	return await Dao.createTrip(mapTripCreateRequest(startDate, name, daysCount, placeId));
 }
 
 export async function getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trip[]> {

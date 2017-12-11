@@ -110,7 +110,7 @@ declare class TripModule {
 	public getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trips.Trip[]>;
 	public getTripsInTrash(): Promise<Trips.Trip[]>;
 	public getTripDetailed(id: string): Promise<Trips.Trip>;
-	public createTrip(startDate: string, name: string, placeId: string): Promise<Trips.Trip>;
+	public createTrip(startDate: string, name: string, daysCount: number, placeId?: string): Promise<Trips.Trip>;
 	public updateTrip(id, dataToUpdate: Trips.TripUpdateData): Promise<Trips.Trip>;
 	public cloneTrip(id): Promise<string>;
 	public addDaysToTrip(id: string, appendCount: number, prependCount: number): Promise<Trips.Trip>;

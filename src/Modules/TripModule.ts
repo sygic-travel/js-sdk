@@ -44,8 +44,8 @@ export default class TripModule {
 		return getTripDetailed(id);
 	}
 
-	public createTrip(startDate: string, name: string, placeId: string): Promise<Trip> {
-		return createTrip(startDate, name, placeId);
+	public createTrip(startDate: string, name: string, daysCount: number, placeId?: string): Promise<Trip> {
+		return createTrip(startDate, name, daysCount, placeId);
 	}
 
 	public updateTrip(id, dataToUpdate: TripUpdateData): Promise<Trip> {

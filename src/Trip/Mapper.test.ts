@@ -6,6 +6,7 @@ import * as ApiResponses from '../TestData/TripApiResponses';
 import * as ExpectedResults from '../TestData/TripExpectedResults';
 import * as Mapper from '../Trip/Mapper';
 import { UserSettings } from '../User';
+import { TripCreateRequest } from './Trip';
 
 chai.use(chaiAsPromised);
 
@@ -23,6 +24,33 @@ describe('TripMapper', () => {
 			const trip = Mapper.mapTripDetailedApiResponseToTrip(ApiResponses.tripDetail.trip, null);
 			const mappedResponse = Mapper.mapTripToApiFormat(trip);
 			return chai.expect(mappedResponse).to.deep.equal(expectedResponse);
+		});
+	});
+
+	describe('#mapTripCreateRequest', () => {
+		it('should throw an error when low daysCount is passed', () => {
+			return chai.expect(() => Mapper.mapTripCreateRequest('2017-12-13', 'Awesome', 0))
+				.to.throw(Error, 'Invalid trip days count. Value between 1 and 81 expected.');
+		});
+		it('should throw an error when too high daysCount is passed', () => {
+			return chai.expect(() => Mapper.mapTripCreateRequest('2017-12-13', 'Awesome', 82))
+				.to.throw(Error, 'Invalid trip days count. Value between 1 and 81 expected.');
+		});
+		it('should create correct request for days', () => {
+			const tripRequest: TripCreateRequest = Mapper.mapTripCreateRequest('2017-12-13', 'Awesome', 2);
+			chai.expect(tripRequest.days).to.have.lengthOf(2);
+			chai.expect(tripRequest.startsOn).to.be.equal('2017-12-13');
+			chai.expect(tripRequest.name).to.be.equal('Awesome');
+			chai.expect(tripRequest.days[0].itinerary).to.have.length(0);
+			chai.expect(tripRequest.days[1].itinerary).to.have.length(0);
+		});
+		it('should create correct request for days and place', () => {
+			const tripRequest: TripCreateRequest = Mapper.mapTripCreateRequest('2017-12-13', 'Awesome', 2, 'poi:530');
+			chai.expect(tripRequest.days).to.have.lengthOf(2);
+			chai.expect(tripRequest.startsOn).to.be.equal('2017-12-13');
+			chai.expect(tripRequest.name).to.be.equal('Awesome');
+			chai.expect(tripRequest.days[0].itinerary).to.have.length(1);
+			chai.expect(tripRequest.days[1].itinerary).to.have.length(0);
 		});
 	});
 
