@@ -10,7 +10,15 @@ import { getUserSettings, UserSettings } from '../User';
 import { sleep } from '../Util';
 import * as Dao from './DataAccess';
 import { generateDestinationMainMap, generateDestinationSecondaryMaps } from './MapGenerator';
-import { GeneratingState, PdfData, PdfQuery, PdfStaticMap, PdfStaticMapSector, PlaceSource } from './PdfData';
+import {
+	GeneratingState,
+	PdfData,
+	PdfDestination,
+	PdfQuery,
+	PdfStaticMap,
+	PdfStaticMapSector,
+	PlaceSource
+} from './PdfData';
 
 export {
 	GeneratingState,
@@ -70,39 +78,20 @@ export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 
 	const destinationIds: string[] = Array.from(destinationIdsWithPlaces.keys());
 
-	const destinationsPromise: Promise<void[]> = Promise.all(destinationIds.map(async (destinationId: string) => {
-		const collectionsForDestination: Collection[] = await getCollectionsForDestinationId(destinationId);
-		const mergedCollectionsAndPlacesFromDestination: Place[] = mergePlacesArrays(
-			collectionsForDestination.length > 0 ? collectionsForDestination[0].places : [],
-			destinationIdsWithPlaces.get(destinationId)!
-		);
+	const destinationsPromise: Promise<PdfDestination[]> = Promise.all(destinationIds.map(
+		(destinationId: string) => (
+		createDestinationData(
+			destinationId,
+			destinationIdsWithPlaces,
+			destinationIdsWithDestinations,
+			placeIdsWithPlaceType,
+			query
+		)
+	)));
 
-		const placesWihoutTypeSet: Place[] = mergedCollectionsAndPlacesFromDestination.filter((place: Place) => {
-			return !placeIdsWithPlaceType.has(place.id);
-		});
-		placesWihoutTypeSet.forEach((placeWithoutTypeSet: Place) => {
-			placeIdsWithPlaceType.set(placeWithoutTypeSet.id, PlaceSource.FROM_COLLECTION);
-		});
-
-		destinationIdsWithPlaces.set(destinationId, mergedCollectionsAndPlacesFromDestination);
-
-		const {
-			mainMap,
-			secondaryMaps
-		} = await generateDestinationMaps(mergedCollectionsAndPlacesFromDestination, query);
-
-		pdfData.destinations.push({
-			destination: destinationIdsWithDestinations.get(destinationId)!,
-			places: destinationIdsWithPlaces.get(destinationId)!,
-			placeSources: placeIdsWithPlaceType,
-			mainMap,
-			secondaryMaps
-		});
-	}));
-
-	const [routes] = await Promise.all([routesPromise, destinationsPromise]);
+	const [routes, destinations] = await Promise.all([routesPromise, destinationsPromise]);
 	pdfData.routes = routes;
-
+	pdfData.destinations = destinations;
 	return pdfData;
 }
 
@@ -161,6 +150,43 @@ export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<
 		), placeIdsWithPlaceType };
 }
 
+async function createDestinationData(
+	destinationId: string,
+	destinationIdsWithPlaces,
+	destinationIdsWithDestinations,
+	placeIdsWithPlaceType,
+	query
+): Promise<PdfDestination> {
+
+	const collectionsForDestination: Collection[] = await getCollectionsForDestinationId(destinationId);
+	const mergedCollectionsAndPlacesFromDestination: Place[] = mergePlacesArrays(
+		collectionsForDestination.length > 0 ? collectionsForDestination[0].places : [],
+		destinationIdsWithPlaces.get(destinationId)!
+	);
+
+	const placesWihoutTypeSet: Place[] = mergedCollectionsAndPlacesFromDestination.filter((place: Place) => {
+		return !placeIdsWithPlaceType.has(place.id);
+	});
+	placesWihoutTypeSet.forEach((placeWithoutTypeSet: Place) => {
+		placeIdsWithPlaceType.set(placeWithoutTypeSet.id, PlaceSource.FROM_COLLECTION);
+	});
+
+	destinationIdsWithPlaces.set(destinationId, mergedCollectionsAndPlacesFromDestination);
+
+	const {
+		mainMap,
+		secondaryMaps
+	} = await generateDestinationMaps(mergedCollectionsAndPlacesFromDestination, query);
+
+	return {
+		destination: destinationIdsWithDestinations.get(destinationId)!,
+		places: destinationIdsWithPlaces.get(destinationId)!,
+		placeSources: placeIdsWithPlaceType,
+		mainMap,
+		secondaryMaps
+	} as PdfDestination;
+}
+
 async function generateDestinationMaps(destinationPlaces: Place[], query: PdfQuery): Promise<{
 	mainMap: PdfStaticMap,
 	secondaryMaps: PdfStaticMap[]
@@ -177,15 +203,13 @@ async function generateDestinationMaps(destinationPlaces: Place[], query: PdfQue
 	return { mainMap, secondaryMaps };
 }
 
-async function getHomeDestinationId(): Promise<string|null> {
-	const userSettings: UserSettings = await getUserSettings();
-
-	if (!userSettings.homePlaceId) {
+async function getHomeDestinationId(homePlaceId: string|null): Promise<string|null> {
+	if (!homePlaceId) {
 		return null;
 	}
 
-	const homeDestinationMap: Map<string, Place> = await getPlacesDestinationMap([userSettings.homePlaceId]);
-	const homeDestination: Place|undefined = homeDestinationMap.get(userSettings.homePlaceId);
+	const homeDestinationMap: Map<string, Place> = await getPlacesDestinationMap([homePlaceId]);
+	const homeDestination: Place|undefined = homeDestinationMap.get(homePlaceId);
 	return homeDestination ? homeDestination.id : null;
 }
 
@@ -196,8 +220,12 @@ async function filterUnnecessaryDestinations(
 	destinationIdsWithDestinations: Map<string, Place>,
 	destinationIdsWithPlaces: Map<string, Place[]>
 }> {
-	const homeDestinationId: string|null = await getHomeDestinationId();
-	if (homeDestinationId) {
+	const userSettings: UserSettings = await getUserSettings();
+	const homeDestinationId: string|null = await getHomeDestinationId(userSettings.homePlaceId);
+	const homeDestinationPlaces: Place[]|undefined = homeDestinationId ?
+		destinationIdsWithPlaces.get(homeDestinationId) : undefined;
+
+	if (homeDestinationId && homeDestinationPlaces && homeDestinationPlaces.length > 1) {
 		destinationIdsWithDestinations.delete(homeDestinationId);
 		destinationIdsWithPlaces.delete(homeDestinationId);
 	}
