@@ -354,3 +354,18 @@ function checkItemExists(
 	}
 	return true;
 }
+
+export function removePlaceFromDayByPlaceId(
+	trip: Trip,
+	placeId: string,
+	dayIndex: number,
+	userSettings: UserSettings | null
+): Trip {
+	checkDayExists(trip, dayIndex);
+	const resultTrip = cloneDeep(trip);
+	resultTrip.days[dayIndex].itinerary = resultTrip.days[dayIndex]
+		.itinerary.filter((itineraryItem: ItineraryItem) => {
+			return itineraryItem.placeId !== placeId;
+		});
+	return resolveStickiness(resultTrip, userSettings);
+}

@@ -14,6 +14,7 @@ import {
 	movePlaceInDay,
 	removeAllPlacesFromDay,
 	removeDayFromTrip,
+	removePlaceFromDaysByPlaceId,
 	removePlacesFromDay,
 	setOvernightPlace,
 	setTransport,
@@ -74,6 +75,10 @@ export default class TripModule {
 
 	public removePlacesFromDay(id: string, dayIndex: number, positionsInDay: number[]): Promise<Trip> {
 		return removePlacesFromDay(id, dayIndex, positionsInDay);
+	}
+
+	public removePlaceFromDaysByPlaceId(id: string, placeId: string, daysIndexes: number[]): Promise<Trip> {
+		return removePlaceFromDaysByPlaceId(id, placeId, daysIndexes);
 	}
 
 	public removeAllPlacesFromDay(id: string, dayIndex: number): Promise<Trip> {

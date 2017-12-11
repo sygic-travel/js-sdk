@@ -593,4 +593,14 @@ describe('TripManipulator', () => {
 			chai.expect(trip).to.deep.equal(expectedTrip);
 		});
 	});
+
+	describe('#removePlaceFromDayByPlaceId', () => {
+		it('should remove places from day by place id', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const resultTrip: Trip = Manipulator.removePlaceFromDayByPlaceId(inputTrip, 'poi:2', 0, null);
+			const day: Day = resultTrip.days![0];
+			chai.expect(day.itinerary.length).to.be.equal(1);
+			chai.expect(day.itinerary[0].placeId).to.be.equal('poi:1');
+		});
+	});
 });
