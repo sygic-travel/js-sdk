@@ -197,6 +197,24 @@ export async function removeAllPlacesFromDay(id: string, dayIndex: number): Prom
 	);
 }
 
+export async function removePlaceFromDaysByPlaceId(
+	tripId: string,
+	placeId: string,
+	daysIndexes: number[]
+): Promise<Trip> {
+	let tripToBeUpdated: Trip = await getTripDetailed(tripId);
+	const userSettings: UserSettings = await getUserSettings();
+	daysIndexes.forEach((dayIndex: number) => {
+		tripToBeUpdated = TripManipulator.removePlaceFromDayByPlaceId(
+			tripToBeUpdated,
+			placeId,
+			dayIndex,
+			userSettings
+		);
+	});
+	return Dao.updateTrip(tripToBeUpdated);
+}
+
 export async function setOvernightPlace(tripId: string, placeId: string, dayIndexes: number[]): Promise<Trip> {
 	let tripToBeUpdated: Trip = await getTripDetailed(tripId);
 	const place: Place = await getPlaceDetailed(placeId, '300x300');

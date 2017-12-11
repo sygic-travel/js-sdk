@@ -365,4 +365,21 @@ describe('TripController', () => {
 			chai.expect(resultTrip.days && resultTrip.days[2].itinerary[2].placeId).to.equal('poi:100');
 		});
 	});
+
+	describe('#removePlaceFromDaysByPlaceId', () => {
+		it('should remove places from days by place id', async () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => {resolve(inputTrip); }));
+			sandbox.stub(PlaceController, 'getPlacesDetailed').returns(new Promise<Place[]>((resolve) => {resolve([]); }));
+			const resultTrip: Trip = await TripController.removePlaceFromDaysByPlaceId('test', 'poi:2', [0, 1]);
+			const day1: Day = resultTrip.days![0];
+			const day2: Day = resultTrip.days![1];
+
+			chai.expect(day1.itinerary.length).to.be.equal(1);
+			chai.expect(day1.itinerary[0].placeId).to.be.equal('poi:1');
+
+			chai.expect(day2.itinerary.length).to.be.equal(1);
+			chai.expect(day2.itinerary[0].placeId).to.be.equal('poi:3');
+		});
+	});
 });
