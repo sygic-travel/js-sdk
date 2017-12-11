@@ -363,7 +363,7 @@ export function removePlaceFromDayByPlaceId(
 ): Trip {
 	checkDayExists(trip, dayIndex);
 	const resultTrip = cloneDeep(trip);
-	resultTrip.days[dayIndex].itinerary = resultTrip.days[dayIndex].itinerary = resultTrip.days[dayIndex]
+	resultTrip.days[dayIndex].itinerary = resultTrip.days[dayIndex]
 		.itinerary.filter((itineraryItem: ItineraryItem) => {
 			return itineraryItem.placeId !== placeId;
 		});
