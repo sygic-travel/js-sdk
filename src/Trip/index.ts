@@ -332,6 +332,10 @@ export async function applyTripTemplate(tripId: string, templateId: number, dayI
 	return await populateTripWithPlaces(tripWithoutPlaces);
 }
 
+export async function ensureTripSyncedToServer(tripId: string): Promise<void> {
+	return Dao.syncChangedTripToServer(tripId);
+}
+
 async function populateTripWithPlaces(trip: Trip): Promise<Trip> {
 	const placesIds: string[] = getPlacesIdsFromTrip(trip);
 	return putPlacesToTrip(trip, await getPlacesDetailed(placesIds, '300x300'));

@@ -1,5 +1,4 @@
 import { camelizeKeys } from 'humps';
-import * as cloneDeep from 'lodash.clonedeep';
 import { stringify } from 'query-string';
 
 import { ApiResponse, StApi } from '../Api';
@@ -17,8 +16,13 @@ import {
 } from './Mapper';
 import { Trip, TripConflictClientResolution, TripConflictInfo, TripCreateRequest, TripTemplate } from './Trip';
 
-const updateTimeouts = {};
-const tripDataToSend = {};
+interface ChangedTrip {
+	trip: Trip;
+	apiData: any;
+	timeout;
+}
+
+const changedTrips: Map<string, ChangedTrip> = new Map();
 const UPDATE_TIMEOUT: number = 3000;
 
 export async function getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trip[]> {
@@ -75,27 +79,42 @@ export async function createTrip(tripRequest: TripCreateRequest): Promise<Trip> 
 export async function updateTrip(tripToBeUpdated: Trip): Promise<Trip> {
 	const tripApiFormatData = mapTripToApiFormat(tripToBeUpdated);
 	await tripsDetailedCache.set(tripToBeUpdated.id, tripApiFormatData);
-	if (updateTimeouts[tripToBeUpdated.id]) {
-		clearTimeout(updateTimeouts[tripToBeUpdated.id]);
+	const oldChangedTrip: ChangedTrip|undefined = changedTrips.get(tripToBeUpdated.id);
+	if (oldChangedTrip) {
+		clearTimeout(oldChangedTrip.timeout);
 	}
 	const updateRequestData = mapTripToApiUpdateFormat(tripToBeUpdated) as any;
 	updateRequestData.updated_at = dateToW3CString(new Date());
-	tripDataToSend[tripToBeUpdated.id] = updateRequestData;
-	updateTimeouts[tripToBeUpdated.id] = setTimeout(async () => {
-		const requestData =  cloneDeep(tripDataToSend[tripToBeUpdated.id]);
-		delete tripDataToSend[tripToBeUpdated.id];
-		const tripResponse: ApiResponse = await putTripToApi(requestData);
-		if (tripResponse.data.conflict_resolution === 'ignored') {
-			const conflictInfo = camelizeKeys(tripResponse.data.conflict_info) as TripConflictInfo;
-			return await handleIgnoredConflict(conflictInfo, tripToBeUpdated, tripResponse);
-		}
-		if (tripDataToSend[tripToBeUpdated.id]) {
-			tripDataToSend[tripToBeUpdated.id].base_version = tripResponse.data.trip.version;
-		} else {
-			await tripsDetailedCache.set(tripResponse.data.trip.id, tripResponse.data.trip);
-		}
-	}, UPDATE_TIMEOUT);
+	const changedTrip: ChangedTrip = {
+		apiData: updateRequestData,
+		trip: tripToBeUpdated,
+		timeout: setTimeout(async () => {
+			await syncChangedTripToServer(tripToBeUpdated.id);
+		}, UPDATE_TIMEOUT)
+	};
+	changedTrips.set(tripToBeUpdated.id, changedTrip);
 	return tripToBeUpdated;
+}
+
+export async function syncChangedTripToServer(tripId: string): Promise<void> {
+	const changedTrip: ChangedTrip|undefined = changedTrips.get(tripId);
+	changedTrips.delete(tripId);
+	if (!changedTrip)  {
+		return;
+	}
+	const tripResponse: ApiResponse = await putTripToApi(changedTrip.apiData);
+	clearTimeout(changedTrip.timeout);
+	if (tripResponse.data.conflict_resolution === 'ignored') {
+		const conflictInfo = camelizeKeys(tripResponse.data.conflict_info) as TripConflictInfo;
+		return await handleIgnoredConflict(conflictInfo, changedTrip.trip, tripResponse);
+	}
+
+	const newerChangedTrip: ChangedTrip|undefined = changedTrips.get(tripId);
+	if (newerChangedTrip) {
+		newerChangedTrip.apiData.base_version = tripResponse.data.trip.version;
+	} else {
+		await tripsDetailedCache.set(tripResponse.data.trip.id, tripResponse.data.trip);
+	}
 }
 
 export async function shouldNotifyOnTripUpdate(id: string, version: number | null): Promise<boolean> {

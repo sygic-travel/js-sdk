@@ -113,6 +113,7 @@ declare class TripModule {
 	public createTrip(startDate: string, name: string, daysCount: number, placeId?: string): Promise<Trips.Trip>;
 	public updateTrip(id, dataToUpdate: Trips.TripUpdateData): Promise<Trips.Trip>;
 	public cloneTrip(id): Promise<string>;
+	public ensureTripSyncedToServer(tripId: string): Promise<void>;
 	public addDaysToTrip(id: string, appendCount: number, prependCount: number): Promise<Trips.Trip>;
 	public removeDayFromTrip(id: string, dayIndex: number): Promise<Trips.Trip>;
 	public swapDaysInTrip(id: string, firstDayIndex: number, secondDayIndex: number): Promise<Trips.Trip>;
