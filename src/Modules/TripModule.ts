@@ -7,6 +7,7 @@ import {
 	cloneTrip,
 	createTrip,
 	emptyTripsTrash,
+	ensureTripSyncedToServer,
 	getTripDetailed,
 	getTrips,
 	getTripsInTrash,
@@ -55,6 +56,10 @@ export default class TripModule {
 
 	public cloneTrip(id): Promise<string> {
 		return cloneTrip(id);
+	}
+
+	public ensureTripSyncedToServer(tripId: string): Promise<void> {
+		return ensureTripSyncedToServer(tripId);
 	}
 
 	public addDaysToTrip(id: string, appendCount: number, prependCount: number): Promise<Trip> {
