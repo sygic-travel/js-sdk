@@ -40,9 +40,7 @@ describe('ChangeWatcher', () => {
 	describe('#start', () => {
 		it('should start changes watch and check for changes on api multiple times', (done) => {
 			changeWatcher = new ChangeWatcher(TICK_INTERVAL, () => {});
-			let callCount = 0;
 			const stub: SinonStub = sandbox.stub(StApi, 'get').callsFake(() => {
-				callCount++;
 				return(new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, {
 						changes: ''

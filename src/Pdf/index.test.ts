@@ -4,6 +4,7 @@ import * as cloneDeep from 'lodash.clonedeep';
 import { SinonSandbox, SinonStub } from 'sinon';
 import * as sinon from 'sinon';
 import { ApiResponse, StApi } from '../Api';
+import * as FavoritesController from '../Favorites';
 import { Place } from '../Places';
 import * as PlacesController from '../Places';
 
@@ -14,6 +15,7 @@ import { setEnvironment } from '../Settings/';
 import * as pdfApiResponses from '../TestData/PdfApiResponses';
 import * as pdfResults from '../TestData/PdfExpectedResults';
 import { placeDetailedEiffelTowerWithoutMedia as placeMock } from '../TestData/PlacesExpectedResults';
+import * as User from '../User';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
@@ -63,7 +65,31 @@ describe('PdfController', () => {
 			placesDestinationMap.set('poi:2', destination2);
 			placesDestinationMap.set('poi:3', destination2);
 
-			sandbox.stub(PlacesController, 'getPlacesDestinationMap').returns(placesDestinationMap);
+			const placeFromFavorites1: Place = cloneDeep(placeMock);
+			placeFromFavorites1.id = 'poi:1234';
+			placeFromFavorites1.parents = ['city:1'];
+			const favoritesDetailedMap: Map<string, Place> = new Map<string, Place>();
+			favoritesDetailedMap.set(placeFromFavorites1.id, placeFromFavorites1);
+			const favoritesDestinationMap: Map<string, Place> = new Map<string, Place>();
+			favoritesDestinationMap.set(placeFromFavorites1.id, destination1);
+
+			const homeDestination: Place = cloneDeep(placeMock);
+			homeDestination.id = 'country:999';
+			const homeDestinationMap: Map<string, Place> = new Map<string, Place>();
+			homeDestinationMap.set('poi:999', homeDestination);
+
+			sandbox.stub(User, 'getUserSettings').returns(new Promise<User.UserSettings>((resolve) => {
+				resolve({homePlaceId: 'poi:999', workPlaceId: null});
+			}));
+
+			sandbox.stub(PlacesController, 'getPlacesDestinationMap')
+				.onFirstCall().returns(placesDestinationMap)
+				.onSecondCall().returns(favoritesDestinationMap)
+				.onThirdCall().returns(homeDestinationMap);
+			sandbox.stub(FavoritesController, 'getFavoritesIds').returns(new Promise<string[]>((resolve) =>
+				(resolve(['poi:1234']))
+			));
+			sandbox.stub(PlacesController, 'getPlacesDetailedMap').returns(favoritesDetailedMap);
 
 			const {
 				destinationIdsWithDestinations,
@@ -77,7 +103,7 @@ describe('PdfController', () => {
 
 			chai.expect(destinationIdsWithPlaces.size).to.eq(2);
 			chai.expect(Array.from(destinationIdsWithPlaces.keys())).to.deep.eq(['city:1', 'city:2']);
-			chai.expect(destinationIdsWithPlaces.get('city:1')).to.deep.eq([placeFromTrip1]);
+			chai.expect(destinationIdsWithPlaces.get('city:1')).to.deep.eq([placeFromTrip1, placeFromFavorites1]);
 			chai.expect(destinationIdsWithPlaces.get('city:2')).to.deep.eq([placeFromTrip2, placeFromTrip3]);
 		});
 	});

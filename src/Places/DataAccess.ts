@@ -252,7 +252,7 @@ async function getPlacesWithMapSpread(filter: PlacesListFilter): Promise<ApiResp
 		let apiFilter = filter.cloneSetBounds(null);
 		apiFilter = apiFilter.cloneSetLimit(32);
 		apiFilter = apiFilter.cloneSetMapTiles([mapTile]);
-		const promise = new Promise(async (success) => {
+		const promise = new Promise<ApiResponse>(async (success) => {
 			try {
 				success(await StApi.get('places/list?' + apiFilter.toQueryString()));
 			} catch (error) {

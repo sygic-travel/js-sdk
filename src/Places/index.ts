@@ -52,6 +52,15 @@ export async function getPlacesDetailed(ids: string[], photoSize: string): Promi
 	return await Dao.getPlacesDetailed(ids, photoSize);
 }
 
+export async function getPlacesDetailedMap(ids: string[], photoSize: string): Promise<Map<string, Place>> {
+	const placesDetailed: Place[] = await getPlacesDetailed(ids, photoSize);
+	const placesDetailedMap: Map<string, Place> = new Map<string, Place>();
+	placesDetailed.forEach((placeDetailed: Place) => {
+		placesDetailedMap.set(placeDetailed.id, placeDetailed);
+	});
+	return placesDetailedMap;
+}
+
 export async function getPlaceMedia(id: string): Promise<Medium[]> {
 	return await Dao.getPlaceMedia(id);
 }

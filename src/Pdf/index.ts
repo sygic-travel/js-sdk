@@ -1,11 +1,24 @@
 import { Collection, getCollectionsForDestinationId } from '../Collections';
-import { getPlacesDestinationMap, getPlacesMapFromTrip, mergePlacesArrays, Place } from '../Places';
+import { getFavoritesIds } from '../Favorites';
+import {
+	getPlacesDestinationMap, getPlacesDetailedMap, getPlacesMapFromTrip, mergePlacesArrays,
+	Place, Tag
+} from '../Places';
 import { getRoutesForTripDay, TripDayRoutes } from '../Route';
 import { Day, getTripDetailed, Trip } from '../Trip';
+import { getUserSettings, UserSettings } from '../User';
 import { sleep } from '../Util';
 import * as Dao from './DataAccess';
 import { generateDestinationMainMap, generateDestinationSecondaryMaps } from './MapGenerator';
-import { GeneratingState, PdfData, PdfQuery, PdfStaticMap, PdfStaticMapSector } from './PdfData';
+import {
+	GeneratingState,
+	PdfData,
+	PdfDestination,
+	PdfQuery,
+	PdfStaticMap,
+	PdfStaticMapSector,
+	PlaceSource
+} from './PdfData';
 
 export {
 	GeneratingState,
@@ -14,6 +27,8 @@ export {
 	PdfStaticMap,
 	PdfStaticMapSector
 };
+
+const imageSize: string = '100x100';
 
 const GENERATING_STATE_REFRESH_INTERVAL = 5000; // 5 seconds
 const GENERATING_STATE_CHECK_ATTEMPTS = 60;
@@ -57,50 +72,44 @@ export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 	const placesMapFromTrip: Map<string, Place> = await getPlacesMapFromTrip(trip);
 	const {
 		destinationIdsWithDestinations,
-		destinationIdsWithPlaces
+		destinationIdsWithPlaces,
+		placeIdsWithPlaceType
 	} = await buildDestinationsAndPlaces(placesMapFromTrip);
 
 	const destinationIds: string[] = Array.from(destinationIdsWithPlaces.keys());
 
-	const destinationsPromise: Promise<void[]> = Promise.all(destinationIds.map(async (destinationId: string) => {
-		const collectionsForDestination: Collection[] = await getCollectionsForDestinationId(destinationId);
-		const mergedCollectionsAndPlacesFromDestination: Place[] = mergePlacesArrays(
-			collectionsForDestination.length > 0 ? collectionsForDestination[0].places : [],
-			destinationIdsWithPlaces.get(destinationId)!
-		);
+	const destinationsPromise: Promise<PdfDestination[]> = Promise.all(destinationIds.map(
+		(destinationId: string) => (
+		createDestinationData(
+			destinationId,
+			destinationIdsWithPlaces,
+			destinationIdsWithDestinations,
+			placeIdsWithPlaceType,
+			query
+		)
+	)));
 
-		destinationIdsWithPlaces.set(destinationId, mergedCollectionsAndPlacesFromDestination);
-
-		const {
-			mainMap,
-			secondaryMaps
-		} = await generateDestinationMaps(mergedCollectionsAndPlacesFromDestination, query);
-
-		pdfData.destinations.push({
-			destination: destinationIdsWithDestinations.get(destinationId)!,
-			places: destinationIdsWithPlaces.get(destinationId)!,
-			mainMap,
-			secondaryMaps
-		});
-	}));
-
-	const [routes] = await Promise.all([routesPromise, destinationsPromise]);
+	const [routes, destinations] = await Promise.all([routesPromise, destinationsPromise]);
 	pdfData.routes = routes;
-
+	pdfData.destinations = destinations;
 	return pdfData;
 }
 
 export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<string, Place>): Promise<{
 	destinationIdsWithDestinations: Map<string, Place>,
-	destinationIdsWithPlaces: Map<string, Place[]>
+	destinationIdsWithPlaces: Map<string, Place[]>,
+	placeIdsWithPlaceType: Map<string, PlaceSource>
 }> {
 	const placeIdsWithDestinations: Map<string, Place> = await getPlacesDestinationMap(
 		Array.from(placeIdsAndPlacesFromTrip.keys())
 	);
 	const destinationIdsWithDestinations: Map<string, Place> = new Map<string, Place>();
 	const destinationIdsWithPlaces: Map<string, Place[]> = new Map<string, Place[]>();
+	const placeIdsWithPlaceType: Map<string, PlaceSource> = new Map<string, PlaceSource>();
 
 	placeIdsWithDestinations.forEach((destination: Place, placeId: string) => {
+		placeIdsWithPlaceType.set(placeId, PlaceSource.FROM_TRIP);
+
 		if (!destinationIdsWithDestinations.has(destination.id)) {
 			destinationIdsWithDestinations.set(destination.id, destination);
 		}
@@ -114,7 +123,68 @@ export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<
 		}
 	});
 
-	return { destinationIdsWithDestinations, destinationIdsWithPlaces };
+	const userFavoritesMap: Map<string, Place> = await getPlacesDetailedMap(
+		await getFavoritesIds(),
+		imageSize
+	);
+
+	const favoritesIdsWithDestinations: Map<string, Place> = await getPlacesDestinationMap(
+		Array.from(userFavoritesMap.keys())
+	);
+
+	favoritesIdsWithDestinations.forEach((destination: Place, favoriteId: string) => {
+		if (destination && destinationIdsWithPlaces.has(destination.id)) {
+			placeIdsWithPlaceType.set(favoriteId, PlaceSource.FROM_FAVORITES);
+			const favorite: Place|undefined = userFavoritesMap.get(favoriteId);
+			const placesToBeMerged: Place[]|undefined = destinationIdsWithPlaces.get(destination.id);
+			destinationIdsWithPlaces.set(destination.id, mergePlacesArrays(
+				placesToBeMerged!,
+				[favorite!]
+			));
+		}
+	});
+
+	return { ...await filterUnnecessaryDestinations(
+			destinationIdsWithDestinations,
+			destinationIdsWithPlaces
+		), placeIdsWithPlaceType };
+}
+
+async function createDestinationData(
+	destinationId: string,
+	destinationIdsWithPlaces,
+	destinationIdsWithDestinations,
+	placeIdsWithPlaceType,
+	query
+): Promise<PdfDestination> {
+
+	const collectionsForDestination: Collection[] = await getCollectionsForDestinationId(destinationId);
+	const mergedCollectionsAndPlacesFromDestination: Place[] = mergePlacesArrays(
+		collectionsForDestination.length > 0 ? collectionsForDestination[0].places : [],
+		destinationIdsWithPlaces.get(destinationId)!
+	);
+
+	const placesWihoutTypeSet: Place[] = mergedCollectionsAndPlacesFromDestination.filter((place: Place) => {
+		return !placeIdsWithPlaceType.has(place.id);
+	});
+	placesWihoutTypeSet.forEach((placeWithoutTypeSet: Place) => {
+		placeIdsWithPlaceType.set(placeWithoutTypeSet.id, PlaceSource.FROM_COLLECTION);
+	});
+
+	destinationIdsWithPlaces.set(destinationId, mergedCollectionsAndPlacesFromDestination);
+
+	const {
+		mainMap,
+		secondaryMaps
+	} = await generateDestinationMaps(mergedCollectionsAndPlacesFromDestination, query);
+
+	return {
+		destination: destinationIdsWithDestinations.get(destinationId)!,
+		places: destinationIdsWithPlaces.get(destinationId)!,
+		placeSources: placeIdsWithPlaceType,
+		mainMap,
+		secondaryMaps
+	} as PdfDestination;
 }
 
 async function generateDestinationMaps(destinationPlaces: Place[], query: PdfQuery): Promise<{
@@ -131,4 +201,50 @@ async function generateDestinationMaps(destinationPlaces: Place[], query: PdfQue
 		sectorsForSecondaryMaps
 	);
 	return { mainMap, secondaryMaps };
+}
+
+async function getHomeDestinationId(homePlaceId: string|null): Promise<string|null> {
+	if (!homePlaceId) {
+		return null;
+	}
+
+	const homeDestinationMap: Map<string, Place> = await getPlacesDestinationMap([homePlaceId]);
+	const homeDestination: Place|undefined = homeDestinationMap.get(homePlaceId);
+	return homeDestination ? homeDestination.id : null;
+}
+
+async function filterUnnecessaryDestinations(
+	destinationIdsWithDestinations: Map<string, Place>,
+	destinationIdsWithPlaces: Map<string, Place[]>
+): Promise<{
+	destinationIdsWithDestinations: Map<string, Place>,
+	destinationIdsWithPlaces: Map<string, Place[]>
+}> {
+	const userSettings: UserSettings = await getUserSettings();
+	const homeDestinationId: string|null = await getHomeDestinationId(userSettings.homePlaceId);
+	const homeDestinationPlaces: Place[]|undefined = homeDestinationId ?
+		destinationIdsWithPlaces.get(homeDestinationId) : undefined;
+
+	if (homeDestinationId && homeDestinationPlaces && homeDestinationPlaces.length > 1) {
+		destinationIdsWithDestinations.delete(homeDestinationId);
+		destinationIdsWithPlaces.delete(homeDestinationId);
+	}
+
+	const destinationIdsToBeDeleted: string[] = [];
+	destinationIdsWithPlaces.forEach((places: Place[], destinationId) => {
+		if (places.length === 1) {
+			const singlePlace: Place = places[0];
+			const airportTag: Tag|undefined = singlePlace.detail!.tags.find((tag: Tag) => (tag.name === 'Airport'));
+			if (airportTag) {
+				destinationIdsToBeDeleted.push(destinationId);
+			}
+		}
+	});
+
+	destinationIdsToBeDeleted.forEach((destinationIdToBeDeleted: string) => {
+		destinationIdsWithDestinations.delete(destinationIdToBeDeleted);
+		destinationIdsWithPlaces.delete(destinationIdToBeDeleted);
+	});
+
+	return { destinationIdsWithDestinations, destinationIdsWithPlaces };
 }

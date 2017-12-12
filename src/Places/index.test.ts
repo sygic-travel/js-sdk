@@ -1,6 +1,7 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as cloneDeep from 'lodash.clonedeep';
+import 'mocha';
 import { SinonSandbox } from 'sinon';
 import * as sinon from 'sinon';
 

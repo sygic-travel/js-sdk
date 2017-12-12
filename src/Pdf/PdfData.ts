@@ -22,6 +22,7 @@ export interface PdfDestination {
 	mainMap: PdfStaticMap|null;
 	secondaryMaps: PdfStaticMap[];
 	places: Place[];
+	placeSources: Map<string, PlaceSource>;
 }
 
 export interface PdfStaticMapSector {
@@ -30,7 +31,7 @@ export interface PdfStaticMapSector {
 	places: Place[];
 }
 
-export interface PdfStaticMap extends StaticMap{
+export interface PdfStaticMap extends StaticMap {
 	id: string;
 	sectors: PdfStaticMapSector[];
 }
@@ -48,4 +49,10 @@ export interface GeneratingState {
 	generatingId: string;
 	state: 'generating' | 'done' | 'not_found' | 'timeout';
 	url: string|null;
+}
+
+export enum PlaceSource {
+	FROM_TRIP = 'FROM_TRIP',
+	FROM_COLLECTION = 'FROM_COLLECTION',
+	FROM_FAVORITES = 'FROM_FAVORITES'
 }

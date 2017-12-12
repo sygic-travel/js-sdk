@@ -42,7 +42,7 @@ module.exports = {
 ]
 	},
 	resolve: {
-		extensions: [".tsx", ".ts", ".js"]
+		extensions: [".ts", ".js"]
 	},
 	devtool: 'inline-source-map',
 	plugins: [
@@ -55,5 +55,8 @@ module.exports = {
 		hot: true,
 		inline: false,
 		contentBase: './build'
+	},
+	node: {
+		fs: 'empty'
 	}
 };
