@@ -31,7 +31,7 @@ describe('PlacesStatsFilter', () => {
 			const modifiedFilter = filter.switchBoundsToMapTileBounds();
 			chai.expect(modifiedFilter).to.has.property('_bounds', null);
 			chai.expect(modifiedFilter).to.has.property('_mapTileBounds').deep.equal(['3000000000', '1222222212']);
-			chai.expect(filter).to.has.property('_mapTileBounds').undefined;
+			chai.expect(filter).to.has.property('_mapTileBounds').undefined('Expected true');
 		});
 	});
 

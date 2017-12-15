@@ -1,9 +1,13 @@
 import * as chai from 'chai';
+import * as dirtyChai from 'dirty-chai';
 import { calculateLocationsBounds, isLocationInBounds } from './Bounds';
 import {
 	Location, locationToCanvasCoordinate, locationToTileCoordinate,
 	normalizeLng
 } from './Location';
+
+chai.use(dirtyChai);
+
 describe('Location', () => {
 	describe('#locationToTileCoordinate', () => {
 		it('should return correct tile coordinates', () => {
@@ -57,7 +61,7 @@ describe('Location', () => {
 				west: 4,
 				north: 7,
 				east: 7
-			})).to.be.true;
+			})).to.be.true('Expect true');
 			chai.expect(isLocationInBounds({
 				lat: 4,
 				lng: 4,
@@ -66,7 +70,7 @@ describe('Location', () => {
 				west: 4,
 				north: 7,
 				east: 7
-			})).to.be.true;
+			})).to.be.true('Expect true');
 			chai.expect(isLocationInBounds({
 				lat: 7,
 				lng: 7,
@@ -75,7 +79,7 @@ describe('Location', () => {
 				west: 4,
 				north: 7,
 				east: 7
-			})).to.be.true;
+			})).to.be.true('Expect true');
 		});
 		it('should return false if location is not in bounds', () => {
 			chai.expect(isLocationInBounds({
@@ -86,7 +90,7 @@ describe('Location', () => {
 				west: 7,
 				north: 8,
 				east: 8
-			})).to.be.false;
+			})).to.be.false('Expect true');
 		});
 	});
 

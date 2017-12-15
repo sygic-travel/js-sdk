@@ -1,7 +1,6 @@
 import * as chai from 'chai';
 import * as cloneDeep from 'lodash.clonedeep';
-import { SinonSandbox } from 'sinon';
-import * as sinon from 'sinon';
+import { sandbox as sinonSandbox, SinonSandbox } from 'sinon';
 
 import { ApiResponse, StApi } from '../Api';
 import * as HotelsApiData from '../TestData/HotelsApiReponses';
@@ -13,7 +12,7 @@ let sandbox: SinonSandbox;
 
 describe('HotelsDataAccess', () => {
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinonSandbox.create();
 	});
 
 	afterEach(() => {

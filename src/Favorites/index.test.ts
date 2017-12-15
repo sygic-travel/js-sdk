@@ -1,12 +1,11 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-import { SinonSandbox } from 'sinon';
-import * as sinon from 'sinon';
+import { assert, sandbox as sinonSandbox, SinonSandbox } from 'sinon';
 
 import { ApiResponse, StApi } from '../Api';
 import * as FavoritesController from '../Favorites';
 import { Location } from '../Geo';
-import { setEnvironment } from '../Settings/index';
+import { setEnvironment } from '../Settings';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
@@ -18,7 +17,7 @@ describe('FavoritesController', () => {
 	});
 
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinonSandbox.create();
 	});
 
 	afterEach(() => {
@@ -56,7 +55,7 @@ describe('FavoritesController', () => {
 			}));
 
 			FavoritesController.addPlaceToFavorites('poi:530');
-			sinon.assert.calledOnce(stub);
+			assert.calledOnce(stub);
 			done();
 		});
 	});
@@ -85,7 +84,7 @@ describe('FavoritesController', () => {
 			}));
 
 			FavoritesController.removePlaceFromFavorites('poi:530');
-			sinon.assert.calledOnce(stub);
+			assert.calledOnce(stub);
 			done();
 		});
 	});

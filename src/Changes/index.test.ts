@@ -1,7 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-import * as sinon from 'sinon';
-import { SinonFakeTimers, SinonSandbox, SinonSpy, SinonStub } from 'sinon';
+import { sandbox as sinoSandbox, SinonFakeTimers, SinonSandbox, SinonSpy, SinonStub } from 'sinon';
 import { ApiResponse, StApi } from '../Api';
 
 import { initializeChangesWatching, setChangesCallback, stopChangesWatching } from '.';
@@ -26,8 +25,8 @@ describe('ChangesController', () => {
 	});
 
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
-		clock = sinon.useFakeTimers((new Date()).getTime());
+		sandbox = sinoSandbox.create();
+		clock = sandbox.useFakeTimers((new Date()).getTime());
 	});
 
 	afterEach(() => {
@@ -139,7 +138,7 @@ describe('ChangesController', () => {
 
 			await initializeChangesWatching(5000);
 			clock.tick(6000);
-			return chai.expect(spy.notCalled).to.be.true;
+			return chai.expect(spy.notCalled).to.be.true('Expect true');
 		});
 
 		it('should handle changes after trip was deleted remotely', async () => {
@@ -155,7 +154,7 @@ describe('ChangesController', () => {
 
 			await initializeChangesWatching(5000);
 			clock.tick(6000);
-			chai.expect(tripsDetailedCache.get('xxx')).to.eventually.be.null;
+			chai.expect(tripsDetailedCache.get('xxx')).to.eventually.be.null('Expect null');
 			return chai.expect(spy.calledWithExactly([{
 				type: 'trip',
 				id: 'xxx',

@@ -1,8 +1,7 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as cloneDeep from 'lodash.clonedeep';
-import { SinonSandbox } from 'sinon';
-import * as sinon from 'sinon';
+import { sandbox as sinonSandbox, SinonSandbox } from 'sinon';
 import { RouteRequest } from '.';
 import { StApi } from '../Api';
 import { Location } from '../Geo';
@@ -23,7 +22,7 @@ describe('RouteDataAccess', () => {
 	});
 
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinonSandbox.create();
 	});
 
 	afterEach(() => {

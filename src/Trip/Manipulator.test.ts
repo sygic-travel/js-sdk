@@ -261,14 +261,14 @@ describe('TripManipulator', () => {
 				secondDayItinerary = expectedTrip.days[1].itinerary;
 
 				chai.expect(firstDayItinerary[0].placeId).to.be.eq('poi:2');
-				chai.expect(firstDayItinerary[0].isSticky).to.be.false;
+				chai.expect(firstDayItinerary[0].isSticky).to.be.false('Expect false');
 				chai.expect(firstDayItinerary[1].placeId).to.be.eq('poi:1');
-				chai.expect(firstDayItinerary[1].isSticky).to.be.false;
+				chai.expect(firstDayItinerary[1].isSticky).to.be.false('Expect false');
 
 				chai.expect(secondDayItinerary[0].placeId).to.be.eq('poi:2');
-				chai.expect(secondDayItinerary[0].isSticky).to.be.false;
+				chai.expect(secondDayItinerary[0].isSticky).to.be.false('Expect false');
 				chai.expect(secondDayItinerary[1].placeId).to.be.eq('poi:3');
-				chai.expect(secondDayItinerary[1].isSticky).to.be.false;
+				chai.expect(secondDayItinerary[1].isSticky).to.be.false('Expect false');
 			}
 		});
 	});
@@ -447,12 +447,12 @@ describe('TripManipulator', () => {
 			).to.deep.equal(transportSettings);
 			chai.expect(
 				inputTrip.days && inputTrip.days[0].itinerary[1].transportFromPrevious
-			).to.be.null;
+			).to.be.null('Expect null');
 
 			const resultNulled =  Manipulator.setTransport(resultTrip, 0, 1, null);
 			chai.expect(
 				resultNulled.days && resultNulled.days[0].itinerary[1].transportFromPrevious
-			).to.be.null;
+			).to.be.null('Expect null');
 		});
 
 	});
@@ -480,9 +480,9 @@ describe('TripManipulator', () => {
 			chai.expect(resultTrip.days && resultTrip.days[0].itinerary[1].note).to.equal('test');
 
 			const resultNulled =  Manipulator.updateItineraryItemUserData(resultTrip, 0, 1, null, null, null);
-			chai.expect(resultNulled.days && resultNulled.days[0].itinerary[1].startTime).to.be.null;
-			chai.expect(resultNulled.days && resultNulled.days[0].itinerary[1].duration).to.be.null;
-			chai.expect(resultNulled.days && resultNulled.days[0].itinerary[1].note).to.be.null;
+			chai.expect(resultNulled.days && resultNulled.days[0].itinerary[1].startTime).to.be.null('Expect null');
+			chai.expect(resultNulled.days && resultNulled.days[0].itinerary[1].duration).to.be.null('Expect null');
+			chai.expect(resultNulled.days && resultNulled.days[0].itinerary[1].note).to.be.null('Expect null');
 		});
 
 	});
@@ -510,7 +510,7 @@ describe('TripManipulator', () => {
 			const trip = Manipulator.duplicateItineraryItem(inputTrip, 0, 1, true);
 			chai.expect(trip.days![0].itinerary[1].placeId).to.equal(trip.days![0].itinerary[2].placeId);
 			chai.expect(trip.days![0].itinerary[1].transportFromPrevious).to.deep.equal(TripExpectedResults.transportSettings);
-			chai.expect(trip.days![0].itinerary[2].transportFromPrevious).to.be.null;
+			chai.expect(trip.days![0].itinerary[2].transportFromPrevious).to.be.null('Expected null');
 		});
 	});
 

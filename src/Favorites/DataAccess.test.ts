@@ -1,7 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-import { SinonSandbox, SinonStub } from 'sinon';
-import * as sinon from 'sinon';
+import { assert, sandbox as sinonSandbox, SinonSandbox, SinonStub } from 'sinon';
 
 import { ApiResponse, StApi } from '../Api';
 import { favoritesCache } from '../Cache';
@@ -19,7 +18,7 @@ describe('FavoritesDataAccess', () => {
 	});
 
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinonSandbox.create();
 	});
 
 	afterEach(() => {
@@ -43,7 +42,7 @@ describe('FavoritesDataAccess', () => {
 			}));
 
 			return Dao.shouldNotifyOnFavoritesUpdate('').then(() => {
-				sinon.assert.calledOnce(stub);
+				assert.calledOnce(stub);
 				chai.expect(favoritesCache.getAll()).to.eventually.deep.equal(favoritesData);
 			});
 		});

@@ -18,7 +18,7 @@ describe('Estimator', () => {
 			chai.expect(direction.avoid).to.deep.equal([]);
 			chai.expect(direction.isoCodes).to.deep.equal([]);
 			chai.expect(direction.source).to.equal('estimator');
-			chai.expect(direction.routeId).to.be.null;
+			chai.expect(direction.routeId).to.be.null('Expect null');
 		});
 
 	});

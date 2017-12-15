@@ -32,7 +32,7 @@ describe('Validator', () => {
 			};
 			chai.expect(() => Validator.validateTransportSettings(settings))
 				.to.throw(Error, 'Missing duration');
-			chai.expect(() => Validator.validateTransportSettings(Object.assign({}, settings, {duration: -1})))
+			chai.expect(() => Validator.validateTransportSettings({...settings, ...{duration: -1}}))
 				.to.throw(Error, 'Invalid duration value -1');
 		});
 		it('should throw an error when invalid note is passed', () => {
@@ -45,7 +45,7 @@ describe('Validator', () => {
 			};
 			chai.expect(() => Validator.validateTransportSettings(settings))
 				.to.throw(Error, 'Missing note');
-			chai.expect(() => Validator.validateTransportSettings(Object.assign({}, settings, {note: 0})))
+			chai.expect(() => Validator.validateTransportSettings({...settings, ...{note: 0}}))
 				.to.throw(Error, 'Invalid note value 0');
 		});
 		it('should throw an error when invalid note is passed', () => {
@@ -59,9 +59,9 @@ describe('Validator', () => {
 			};
 			chai.expect(() => Validator.validateTransportSettings(settings))
 				.to.throw(Error, 'waypoints must be an array');
-			chai.expect(() => Validator.validateTransportSettings(Object.assign({}, settings, {waypoints: [{x: 0}]})))
+			chai.expect(() => Validator.validateTransportSettings({...settings, ...{waypoints: [{x: 0}]}}))
 				.to.throw(Error, 'Invalid waypoint value [object Object]');
-			chai.expect(() => Validator.validateTransportSettings(Object.assign({}, settings, {waypoints: [{lat: '', lng: 0}]})))
+			chai.expect(() => Validator.validateTransportSettings({...settings, ...{waypoints: [{lat: '', lng: 0}]}}))
 				.to.throw(Error, 'Invalid waypoint value [object Object]');
 		});
 		it('should pass correct settings', () => {

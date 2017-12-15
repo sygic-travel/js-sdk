@@ -1,8 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-// import * as cloneDeep from 'lodash.clonedeep';
-import * as sinon from 'sinon';
-import { SinonFakeTimers, SinonSandbox, SinonStub } from 'sinon';
+import { sandbox as sinonSandbox, SinonFakeTimers, SinonSandbox, SinonStub } from 'sinon';
 
 import { Changes } from '../../index';
 import { ApiResponse, StApi } from '../Api';
@@ -28,7 +26,7 @@ describe('ChangeWatcher', () => {
 	});
 
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinonSandbox.create();
 		clock = sandbox.useFakeTimers((new Date()).getTime());
 	});
 

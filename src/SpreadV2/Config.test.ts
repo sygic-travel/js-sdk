@@ -28,9 +28,9 @@ describe('Config', () => {
 
 	describe('#isDisabledByCategory', () => {
 		it('should detect disabled size', () => {
-			chai.expect(isDisabledByCategory(['no_category'], [])).to.be.true;
-			chai.expect(isDisabledByCategory(['no_category'], ['eating'])).to.be.false;
-			chai.expect(isDisabledByCategory(['going_out'], ['eating', 'going_out'])).to.be.false;
+			chai.expect(isDisabledByCategory(['no_category'], [])).to.be.true('Expect true');
+			chai.expect(isDisabledByCategory(['no_category'], ['eating'])).to.be.false('Expect false');
+			chai.expect(isDisabledByCategory(['going_out'], ['eating', 'going_out'])).to.be.false('Expect false');
 		});
 	});
 

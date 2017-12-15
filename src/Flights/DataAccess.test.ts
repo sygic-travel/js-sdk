@@ -1,6 +1,5 @@
 import * as chai from 'chai';
-import { SinonSandbox, SinonStub } from 'sinon';
-import * as sinon from 'sinon';
+import { sandbox as sinonSandbox, SinonSandbox, SinonStub } from 'sinon';
 import { FlightSearchResult, FlightsQuery } from '.';
 import { ApiResponse, KiwiApi } from '../Api';
 import { airlines, airports, flights } from '../TestData/FlightsApiResponses';
@@ -11,7 +10,7 @@ let sandbox: SinonSandbox;
 
 describe('RouteDataAccess', () => {
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinonSandbox.create();
 	});
 
 	afterEach(() => {
@@ -57,11 +56,11 @@ describe('RouteDataAccess', () => {
 			const flightsResults: FlightSearchResult[] = await dao.getFlights({
 				origin: {
 					lat: 49.215259,
-						lng: 16.571589
+					lng: 16.571589
 				},
 				destination: {
 					lat: 25.252253,
-						lng:  55.364348
+					lng:  55.364348
 				},
 				date: '2017-11-22',
 				returnDate: '2017-11-25'

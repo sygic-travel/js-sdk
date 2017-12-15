@@ -1,10 +1,8 @@
 import * as chai from 'chai';
 import * as cloneDeep from 'lodash.clonedeep';
-import * as sinon from 'sinon';
-import { SinonSandbox } from 'sinon';
+import { sandbox as sinonSandbox, SinonSandbox } from 'sinon';
 
-import * as RoutesController from '.';
-import { Route, TripDayRoutes } from '.';
+import { getRoutesForTripDay, Route, TripDayRoutes } from '.';
 import { Dao as placesDao, Place } from '../Places';
 import { route } from '../TestData/DirectionsEntities';
 import { tripDetailed } from '../TestData/TripExpectedResults';
@@ -16,7 +14,7 @@ let sandbox: SinonSandbox;
 describe('RoutesController', () => {
 
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinonSandbox.create();
 	});
 
 	afterEach(() => {
@@ -47,7 +45,7 @@ describe('RoutesController', () => {
 					cloneDeep(route),
 					cloneDeep(route),
 			]); }));
-			const dayRoutes: TripDayRoutes = await RoutesController.getRoutesForTripDay('12345', 0);
+			const dayRoutes: TripDayRoutes = await getRoutesForTripDay('12345', 0);
 			chai.expect(dayRoutes.routes.length).to.equal(2);
 			chai.expect(dayRoutes.userTransportSettings).to.deep.equal([transportFromPrevious, null]);
 		});

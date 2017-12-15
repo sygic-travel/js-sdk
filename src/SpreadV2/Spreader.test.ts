@@ -76,7 +76,7 @@ describe('Spreader', () => {
 	describe('#spread', () => {
 		it('should spread one place correctly', () => {
 			// Place out of canvas
-			const place2 = Object.assign({}, place);
+			const place2 = {...place};
 			place2.location = {lat: -0.3, lng: 10.3};
 			const spreaded = spread([place, place2], [], sizeConfigs, bounds, canvas, categoriesCoefficients);
 			chai.expect(spreaded.hidden.length).to.equal(0);
@@ -86,7 +86,7 @@ describe('Spreader', () => {
 	});
 
 	it('should hide place without photo correctly', () => {
-		const placeWithoutImage = Object.assign({}, place);
+		const placeWithoutImage = {...place};
 		placeWithoutImage.thumbnailUrl = null;
 		const spreaded = spread([placeWithoutImage], [], [sizeConfigs[0]], bounds, canvas, null);
 		chai.expect(spreaded.hidden.length).to.equal(1);
@@ -110,7 +110,7 @@ describe('Spreader', () => {
 	});
 
 	it('should use smaller size when bigger size collides', () => {
-		const place2 = Object.assign({}, place);
+		const place2 = {...place};
 		place2.location = {lat: 0.3, lng: 0.3};
 		place2.id = 'poi:2';
 		const spreaded = spread([place, place2], [], sizeConfigs, bounds, canvas, null);
@@ -148,7 +148,7 @@ describe('Spreader', () => {
 		const place1 = cloneDeep(place);
 		place1.rating = 0.6;
 		place1.categories = ['traveling'];
-		const place2 = Object.assign({}, place);
+		const place2 = {...place};
 		place2.location = {lat: 0.3, lng: 0.3};
 		place2.id = 'poi:2';
 		const spreaded = spread([place1, place2], [], [config, sizeConfigs[1]], bounds, canvas, categoriesCoefficients);

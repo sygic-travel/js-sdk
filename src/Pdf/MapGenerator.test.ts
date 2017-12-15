@@ -1,8 +1,7 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as cloneDeep from 'lodash.clonedeep';
-import { SinonSandbox, SinonStub } from 'sinon';
-import * as sinon from 'sinon';
+import { sandbox as sinonSandbox, SinonSandbox, SinonStub } from 'sinon';
 
 import { Bounds } from '../Geo';
 import { Place } from '../Places';
@@ -59,7 +58,7 @@ describe('MapGeneratorController', () => {
 	});
 
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinonSandbox.create();
 	});
 
 	afterEach(() => {
@@ -83,10 +82,10 @@ describe('MapGeneratorController', () => {
 			const map: PdfStaticMap = await generateDestinationMainMap(destinationPlaces, query);
 			chai.expect(map.sectors.length).to.be.eq(4);
 
-			const sectorA0: PdfStaticMapSector|undefined = map.sectors.find((s: PdfStaticMapSector) => s.id === 'A0');
-			const sectorA1: PdfStaticMapSector|undefined = map.sectors.find((s: PdfStaticMapSector) => s.id === 'A1');
-			const sectorB0: PdfStaticMapSector|undefined = map.sectors.find((s: PdfStaticMapSector) => s.id === 'B0');
-			const sectorB1: PdfStaticMapSector|undefined = map.sectors.find((s: PdfStaticMapSector) => s.id === 'B1');
+			const sectorA0: PdfStaticMapSector | undefined = map.sectors.find((s: PdfStaticMapSector) => s.id === 'A0');
+			const sectorA1: PdfStaticMapSector | undefined = map.sectors.find((s: PdfStaticMapSector) => s.id === 'A1');
+			const sectorB0: PdfStaticMapSector | undefined = map.sectors.find((s: PdfStaticMapSector) => s.id === 'B0');
+			const sectorB1: PdfStaticMapSector | undefined = map.sectors.find((s: PdfStaticMapSector) => s.id === 'B1');
 
 			chai.expect(sectorA0!.bounds).to.be.deep.eq({
 				south: 20,

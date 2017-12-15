@@ -1,8 +1,7 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as cloneDeep from 'lodash.clonedeep';
-import { SinonFakeTimers, SinonSandbox, SinonStub } from 'sinon';
-import * as sinon from 'sinon';
+import { assert, sandbox as sinonSandbox, SinonFakeTimers, SinonSandbox, SinonStub } from 'sinon';
 
 import { ApiResponse, StApi } from '../Api';
 import { placesDetailedCache as Cache, tripsDetailedCache } from '../Cache';
@@ -24,11 +23,11 @@ describe('TripDataAccess', () => {
 	});
 
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinonSandbox.create();
 		sandbox.stub(User, 'getUserSettings').returns(new Promise<User.UserSettings>((resolve) => {
 			resolve({homePlaceId: null, workPlaceId: null});
 		}));
-		clock = sinon.useFakeTimers((new Date()).getTime());
+		clock = sandbox.useFakeTimers((new Date()).getTime());
 		Cache.reset();
 	});
 
@@ -61,21 +60,21 @@ describe('TripDataAccess', () => {
 			}));
 
 			const result: Trip[] = await Dao.getTrips();
-			sinon.assert.calledOnce(apiStub);
-			sinon.assert.calledWith(apiStub, 'trips/list?');
+			assert.calledOnce(apiStub);
+			assert.calledWith(apiStub, 'trips/list?');
 			chai.expect(result).to.deep.equal(TripExpectedResults.tripList);
 
 			await Dao.getTrips(null, null);
-			sinon.assert.calledWith(apiStub, 'trips/list?');
+			assert.calledWith(apiStub, 'trips/list?');
 
 			await Dao.getTrips(null, '2017-01-01');
-			sinon.assert.calledWith(apiStub, 'trips/list?to=2017-01-01');
+			assert.calledWith(apiStub, 'trips/list?to=2017-01-01');
 
 			await Dao.getTrips('2017-01-01', null);
-			sinon.assert.calledWith(apiStub, 'trips/list?from=2017-01-01');
+			assert.calledWith(apiStub, 'trips/list?from=2017-01-01');
 
 			await Dao.getTrips('2017-01-01', '2017-12-01');
-			sinon.assert.calledWith(apiStub, 'trips/list?from=2017-01-01&to=2017-12-01');
+			assert.calledWith(apiStub, 'trips/list?from=2017-01-01&to=2017-12-01');
 		});
 	});
 
@@ -86,8 +85,8 @@ describe('TripDataAccess', () => {
 			}));
 
 			const result: Trip[] = await Dao.getTripsInTrash();
-			sinon.assert.calledOnce(apiStub);
-			sinon.assert.calledWith(apiStub, 'trips/trash');
+			assert.calledOnce(apiStub);
+			assert.calledWith(apiStub, 'trips/trash');
 			chai.expect(result).to.deep.equal(TripExpectedResults.tripList);
 		});
 	});
@@ -99,7 +98,7 @@ describe('TripDataAccess', () => {
 			}));
 
 			return Dao.getTripDetailed('111').then((result) => {
-				sinon.assert.calledOnce(stub);
+				assert.calledOnce(stub);
 				return chai.expect(result).to.deep.equal(trip1Expected);
 			});
 		});
@@ -112,7 +111,7 @@ describe('TripDataAccess', () => {
 			tripsDetailedCache.set('111', trip1FromApi);
 
 			return Dao.getTripDetailed('111').then((result) => {
-				sinon.assert.notCalled(stub);
+				assert.notCalled(stub);
 				return chai.expect(result).to.deep.equal(trip1Expected);
 			});
 
@@ -158,9 +157,9 @@ describe('TripDataAccess', () => {
 			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
 				clock.tick(3100);
 				const callDate = new Date(apiPut.getCall(0).args[1].updated_at);
-				chai.expect(callDate > testUpdatedAt).to.be.true;
+				chai.expect(callDate > testUpdatedAt).to.be.true('Expect true');
 				testUpdatedAt.setSeconds(testUpdatedAt.getSeconds() + 1);
-				chai.expect(callDate < testUpdatedAt).to.be.true;
+				chai.expect(callDate < testUpdatedAt).to.be.true('Expect true');
 			});
 		});
 
@@ -202,7 +201,7 @@ describe('TripDataAccess', () => {
 
 		it('should call conflict handler on ignored conflict and leave server response', (done) => {
 			let handlerCalled = false;
-			const handler: TripConflictHandler = async (info, trip): Promise<'server'|'local'> => {
+			const handler: TripConflictHandler = async (info, trip): Promise<'server' | 'local'> => {
 				handlerCalled = true;
 				return 'server';
 			};
@@ -223,7 +222,7 @@ describe('TripDataAccess', () => {
 				clock.restore();
 				// Wait for the trip be stored to cache before making further assertions
 				setTimeout(() => {
-					chai.expect(handlerCalled).to.be.true;
+					chai.expect(handlerCalled).to.be.true('Expect true');
 					chai.expect(tripsDetailedCache.get(TripExpectedResults.tripDetailed.id))
 						.to.be.eventually.deep.equal(TripApiTestData.tripDetail.trip);
 					chai.expect(apiPut.callCount).to.be.equal(1);
@@ -234,7 +233,7 @@ describe('TripDataAccess', () => {
 
 		it('should call update with newer updated_at when user select local changes', (done) => {
 			let handlerCalled = false;
-			const handler: TripConflictHandler = async (info, trip): Promise<'server'|'local'> => {
+			const handler: TripConflictHandler = async (info, trip): Promise<'server' | 'local'> => {
 				handlerCalled = true;
 				return 'local';
 			};
@@ -255,7 +254,7 @@ describe('TripDataAccess', () => {
 				clock.restore();
 				// Wait for the trip response to be handled before making further assertions
 				setTimeout(() => {
-					chai.expect(handlerCalled).to.be.true;
+					chai.expect(handlerCalled).to.be.true('Expect true');
 					chai.expect(apiPut.callCount).to.be.equal(2);
 					done();
 				}, 100);
@@ -277,7 +276,7 @@ describe('TripDataAccess', () => {
 			const result = await Dao.shouldNotifyOnTripUpdate(tripInCache.id, 34);
 			const tripToBeUpdated = await tripsDetailedCache.get(tripInCache.id);
 			chai.expect(tripToBeUpdated.name).to.equal(tripFromApi.name);
-			chai.expect(result).to.be.true;
+			chai.expect(result).to.be.true('Expect true');
 		});
 
 		it('should not call api for trip which is already up to date and return should return false', async () => {
@@ -287,7 +286,7 @@ describe('TripDataAccess', () => {
 
 			const result = await Dao.shouldNotifyOnTripUpdate(tripInCache.id, 33);
 			chai.expect(apiStub.callCount).to.equal(0);
-			chai.expect(result).to.be.false;
+			chai.expect(result).to.be.false('Expect true');
 		});
 
 		it('should not call api when trip is not in cache and should return true', async () => {
@@ -297,7 +296,7 @@ describe('TripDataAccess', () => {
 
 			const result = await Dao.shouldNotifyOnTripUpdate('unknownId', null);
 			chai.expect(apiStub.callCount).to.equal(0);
-			chai.expect(result).to.be.true;
+			chai.expect(result).to.be.true('Expect true');
 		});
 	});
 

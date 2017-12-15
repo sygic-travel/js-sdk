@@ -12,7 +12,7 @@ describe('RouteMapper', () => {
 	describe('#mapRouteFromApiResponse', () => {
 
 		it('should correctly map api response to response', () => {
-			chai.expect(Mapper.mapRouteFromApiResponse(apiRoute, [], 'car' ))
+			chai.expect(Mapper.mapRouteFromApiResponse(apiRoute, [], 'car'))
 				.to.deep.equal(routeEntity);
 		});
 

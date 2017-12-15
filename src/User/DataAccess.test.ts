@@ -1,7 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-import { SinonSandbox, SinonStub } from 'sinon';
-import * as sinon from 'sinon';
+import { assert, sandbox as sinonSandbox, SinonSandbox, SinonStub } from 'sinon';
 
 import { AuthResponse, RegistrationResponseCode, Session, UserInfo, UserSettings } from '.';
 import { ApiResponse, SsoApi, StApi } from '../Api';
@@ -22,7 +21,7 @@ describe('UserDataAccess', () => {
 	});
 
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinonSandbox.create();
 	});
 
 	afterEach(() => {
@@ -49,7 +48,7 @@ describe('UserDataAccess', () => {
 			}));
 
 			return Dao.getUserSettings().then((result) => {
-				sinon.assert.calledOnce(stub);
+				assert.calledOnce(stub);
 				return chai.expect(result).to.deep.equal(settings);
 			});
 		});
@@ -62,7 +61,7 @@ describe('UserDataAccess', () => {
 			await userCache.set('settings', settingsApiData.settings);
 
 			return Dao.getUserSettings().then((result) => {
-				sinon.assert.notCalled(apiStub);
+				assert.notCalled(apiStub);
 				return chai.expect(result).to.deep.equal(settings);
 			});
 
@@ -117,8 +116,8 @@ describe('UserDataAccess', () => {
 				chai.expect(apiStub.getCall(0).args[0]).to.equal('oauth2/token');
 				chai.expect(apiStub.getCall(0).args[1]['username']).to.equal('name');
 				chai.expect(apiStub.getCall(0).args[1]['password']).to.equal('pass');
-				chai.expect(apiStub.getCall(0).args[1]['device_code']).to.be.undefined;
-				chai.expect(apiStub.getCall(0).args[1]['device_platform']).to.be.undefined;
+				chai.expect(apiStub.getCall(0).args[1]['device_code']).to.be.undefined('Expect undefined');
+				chai.expect(apiStub.getCall(0).args[1]['device_platform']).to.be.undefined('Expect undefined');
 				chai.expect(apiStub.getCall(0).args[1]['grant_type']).to.equal('password');
 			});
 		});
@@ -138,7 +137,7 @@ describe('UserDataAccess', () => {
 				resolve(new ApiResponse(401, tokenData));
 			}));
 			const result: AuthResponse = await Dao.getSessionWithPassword('name', 'pass', 'id', 'ios');
-			chai.expect(result.session).to.be.null;
+			chai.expect(result.session).to.be.null('Expect null');
 			chai.expect(result.code).to.equal('ERROR_INVALID_CREDENTIALS');
 		});
 
@@ -147,7 +146,7 @@ describe('UserDataAccess', () => {
 				resolve(new ApiResponse(500, tokenData));
 			}));
 			const result: AuthResponse = await Dao.getSessionWithPassword('name', 'pass', 'id', 'ios');
-			chai.expect(result.session).to.be.null;
+			chai.expect(result.session).to.be.null('Expect null');
 			chai.expect(result.code).to.equal('ERROR');
 		});
 	});
@@ -195,9 +194,9 @@ describe('UserDataAccess', () => {
 				chai.expect(apiStub.callCount).to.equal(1);
 				chai.expect(apiStub.getCall(0).args[0]).to.equal('oauth2/token');
 				chai.expect(apiStub.getCall(0).args[1]['access_token']).to.equal('facebook_token');
-				chai.expect(apiStub.getCall(0).args[1]['authorization_code']).to.be.undefined;
-				chai.expect(apiStub.getCall(0).args[1]['device_code']).to.be.undefined;
-				chai.expect(apiStub.getCall(0).args[1]['device_platform']).to.be.undefined;
+				chai.expect(apiStub.getCall(0).args[1]['authorization_code']).to.be.undefined('Expect undefined');
+				chai.expect(apiStub.getCall(0).args[1]['device_code']).to.be.undefined('Expect undefined');
+				chai.expect(apiStub.getCall(0).args[1]['device_platform']).to.be.undefined('Expect undefined');
 				chai.expect(apiStub.getCall(0).args[1]['grant_type']).to.equal('facebook');
 			});
 		});
@@ -214,10 +213,10 @@ describe('UserDataAccess', () => {
 				chai.expect(data).to.deep.equal({code: 'OK', session: testSession});
 				chai.expect(apiStub.callCount).to.equal(1);
 				chai.expect(apiStub.getCall(0).args[0]).to.equal('oauth2/token');
-				chai.expect(apiStub.getCall(0).args[1]['access_token']).to.be.undefined;
+				chai.expect(apiStub.getCall(0).args[1]['access_token']).to.be.undefined('Expect undefined');
 				chai.expect(apiStub.getCall(0).args[1]['authorization_code']).to.equal('auth_code');
-				chai.expect(apiStub.getCall(0).args[1]['device_code']).to.be.undefined;
-				chai.expect(apiStub.getCall(0).args[1]['device_platform']).to.be.undefined;
+				chai.expect(apiStub.getCall(0).args[1]['device_code']).to.be.undefined('Expect undefined');
+				chai.expect(apiStub.getCall(0).args[1]['device_platform']).to.be.undefined('Expect undefined');
 				chai.expect(apiStub.getCall(0).args[1]['grant_type']).to.equal('facebook');
 			});
 		});
@@ -277,7 +276,7 @@ describe('UserDataAccess', () => {
 			chai.expect(apiStub.getCall(1).args[1]['email']).to.equal('email@example.com');
 			chai.expect(apiStub.getCall(1).args[1]['password']).to.equal('12345678');
 			chai.expect(apiStub.getCall(1).args[1]['name']).to.equal('name');
-			chai.expect(apiStub.getCall(1).args[1]['email_is_verified']).to.be.false;
+			chai.expect(apiStub.getCall(1).args[1]['email_is_verified']).to.be.false('Expect false');
 
 		});
 
@@ -352,7 +351,7 @@ describe('UserDataAccess', () => {
 				.returns(new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, userInfoApiResponse));
 				}));
-			const userInfo: UserInfo|null = await Dao.getUserInfo();
+			const userInfo: UserInfo | null = await Dao.getUserInfo();
 			chai.expect(userInfo).deep.equal(userInfoResult);
 		});
 	});

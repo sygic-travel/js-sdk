@@ -1,8 +1,7 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as Moxios from 'moxios';
-import { SinonSandbox } from 'sinon';
-import * as sinon from 'sinon';
+import { sandbox as sinonSandbox, SinonSandbox } from 'sinon';
 
 import { ApiResponse, StApi } from '../Api';
 import { setEnvironment } from '../Settings';
@@ -21,7 +20,7 @@ describe('CollaborationDataAccess', () => {
 	});
 
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinonSandbox.create();
 		Moxios.install(StApi.axiosInstance);
 	});
 

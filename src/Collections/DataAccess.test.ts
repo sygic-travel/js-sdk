@@ -1,8 +1,7 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as Moxios from 'moxios';
-import { SinonSandbox } from 'sinon';
-import * as sinon from 'sinon';
+import { assert, sandbox as sinonSandbox, SinonSandbox } from 'sinon';
 
 import { ApiResponse, StApi } from '../Api';
 import { Place } from '../Places';
@@ -25,7 +24,7 @@ describe('CollectionsDataAccess', () => {
 	});
 
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinonSandbox.create();
 		Moxios.install(StApi.axiosInstance);
 	});
 
@@ -44,8 +43,8 @@ describe('CollectionsDataAccess', () => {
 			}));
 
 			const result: Collection = await Dao.getCollection(1, '100x100');
-			sinon.assert.calledOnce(apiStub);
-			sinon.assert.calledWith(apiStub, 'collections/1');
+			assert.calledOnce(apiStub);
+			assert.calledWith(apiStub, 'collections/1');
 			chai.expect(result).to.deep.equal(ExpectedResults.collection);
 		});
 	});
@@ -62,8 +61,8 @@ describe('CollectionsDataAccess', () => {
 				offset: 5
 			});
 			let result: Collection[] = await Dao.getCollections(filter, false, '100x100');
-			sinon.assert.calledOnce(apiStub);
-			sinon.assert.calledWith(apiStub, 'collections?limit=5&offset=5&parent_place_id=city%3A1');
+			assert.calledOnce(apiStub);
+			assert.calledWith(apiStub, 'collections?limit=5&offset=5&parent_place_id=city%3A1');
 			chai.expect(result).to.deep.equal(ExpectedResults.collections);
 
 			filter = new CollectionsFilter({
@@ -71,7 +70,7 @@ describe('CollectionsDataAccess', () => {
 				tags: ['Hotel', 'Historical']
 			});
 			result = await Dao.getCollections(filter, false, '100x100');
-			sinon.assert.calledWith(apiStub, 'collections?parent_place_id=city%3A1&tags=Hotel%2CHistorical');
+			assert.calledWith(apiStub, 'collections?parent_place_id=city%3A1&tags=Hotel%2CHistorical');
 			chai.expect(result).to.deep.equal(ExpectedResults.collections);
 		});
 	});
