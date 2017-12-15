@@ -25,12 +25,8 @@ import { PlacesStats } from './Stats';
 import { PlacesStatsFilter } from './StatsFilter';
 
 export async function getPlaces(filter: PlacesListFilter): Promise<Place[]> {
-	let apiResponse: ApiResponse;
-	if (filter.mapSpread) {
-		apiResponse = await getPlacesWithMapSpread(filter);
-	} else {
-		apiResponse = await StApi.get('places/list?' + filter.toQueryString());
-	}
+	const apiResponse: ApiResponse =
+		filter.mapSpread ? await getPlacesWithMapSpread(filter) : await StApi.get('places/list?' + filter.toQueryString());
 	if (!apiResponse.data.hasOwnProperty('places')) {
 		throw new Error('Wrong API response');
 	}
@@ -256,7 +252,7 @@ async function getPlacesWithMapSpread(filter: PlacesListFilter): Promise<ApiResp
 			try {
 				success(await StApi.get('places/list?' + apiFilter.toQueryString()));
 			} catch (error) {
-				success(new ApiResponse( 200, {places: []}));
+				success(new ApiResponse(200, {places: []}));
 			}
 		});
 		apiResults.push(promise);
@@ -274,4 +270,4 @@ async function getPlacesWithMapSpread(filter: PlacesListFilter): Promise<ApiResp
 		return 1;
 	});
 	return finalResponse;
-};
+}

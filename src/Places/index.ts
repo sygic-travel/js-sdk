@@ -32,24 +32,24 @@ export {
 	Tag,
 	Description,
 	Dao,
-}
+};
 
 export const DESTINATION_BREAK_LEVELS = ['city', 'town', 'village', 'island'];
 
 export async function getPlaces(filter: PlacesListFilter): Promise<Place[]> {
-	return await Dao.getPlaces(filter);
+	return Dao.getPlaces(filter);
 }
 
 export async function getPlacesStats(filter: PlacesStatsFilter): Promise<PlacesStats> {
-	return await Dao.getPlacesStats(filter);
+	return Dao.getPlacesStats(filter);
 }
 
 export async function getPlaceDetailed(id: string, photoSize: string): Promise<Place> {
-	return await Dao.getPlaceDetailed(id, photoSize);
+	return Dao.getPlaceDetailed(id, photoSize);
 }
 
 export async function getPlacesDetailed(ids: string[], photoSize: string): Promise<Place[]> {
-	return await Dao.getPlacesDetailed(ids, photoSize);
+	return Dao.getPlacesDetailed(ids, photoSize);
 }
 
 export async function getPlacesDetailedMap(ids: string[], photoSize: string): Promise<Map<string, Place>> {
@@ -62,27 +62,27 @@ export async function getPlacesDetailedMap(ids: string[], photoSize: string): Pr
 }
 
 export async function getPlaceMedia(id: string): Promise<Medium[]> {
-	return await Dao.getPlaceMedia(id);
+	return Dao.getPlaceMedia(id);
 }
 
 export async function createCustomPlace(data: CustomPlaceFormData): Promise<Place> {
-	return await Dao.createCustomPlace(data);
+	return Dao.createCustomPlace(data);
 }
 
 export async function updateCustomPlace(id: string, data: CustomPlaceFormData): Promise<Place> {
-	return await Dao.updateCustomPlace(id, data);
+	return Dao.updateCustomPlace(id, data);
 }
 
 export async function deleteCustomPlace(id: string): Promise<void> {
-	return await Dao.deleteCustomPlace(id);
+	return Dao.deleteCustomPlace(id);
 }
 
 export async function getPlaceGeometry(id: string): Promise<PlaceGeometry> {
-	return await Dao.getPlaceGeometry(id);
+	return Dao.getPlaceGeometry(id);
 }
 
 export async function getPlaceOpeningHours(id: string, from: string, to: string): Promise<PlaceOpeningHours> {
-	return await Dao.getPlaceOpeningHours(id, from, to);
+	return Dao.getPlaceOpeningHours(id, from, to);
 }
 
 export async function addPlaceReview(placeId: string, rating: number, message: string): Promise<PlaceReview> {
@@ -159,7 +159,7 @@ export function getPlaceDestination(place: Place, parentPlacesMap: Map<string, P
 	const reversedPlaceParentIds = place.parents.slice().reverse();
 
 	for (const parentId of reversedPlaceParentIds) {
-		const parentPlace: Place|undefined = parentPlacesMap.get(parentId);
+		const parentPlace: Place | undefined = parentPlacesMap.get(parentId);
 		if (parentPlace && isPlaceDestination(parentPlace)) {
 			return parentPlace;
 		}

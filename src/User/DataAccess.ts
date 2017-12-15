@@ -18,23 +18,18 @@ const CLIENT_SESSION_KEY = 'client_session';
 const USER_SESSION_KEY = 'user_session';
 
 export async function getUserSettings(): Promise<UserSettings> {
-	let result: any = null;
-	const fromCache: any = await userCache.get(SETTINGS_KEY);
-
-	if (!fromCache) {
+	let result: any = await userCache.get(SETTINGS_KEY);
+	if (!result) {
 		result = await getUserSettingsFromApi();
-	} else {
-		result = fromCache;
 	}
-
 	return camelizeKeys(result) as UserSettings;
 }
 
-export async function getUserSession(): Promise<Session|null> {
+export async function getUserSession(): Promise<Session | null> {
 	return sessionCache.get(USER_SESSION_KEY);
 }
 
-export async function setUserSession(session: Session|null): Promise<void> {
+export async function setUserSession(session: Session | null): Promise<void> {
 	return sessionCache.set(USER_SESSION_KEY, session);
 }
 
@@ -84,8 +79,8 @@ export async function getSessionWithJwt(
 
 export async function getSessionWithThirdPartyAuth(
 	type: ThirdPartyAuthType,
-	accessToken: string|null,
-	authorizationCode: string|null,
+	accessToken: string | null,
+	authorizationCode: string | null,
 	deviceId?: string,
 	devicePlatform?: string
 ): Promise<AuthResponse> {
@@ -180,7 +175,7 @@ export async function getUserInfo(): Promise<UserInfo> {
 		throw new Error('Wrong API response');
 	}
 	const userData = apiResponse.data.user;
-	const license: UserLicense|null = userData.premium ? {
+	const license: UserLicense | null = userData.premium ? {
 		name: userData.premium.name,
 		expirationAt: userData.premium.expiration_at,
 		isActive: userData.premium.is_active,

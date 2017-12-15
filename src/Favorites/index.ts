@@ -15,7 +15,7 @@ export async function addCustomPlaceToFavorites(
 	location: Location,
 	address: string
 ): Promise<string> {
-	return await Dao.addCustomPlaceToFavorites(name, location, address);
+	return Dao.addCustomPlaceToFavorites(name, location, address);
 }
 
 export async function removePlaceFromFavorites(id: string): Promise<void> {

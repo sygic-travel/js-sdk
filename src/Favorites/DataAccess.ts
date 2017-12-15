@@ -7,7 +7,7 @@ export async function getFavorites(): Promise<string[]> {
 	if (fromCache.length > 0) {
 		return fromCache;
 	}
-	return await getFromApi();
+	return getFromApi();
 }
 
 export async function addPlaceToFavorites(id: string): Promise<void> {

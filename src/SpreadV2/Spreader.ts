@@ -38,11 +38,9 @@ const detectRenderSize = (
 	ignoreDisabledCategories: boolean,
 	categoriesCoefficients?: CategoriesCoefficients | null
 ): SpreadResult => {
-	let spreadRating = 0;
+	let spreadRating = place.rating;
 	if (categoriesCoefficients && place.level === 'poi') {
 		spreadRating = place.rating * getRatingCoeficientFromCategories(categoriesCoefficients, place.categories);
-	} else {
-		spreadRating = place.rating;
 	}
 
 	if (!place.location) {

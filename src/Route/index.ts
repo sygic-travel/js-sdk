@@ -16,7 +16,7 @@ export {
 	Mapper,
 	TripDayRoutes,
 	Waypoint
-}
+};
 
 export async function getRoutesForTripDay(tripId: string, dayIndex: number): Promise<TripDayRoutes>  {
 	const trip: Trip = await tripsDao.getTripDetailed(tripId);

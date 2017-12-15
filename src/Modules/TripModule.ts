@@ -102,7 +102,7 @@ export default class TripModule {
 		tripId: string,
 		dayIndex: number,
 		placeIds: string[],
-		transports?: (TransportSettings|null)[],
+		transports?: (TransportSettings | null)[],
 		positionInDay?: number
 	): Promise<Trip> {
 		return addSequenceToDay(tripId, dayIndex, placeIds, transports, positionInDay);

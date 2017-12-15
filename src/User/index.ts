@@ -27,14 +27,14 @@ export {
 export { getUserSession } from './DataAccess';
 
 export async function getUserSettings(): Promise<UserSettings> {
-	return await Dao.getUserSettings();
+	return Dao.getUserSettings();
 }
 
 export async function updateUserSettings(settings: UserSettings): Promise<UserSettings> {
-	return await Dao.updateUserSettings(settings);
+	return Dao.updateUserSettings(settings);
 }
 
-export async function setUserSession(userSession: Session|null): Promise<void> {
+export async function setUserSession(userSession: Session | null): Promise<void> {
 	await userCache.reset();
 	await favoritesCache.reset();
 	await tripsDetailedCache.reset();
@@ -71,8 +71,8 @@ export async function loginUserWithPassword(
 }
 
 export async function loginUserWithFacebook(
-	accessToken: string|null,
-	authorizationCode: string|null,
+	accessToken: string | null,
+	authorizationCode: string | null,
 	deviceId?: string,
 	devicePlatform?: string
 ): Promise<AuthenticationResponseCode> {
@@ -86,8 +86,8 @@ export async function loginUserWithFacebook(
 }
 
 export async function loginUserWithGoogle(
-	accessToken: string|null,
-	authorizationCode: string|null,
+	accessToken: string | null,
+	authorizationCode: string | null,
 	deviceId?: string,
 	devicePlatform?: string
 ): Promise<AuthenticationResponseCode> {

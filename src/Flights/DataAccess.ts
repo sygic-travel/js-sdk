@@ -10,7 +10,7 @@ const DEFAULT_LANGUAGE = 'en';
 const DEFAULT_CURRENCY = 'USD';
 const AIRPORT_SEARCH_RADIUS = '250km';
 
-let airlinesCache: Map<string, Airline>|null = null;
+let airlinesCache: Map<string, Airline> | null = null;
 
 export async function getFlights(query: FlightsQuery): Promise<FlightSearchResult[]> {
 	const date: Date = new Date(query.date);

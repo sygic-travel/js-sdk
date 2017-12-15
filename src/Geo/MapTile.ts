@@ -2,7 +2,7 @@ import { Bounds, Location, locationToTileCoordinate, normalizeLng } from '.';
 import { Coordinate } from './Coordinate';
 
 export function boundsToMapTileKeys(bounds: Bounds , zoom: number): string[] {
-	bounds = Object.assign({}, bounds);
+	bounds = {...bounds};
 	bounds.west = normalizeLng(bounds.west);
 	bounds.east = normalizeLng(bounds.east);
 	if (bounds.west > bounds.east) {

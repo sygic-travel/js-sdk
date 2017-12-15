@@ -5,7 +5,7 @@ export interface FlightSearchResult {
 	currency: string;
 	deepLink: string;
 	outbound: Flight;
-	inbound: Flight|null;
+	inbound: Flight | null;
 }
 
 export interface Airport {
@@ -30,7 +30,7 @@ export interface Route {
 	departureTime: Date;
 	arrivalTime: Date;
 	polyline: string;
-	stopOver: number|null;
+	stopOver: number | null;
 }
 
 export interface FlightsQuery {

@@ -122,8 +122,8 @@ export const resolveStickiness = (inputTrip: Trip, userSettings: UserSettings | 
 	if (trip.days === null) {
 		return trip;
 	}
-	let prevDay: Day|null;
-	let nextDay: Day|null;
+	let prevDay: Day | null;
+	let nextDay: Day | null;
 	trip.days.forEach((day: Day, index: number) => {
 		day.itinerary.forEach((item: ItineraryItem) => {
 			item.isSticky = false;

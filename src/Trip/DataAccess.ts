@@ -79,7 +79,7 @@ export async function createTrip(tripRequest: TripCreateRequest): Promise<Trip> 
 export async function updateTrip(tripToBeUpdated: Trip): Promise<Trip> {
 	const tripApiFormatData = mapTripToApiFormat(tripToBeUpdated);
 	await tripsDetailedCache.set(tripToBeUpdated.id, tripApiFormatData);
-	const oldChangedTrip: ChangedTrip|undefined = changedTrips.get(tripToBeUpdated.id);
+	const oldChangedTrip: ChangedTrip | undefined = changedTrips.get(tripToBeUpdated.id);
 	if (oldChangedTrip) {
 		clearTimeout(oldChangedTrip.timeout);
 	}
@@ -97,7 +97,7 @@ export async function updateTrip(tripToBeUpdated: Trip): Promise<Trip> {
 }
 
 export async function syncChangedTripToServer(tripId: string): Promise<void> {
-	const changedTrip: ChangedTrip|undefined = changedTrips.get(tripId);
+	const changedTrip: ChangedTrip | undefined = changedTrips.get(tripId);
 	changedTrips.delete(tripId);
 	if (!changedTrip)  {
 		return;
@@ -106,10 +106,10 @@ export async function syncChangedTripToServer(tripId: string): Promise<void> {
 	clearTimeout(changedTrip.timeout);
 	if (tripResponse.data.conflict_resolution === 'ignored') {
 		const conflictInfo = camelizeKeys(tripResponse.data.conflict_info) as TripConflictInfo;
-		return await handleIgnoredConflict(conflictInfo, changedTrip.trip, tripResponse);
+		return handleIgnoredConflict(conflictInfo, changedTrip.trip, tripResponse);
 	}
 
-	const newerChangedTrip: ChangedTrip|undefined = changedTrips.get(tripId);
+	const newerChangedTrip: ChangedTrip | undefined = changedTrips.get(tripId);
 	if (newerChangedTrip) {
 		newerChangedTrip.apiData.base_version = tripResponse.data.trip.version;
 	} else {

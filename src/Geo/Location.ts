@@ -40,7 +40,7 @@ export function locationToCanvasCoordinate(location: Location, bounds: Bounds, c
 		x: Math.round(lngDiff * lngRatio),
 		y: Math.round(latDiff * latRatio)
 	};
-};
+}
 
 export function normalizeLng(lng: number) {
 	let compValue = Math.abs(lng);
@@ -51,7 +51,7 @@ export function normalizeLng(lng: number) {
 		compValue = compValue - 360;
 	}
 	return lng < 0 ? compValue * -1 : compValue;
-};
+}
 
 const clip = (n: number, min: number, max: number): number => {
 	return Math.max(min, Math.min(n, max));
