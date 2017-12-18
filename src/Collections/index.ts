@@ -16,9 +16,9 @@ export async function getCollections(
 	return Dao.getCollections(filter, loadPlaces, photoSize);
 }
 
-export async function getCollectionsForDestinationId(destinationId: string): Promise<Collection[]> {
+export async function getCollectionsForDestinationId(destinationId: string, imageSize: string): Promise<Collection[]> {
 	const collectionsFilter: CollectionsFilter = new CollectionsFilter({
 		parentPlaceId: destinationId
 	});
-	return getCollections(collectionsFilter, true, '100x100');
+	return getCollections(collectionsFilter, true, imageSize);
 }

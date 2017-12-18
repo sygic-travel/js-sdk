@@ -124,9 +124,9 @@ export async function getPlacesDetailed(ids: string[], photoSize: string): Promi
 	return mapPlaceDetailedBatchApiResponseToPlaces(places, photoSize);
 }
 
-export async function getPlacesFromTripDay(day: Day): Promise<Place[]> {
+export async function getPlacesFromTripDay(day: Day, imageSize: string): Promise<Place[]> {
 	const placesIds: string[] = day.itinerary.map((item: ItineraryItem) => (item.placeId));
-	return getPlacesDetailed(placesIds, '100x100');
+	return getPlacesDetailed(placesIds, imageSize);
 }
 
 export async function getPlaceMedia(id: string): Promise<Medium[]> {
