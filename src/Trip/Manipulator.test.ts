@@ -104,6 +104,8 @@ describe('TripManipulator', () => {
 				expectedTrip.days.splice(indexToBeRemoved, 1);
 				expectedTrip.days[expectedTrip.days.length - 1].date = '2017-04-09';
 				expectedTrip.days[0].itinerary[1].isSticky = false;
+				expectedTrip.days[0].itinerary[1].isStickyFirstInDay = false;
+				expectedTrip.days[0].itinerary[1].isStickyLastInDay = false;
 			}
 
 			return chai.expect(Manipulator.removeDayFromTrip(inputTrip, indexToBeRemoved, null)).to.deep.equal(expectedTrip);
@@ -119,6 +121,8 @@ describe('TripManipulator', () => {
 			if (expectedTrip.days) {
 				expectedTrip.days.splice(indexToBeRemoved, 1);
 				expectedTrip.days[0].itinerary[0].isSticky = false;
+				expectedTrip.days[0].itinerary[0].isStickyFirstInDay = false;
+				expectedTrip.days[0].itinerary[0].isStickyLastInDay = false;
 			}
 
 			return chai.expect(Manipulator.removeDayFromTrip(inputTrip, indexToBeRemoved, null)).to.deep.equal(expectedTrip);
@@ -161,7 +165,11 @@ describe('TripManipulator', () => {
 				expectedTrip.days[0] = expectedTrip.days[1];
 				expectedTrip.days[1] = tempDay;
 				expectedTrip.days[0].itinerary[0].isSticky = false;
+				expectedTrip.days[0].itinerary[0].isStickyFirstInDay = false;
+				expectedTrip.days[0].itinerary[0].isStickyLastInDay = false;
 				expectedTrip.days[1].itinerary[1].isSticky = false;
+				expectedTrip.days[1].itinerary[1].isStickyFirstInDay = false;
+				expectedTrip.days[1].itinerary[1].isStickyLastInDay = false;
 			}
 
 			return chai.expect(Manipulator.swapDaysInTrip(inputTrip, 0, 1, null)).to.deep.equal(expectedTrip);
@@ -298,6 +306,8 @@ describe('TripManipulator', () => {
 			if (expectedTrip.days) {
 				expectedTrip.days[0].itinerary.splice(0, 2);
 				expectedTrip.days[1].itinerary[0].isSticky = false;
+				expectedTrip.days[1].itinerary[0].isStickyFirstInDay = false;
+				expectedTrip.days[1].itinerary[0].isStickyLastInDay = false;
 			}
 
 			const result = Manipulator.removePlacesFromDay(inputTrip, 0, [0, 1], null);
@@ -312,6 +322,8 @@ describe('TripManipulator', () => {
 			if (expectedTrip.days) {
 				expectedTrip.days[0].itinerary = [];
 				expectedTrip.days[1].itinerary[0].isSticky = false;
+				expectedTrip.days[1].itinerary[0].isStickyFirstInDay = false;
+				expectedTrip.days[1].itinerary[0].isStickyLastInDay = false;
 			}
 			return chai.expect(Manipulator.removeAllPlacesFromDay(inputTrip, 0, null)).to.be.deep.equal(expectedTrip);
 		});
@@ -347,10 +359,16 @@ describe('TripManipulator', () => {
 					duration: null,
 					note: null,
 					transportFromPrevious: null,
-					isSticky: false
+					isSticky: false,
+					isStickyFirstInDay: false,
+					isStickyLastInDay: false
 				} as ItineraryItem);
 				expectedTrip.days[0].itinerary[1].isSticky = false;
+				expectedTrip.days[0].itinerary[1].isStickyFirstInDay = false;
+				expectedTrip.days[0].itinerary[1].isStickyLastInDay = false;
 				expectedTrip.days[1].itinerary[0].isSticky = false;
+				expectedTrip.days[1].itinerary[0].isStickyFirstInDay = false;
+				expectedTrip.days[1].itinerary[0].isStickyLastInDay = false;
 			}
 
 			return chai.expect(Manipulator.addPlaceToDay(inputTrip, inputPlace, 0, null)).to.deep.equal(expectedTrip);
@@ -371,7 +389,9 @@ describe('TripManipulator', () => {
 					duration: null,
 					note: null,
 					transportFromPrevious: null,
-					isSticky: false
+					isSticky: false,
+					isStickyFirstInDay: false,
+					isStickyLastInDay: false
 				} as ItineraryItem);
 			}
 
@@ -509,17 +529,24 @@ describe('TripManipulator', () => {
 			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 
 			if (expectedTrip.days) {
-				const item = {
+				const item1: ItineraryItem = {
 					place: inputPlace,
 					placeId: 'poi:530',
 					startTime: null,
 					duration: null,
 					note: null,
 					transportFromPrevious: null,
-					isSticky: true
+					isSticky: true,
+					isStickyFirstInDay: false,
+					isStickyLastInDay: true
 				};
-				expectedTrip.days[0].itinerary[1] = item;
-				expectedTrip.days[1].itinerary[0] = item;
+
+				const item2: ItineraryItem = cloneDeep(item1);
+				item2.isStickyFirstInDay = true;
+				item2.isStickyLastInDay = false;
+
+				expectedTrip.days[0].itinerary[1] = item1;
+				expectedTrip.days[1].itinerary[0] = item2;
 			}
 			const trip = Manipulator.addOrReplaceOvernightPlace(inputTrip, inputPlace, 0, null);
 			chai.expect(trip).to.deep.equal(expectedTrip);
@@ -531,17 +558,24 @@ describe('TripManipulator', () => {
 			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 
 			if (expectedTrip.days) {
-				const item = {
+				const item1: ItineraryItem = {
 					place: inputPlace,
 					placeId: 'poi:530',
 					startTime: null,
 					duration: null,
 					note: null,
 					transportFromPrevious: null,
-					isSticky: true
+					isSticky: true,
+					isStickyFirstInDay: false,
+					isStickyLastInDay: true
 				};
-				expectedTrip.days[1].itinerary.push(item);
-				expectedTrip.days[2].itinerary.unshift(item);
+
+				const item2: ItineraryItem = cloneDeep(item1);
+				item2.isStickyFirstInDay = true;
+				item2.isStickyLastInDay = false;
+
+				expectedTrip.days[1].itinerary.push(item1);
+				expectedTrip.days[2].itinerary.unshift(item2);
 			}
 			const trip = Manipulator.addOrReplaceOvernightPlace(inputTrip, inputPlace, 1, null);
 			chai.expect(trip).to.deep.equal(expectedTrip);
@@ -554,17 +588,21 @@ describe('TripManipulator', () => {
 			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 
 			if (expectedTrip.days) {
-				const item = {
+				const item: ItineraryItem = {
 					place: inputPlace,
 					placeId: 'poi:4',
 					startTime: null,
 					duration: null,
 					note: null,
 					transportFromPrevious: null,
-					isSticky: true
+					isSticky: true,
+					isStickyFirstInDay: false,
+					isStickyLastInDay: true
 				};
 				expectedTrip.days[1].itinerary.push(item);
 				expectedTrip.days[2].itinerary[0].isSticky = true;
+				expectedTrip.days[2].itinerary[0].isStickyFirstInDay = true;
+				expectedTrip.days[2].itinerary[0].isStickyLastInDay = false;
 			}
 			const trip = Manipulator.addOrReplaceOvernightPlace(inputTrip, inputPlace, 1, null);
 			chai.expect(trip).to.deep.equal(expectedTrip);
@@ -577,17 +615,21 @@ describe('TripManipulator', () => {
 			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 
 			if (expectedTrip.days) {
-				const item = {
+				const item: ItineraryItem = {
 					place: inputPlace,
 					placeId: 'poi:3',
 					startTime: null,
 					duration: null,
 					note: null,
 					transportFromPrevious: null,
-					isSticky: true
+					isSticky: true,
+					isStickyFirstInDay: true,
+					isStickyLastInDay: false
 				};
 				expectedTrip.days[2].itinerary.unshift(item);
 				expectedTrip.days[1].itinerary[1].isSticky = true;
+				expectedTrip.days[1].itinerary[1].isStickyFirstInDay = false;
+				expectedTrip.days[1].itinerary[1].isStickyLastInDay = true;
 			}
 			const trip = Manipulator.addOrReplaceOvernightPlace(inputTrip, inputPlace, 1, null);
 			chai.expect(trip).to.deep.equal(expectedTrip);

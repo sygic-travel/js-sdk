@@ -152,6 +152,8 @@ export function addPlaceToDay(
 		startTime: null,
 		duration: null,
 		isSticky: false,
+		isStickyFirstInDay: false,
+		isStickyLastInDay: false,
 		note: null,
 		transportFromPrevious: null
 	};

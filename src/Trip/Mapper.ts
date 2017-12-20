@@ -52,7 +52,9 @@ export const mapTripCreateRequest = (
 			duration: null,
 			startTime: null,
 			transportFromPrevious: null,
-			isSticky: false
+			isSticky: false,
+			isStickyFirstInDay: false,
+			isStickyLastInDay: false
 		}];
 	}
 
@@ -95,6 +97,8 @@ const mapTripDays = (trip): Day[] => trip.days.map((day) => ({
 		duration: itineraryItem.duration,
 		note: itineraryItem.note,
 		isSticky: null,
+		isStickyFirstInDay: null,
+		isStickyLastInDay: null,
 		transportFromPrevious: itineraryItem.transport_from_previous ? {
 			mode: itineraryItem.transport_from_previous.mode,
 			type: itineraryItem.transport_from_previous.type,
@@ -123,6 +127,8 @@ export const resolveStickiness = (inputTrip: Trip, userSettings: UserSettings | 
 	trip.days.forEach((day: Day, index: number) => {
 		day.itinerary.forEach((item: ItineraryItem) => {
 			item.isSticky = false;
+			item.isStickyFirstInDay = false;
+			item.isStickyLastInDay = false;
 		});
 
 		if (userSettings &&
@@ -134,6 +140,7 @@ export const resolveStickiness = (inputTrip: Trip, userSettings: UserSettings | 
 			)
 		) {
 			day.itinerary[0].isSticky = true;
+			day.itinerary[0].isStickyFirstInDay = true;
 		}
 
 		if (prevDay &&
@@ -142,6 +149,7 @@ export const resolveStickiness = (inputTrip: Trip, userSettings: UserSettings | 
 			day.itinerary[0].placeId === prevDay.itinerary[prevDay.itinerary.length - 1].placeId
 		) {
 			day.itinerary[0].isSticky = true;
+			day.itinerary[0].isStickyFirstInDay = true;
 		}
 		nextDay = trip.days && trip.days[index + 1] ? trip.days[index + 1] : null;
 		if (nextDay &&
@@ -150,6 +158,7 @@ export const resolveStickiness = (inputTrip: Trip, userSettings: UserSettings | 
 			day.itinerary[day.itinerary.length - 1].placeId === nextDay.itinerary[0].placeId
 		) {
 			day.itinerary[day.itinerary.length - 1].isSticky = true;
+			day.itinerary[day.itinerary.length - 1].isStickyLastInDay = true;
 		}
 
 		if (userSettings &&
@@ -161,6 +170,7 @@ export const resolveStickiness = (inputTrip: Trip, userSettings: UserSettings | 
 			)
 		) {
 			day.itinerary[day.itinerary.length - 1].isSticky = true;
+			day.itinerary[day.itinerary.length - 1].isStickyLastInDay = true;
 		}
 
 		prevDay = day;
