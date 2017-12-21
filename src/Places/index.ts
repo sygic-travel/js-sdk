@@ -165,6 +165,12 @@ export function getPlaceDestination(place: Place, parentPlacesMap: Map<string, P
 		}
 	}
 
+	const countryParentId: string|undefined = reversedPlaceParentIds.find((parentId) => parentId.includes('country:'));
+
+	if (countryParentId) {
+		return parentPlacesMap.get(countryParentId)!;
+	}
+
 	return parentPlacesMap.get(reversedPlaceParentIds[0])!;
 }
 
