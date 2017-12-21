@@ -165,13 +165,11 @@ export function getPlaceDestination(place: Place, parentPlacesMap: Map<string, P
 		}
 	}
 
-	const countryParentId: string|undefined = reversedPlaceParentIds.find((parentId) => parentId.includes('country:'));
+	const countryParent: Place|undefined = reversedPlaceParentIds.map((parentPlaceId: string): Place =>
+		parentPlacesMap.get(parentPlaceId)!
+	).find((parentPlace: Place) => parentPlace.level === 'country');
 
-	if (countryParentId) {
-		return parentPlacesMap.get(countryParentId)!;
-	}
-
-	return parentPlacesMap.get(reversedPlaceParentIds[0])!;
+	return countryParent ? countryParent : parentPlacesMap.get(reversedPlaceParentIds[0])!;
 }
 
 export function isPlaceDestination(place: Place): boolean {
