@@ -110,7 +110,7 @@ export default class PlacesModule {
 		return spreadV2(places, vipPlaces, bounds, canvas, sizesConfig, categoriesCoefficients);
 	}
 
-	public getPlacesDestinationMap(placeIds: string[]): Promise<Map<string, Place>> {
-		return getPlacesDestinationMap(placeIds);
+	public getPlacesDestinationMap(placeIds: string[], imageSize: string): Promise<Map<string, Place>> {
+		return getPlacesDestinationMap(placeIds, imageSize);
 	}
 }

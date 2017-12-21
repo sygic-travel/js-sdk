@@ -28,7 +28,7 @@ export {
 	PdfStaticMapSector
 };
 
-const imageSize: string = '100x100';
+const imageSize: string = '150x120';
 
 const GENERATING_STATE_REFRESH_INTERVAL = 5000; // 5 seconds
 const GENERATING_STATE_CHECK_ATTEMPTS = 60;
@@ -69,7 +69,7 @@ export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 		getRoutesForTripDay(trip.id, dayIndex)
 	)));
 
-	const placesMapFromTrip: Map<string, Place> = await getPlacesMapFromTrip(trip);
+	const placesMapFromTrip: Map<string, Place> = await getPlacesMapFromTrip(trip, imageSize);
 	const {
 		destinationIdsWithDestinations,
 		destinationIdsWithPlaces,
@@ -101,7 +101,8 @@ export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<
 	placeIdsWithPlaceType: Map<string, PlaceSource>
 }> {
 	const placeIdsWithDestinations: Map<string, Place> = await getPlacesDestinationMap(
-		Array.from(placeIdsAndPlacesFromTrip.keys())
+		Array.from(placeIdsAndPlacesFromTrip.keys()),
+		imageSize
 	);
 	const destinationIdsWithDestinations: Map<string, Place> = new Map<string, Place>();
 	const destinationIdsWithPlaces: Map<string, Place[]> = new Map<string, Place[]>();
@@ -129,7 +130,8 @@ export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<
 	);
 
 	const favoritesIdsWithDestinations: Map<string, Place> = await getPlacesDestinationMap(
-		Array.from(userFavoritesMap.keys())
+		Array.from(userFavoritesMap.keys()),
+		imageSize
 	);
 
 	favoritesIdsWithDestinations.forEach((destination: Place, favoriteId: string) => {
@@ -158,7 +160,7 @@ async function createDestinationData(
 	query
 ): Promise<PdfDestination> {
 
-	const collectionsForDestination: Collection[] = await getCollectionsForDestinationId(destinationId);
+	const collectionsForDestination: Collection[] = await getCollectionsForDestinationId(destinationId, imageSize);
 	const mergedCollectionsAndPlacesFromDestination: Place[] = mergePlacesArrays(
 		collectionsForDestination.length > 0 ? collectionsForDestination[0].places : [],
 		destinationIdsWithPlaces.get(destinationId)!
@@ -208,7 +210,7 @@ async function getHomeDestinationId(homePlaceId: string|null): Promise<string|nu
 		return null;
 	}
 
-	const homeDestinationMap: Map<string, Place> = await getPlacesDestinationMap([homePlaceId]);
+	const homeDestinationMap: Map<string, Place> = await getPlacesDestinationMap([homePlaceId], imageSize);
 	const homeDestination: Place|undefined = homeDestinationMap.get(homePlaceId);
 	return homeDestination ? homeDestination.id : null;
 }

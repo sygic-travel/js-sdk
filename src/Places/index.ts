@@ -109,7 +109,7 @@ export async function detectParentsByLocation(location: Location): Promise<Place
 	return Dao.detectParentsByLocation(location);
 }
 
-export async function getPlacesMapFromTrip(trip: Trip): Promise<Map<string, Place>> {
+export async function getPlacesMapFromTrip(trip: Trip, imageSize: string): Promise<Map<string, Place>> {
 	const placesMapFromTrip: Map<string, Place> = new Map<string, Place>();
 
 	if (!trip.days) {
@@ -117,7 +117,7 @@ export async function getPlacesMapFromTrip(trip: Trip): Promise<Map<string, Plac
 	}
 
 	const placesForDays: Place[][] = await Promise.all(
-		trip.days.map((day: Day) => Dao.getPlacesFromTripDay(day))
+		trip.days.map((day: Day) => Dao.getPlacesFromTripDay(day, imageSize))
 	);
 	const placesFromTrips: Place[] = ([] as Place[]).concat(...placesForDays);
 
@@ -128,15 +128,15 @@ export async function getPlacesMapFromTrip(trip: Trip): Promise<Map<string, Plac
 	return placesMapFromTrip;
 }
 
-export async function getPlacesDestinationMap(placesIds: string[]): Promise<Map<string, Place>> {
-	const places: Place[] = await Dao.getPlacesDetailed(placesIds, '100x100');
+export async function getPlacesDestinationMap(placesIds: string[], imageSize: string): Promise<Map<string, Place>> {
+	const places: Place[] = await Dao.getPlacesDetailed(placesIds, imageSize);
 
 	const placesParentIds: Set<string> = new Set<string>();
 	places.forEach((place: Place) => {
 		place.parents.forEach((parentId: string) => placesParentIds.add(parentId));
 	});
 
-	const parentPlaces: Place[] = await Dao.getPlacesDetailed(Array.from(placesParentIds), '100x100');
+	const parentPlaces: Place[] = await Dao.getPlacesDetailed(Array.from(placesParentIds), imageSize);
 	const parentPlacesMap: Map<string, Place> = new Map<string, Place>();
 	parentPlaces.forEach((parentPlace: Place) => {
 		parentPlacesMap.set(parentPlace.id, parentPlace);
@@ -163,6 +163,12 @@ export function getPlaceDestination(place: Place, parentPlacesMap: Map<string, P
 		if (parentPlace && isPlaceDestination(parentPlace)) {
 			return parentPlace;
 		}
+	}
+
+	const countryParentId: string|undefined = reversedPlaceParentIds.find((parentId) => parentId.includes('country:'));
+
+	if (countryParentId) {
+		return parentPlacesMap.get(countryParentId)!;
 	}
 
 	return parentPlacesMap.get(reversedPlaceParentIds[0])!;
