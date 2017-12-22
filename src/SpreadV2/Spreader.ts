@@ -18,13 +18,13 @@ export function spread(
 ): SpreadResult {
 	const zoom = getZoomFromBounds(bounds, canvas.width);
 	const finalResult = vipPlaces.reduce((result: SpreadResult, place: Place): SpreadResult => {
-		return detectRenderSize(result, place, markerSizes, bounds, canvas, zoom);
+		return detectRenderSize(result, place, markerSizes, bounds, canvas, zoom, true);
 	}, {
 		hidden: [],
 		visible: []
 	});
 	return places.reduce((result: SpreadResult, place: Place): SpreadResult => {
-		return detectRenderSize(result, place, markerSizes, bounds, canvas, zoom, categoriesCoefficients);
+		return detectRenderSize(result, place, markerSizes, bounds, canvas, zoom, false, categoriesCoefficients);
 	}, finalResult);
 }
 
@@ -35,6 +35,7 @@ const detectRenderSize = (
 	bounds: Bounds,
 	canvas: CanvasSize,
 	zoom: number,
+	ignoreDisabledCategories: boolean,
 	categoriesCoefficients?: CategoriesCoefficients | null
 ): SpreadResult => {
 	let spreadRating = 0;
@@ -62,7 +63,11 @@ const detectRenderSize = (
 			continue;
 		}
 
-		if (place.level === 'poi' && isDisabledByCategory(size.disabledCategories, place.categories)) {
+		if (
+			!ignoreDisabledCategories &&
+			place.level === 'poi' &&
+			isDisabledByCategory(size.disabledCategories, place.categories)
+		) {
 			continue;
 		}
 
