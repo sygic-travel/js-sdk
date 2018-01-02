@@ -165,7 +165,7 @@ export function getPlaceDestination(place: Place, parentPlacesMap: Map<string, P
 		}
 	}
 
-	const countryParent: Place|undefined = reversedPlaceParentIds.map((parentPlaceId: string): Place =>
+	const countryParent: Place | undefined = reversedPlaceParentIds.map((parentPlaceId: string): Place =>
 		parentPlacesMap.get(parentPlaceId)!
 	).find((parentPlace: Place) => parentPlace.level === 'country');
 
