@@ -162,7 +162,7 @@ async function createDestinationData(
 
 	const collectionsForDestination: Collection[] = await getCollectionsForDestinationId(destinationId, imageSize);
 	const mergedCollectionsAndPlacesFromDestination: Place[] = mergePlacesArrays(
-		collectionsForDestination.length > 0 ? collectionsForDestination[0].places : [],
+		getSuitableCollectionForDestination(collectionsForDestination),
 		destinationIdsWithPlaces.get(destinationId)!
 	);
 
@@ -187,6 +187,22 @@ async function createDestinationData(
 		mainMap,
 		secondaryMaps
 	} as PdfDestination;
+}
+
+function getSuitableCollectionForDestination(collectionsForDestination: Collection[]): Place[] {
+	if (collectionsForDestination.length === 0) {
+		return [];
+	}
+
+	let collectionPlaces: Place[] = [];
+	collectionsForDestination.forEach((collectionForDestination: Collection) => {
+		// if collection has no tags => top POIs in collection
+		if (collectionForDestination.tags.length === 0) {
+			collectionPlaces = collectionsForDestination[0].places;
+		}
+	});
+
+	return collectionPlaces;
 }
 
 async function generateDestinationMaps(destinationPlaces: Place[], query: PdfQuery): Promise<{
