@@ -26,7 +26,7 @@
     "dirty-chai": "^2.0.1",
     "jsdom": "^11.5.1",
     "jsdom-global": "^3.0.2",
-    "mocha": "^4.0.1",
+    "mocha": "^4.1.0",
     "mocha-webpack": "^1.0.1",
     "moxios": "^0.3.0",
     "optimize-js-plugin": "^0.0.4",
