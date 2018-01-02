@@ -3,6 +3,8 @@ import { listToEnum } from '../Util';
 export interface Session {
 	accessToken: string;
 	refreshToken: string;
+	expirationTimestamp: number;
+	suggestedRefreshTimestamp: number;
 }
 
 export interface AuthResponse {

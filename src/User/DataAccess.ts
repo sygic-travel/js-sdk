@@ -196,12 +196,15 @@ export async function getUserInfo(): Promise<UserInfo> {
 
 async function authOnSso(request): Promise<AuthResponse> {
 	const response: ApiResponse = await SsoApi.post('oauth2/token', request);
+	const now = new Date();
 	if (response.statusCode === 200) {
 		return {
 			code: 'OK',
 			session: {
 				accessToken: response.data.access_token,
-				refreshToken: response.data.refresh_token
+				refreshToken: response.data.refresh_token,
+				expirationTimestamp: now.getTime() + (response.data.expires_in * 1000),
+				suggestedRefreshTimestamp: now.getTime() + (response.data.expires_in * 500)
 			} as Session
 		};
 	}
