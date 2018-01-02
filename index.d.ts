@@ -578,6 +578,8 @@ export namespace Trips {
 		duration: number | null; // Time in seconds planned to spend visiting place.
 		note: string | null;
 		isSticky: boolean | null; // https://confluence.sygic.com/display/STV/Sticky+Places+in+Itinerary
+		isStickyFirstInDay: boolean | null; // https://confluence.sygic.com/display/STV/Sticky+Places+in+Itinerary
+		isStickyLastInDay: boolean | null; // https://confluence.sygic.com/display/STV/Sticky+Places+in+Itinerary
 		transportFromPrevious: TransportSettings | null;
 
 	}

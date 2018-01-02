@@ -182,11 +182,17 @@ describe('TripController', () => {
 					duration: null,
 					note: null,
 					isSticky: false,
+					isStickyFirstInDay: false,
+					isStickyLastInDay: false,
 					transportFromPrevious: null
 				};
 
 				expectedTrip.days[0].itinerary[1].isSticky = false;
+				expectedTrip.days[0].itinerary[1].isStickyFirstInDay = false;
+				expectedTrip.days[0].itinerary[1].isStickyLastInDay = false;
 				expectedTrip.days[1].itinerary[0].isSticky = false;
+				expectedTrip.days[1].itinerary[0].isStickyFirstInDay = false;
+				expectedTrip.days[1].itinerary[0].isStickyLastInDay = false;
 
 				const newPoi: PlaceController.Place = cloneDeep(hotel);
 				newPoi.categories = [];
@@ -238,19 +244,30 @@ describe('TripController', () => {
 			if (!inputTrip.days) {
 				throw new Error('Wrong trip data.');
 			}
-			const stickyItineraryItem: ItineraryItem = {
+			const stickyItineraryItem1: ItineraryItem = {
 				place: stickyPlace,
 				placeId: stickyPlace.id,
 				startTime: null,
 				duration: null,
 				note: null,
 				isSticky: true,
+				isStickyFirstInDay: false,
+				isStickyLastInDay: true,
 				transportFromPrevious: null
 			};
+
+			const stickyItineraryItem2: ItineraryItem = cloneDeep(stickyItineraryItem1);
+			stickyItineraryItem2.isStickyFirstInDay = true;
+			stickyItineraryItem2.isStickyLastInDay = true;
+
+			const stickyItineraryItem3: ItineraryItem = cloneDeep(stickyItineraryItem1);
+			stickyItineraryItem2.isStickyFirstInDay = true;
+			stickyItineraryItem3.isStickyLastInDay = false;
+
 			// Place in second day is sticky from both sides
-			inputTrip.days[0].itinerary = [cloneDeep(stickyItineraryItem)];
-			inputTrip.days[1].itinerary = [cloneDeep(stickyItineraryItem)];
-			inputTrip.days[2].itinerary = [cloneDeep(stickyItineraryItem)];
+			inputTrip.days[0].itinerary = [cloneDeep(stickyItineraryItem1)];
+			inputTrip.days[1].itinerary = [cloneDeep(stickyItineraryItem2)];
+			inputTrip.days[2].itinerary = [cloneDeep(stickyItineraryItem3)];
 
 			// Stubs for fetching trip
 			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => {resolve(inputTrip); }));

@@ -6,7 +6,7 @@ import * as ApiResponses from '../TestData/TripApiResponses';
 import * as ExpectedResults from '../TestData/TripExpectedResults';
 import * as Mapper from '../Trip/Mapper';
 import { UserSettings } from '../User';
-import { TripCreateRequest } from './Trip';
+import { Trip, TripCreateRequest } from './Trip';
 
 chai.use(chaiAsPromised);
 
@@ -67,13 +67,15 @@ describe('TripMapper', () => {
 		});
 
 		it('should correctly map api response and set home stickiness in first day', () => {
-			const result = cloneDeep(ExpectedResults.tripDetailed);
-			result.days.forEach((day) => {
+			const result: Trip = cloneDeep(ExpectedResults.tripDetailed);
+			result.days!.forEach((day) => {
 				day.itinerary.forEach((item) => {
 					delete item.place;
 				});
 			});
-			result.days[0].itinerary[0].isSticky = true;
+			result.days![0].itinerary[0].isSticky = true;
+			result.days![0].itinerary[0].isStickyFirstInDay = true;
+			result.days![0].itinerary[0].isStickyLastInDay = false;
 			const userSettings: UserSettings = {
 				homePlaceId: 'poi:1',
 				workPlaceId: null
@@ -90,6 +92,8 @@ describe('TripMapper', () => {
 				});
 			});
 			result.days[0].itinerary[0].isSticky = true;
+			result.days![0].itinerary[0].isStickyFirstInDay = true;
+			result.days![0].itinerary[0].isStickyLastInDay = false;
 			const userSettings: UserSettings = {
 				homePlaceId: 'poi:10',
 				workPlaceId: 'poi:1'
@@ -106,6 +110,8 @@ describe('TripMapper', () => {
 				});
 			});
 			result.days[2].itinerary[1].isSticky = true;
+			result.days![2].itinerary[1].isStickyFirstInDay = false;
+			result.days![2].itinerary[1].isStickyLastInDay = true;
 			const userSettings: UserSettings = {
 				homePlaceId: 'poi:5',
 				workPlaceId: 'poi:10'
@@ -122,6 +128,8 @@ describe('TripMapper', () => {
 				});
 			});
 			result.days[2].itinerary[1].isSticky = true;
+			result.days![2].itinerary[1].isStickyFirstInDay = false;
+			result.days![2].itinerary[1].isStickyLastInDay = true;
 			const userSettings: UserSettings = {
 				homePlaceId: 'poi:10',
 				workPlaceId: 'poi:5'

@@ -57,6 +57,8 @@ export const itineratyItem: ItineraryItem = {
 	note: null,
 	transportFromPrevious: null,
 	isSticky: false,
+	isStickyFirstInDay: false,
+	isStickyLastInDay: false
 };
 
 export const transportSettings: TransportSettings = {
@@ -95,6 +97,8 @@ export const tripDetailed = {
 					note: null,
 					transportFromPrevious: null,
 					isSticky: false,
+					isStickyFirstInDay: false,
+					isStickyLastInDay: false,
 				} as ItineraryItem,
 				{
 					placeId: 'poi:2',
@@ -103,7 +107,9 @@ export const tripDetailed = {
 					duration: null,
 					note: null,
 					transportFromPrevious: null,
-					isSticky: true
+					isSticky: true,
+					isStickyFirstInDay: false,
+					isStickyLastInDay: true,
 				} as ItineraryItem
 			],
 			note: null,
@@ -117,7 +123,9 @@ export const tripDetailed = {
 					duration: null,
 					note: null,
 					transportFromPrevious: null,
-					isSticky: true
+					isSticky: true,
+					isStickyFirstInDay: true,
+					isStickyLastInDay: false,
 				} as ItineraryItem,
 				{
 					placeId: 'poi:3',
@@ -126,7 +134,9 @@ export const tripDetailed = {
 					duration: null,
 					note: null,
 					transportFromPrevious: null,
-					isSticky: false
+					isSticky: false,
+					isStickyFirstInDay: false,
+					isStickyLastInDay: false,
 				} as ItineraryItem,
 			],
 			note: null,
@@ -140,7 +150,9 @@ export const tripDetailed = {
 					duration: null,
 					note: null,
 					transportFromPrevious: null,
-					isSticky: false
+					isSticky: false,
+					isStickyFirstInDay: false,
+					isStickyLastInDay: false,
 				} as ItineraryItem,
 				{
 					placeId: 'poi:5',
@@ -149,7 +161,9 @@ export const tripDetailed = {
 					duration: null,
 					note: null,
 					transportFromPrevious: null,
-					isSticky: false
+					isSticky: false,
+					isStickyFirstInDay: false,
+					isStickyLastInDay: false
 				} as ItineraryItem
 			],
 			note: null,
