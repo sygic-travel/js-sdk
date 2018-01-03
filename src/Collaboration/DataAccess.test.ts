@@ -38,7 +38,7 @@ describe('CollaborationDataAccess', () => {
 				chai.expect(request.config.method).to.equal('post');
 				chai.expect(request.config.url).to.equal(`api/trips/${tripId}/subscription`);
 				done();
-			});
+			}, 5);
 		});
 	});
 
@@ -51,7 +51,7 @@ describe('CollaborationDataAccess', () => {
 				chai.expect(request.config.method).to.equal('delete');
 				chai.expect(request.config.url).to.equal(`api/trips/${tripId}/subscription`);
 				done();
-			});
+			}, 5);
 		});
 	});
 
@@ -87,7 +87,7 @@ describe('CollaborationDataAccess', () => {
 				chai.expect(data.user_email).to.equal(userEmail);
 				chai.expect(data.access_level).to.equal(accessLevel);
 				done();
-			});
+			}, 5);
 		});
 	});
 
@@ -100,7 +100,7 @@ describe('CollaborationDataAccess', () => {
 				chai.expect(request.config.method).to.equal('delete');
 				chai.expect(request.config.url).to.equal(`api/trip-collaborations/${collaborationId}`);
 				done();
-			});
+			}, 5);
 		});
 	});
 
@@ -116,7 +116,7 @@ describe('CollaborationDataAccess', () => {
 				const data = JSON.parse(request.config.data);
 				chai.expect(data.access_level).to.equal(accessLevel);
 				done();
-			});
+			}, 5);
 		});
 	});
 
@@ -132,7 +132,7 @@ describe('CollaborationDataAccess', () => {
 				const data = JSON.parse(request.config.data);
 				chai.expect(data.hash).to.equal(hash);
 				done();
-			});
+			}, 5);
 		});
 
 		it('should return tripId', () => {
@@ -159,7 +159,7 @@ describe('CollaborationDataAccess', () => {
 				chai.expect(request.config.method).to.equal('post');
 				chai.expect(request.config.url).to.equal(`api/trip-collaborations/${collaborationId}/resend-email`);
 				done();
-			});
+			}, 5);
 		});
 	});
 });

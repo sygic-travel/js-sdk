@@ -33,7 +33,7 @@ describe('StApi', () => {
 				const request = Moxios.requests.mostRecent();
 				chai.expect(request.config.baseURL).to.equal(testApiURL);
 				done();
-			});
+			}, 5);
 		});
 
 		it('should be called with correct client key', (done) => {
@@ -54,7 +54,7 @@ describe('StApi', () => {
 			Moxios.wait(() => {
 				const request = Moxios.requests.mostRecent();
 				chai.expect(request.headers['Authorization']).to.equal('Bearer ' + accessToken);
-			});
+			}, 5);
 		});
 	});
 
@@ -65,7 +65,7 @@ describe('StApi', () => {
 				const request = Moxios.requests.mostRecent();
 				chai.expect(request.config.baseURL).to.equal(testApiURL);
 				done();
-			});
+			}, 5);
 		});
 
 		it('should be called with correct client key', (done) => {
@@ -74,7 +74,7 @@ describe('StApi', () => {
 				const request = Moxios.requests.mostRecent();
 				chai.expect(request.headers['x-api-key']).to.equal(testClientKey);
 				done();
-			});
+			}, 5);
 		});
 
 		it('should correctly set access token and call api with it', (done) => {
@@ -87,7 +87,7 @@ describe('StApi', () => {
 				const request = Moxios.requests.mostRecent();
 				chai.expect(request.headers['Authorization']).to.equal('Bearer ' + accessToken);
 				done();
-			});
+			}, 5);
 		});
 	});
 
@@ -98,7 +98,7 @@ describe('StApi', () => {
 				const request = Moxios.requests.mostRecent();
 				chai.expect(request.config.baseURL).to.equal(testApiURL);
 				done();
-			});
+			}, 5);
 		});
 
 		it('should be called with correct client key', (done) => {
@@ -107,7 +107,7 @@ describe('StApi', () => {
 				const request = Moxios.requests.mostRecent();
 				chai.expect(request.headers['x-api-key']).to.equal(testClientKey);
 				done();
-			});
+			}, 5);
 		});
 
 		it('should correctly set access token and call api with it', (done) => {
@@ -120,7 +120,7 @@ describe('StApi', () => {
 				const request = Moxios.requests.mostRecent();
 				chai.expect(request.headers['Authorization']).to.equal('Bearer ' + accessToken);
 				done();
-			});
+			}, 5);
 		});
 	});
 });

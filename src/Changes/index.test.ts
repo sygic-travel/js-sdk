@@ -39,7 +39,7 @@ describe('ChangesController', () => {
 
 	describe('#initializeChangesWatching', () => {
 		it('should throw an error when passed tick interval is smaller than minimal interval limit', () => {
-			return chai.expect(initializeChangesWatching(1000)).to.be.rejected;
+			return chai.expect(initializeChangesWatching(1000)).to.be.rejected('Should be rejected');
 		});
 
 		it('should start changes watch and check for changes multiple times', (done) => {
@@ -104,7 +104,7 @@ describe('ChangesController', () => {
 
 			await initializeChangesWatching(5000);
 			clock.tick(6000);
-			return chai.expect(spy.notCalled).to.be.true;
+			return chai.expect(spy.notCalled).to.be.true('Expect true');
 		});
 
 		it('should handle changes after trip change is made remotely', async () => {
@@ -123,7 +123,7 @@ describe('ChangesController', () => {
 				id: 'xxx',
 				change: 'updated',
 				version: 3
-			} as ChangeNotification])).to.be.true;
+			} as ChangeNotification])).to.be.true('Expect true');
 		});
 
 		it('should not handle changes after trip was deleted locally', async () => {
@@ -160,7 +160,7 @@ describe('ChangesController', () => {
 				id: 'xxx',
 				change: 'deleted',
 				version: 3
-			} as ChangeNotification])).to.be.true;
+			} as ChangeNotification])).to.be.true('Expect true');
 		});
 
 		it('should not handle changes after favorite was added locally', async () => {
@@ -176,7 +176,7 @@ describe('ChangesController', () => {
 
 			await initializeChangesWatching(5000);
 			clock.tick(6000);
-			return chai.expect(spy.notCalled).to.be.true;
+			return chai.expect(spy.notCalled).to.be.true('Expect true');
 		});
 
 		it('should handle changes after favorite was added remotely', async () => {
@@ -216,7 +216,7 @@ describe('ChangesController', () => {
 				id: 'poi:530',
 				change: 'updated',
 				version: null
-			} as ChangeNotification])).to.be.true;
+			} as ChangeNotification])).to.be.true('Expect true');
 		});
 
 		it('should not handle changes when favorite was removed locally', async () => {
@@ -231,7 +231,7 @@ describe('ChangesController', () => {
 
 			await initializeChangesWatching(5000);
 			clock.tick(6000);
-			return chai.expect(spy.notCalled).to.be.true;
+			return chai.expect(spy.notCalled).to.be.true('Expect true');
 		});
 
 		it('should handle changes when favorite was removed remotely', async () => {
@@ -253,7 +253,7 @@ describe('ChangesController', () => {
 				id: 'poi:530',
 				change: 'deleted',
 				version: null
-			}])).to.be.true;
+			}])).to.be.true('Expect true');
 		});
 	});
 });
