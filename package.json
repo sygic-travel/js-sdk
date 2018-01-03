@@ -7,8 +7,7 @@
   "scripts": {
     "dev": "webpack-dev-server",
     "build": "webpack --config ./webpack.prod.config.js",
-    "test": "mocha-webpack -r jsdom-global/register --webpack-config webpack.config.js \"src/**/*.test.ts\" --reporter \"list\" --timeout 5000",
-    "test-watch": "mocha-webpack --watch -r jsdom-global/register --webpack-config webpack.config.js \"src/**/*.test.ts\" --reporter \"list\"",
+    "test": "mocha-webpack --webpack-config webpack.test.config.js \"src/**/*.test.ts\" --reporter \"list\" --timeout 5000",
     "doc": "typedoc --mode modules --excludeExternals --exclude \"**/*+(.test).ts\"  --out ./doc ./src"
   },
   "devDependencies": {
@@ -24,8 +23,6 @@
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "dirty-chai": "^2.0.1",
-    "jsdom": "^11.5.1",
-    "jsdom-global": "^3.0.2",
     "mocha": "^4.1.0",
     "mocha-webpack": "^1.0.1",
     "moxios": "^0.3.0",
@@ -40,7 +37,8 @@
     "typedoc": "^0.9.0",
     "typescript": "^2.6.0",
     "webpack": "^3.10.0",
-    "webpack-dev-server": "^2.9.7"
+    "webpack-dev-server": "^2.9.7",
+    "webpack-node-externals": "^1.6.0"
   },
   "dependencies": {
     "@mapbox/polyline": "^0.2.0",
