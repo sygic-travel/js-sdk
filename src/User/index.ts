@@ -26,7 +26,7 @@ export {
 };
 
 export async function getUserSession(): Promise<Session | null> {
-	let session = await Dao.getUserSession();
+	let session: Session | null = await Dao.getUserSession();
 	const now = new Date();
 	if (session && (now.getTime() > session.suggestedRefreshTimestamp || !session.suggestedRefreshTimestamp)) {
 		const authResponse: AuthResponse = await Dao.getSessionWithRefreshToken(session.refreshToken);

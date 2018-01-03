@@ -5,6 +5,7 @@ import { sandbox as sinonSandbox, SinonFakeTimers, SinonSandbox, SinonStub } fro
 import { Changes } from '../../index';
 import { ApiResponse, StApi } from '../Api';
 import { setEnvironment } from '../Settings';
+import { session as testSession } from '../TestData/UserInfoExpectedResults';
 import { setUserSession } from '../User/DataAccess';
 import ChangeWatcher from './ChangeWatcher';
 import ChangeNotification = Changes.ChangeNotification;
@@ -17,22 +18,20 @@ let changeWatcher: ChangeWatcher;
 const TICK_INTERVAL = 5000;
 
 describe('ChangeWatcher', () => {
-	before(async () => {
+	before(() => {
 		setEnvironment({ stApiUrl: 'api', integratorApiKey: '987654321' });
-		await setUserSession({
-			accessToken: '12345',
-			refreshToken: '54321',
-		});
 	});
 
-	beforeEach(() => {
+	beforeEach((done) => {
 		sandbox = sinonSandbox.create();
 		clock = sandbox.useFakeTimers((new Date()).getTime());
+		setUserSession(testSession).then(() => { done(); });
 	});
 
-	afterEach(() => {
+	afterEach((done) => {
 		sandbox.restore();
 		clock.restore();
+		setUserSession(null).then(() => { done(); });
 	});
 
 	describe('#start', () => {

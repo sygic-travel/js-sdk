@@ -35,8 +35,8 @@ describe('UserController', () => {
 
 		it('should should call refresh token when session is near expiration', async () => {
 			const refreshedSession: Session = cloneDeep(testSession);
-			refreshedSession.suggestedRefreshTimestamp += 2000;
-			refreshedSession.expirationTimestamp += 2000;
+			refreshedSession.suggestedRefreshTimestamp += 2000000;
+			refreshedSession.expirationTimestamp += 2000000;
 			const stub: SinonStub = sandbox.stub(Dao, 'getSessionWithRefreshToken').returns(
 				new Promise<AuthResponse>((resolve) => {
 				resolve({
