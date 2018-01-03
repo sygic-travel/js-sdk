@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var OptimizeJsPlugin = require('optimize-js-plugin');
+var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 var cloneDeep = require('lodash.clonedeep');
 
 var baseConfig = {
@@ -31,11 +32,6 @@ var baseConfig = {
 		new webpack.LoaderOptionsPlugin({
 			minimize: true,
 			debug: false
-		}),
-		new webpack.optimize.UglifyJsPlugin({
-			output: {
-				comments: false
-			}
 		})
 	]
 };
@@ -43,6 +39,13 @@ var baseConfig = {
 var browserConfig = cloneDeep(baseConfig);
 browserConfig.output.filename = 'SygicTravelSDK.js';
 browserConfig.target = 'web';
+browserConfig.plugins.push(
+	new UglifyJSPlugin({
+		uglifyOptions: {
+			ecma: 5
+		}
+	})
+);
 
 var nodeConfig = cloneDeep(baseConfig);
 nodeConfig.output.filename = 'SygicTravelSDK.node.js';
@@ -51,5 +54,12 @@ nodeConfig.node = { process: false };
 nodeConfig.plugins.push(new webpack.DefinePlugin({
 	'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
 }));
+nodeConfig.plugins.push(
+	new UglifyJSPlugin({
+		uglifyOptions: {
+			ecma: 6
+		}
+	})
+);
 
 module.exports = [browserConfig, nodeConfig];
