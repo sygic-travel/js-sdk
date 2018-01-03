@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "webpack-dev-server",
     "build": "webpack --config ./webpack.prod.config.js",
-    "test": "mocha-webpack --webpack-config webpack.test.config.js \"src/**/*.test.ts\" --reporter \"list\" --timeout 5000",
+    "test": "mocha -r ts-node/register \"src/**/*.test.ts\" --reporter \"list\" --timeout 5000",
     "doc": "typedoc --mode modules --excludeExternals --exclude \"**/*+(.test).ts\"  --out ./doc ./src"
   },
   "devDependencies": {
@@ -24,7 +24,6 @@
     "chai-as-promised": "^7.1.1",
     "dirty-chai": "^2.0.1",
     "mocha": "^4.1.0",
-    "mocha-webpack": "^1.0.1",
     "moxios": "^0.3.0",
     "optimize-js-plugin": "^0.0.4",
     "sinon": "^2.1.0",

@@ -33,8 +33,6 @@ export async function put(url: string, requestData): Promise<ApiResponse> {
 }
 
 async function buildRequestConfig(url: string, requestData?: any): Promise<AxiosRequestConfig> {
-	console.log(url);
-	console.trace();
 	let baseUrl = getStApiUrl();
 
 	if (url.indexOf('places/list') === -1) {
