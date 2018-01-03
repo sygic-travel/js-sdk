@@ -39,7 +39,7 @@ describe('SearchDataAccess', () => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
-			return chai.expect(Dao.search(query, location)).to.be.rejected;
+			return chai.expect(Dao.search(query, location)).to.be.rejected('Should be rejected');
 		});
 
 		it('should correctly map search response', () => {
@@ -58,7 +58,7 @@ describe('SearchDataAccess', () => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
-			return chai.expect(Dao.searchReverse(location)).to.be.rejected;
+			return chai.expect(Dao.searchReverse(location)).to.be.rejected('Should be rejected');
 		});
 
 		it('should correctly map search response', () => {

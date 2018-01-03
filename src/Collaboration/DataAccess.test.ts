@@ -60,7 +60,7 @@ describe('CollaborationDataAccess', () => {
 			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
-			return chai.expect(Dao.getTripCollaborations('')).to.be.rejected;
+			return chai.expect(Dao.getTripCollaborations('')).to.be.rejected('Should be rejected');
 		});
 
 		it('should correctly map collaborations api response', () => {

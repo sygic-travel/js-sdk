@@ -67,7 +67,7 @@ describe('TripController', () => {
 			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
-			return chai.expect(TripController.getTrips('2017-04-23', '2017-04-24')).to.be.rejected;
+			return chai.expect(TripController.getTrips('2017-04-23', '2017-04-24')).to.be.rejected('Should be rejected');
 		});
 
 		it('should return array of trips', () => {
@@ -91,7 +91,7 @@ describe('TripController', () => {
 			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
-			return chai.expect(TripController.getTripDetailed('1234567890')).to.be.rejected;
+			return chai.expect(TripController.getTripDetailed('1234567890')).to.be.rejected('Should be rejected');
 		});
 
 		it('should correctly map api response', () => {
@@ -148,7 +148,7 @@ describe('TripController', () => {
 
 			await TripController.updateTrip('123', { isDeleted: true });
 			const tripToBeUpdated: Trip = stub.getCall(0).args[0] as Trip;
-			return chai.expect(tripToBeUpdated.isDeleted).to.be.true;
+			return chai.expect(tripToBeUpdated.isDeleted).to.be.true('Expect true');
 		});
 
 		it('should call dao correctly when restoring a trip', async () => {
@@ -161,7 +161,7 @@ describe('TripController', () => {
 
 			await TripController.updateTrip('123', { isDeleted: false });
 			const tripToBeUpdated: Trip = stub.getCall(0).args[0] as Trip;
-			return chai.expect(tripToBeUpdated.isDeleted).to.be.false;
+			return chai.expect(tripToBeUpdated.isDeleted).to.be.false('Expect false');
 		});
 	});
 

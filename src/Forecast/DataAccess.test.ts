@@ -11,7 +11,7 @@ import * as TestExpectedResults from '../TestData/ForecastExpectedResults';
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
 
-describe('ForecastController', () => {
+describe('ForecastDataAccess', () => {
 	before((done) => {
 		setEnvironment({ stApiUrl: 'api', integratorApiKey: '987654321' });
 		done();
@@ -31,7 +31,7 @@ describe('ForecastController', () => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
-			return chai.expect(ForecastController.getDestinationWeather('123')).to.be.rejected;
+			return chai.expect(ForecastController.getDestinationWeather('123')).to.be.rejected('Should be rejected');
 		});
 
 		it('should correctly map api respose', () => {

@@ -89,7 +89,7 @@ describe('PlacesController', () => {
 				tags: []
 			};
 
-			return chai.expect(getPlaces(new PlacesListFilter(placesFilterJSON))).to.be.rejected;
+			return chai.expect(getPlaces(new PlacesListFilter(placesFilterJSON))).to.be.rejected('Should be rejected');
 		});
 
 		it('should return array of places', () => {

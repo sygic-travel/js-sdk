@@ -30,7 +30,7 @@ describe('FavoritesController', () => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
-			return chai.expect(FavoritesController.getFavoritesIds()).to.be.rejected;
+			return chai.expect(FavoritesController.getFavoritesIds()).to.be.rejected('Should be rejected');
 		});
 
 		it('should correctly get data from api response', () => {
