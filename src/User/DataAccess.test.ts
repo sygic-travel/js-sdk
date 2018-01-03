@@ -1,18 +1,20 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as dirtyChai from 'dirty-chai';
-import { assert, sandbox as sinonSandbox, SinonSandbox, SinonStub } from 'sinon';
+import { assert, sandbox as sinonSandbox, SinonFakeTimers, SinonSandbox, SinonStub } from 'sinon';
 
-import { AuthResponse, RegistrationResponseCode, Session, UserInfo, UserSettings } from '.';
+import { AuthResponse, RegistrationResponseCode, UserInfo, UserSettings } from '.';
 import { ApiResponse, SsoApi, StApi } from '../Api';
 import { userCache } from '../Cache';
 import { setEnvironment } from '../Settings';
 import { tokenData } from '../TestData/SsoApiResponses';
 import { userInfo as userInfoApiResponse } from '../TestData/UserInfoApiResponse';
-import { userInfo as userInfoResult } from '../TestData/UserInfoExpectedResults';
+import { session as testSession, userInfo as userInfoResult } from '../TestData/UserInfoExpectedResults';
 import * as Dao from './DataAccess';
 
 let sandbox: SinonSandbox;
+let clock: SinonFakeTimers;
+
 chai.use(chaiAsPromised);
 chai.use(dirtyChai);
 
@@ -24,11 +26,13 @@ describe('UserDataAccess', () => {
 
 	beforeEach(() => {
 		sandbox = sinonSandbox.create();
+		clock = sandbox.useFakeTimers(10000000);
 	});
 
 	afterEach(() => {
 		sandbox.restore();
 		userCache.reset();
+		clock.restore();
 	});
 
 	const settingsApiData = {
@@ -88,10 +92,6 @@ describe('UserDataAccess', () => {
 			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, tokenData));
 			}));
-			const testSession: Session = {
-				accessToken: tokenData.access_token,
-				refreshToken: tokenData.refresh_token
-			};
 			return Dao.getSessionWithDeviceId('id', 'platform').then((data) => {
 				chai.expect(data).to.deep.equal({code: 'OK', session: testSession});
 				chai.expect(apiStub.callCount).to.equal(1);
@@ -108,10 +108,6 @@ describe('UserDataAccess', () => {
 			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, tokenData));
 			}));
-			const testSession: Session = {
-				accessToken: tokenData.access_token,
-				refreshToken: tokenData.refresh_token
-			};
 			return Dao.getSessionWithPassword('name', 'pass').then((data) => {
 				chai.expect(data).to.deep.equal({code: 'OK', session: testSession});
 				chai.expect(apiStub.callCount).to.equal(1);
@@ -158,10 +154,6 @@ describe('UserDataAccess', () => {
 			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, tokenData));
 			}));
-			const testSession: Session = {
-				accessToken: tokenData.access_token,
-				refreshToken: tokenData.refresh_token
-			};
 			return Dao.getSessionWithJwt('asdfg.xxx.asdfg').then((data) => {
 				chai.expect(data).to.deep.equal({code: 'OK', session: testSession});
 				chai.expect(apiStub.callCount).to.equal(1);
@@ -187,10 +179,6 @@ describe('UserDataAccess', () => {
 			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, tokenData));
 			}));
-			const testSession: Session = {
-				accessToken: tokenData.access_token,
-				refreshToken: tokenData.refresh_token
-			};
 			return Dao.getSessionWithThirdPartyAuth('facebook', 'facebook_token', null).then((data) => {
 				chai.expect(data).to.deep.equal({code: 'OK', session: testSession});
 				chai.expect(apiStub.callCount).to.equal(1);
@@ -207,10 +195,6 @@ describe('UserDataAccess', () => {
 			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, tokenData));
 			}));
-			const testSession: Session = {
-				accessToken: tokenData.access_token,
-				refreshToken: tokenData.refresh_token
-			};
 			return Dao.getSessionWithThirdPartyAuth('facebook', null, 'auth_code').then((data) => {
 				chai.expect(data).to.deep.equal({code: 'OK', session: testSession});
 				chai.expect(apiStub.callCount).to.equal(1);
@@ -242,17 +226,29 @@ describe('UserDataAccess', () => {
 		});
 	});
 
+	describe('#getSessionWithRefreshToken', () => {
+		it('should get the token from api', () => {
+			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, tokenData));
+			}));
+
+			return Dao.getSessionWithRefreshToken('abcd').then((data) => {
+				chai.expect(data).to.deep.equal({code: 'OK', session: testSession});
+				chai.expect(apiStub.callCount).to.equal(1);
+				chai.expect(apiStub.getCall(0).args[0]).to.equal('oauth2/token');
+				chai.expect(apiStub.getCall(0).args[1]['token']).to.equal('abcd');
+				chai.expect(apiStub.getCall(0).args[1]['grant_type']).to.equal('refresh_token');
+			});
+		});
+
+	});
+
 	const regRequest = {
 		username: 'email@example.com',
 		email_is_verified: false,
 		email: 'email@example.com',
 		password: '12345678',
 		name: 'name'
-	};
-
-	const clientSession: Session = {
-		accessToken: tokenData.access_token,
-		refreshToken: tokenData.refresh_token
 	};
 
 	describe('#registerUser', () => {
@@ -265,7 +261,7 @@ describe('UserDataAccess', () => {
 					resolve(new ApiResponse(200, tokenData));
 				}));
 
-			apiStub.withArgs('user/register', regRequest, clientSession)
+			apiStub.withArgs('user/register', regRequest, testSession)
 				.returns(new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, response));
 				}));
@@ -288,7 +284,7 @@ describe('UserDataAccess', () => {
 				.returns(new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, tokenData));
 				}));
-			apiStub.withArgs('user/register', regRequest, clientSession)
+			apiStub.withArgs('user/register', regRequest, testSession)
 				.returns(new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(409, {type: ''}));
 				}));
@@ -303,7 +299,7 @@ describe('UserDataAccess', () => {
 				.returns(new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, tokenData));
 				}));
-			apiStub.withArgs('user/register', regRequest, clientSession)
+			apiStub.withArgs('user/register', regRequest, testSession)
 				.returns(new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(422, {type: 'validation.password.min_length'}));
 				}));
@@ -318,7 +314,7 @@ describe('UserDataAccess', () => {
 				.returns(new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, tokenData));
 				}));
-			apiStub.withArgs('user/register', regRequest, clientSession)
+			apiStub.withArgs('user/register', regRequest, testSession)
 				.returns(new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(422, {type: 'validation.email.invalid_format'}));
 				}));
@@ -333,7 +329,7 @@ describe('UserDataAccess', () => {
 				.returns(new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, tokenData));
 				}));
-			apiStub.withArgs('user/register', regRequest, clientSession)
+			apiStub.withArgs('user/register', regRequest, testSession)
 				.returns(new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(500, {type: ''}));
 				}));
@@ -345,10 +341,7 @@ describe('UserDataAccess', () => {
 
 	describe('#getUserInfo', () => {
 		it('should call api and handle result for active session', async () => {
-			await Dao.setUserSession({
-				accessToken: '123',
-				refreshToken: '321'
-			});
+			await Dao.setUserSession(testSession);
 			sandbox.stub(StApi, 'get').withArgs('user/info')
 				.returns(new Promise<ApiResponse>((resolve) => {
 					resolve(new ApiResponse(200, userInfoApiResponse));

@@ -9,7 +9,7 @@ export interface Session {
 
 export interface AuthResponse {
 	code: AuthenticationResponseCode;
-	session: Session|null;
+	session: Session | null;
 }
 
 const authenticationResponseCodeValues = listToEnum([

@@ -1,4 +1,5 @@
-import { UserInfo, UserLicense } from '../User';
+import { Session, UserInfo, UserLicense} from '../User';
+import { tokenData } from './SsoApiResponses';
 
 export const userInfo: UserInfo = {
 	id: '5665644fa0269',
@@ -14,4 +15,11 @@ export const userInfo: UserInfo = {
 		expirationAt: null,
 		isActive: true
 	} as UserLicense
+};
+
+export const session: Session = {
+	accessToken: tokenData.access_token,
+	refreshToken: tokenData.refresh_token,
+	suggestedRefreshTimestamp: 11800000,
+	expirationTimestamp: 13600000
 };

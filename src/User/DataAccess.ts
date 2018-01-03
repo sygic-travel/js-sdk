@@ -77,6 +77,17 @@ export async function getSessionWithJwt(
 	return authOnSso(request);
 }
 
+export async function getSessionWithRefreshToken(
+	token: string
+): Promise<AuthResponse> {
+	const request: any = {
+		grant_type: 'refresh_token',
+		token
+	};
+
+	return authOnSso(request);
+}
+
 export async function getSessionWithThirdPartyAuth(
 	type: ThirdPartyAuthType,
 	accessToken: string | null,
