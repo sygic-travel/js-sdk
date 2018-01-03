@@ -1,8 +1,11 @@
 import * as chai from 'chai';
+import * as dirtyChai from 'dirty-chai';
 import { Direction } from '.';
 import { Location } from '../Geo';
 
 import * as Estimator from './Estimator';
+
+chai.use(dirtyChai);
 
 describe('Estimator', () => {
 

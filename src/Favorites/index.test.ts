@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
+import * as dirtyChai from 'dirty-chai';
 import { assert, sandbox as sinonSandbox, SinonSandbox } from 'sinon';
 
 import { ApiResponse, StApi } from '../Api';
@@ -9,6 +10,7 @@ import { setEnvironment } from '../Settings';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
+chai.use(dirtyChai);
 
 describe('FavoritesController', () => {
 	before((done) => {

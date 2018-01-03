@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
+import * as dirtyChai from 'dirty-chai';
 import * as cloneDeep from 'lodash.clonedeep';
 import { assert, sandbox as sinonSandbox, SinonFakeTimers, SinonSandbox, SinonStub } from 'sinon';
 
@@ -15,6 +16,7 @@ import { Day, ItineraryItem, Trip, TripConflictHandler, TripTemplate } from './T
 let sandbox: SinonSandbox;
 let clock: SinonFakeTimers;
 chai.use(chaiAsPromised);
+chai.use(dirtyChai);
 
 describe('TripDataAccess', () => {
 	before((done) => {

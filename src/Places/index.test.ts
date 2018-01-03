@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
+import * as dirtyChai from 'dirty-chai';
 import * as cloneDeep from 'lodash.clonedeep';
 import 'mocha';
 import * as sinon from 'sinon';
@@ -23,6 +24,7 @@ import * as ExpectedResults from '../TestData/PlacesExpectedResults';
 
 let sandbox: sinon.SinonSandbox;
 chai.use(chaiAsPromised);
+chai.use(dirtyChai);
 
 describe('PlacesController', () => {
 	before((done) => {

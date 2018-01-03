@@ -1,7 +1,10 @@
 import * as chai from 'chai';
+import * as dirtyChai from 'dirty-chai';
 
 import { LogicalOperator } from './Filter';
 import { PlacesListFilter, PlacesListFilterJSON } from './ListFilter';
+
+chai.use(dirtyChai);
 
 describe('PlacesListFilter', () => {
 	describe('#filterToQueryString', () => {

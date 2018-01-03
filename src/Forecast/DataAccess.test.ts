@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
+import * as dirtyChai from 'dirty-chai';
 import { sandbox as sinonSandbox, SinonSandbox } from 'sinon';
 
 import * as ForecastController from '.';
@@ -10,6 +11,7 @@ import * as TestExpectedResults from '../TestData/ForecastExpectedResults';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
+chai.use(dirtyChai);
 
 describe('ForecastDataAccess', () => {
 	before((done) => {

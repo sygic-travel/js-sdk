@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
+import * as dirtyChai from 'dirty-chai';
 import { sandbox as sinonSandbox, SinonSandbox } from 'sinon';
 
 import { ApiResponse, StApi } from '../Api';
@@ -12,6 +13,7 @@ import { SearchTagsResult } from './SearchResult';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
+chai.use(dirtyChai);
 
 describe('SearchDataAccess', () => {
 	before((done) => {

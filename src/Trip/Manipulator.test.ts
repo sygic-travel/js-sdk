@@ -1,4 +1,5 @@
 import * as chai from 'chai';
+import * as dirtyChai from 'dirty-chai';
 import * as cloneDeep from 'lodash.clonedeep';
 
 import { Place } from '../Places';
@@ -6,6 +7,8 @@ import * as PlaceExpectedResults from '../TestData/PlacesExpectedResults';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
 import * as Manipulator from './Manipulator';
 import { Day, ItineraryItem, TransportSettings, Trip } from './Trip';
+
+chai.use(dirtyChai);
 
 describe('TripManipulator', () => {
 

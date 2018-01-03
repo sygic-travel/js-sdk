@@ -1,5 +1,8 @@
 import * as chai from 'chai';
+import * as dirtyChai from 'dirty-chai';
 import { CategoriesCoefficients, getRatingCoeficientFromCategories, isDisabledByCategory } from './Config';
+
+chai.use(dirtyChai);
 
 describe('Config', () => {
 

@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
+import * as dirtyChai from 'dirty-chai';
 import * as cloneDeep from 'lodash.clonedeep';
 import { sandbox as sinonSandbox, SinonSandbox, SinonStub } from 'sinon';
 
@@ -20,6 +21,7 @@ import * as User from '../User';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
+chai.use(dirtyChai);
 
 let userSettingsStub: SinonStub;
 
@@ -384,10 +386,16 @@ describe('TripController', () => {
 	describe('#removePlaceFromDaysByPlaceId', () => {
 		it('should remove places from days by place id', async () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => {resolve(inputTrip); }));
+			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => { resolve(inputTrip); }));
 			sandbox.stub(PlaceController, 'getPlacesDetailed').returns(
 				new Promise<PlaceController.Place[]>((resolve) => {resolve([]); })
 			);
+			sandbox.stub(TripDao, 'updateTrip').callsFake((trip) => {
+				return new Promise<Trip>((resolve) => {
+					resolve(trip);
+				});
+			});
+
 			const resultTrip: Trip = await TripController.removePlaceFromDaysByPlaceId('test', 'poi:2', [0, 1]);
 			const day1: Day = resultTrip.days![0];
 			const day2: Day = resultTrip.days![1];

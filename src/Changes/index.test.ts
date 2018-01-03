@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
+import * as dirtyChai from 'dirty-chai';
 import { sandbox as sinoSandbox, SinonFakeTimers, SinonSandbox, SinonSpy, SinonStub } from 'sinon';
 import { ApiResponse, StApi } from '../Api';
 
@@ -9,6 +10,7 @@ import { setEnvironment } from '../Settings';
 import { setUserSession } from '../User/DataAccess';
 import { ChangeNotification } from './ChangeNotification';
 
+chai.use(dirtyChai);
 chai.use(chaiAsPromised);
 
 let sandbox: SinonSandbox;
@@ -154,7 +156,8 @@ describe('ChangesController', () => {
 
 			await initializeChangesWatching(5000);
 			clock.tick(6000);
-			chai.expect(tripsDetailedCache.get('xxx')).to.eventually.be.null('Expect null');
+			const fromCache = await tripsDetailedCache.get('xxx');
+			chai.expect(fromCache).to.be.null('Expect null');
 			return chai.expect(spy.calledWithExactly([{
 				type: 'trip',
 				id: 'xxx',
@@ -210,7 +213,7 @@ describe('ChangesController', () => {
 
 			await initializeChangesWatching(5000);
 			clock.tick(6000);
-			chai.expect(favoritesCache.getAll()).to.eventually.eql(['poi:1', 'poi:2']);
+			chai.expect(await favoritesCache.getAll()).to.eql(['poi:1', 'poi:2']);
 			return chai.expect(spy.calledWithExactly([{
 				type: 'favorite',
 				id: 'poi:530',
@@ -247,7 +250,7 @@ describe('ChangesController', () => {
 
 			await initializeChangesWatching(5000);
 			clock.tick(6000);
-			chai.expect(favoritesCache.getAll()).to.eventually.eql([]);
+			chai.expect(await favoritesCache.getAll()).to.eql([]);
 			return chai.expect(spy.calledWithExactly([{
 				type: 'favorite',
 				id: 'poi:530',

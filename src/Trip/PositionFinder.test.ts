@@ -1,4 +1,5 @@
 import * as chai from 'chai';
+import * as dirtyChai from 'dirty-chai';
 import * as cloneDeep from 'lodash.clonedeep';
 
 import { Place } from '../Places';
@@ -14,6 +15,8 @@ const userSettings: UserSettings = {
 	homePlaceId: 'poi:home',
 	workPlaceId: 'poi:work'
 };
+
+chai.use(dirtyChai);
 
 describe('PositionFinder', () => {
 	describe('#getAddToTripInstructions', () => {

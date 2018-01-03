@@ -1,5 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
+import * as dirtyChai from 'dirty-chai';
 import * as Moxios from 'moxios';
 import { sandbox as sinonSandbox, SinonSandbox } from 'sinon';
 
@@ -12,6 +13,7 @@ import * as Dao from './DataAccess';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
+chai.use(dirtyChai);
 
 describe('CollaborationDataAccess', () => {
 	before((done) => {
