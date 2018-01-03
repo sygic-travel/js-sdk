@@ -1,6 +1,9 @@
 import * as chai from 'chai';
+import * as dirtyChai from 'dirty-chai';
 
 import { PlacesStatsFilter, PlacesStatsFilterJSON } from './StatsFilter';
+
+chai.use(dirtyChai);
 
 describe('PlacesStatsFilter', () => {
 	describe('#filterToQueryString', () => {
@@ -31,7 +34,7 @@ describe('PlacesStatsFilter', () => {
 			const modifiedFilter = filter.switchBoundsToMapTileBounds();
 			chai.expect(modifiedFilter).to.has.property('_bounds', null);
 			chai.expect(modifiedFilter).to.has.property('_mapTileBounds').deep.equal(['3000000000', '1222222212']);
-			chai.expect(filter).to.has.property('_mapTileBounds').undefined;
+			chai.expect(filter).to.has.property('_mapTileBounds').undefined('Expected true');
 		});
 	});
 

@@ -1,4 +1,5 @@
 import * as chai from 'chai';
+import * as dirtyChai from 'dirty-chai';
 import * as cloneDeep from 'lodash.clonedeep';
 
 import { Place } from '../Places';
@@ -14,6 +15,8 @@ const userSettings: UserSettings = {
 	homePlaceId: 'poi:home',
 	workPlaceId: 'poi:work'
 };
+
+chai.use(dirtyChai);
 
 describe('PositionFinder', () => {
 	describe('#getAddToTripInstructions', () => {
@@ -42,7 +45,7 @@ describe('PositionFinder', () => {
 			}];
 			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
 			chai.expect(result.position).to.equal(1);
-			chai.expect(result.shouldDuplicate).to.be.false;
+			chai.expect(result.shouldDuplicate).to.be.false('Expect false');
 		});
 
 		it('should return correct result day with two pois with unbreakable route', () => {
@@ -59,7 +62,7 @@ describe('PositionFinder', () => {
 			}];
 			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
 			chai.expect(result.position).to.equal(0);
-			chai.expect(result.shouldDuplicate).to.be.false;
+			chai.expect(result.shouldDuplicate).to.be.false('Expect false');
 			// Second poi is closer
 			trip.days = [{
 				note: null,
@@ -71,7 +74,7 @@ describe('PositionFinder', () => {
 			}];
 			const result2: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
 			chai.expect(result2.position).to.equal(2);
-			chai.expect(result2.shouldDuplicate).to.be.false;
+			chai.expect(result2.shouldDuplicate).to.be.false('Expect false');
 		});
 
 		it('should return correct for one ordinary poi with route to previous', () => {
@@ -94,7 +97,7 @@ describe('PositionFinder', () => {
 			];
 			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 1, ['city:1'], userSettings);
 			chai.expect(result.position).to.equal(1);
-			chai.expect(result.shouldDuplicate).to.be.false;
+			chai.expect(result.shouldDuplicate).to.be.false('Expect false');
 		});
 
 		it('should prefer place in same destination', () => {
@@ -113,7 +116,7 @@ describe('PositionFinder', () => {
 			];
 			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
 			chai.expect(result.position).to.equal(2);
-			chai.expect(result.shouldDuplicate).to.be.false;
+			chai.expect(result.shouldDuplicate).to.be.false('Expect false');
 		});
 
 		it('should handle only home in first day', () => {
@@ -129,7 +132,7 @@ describe('PositionFinder', () => {
 			];
 			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
 			chai.expect(result.position).to.equal(0);
-			chai.expect(result.shouldDuplicate).to.be.true;
+			chai.expect(result.shouldDuplicate).to.be.true('Expect false');
 
 			trip.days = [{
 				note: null,
@@ -147,7 +150,7 @@ describe('PositionFinder', () => {
 			];
 			const result2: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
 			chai.expect(result2.position).to.equal(1);
-			chai.expect(result2.shouldDuplicate).to.be.false;
+			chai.expect(result2.shouldDuplicate).to.be.false('Expect false');
 		});
 
 		it('should add before home in last day even when it is closer', () => {
@@ -168,7 +171,7 @@ describe('PositionFinder', () => {
 			];
 			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 1, ['city:1'], userSettings);
 			chai.expect(result.position).to.equal(1);
-			chai.expect(result.shouldDuplicate).to.be.false;
+			chai.expect(result.shouldDuplicate).to.be.false('Expect false');
 		});
 
 		it('should add correctly by distance', () => {
@@ -185,7 +188,7 @@ describe('PositionFinder', () => {
 			];
 			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
 			chai.expect(result.position).to.equal(2);
-			chai.expect(result.shouldDuplicate).to.be.false;
+			chai.expect(result.shouldDuplicate).to.be.false('Expect false');
 		});
 
 		it('should split two way sticky place', () => {
@@ -213,7 +216,7 @@ describe('PositionFinder', () => {
 			];
 			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 1, [], userSettings);
 			chai.expect(result.position).to.equal(0);
-			chai.expect(result.shouldDuplicate).to.be.true;
+			chai.expect(result.shouldDuplicate).to.be.true('Expect true');
 		});
 
 		it('should do duplication of place for route with plane between 2 sticky places', () => {
@@ -230,7 +233,7 @@ describe('PositionFinder', () => {
 			];
 			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
 			chai.expect(result.position).to.equal(0);
-			chai.expect(result.shouldDuplicate).to.be.true;
+			chai.expect(result.shouldDuplicate).to.be.true('Expect true');
 
 			trip.days = [{
 				note: null,
@@ -243,7 +246,7 @@ describe('PositionFinder', () => {
 			];
 			const result2: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
 			chai.expect(result2.position).to.equal(1);
-			chai.expect(result2.shouldDuplicate).to.be.true;
+			chai.expect(result2.shouldDuplicate).to.be.true('Expect true');
 		});
 
 		it('should not do duplication for route with car between 2 sticky places', () => {
@@ -260,7 +263,7 @@ describe('PositionFinder', () => {
 			];
 			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
 			chai.expect(result.position).to.equal(1);
-			chai.expect(result.shouldDuplicate).to.be.false;
+			chai.expect(result.shouldDuplicate).to.be.false('Expect false');
 
 			trip.days = [{
 				note: null,
@@ -273,7 +276,7 @@ describe('PositionFinder', () => {
 			];
 			const result2: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
 			chai.expect(result2.position).to.equal(1);
-			chai.expect(result2.shouldDuplicate).to.be.false;
+			chai.expect(result2.shouldDuplicate).to.be.false('Expect false');
 		});
 
 		it('should correctly add hotel if there is no sticky place', () => {
@@ -290,7 +293,7 @@ describe('PositionFinder', () => {
 			}];
 			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
 			chai.expect(result.position).to.equal(2);
-			chai.expect(result.shouldDuplicate).to.be.false;
+			chai.expect(result.shouldDuplicate).to.be.false('Expect false');
 		});
 
 		it('should correctly add hotel if there is already hotel', () => {
@@ -307,7 +310,7 @@ describe('PositionFinder', () => {
 			}];
 			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
 			chai.expect(result.position).to.equal(1);
-			chai.expect(result.shouldDuplicate).to.be.false;
+			chai.expect(result.shouldDuplicate).to.be.false('Expect false');
 		});
 	});
 });

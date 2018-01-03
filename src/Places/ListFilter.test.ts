@@ -1,7 +1,10 @@
 import * as chai from 'chai';
+import * as dirtyChai from 'dirty-chai';
 
 import { LogicalOperator } from './Filter';
 import { PlacesListFilter, PlacesListFilterJSON } from './ListFilter';
+
+chai.use(dirtyChai);
 
 describe('PlacesListFilter', () => {
 	describe('#filterToQueryString', () => {
@@ -110,7 +113,7 @@ describe('PlacesListFilter', () => {
 			const modifiedFilter = filter.cloneSetBounds(bounds);
 			chai.expect(modifiedFilter.bounds).to.be.deep.equal(bounds);
 			chai.expect(modifiedFilter.zoom).to.be.equal(1);
-			chai.expect(filter.bounds).to.be.null;
+			chai.expect(filter.bounds).to.be.null('Expect null');
 		});
 	});
 
@@ -122,7 +125,7 @@ describe('PlacesListFilter', () => {
 			const modifiedFilter = filter.cloneSetLimit(5);
 			chai.expect(modifiedFilter).to.has.property('_limit', 5);
 			chai.expect(modifiedFilter.zoom).to.be.equal(1);
-			chai.expect(filter).to.has.property('_limit').undefined;
+			chai.expect(filter).to.has.property('_limit').undefined('Expect undefined');
 		});
 	});
 
@@ -134,7 +137,7 @@ describe('PlacesListFilter', () => {
 			const modifiedFilter = filter.cloneSetMapTiles(['123']);
 			chai.expect(modifiedFilter).to.has.property('_mapTiles').deep.equal(['123']);
 			chai.expect(modifiedFilter.zoom).to.be.equal(1);
-			chai.expect(filter).to.has.property('_mapTiles').undefined;
+			chai.expect(filter).to.has.property('_mapTiles').undefined('Expect undefined');
 		});
 	});
 

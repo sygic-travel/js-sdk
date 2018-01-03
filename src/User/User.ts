@@ -1,8 +1,8 @@
 import { listToEnum } from '../Util';
 
 export interface UserSettings {
-	homePlaceId: string|null;
-	workPlaceId: string|null;
+	homePlaceId: string | null;
+	workPlaceId: string | null;
 }
 
 const thirdPartyAuthTypes = listToEnum([
@@ -16,18 +16,18 @@ export type ThirdPartyAuthType = keyof typeof thirdPartyAuthTypes;
 
 export interface UserInfo {
 	id: string;
-	name: string|null;
-	email: string|null;
+	name: string | null;
+	email: string | null;
 	roles: string[];
 	dateCreated: string;
 	isEmailSubscribed: boolean;
 	isRegistered: boolean;
-	photoUrl: string|null;
-	license: UserLicense|null;
+	photoUrl: string | null;
+	license: UserLicense | null;
 }
 
 export interface UserLicense {
 	isActive: boolean;
 	name: string;
-	expirationAt: string|null;
+	expirationAt: string | null;
 }

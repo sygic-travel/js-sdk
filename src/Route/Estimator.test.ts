@@ -1,8 +1,11 @@
 import * as chai from 'chai';
+import * as dirtyChai from 'dirty-chai';
 import { Direction } from '.';
 import { Location } from '../Geo';
 
 import * as Estimator from './Estimator';
+
+chai.use(dirtyChai);
 
 describe('Estimator', () => {
 
@@ -18,7 +21,7 @@ describe('Estimator', () => {
 			chai.expect(direction.avoid).to.deep.equal([]);
 			chai.expect(direction.isoCodes).to.deep.equal([]);
 			chai.expect(direction.source).to.equal('estimator');
-			chai.expect(direction.routeId).to.be.null;
+			chai.expect(direction.routeId).to.be.null('Expect null');
 		});
 
 	});

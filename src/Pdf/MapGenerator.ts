@@ -43,9 +43,9 @@ export async function generateDestinationSecondaryMaps(
 	query: PdfQuery,
 	sectorsForSecondaryMaps: PdfStaticMapSector[],
 ): Promise<PdfStaticMap[]> {
-	return await Promise.all(sectorsForSecondaryMaps.map(async (sector: PdfStaticMapSector) => {
+	return Promise.all(sectorsForSecondaryMaps.map(async (sector: PdfStaticMapSector) => {
 		const sectorPlaces: Place[] = sector!.places.map((sectorPlace: Place) => {
-			const place: Place|undefined = destinationPlaces.find((p: Place) => p.id === sectorPlace.id);
+			const place: Place | undefined = destinationPlaces.find((p: Place) => p.id === sectorPlace.id);
 			return place!;
 		});
 		const staticMap: StaticMap = await getStaticMap(

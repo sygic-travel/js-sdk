@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-import { SinonSandbox } from 'sinon';
-import * as sinon from 'sinon';
+import * as dirtyChai from 'dirty-chai';
+import { sandbox as sinonSandbox, SinonSandbox } from 'sinon';
 
 import * as ForecastController from '.';
 import { ApiResponse, StApi } from '../Api';
@@ -11,15 +11,16 @@ import * as TestExpectedResults from '../TestData/ForecastExpectedResults';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
+chai.use(dirtyChai);
 
-describe('ForecastController', () => {
+describe('ForecastDataAccess', () => {
 	before((done) => {
 		setEnvironment({ stApiUrl: 'api', integratorApiKey: '987654321' });
 		done();
 	});
 
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinonSandbox.create();
 	});
 
 	afterEach(() => {
@@ -32,7 +33,7 @@ describe('ForecastController', () => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
-			return chai.expect(ForecastController.getDestinationWeather('123')).to.be.rejected;
+			return chai.expect(ForecastController.getDestinationWeather('123')).to.be.rejected('Should be rejected');
 		});
 
 		it('should correctly map api respose', () => {

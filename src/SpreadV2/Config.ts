@@ -98,7 +98,7 @@ export function getRatingCoeficientFromCategories(
 	if (categories.length === 0) {
 		categories = ['no_category'];
 	}
-	return categories.reduce( (maxCoef, category) => {
+	return categories.reduce((maxCoef, category) => {
 		if (categoriesCoefficients[camelize(category)] && categoriesCoefficients[camelize(category)] > maxCoef) {
 			return categoriesCoefficients[camelize(category)];
 		}

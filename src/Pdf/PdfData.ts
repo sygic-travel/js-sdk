@@ -19,7 +19,7 @@ export interface PdfData {
 
 export interface PdfDestination {
 	destination: Place;
-	mainMap: PdfStaticMap|null;
+	mainMap: PdfStaticMap | null;
 	secondaryMaps: PdfStaticMap[];
 	places: Place[];
 	placeSources: Map<string, PlaceSource>;
@@ -48,7 +48,7 @@ export interface StaticMap {
 export interface GeneratingState {
 	generatingId: string;
 	state: 'generating' | 'done' | 'not_found' | 'timeout';
-	url: string|null;
+	url: string | null;
 }
 
 export enum PlaceSource {

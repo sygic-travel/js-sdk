@@ -21,4 +21,4 @@ export default class CollectionsModule {
 	): Promise<Collection[]> {
 		return getCollections(new CollectionsFilter(filter), loadPlaces, photoSize);
 	}
-};
+}

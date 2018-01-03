@@ -52,7 +52,7 @@ describe('Spreader', () => {
 				}
 			];
 			// Place out of canvas
-			const place2 = Object.assign({}, place);
+			const place2 = {...place};
 			place2.location = {lat: -0.3, lng: 10.3};
 			const spreaded = spread([place, place2], sizes, bounds, canvas);
 			chai.expect(spreaded.hidden.length).to.equal(0);
@@ -71,7 +71,7 @@ describe('Spreader', () => {
 				photoRequired: true
 			}
 		];
-		const placeWithoutImage = Object.assign({}, place);
+		const placeWithoutImage = {...place};
 		placeWithoutImage.thumbnailUrl = null;
 		let spreaded = spread([placeWithoutImage], sizes, bounds, canvas);
 		chai.expect(spreaded.hidden.length).to.equal(1);
@@ -116,7 +116,7 @@ describe('Spreader', () => {
 				name: 'small'
 			}
 		];
-		const place2 = Object.assign({}, place);
+		const place2 = {...place};
 		place2.location = {lat: 0.3, lng: 0.3};
 		place2.id = 'poi:2';
 		const spreaded = spread([place, place2], sizes, bounds, canvas);

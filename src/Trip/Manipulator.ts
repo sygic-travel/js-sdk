@@ -95,7 +95,12 @@ export function swapDaysInTrip(
 	return resolveStickiness(resultTrip, userSettings);
 }
 
-export function setTransport(trip: Trip, dayIndex: number, itemIndex: number, settings: TransportSettings|null): Trip {
+export function setTransport(
+	trip: Trip,
+	dayIndex: number,
+	itemIndex: number,
+	settings: TransportSettings | null
+): Trip {
 	checkItemExists(trip, dayIndex, itemIndex);
 
 	const resultTrip = cloneDeep(trip);
@@ -162,7 +167,7 @@ export function addPlaceToDay(
 		positionInDay = resultTrip.days[dayIndex].itinerary.length;
 	}
 
-	let nextItem: ItineraryItem|null = null;
+	let nextItem: ItineraryItem | null = null;
 	if (tripToBeUpdated.days![dayIndex].itinerary[positionInDay!]) {
 		nextItem = tripToBeUpdated.days![dayIndex].itinerary[positionInDay!];
 	}

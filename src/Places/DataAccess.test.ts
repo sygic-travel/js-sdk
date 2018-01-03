@@ -1,8 +1,7 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import { camelizeKeys } from 'humps';
-import { SinonSandbox } from 'sinon';
-import * as sinon from 'sinon';
+import { assert, sandbox as sinonSandbox, SinonSandbox, spy } from 'sinon';
 
 import { ApiResponse, StApi } from '../Api';
 import { placesDetailedCache as Cache } from '../Cache';
@@ -28,7 +27,7 @@ describe('PlacesDataAccess', () => {
 	});
 
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinonSandbox.create();
 		Cache.reset();
 	});
 
@@ -104,7 +103,7 @@ describe('PlacesDataAccess', () => {
 			const guid = 'region:1948650';
 
 			return Dao.getPlaceDetailed(guid, photoSize).then((result) => {
-				sinon.assert.calledOnce(stub);
+				assert.calledOnce(stub);
 				return chai.expect(result).to.deep.equal(ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
 			});
 		});
@@ -117,7 +116,7 @@ describe('PlacesDataAccess', () => {
 			const guid = 'region:1948650';
 			Cache.set(guid, TestData.placeDetailedEiffelTowerWithoutMedia.place);
 
-			sinon.assert.notCalled(stub);
+			assert.notCalled(stub);
 			return chai.expect(Dao.getPlaceDetailed(guid, photoSize))
 				.to.eventually.deep.equal(ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
 		});
@@ -128,8 +127,8 @@ describe('PlacesDataAccess', () => {
 		const expectedPlaces: Place[] = [];
 
 		for (let i = 1; i < 5; i++) {
-			const placeFormApi = Object.assign({}, TestData.placeDetailedEiffelTowerWithoutMedia.place);
-			const expectedPlace = Object.assign({}, ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			const placeFormApi = {...TestData.placeDetailedEiffelTowerWithoutMedia.place};
+			const expectedPlace = {...ExpectedResults.placeDetailedEiffelTowerWithoutMedia};
 			placeFormApi.id = 'poi:' + i;
 			expectedPlace.id = 'poi:' + i;
 			placesFromApi.push(placeFormApi);
@@ -144,7 +143,7 @@ describe('PlacesDataAccess', () => {
 			}));
 
 			return Dao.getPlacesDetailed(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
-				sinon.assert.calledOnce(stub);
+				assert.calledOnce(stub);
 				return chai.expect(result).to.deep.equal(expectedPlaces);
 			});
 		});
@@ -158,7 +157,7 @@ describe('PlacesDataAccess', () => {
 			const stub = sandbox.stub(StApi, 'get');
 
 			return Dao.getPlacesDetailed(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
-				sinon.assert.notCalled(stub);
+				assert.notCalled(stub);
 				return chai.expect(result).to.deep.equal(expectedPlaces);
 			});
 		});
@@ -174,7 +173,7 @@ describe('PlacesDataAccess', () => {
 			}));
 
 			return Dao.getPlacesDetailed(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
-				sinon.assert.calledOnce(stub);
+				assert.calledOnce(stub);
 				return chai.expect(result).to.deep.equal(expectedPlaces);
 			});
 		});
@@ -322,7 +321,7 @@ describe('PlacesDataAccess', () => {
 
 	describe('#deleteCustomPlace', () => {
 		it('should correctly call api delete and remove from cache', async () => {
-			const cacheSpy = sinon.spy(Cache, 'remove');
+			const cacheSpy = spy(Cache, 'remove');
 			const apiStub = sandbox.stub(StApi, 'delete_').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
@@ -339,8 +338,8 @@ describe('PlacesDataAccess', () => {
 			}));
 
 			const result: Place[] = await Dao.detectParentsByLocation({lat: 49.123, lng: 15.321});
-			sinon.assert.calledOnce(apiStub);
-			sinon.assert.calledWith(apiStub, 'places/detect-parents?location=49.123%2C15.321');
+			assert.calledOnce(apiStub);
+			assert.calledWith(apiStub, 'places/detect-parents?location=49.123%2C15.321');
 			chai.expect(result).to.deep.equal(ExpectedResults.places);
 		});
 	});

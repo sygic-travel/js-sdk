@@ -1,15 +1,16 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-import { SinonSandbox } from 'sinon';
-import * as sinon from 'sinon';
+import * as dirtyChai from 'dirty-chai';
+import { assert, sandbox as sinonSandbox, SinonSandbox } from 'sinon';
 
 import { ApiResponse, StApi } from '../Api';
 import * as FavoritesController from '../Favorites';
 import { Location } from '../Geo';
-import { setEnvironment } from '../Settings/index';
+import { setEnvironment } from '../Settings';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
+chai.use(dirtyChai);
 
 describe('FavoritesController', () => {
 	before((done) => {
@@ -18,7 +19,7 @@ describe('FavoritesController', () => {
 	});
 
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinonSandbox.create();
 	});
 
 	afterEach(() => {
@@ -31,7 +32,7 @@ describe('FavoritesController', () => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
-			return chai.expect(FavoritesController.getFavoritesIds()).to.be.rejected;
+			return chai.expect(FavoritesController.getFavoritesIds()).to.be.rejected('Should be rejected');
 		});
 
 		it('should correctly get data from api response', () => {
@@ -56,7 +57,7 @@ describe('FavoritesController', () => {
 			}));
 
 			FavoritesController.addPlaceToFavorites('poi:530');
-			sinon.assert.calledOnce(stub);
+			assert.calledOnce(stub);
 			done();
 		});
 	});
@@ -85,7 +86,7 @@ describe('FavoritesController', () => {
 			}));
 
 			FavoritesController.removePlaceFromFavorites('poi:530');
-			sinon.assert.calledOnce(stub);
+			assert.calledOnce(stub);
 			done();
 		});
 	});

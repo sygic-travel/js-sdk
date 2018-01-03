@@ -9,7 +9,7 @@ export {
 	FlightSearchResult,
 	isOvernight,
 	Route,
-}
+};
 
 export async function getFlights(query: FlightsQuery): Promise<FlightSearchResult[]> {
 	if (!query.adults) {

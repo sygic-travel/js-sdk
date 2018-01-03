@@ -7,8 +7,8 @@ export {
 	Hotel,
 	HotelsFilter,
 	HotelsFilterJSON
-}
+};
 
 export async function getHotels(filter: HotelsFilter): Promise<AvailableHotels> {
-	return await Dao.getHotels(filter);
+	return Dao.getHotels(filter);
 }

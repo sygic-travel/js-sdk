@@ -35,7 +35,7 @@ const GENERATING_STATE_CHECK_ATTEMPTS = 60;
 
 export async function generatePdf(tripId: string): Promise<GeneratingState> {
 	const initState: GeneratingState = await Dao.generatePdf(tripId);
-	if (initState.state !== 'generating' ) {
+	if (initState.state !== 'generating') {
 		return initState;
 	}
 	let checkCount = 0;
@@ -137,8 +137,8 @@ export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<
 	favoritesIdsWithDestinations.forEach((destination: Place, favoriteId: string) => {
 		if (destination && destinationIdsWithPlaces.has(destination.id)) {
 			placeIdsWithPlaceType.set(favoriteId, PlaceSource.FROM_FAVORITES);
-			const favorite: Place|undefined = userFavoritesMap.get(favoriteId);
-			const placesToBeMerged: Place[]|undefined = destinationIdsWithPlaces.get(destination.id);
+			const favorite: Place | undefined = userFavoritesMap.get(favoriteId);
+			const placesToBeMerged: Place[] | undefined = destinationIdsWithPlaces.get(destination.id);
 			destinationIdsWithPlaces.set(destination.id, mergePlacesArrays(
 				placesToBeMerged!,
 				[favorite!]
@@ -146,10 +146,10 @@ export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<
 		}
 	});
 
-	return { ...await filterUnnecessaryDestinations(
-			destinationIdsWithDestinations,
-			destinationIdsWithPlaces
-		), placeIdsWithPlaceType };
+	return {
+			...await filterUnnecessaryDestinations(destinationIdsWithDestinations, destinationIdsWithPlaces),
+			placeIdsWithPlaceType
+		};
 }
 
 async function createDestinationData(
@@ -205,13 +205,13 @@ async function generateDestinationMaps(destinationPlaces: Place[], query: PdfQue
 	return { mainMap, secondaryMaps };
 }
 
-async function getHomeDestinationId(homePlaceId: string|null): Promise<string|null> {
+async function getHomeDestinationId(homePlaceId: string | null): Promise<string | null> {
 	if (!homePlaceId) {
 		return null;
 	}
 
 	const homeDestinationMap: Map<string, Place> = await getPlacesDestinationMap([homePlaceId], imageSize);
-	const homeDestination: Place|undefined = homeDestinationMap.get(homePlaceId);
+	const homeDestination: Place | undefined = homeDestinationMap.get(homePlaceId);
 	return homeDestination ? homeDestination.id : null;
 }
 
@@ -223,8 +223,8 @@ async function filterUnnecessaryDestinations(
 	destinationIdsWithPlaces: Map<string, Place[]>
 }> {
 	const userSettings: UserSettings = await getUserSettings();
-	const homeDestinationId: string|null = await getHomeDestinationId(userSettings.homePlaceId);
-	const homeDestinationPlaces: Place[]|undefined = homeDestinationId ?
+	const homeDestinationId: string | null = await getHomeDestinationId(userSettings.homePlaceId);
+	const homeDestinationPlaces: Place[] | undefined = homeDestinationId ?
 		destinationIdsWithPlaces.get(homeDestinationId) : undefined;
 
 	if (homeDestinationId && homeDestinationPlaces && homeDestinationPlaces.length > 1) {
@@ -236,7 +236,7 @@ async function filterUnnecessaryDestinations(
 	destinationIdsWithPlaces.forEach((places: Place[], destinationId) => {
 		if (places.length === 1) {
 			const singlePlace: Place = places[0];
-			const airportTag: Tag|undefined = singlePlace.detail!.tags.find((tag: Tag) => (tag.name === 'Airport'));
+			const airportTag: Tag | undefined = singlePlace.detail!.tags.find((tag: Tag) => (tag.name === 'Airport'));
 			if (airportTag) {
 				destinationIdsToBeDeleted.push(destinationId);
 			}

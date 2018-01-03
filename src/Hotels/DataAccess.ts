@@ -12,7 +12,7 @@ export async function getHotels(filter: HotelsFilter): Promise<AvailableHotels> 
 	if (!apiResponse.data.hasOwnProperty('hotels')) {
 		throw new Error('Wrong API response');
 	}
-	const hotels = apiResponse.data.hotels.map( (hotelData: any) => {
+	const hotels = apiResponse.data.hotels.map((hotelData: any) => {
 		return {
 			place: mapPlace(hotelData.place, null),
 			bookingCom: camelizeKeys(hotelData.booking_com)

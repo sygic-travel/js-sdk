@@ -1,22 +1,30 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
+import * as dirtyChai from 'dirty-chai';
 import * as cloneDeep from 'lodash.clonedeep';
 import 'mocha';
-import { SinonSandbox } from 'sinon';
 import * as sinon from 'sinon';
 
-import {getPlaceDestination, isPlaceDestination, PlacesListFilter, PlacesListFilterJSON} from '.';
+import {
+	getPlaceDestination,
+	getPlaceDetailed,
+	getPlaces,
+	getPlacesDetailed,
+	isPlaceDestination,
+	mergePlacesArrays,
+	Place,
+	PlacesListFilter,
+	PlacesListFilterJSON
+} from '.';
 import { ApiResponse, StApi } from '../Api';
 import { setEnvironment } from '../Settings';
-import { mergePlacesArrays } from './index';
-import * as PlacesController from './index';
 
-import { Place } from '.';
 import * as TestData from '../TestData/PlacesApiResponses';
 import * as ExpectedResults from '../TestData/PlacesExpectedResults';
 
-let sandbox: SinonSandbox;
+let sandbox: sinon.SinonSandbox;
 chai.use(chaiAsPromised);
+chai.use(dirtyChai);
 
 describe('PlacesController', () => {
 	before((done) => {
@@ -41,7 +49,7 @@ describe('PlacesController', () => {
 			const guid = 'region:1948650';
 			const photoSize = '150x150';
 
-			return chai.expect(PlacesController.getPlaceDetailed(guid, photoSize))
+			return chai.expect(getPlaceDetailed(guid, photoSize))
 				.to.eventually.deep.equal(ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
 		});
 	});
@@ -49,13 +57,13 @@ describe('PlacesController', () => {
 	describe('#getPlacesDetailed', () => {
 		it('should correctly map api response', () => {
 
-			const place1 = Object.assign({}, TestData.placeDetailedEiffelTowerWithoutMedia.place);
-			const place2 = Object.assign({}, TestData.placeDetailedEiffelTowerWithoutMedia.place);
+			const place1 = {...TestData.placeDetailedEiffelTowerWithoutMedia.place};
+			const place2 = {...TestData.placeDetailedEiffelTowerWithoutMedia.place};
 			place1.id = 'poi:1';
 			place2.id = 'poi:2';
 
-			const expectedResult1 = Object.assign({}, ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
-			const expectedResult2 = Object.assign({}, ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			const expectedResult1 = {...ExpectedResults.placeDetailedEiffelTowerWithoutMedia};
+			const expectedResult2 = {...ExpectedResults.placeDetailedEiffelTowerWithoutMedia};
 			expectedResult1.id = 'poi:1';
 			expectedResult2.id = 'poi:2';
 
@@ -65,7 +73,7 @@ describe('PlacesController', () => {
 				}));
 			}));
 
-			return chai.expect(PlacesController.getPlacesDetailed(['poi:1', 'poi:2'], '150x150'))
+			return chai.expect(getPlacesDetailed(['poi:1', 'poi:2'], '150x150'))
 				.to.eventually.deep.equal([expectedResult1, expectedResult2]);
 		});
 	});
@@ -83,7 +91,7 @@ describe('PlacesController', () => {
 				tags: []
 			};
 
-			return chai.expect(PlacesController.getPlaces(new PlacesListFilter(placesFilterJSON))).to.be.rejected;
+			return chai.expect(getPlaces(new PlacesListFilter(placesFilterJSON))).to.be.rejected('Should be rejected');
 		});
 
 		it('should return array of places', () => {
@@ -98,7 +106,7 @@ describe('PlacesController', () => {
 				tags: []
 			};
 
-			return chai.expect(PlacesController.getPlaces(new PlacesListFilter(placesFilterJSON)))
+			return chai.expect(getPlaces(new PlacesListFilter(placesFilterJSON)))
 				.to.eventually.have.lengthOf(1);
 		});
 
@@ -114,7 +122,7 @@ describe('PlacesController', () => {
 				tags: []
 			};
 
-			return chai.expect(PlacesController.getPlaces(new PlacesListFilter(placesFilterJSON)))
+			return chai.expect(getPlaces(new PlacesListFilter(placesFilterJSON)))
 				.to.eventually.deep.equal(ExpectedResults.places);
 		});
 	});
@@ -123,15 +131,15 @@ describe('PlacesController', () => {
 		it('should return true if passed place id is a destination', () => {
 			const place: Place = cloneDeep(ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
 			place.level = 'city';
-			chai.expect(isPlaceDestination(place)).to.be.true;
+			chai.expect(isPlaceDestination(place)).to.be.true('Expected true');
 			place.level = 'town';
-			chai.expect(isPlaceDestination(place)).to.be.true;
+			chai.expect(isPlaceDestination(place)).to.be.true('Expected true');
 			place.level = 'village';
-			chai.expect(isPlaceDestination(place)).to.be.true;
+			chai.expect(isPlaceDestination(place)).to.be.true('Expected true');
 			place.level = 'island';
-			chai.expect(isPlaceDestination(place)).to.be.true;
+			chai.expect(isPlaceDestination(place)).to.be.true('Expected true');
 			place.level = 'poi';
-			chai.expect(isPlaceDestination(place)).to.be.false;
+			chai.expect(isPlaceDestination(place)).to.be.false('Expected false');
 		});
 	});
 

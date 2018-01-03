@@ -1,8 +1,8 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
+import * as dirtyChai from 'dirty-chai';
 import * as Moxios from 'moxios';
-import { SinonSandbox } from 'sinon';
-import * as sinon from 'sinon';
+import { sandbox as sinonSandbox, SinonSandbox } from 'sinon';
 
 import { ApiResponse, StApi } from '../Api';
 import { setEnvironment } from '../Settings';
@@ -13,6 +13,7 @@ import * as Dao from './DataAccess';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
+chai.use(dirtyChai);
 
 describe('CollaborationDataAccess', () => {
 	before((done) => {
@@ -21,7 +22,7 @@ describe('CollaborationDataAccess', () => {
 	});
 
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinonSandbox.create();
 		Moxios.install(StApi.axiosInstance);
 	});
 
@@ -39,7 +40,7 @@ describe('CollaborationDataAccess', () => {
 				chai.expect(request.config.method).to.equal('post');
 				chai.expect(request.config.url).to.equal(`api/trips/${tripId}/subscription`);
 				done();
-			});
+			}, 5);
 		});
 	});
 
@@ -52,7 +53,7 @@ describe('CollaborationDataAccess', () => {
 				chai.expect(request.config.method).to.equal('delete');
 				chai.expect(request.config.url).to.equal(`api/trips/${tripId}/subscription`);
 				done();
-			});
+			}, 5);
 		});
 	});
 
@@ -61,7 +62,7 @@ describe('CollaborationDataAccess', () => {
 			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
-			return chai.expect(Dao.getTripCollaborations('')).to.be.rejected;
+			return chai.expect(Dao.getTripCollaborations('')).to.be.rejected('Should be rejected');
 		});
 
 		it('should correctly map collaborations api response', () => {
@@ -88,7 +89,7 @@ describe('CollaborationDataAccess', () => {
 				chai.expect(data.user_email).to.equal(userEmail);
 				chai.expect(data.access_level).to.equal(accessLevel);
 				done();
-			});
+			}, 5);
 		});
 	});
 
@@ -101,7 +102,7 @@ describe('CollaborationDataAccess', () => {
 				chai.expect(request.config.method).to.equal('delete');
 				chai.expect(request.config.url).to.equal(`api/trip-collaborations/${collaborationId}`);
 				done();
-			});
+			}, 5);
 		});
 	});
 
@@ -117,7 +118,7 @@ describe('CollaborationDataAccess', () => {
 				const data = JSON.parse(request.config.data);
 				chai.expect(data.access_level).to.equal(accessLevel);
 				done();
-			});
+			}, 5);
 		});
 	});
 
@@ -133,7 +134,7 @@ describe('CollaborationDataAccess', () => {
 				const data = JSON.parse(request.config.data);
 				chai.expect(data.hash).to.equal(hash);
 				done();
-			});
+			}, 5);
 		});
 
 		it('should return tripId', () => {
@@ -160,7 +161,7 @@ describe('CollaborationDataAccess', () => {
 				chai.expect(request.config.method).to.equal('post');
 				chai.expect(request.config.url).to.equal(`api/trip-collaborations/${collaborationId}/resend-email`);
 				done();
-			});
+			}, 5);
 		});
 	});
 });

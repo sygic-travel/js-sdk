@@ -1,8 +1,8 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
+import * as dirtyChai from 'dirty-chai';
 import * as cloneDeep from 'lodash.clonedeep';
-import * as sinon from 'sinon';
-import { SinonSandbox, SinonStub } from 'sinon';
+import { sandbox as sinonSandbox, SinonSandbox, SinonStub } from 'sinon';
 
 import * as TripController from '.';
 import * as TripDao from './DataAccess';
@@ -12,7 +12,6 @@ import { Day, ItineraryItem, Trip } from './Trip';
 import { ApiResponse, StApi } from '../Api';
 import { tripsDetailedCache } from '../Cache';
 import * as PlaceController from '../Places';
-import { Place } from '../Places';
 import { setEnvironment } from '../Settings';
 import * as PlaceTestData from '../TestData/PlacesApiResponses';
 import * as PlaceExpectedResults from '../TestData/PlacesExpectedResults';
@@ -22,6 +21,7 @@ import * as User from '../User';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
+chai.use(dirtyChai);
 
 let userSettingsStub: SinonStub;
 
@@ -32,7 +32,7 @@ describe('TripController', () => {
 	});
 
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinonSandbox.create();
 		userSettingsStub = sandbox.stub(User, 'getUserSettings').returns(new Promise<User.UserSettings>((resolve) => {
 			resolve({homePlaceId: null, workPlaceId: null});
 		}));
@@ -69,7 +69,7 @@ describe('TripController', () => {
 			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
-			return chai.expect(TripController.getTrips('2017-04-23', '2017-04-24')).to.be.rejected;
+			return chai.expect(TripController.getTrips('2017-04-23', '2017-04-24')).to.be.rejected('Should be rejected');
 		});
 
 		it('should return array of trips', () => {
@@ -93,7 +93,7 @@ describe('TripController', () => {
 			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {}));
 			}));
-			return chai.expect(TripController.getTripDetailed('1234567890')).to.be.rejected;
+			return chai.expect(TripController.getTripDetailed('1234567890')).to.be.rejected('Should be rejected');
 		});
 
 		it('should correctly map api response', () => {
@@ -150,7 +150,7 @@ describe('TripController', () => {
 
 			await TripController.updateTrip('123', { isDeleted: true });
 			const tripToBeUpdated: Trip = stub.getCall(0).args[0] as Trip;
-			return chai.expect(tripToBeUpdated.isDeleted).to.be.true;
+			return chai.expect(tripToBeUpdated.isDeleted).to.be.true('Expect true');
 		});
 
 		it('should call dao correctly when restoring a trip', async () => {
@@ -163,7 +163,7 @@ describe('TripController', () => {
 
 			await TripController.updateTrip('123', { isDeleted: false });
 			const tripToBeUpdated: Trip = stub.getCall(0).args[0] as Trip;
-			return chai.expect(tripToBeUpdated.isDeleted).to.be.false;
+			return chai.expect(tripToBeUpdated.isDeleted).to.be.false('Expect false');
 		});
 	});
 
@@ -273,7 +273,7 @@ describe('TripController', () => {
 			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => {resolve(inputTrip); }));
 			sandbox.stub(Mapper, 'putPlacesToTrip').returns(new Promise<Trip>((resolve) => {resolve(inputTrip); }));
 			const getPlacesStub = sandbox.stub(PlaceController, 'getPlacesDetailed');
-			getPlacesStub.returns(new Promise<Place[]>((resolve) => {resolve([]); }));
+			getPlacesStub.returns(new Promise<PlaceController.Place[]>((resolve) => {resolve([]); }));
 
 			// Update trip stub
 			sandbox.stub(TripDao, 'updateTrip').callsFake((trip) => {
@@ -313,7 +313,7 @@ describe('TripController', () => {
 			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => { resolve(inputTrip); }));
 			sandbox.stub(Mapper, 'putPlacesToTrip').returns(new Promise<Trip>((resolve) => { resolve(inputTrip); }));
 			const getPlacesStub = sandbox.stub(PlaceController, 'getPlacesDetailed');
-			getPlacesStub.returns(new Promise<Place[]>((resolve) => {resolve([]); }));
+			getPlacesStub.returns(new Promise<PlaceController.Place[]>((resolve) => {resolve([]); }));
 
 			// Update trip stub
 			sandbox.stub(TripDao, 'updateTrip').callsFake((trip) => {
@@ -386,8 +386,16 @@ describe('TripController', () => {
 	describe('#removePlaceFromDaysByPlaceId', () => {
 		it('should remove places from days by place id', async () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => {resolve(inputTrip); }));
-			sandbox.stub(PlaceController, 'getPlacesDetailed').returns(new Promise<Place[]>((resolve) => {resolve([]); }));
+			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => { resolve(inputTrip); }));
+			sandbox.stub(PlaceController, 'getPlacesDetailed').returns(
+				new Promise<PlaceController.Place[]>((resolve) => {resolve([]); })
+			);
+			sandbox.stub(TripDao, 'updateTrip').callsFake((trip) => {
+				return new Promise<Trip>((resolve) => {
+					resolve(trip);
+				});
+			});
+
 			const resultTrip: Trip = await TripController.removePlaceFromDaysByPlaceId('test', 'poi:2', [0, 1]);
 			const day1: Day = resultTrip.days![0];
 			const day2: Day = resultTrip.days![1];

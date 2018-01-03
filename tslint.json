@@ -1,5 +1,5 @@
 {
-  "extends": "tslint:latest",
+  "extends": ["tslint:latest"],
   "rules": {
     "quotemark": [true, "single"],
     "indent": [true, "tabs"],
@@ -13,7 +13,9 @@
     "no-namespace": false,
     "no-string-literal": false,
     "no-empty": false,
-    "max-classes-per-file": [false]
+    "max-classes-per-file": [false],
+    "no-object-literal-type-assertion": false,
+    "no-implicit-dependencies": [true, "dev"]
   },
   "rulesDirectory": []
 }

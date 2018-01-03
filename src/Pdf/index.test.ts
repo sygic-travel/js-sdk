@@ -1,15 +1,12 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as cloneDeep from 'lodash.clonedeep';
-import { SinonSandbox, SinonStub } from 'sinon';
-import * as sinon from 'sinon';
+import { sandbox as sinonSandbox, SinonSandbox, SinonStub } from 'sinon';
 import { ApiResponse, StApi } from '../Api';
 import * as FavoritesController from '../Favorites';
-import { Place } from '../Places';
 import * as PlacesController from '../Places';
 
-import * as PdfController from '.';
-import { GeneratingState } from '.';
+import { buildDestinationsAndPlaces, generatePdf, GeneratingState } from '.';
 
 import { setEnvironment } from '../Settings/';
 import * as pdfApiResponses from '../TestData/PdfApiResponses';
@@ -36,7 +33,7 @@ describe('PdfController', () => {
 	});
 
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinonSandbox.create();
 	});
 
 	afterEach(() => {
@@ -45,14 +42,14 @@ describe('PdfController', () => {
 
 	describe('#buildDestinationsAndPlaces', () => {
 		it('should get all destination with places from trip', async () => {
-			const placeIdsAndPlacesFromTrip: Map<string, Place> = new Map<string, Place>();
-			const placeFromTrip1: Place = cloneDeep(placeMock);
+			const placeIdsAndPlacesFromTrip: Map<string, PlacesController.Place> = new Map<string, PlacesController.Place>();
+			const placeFromTrip1: PlacesController.Place = cloneDeep(placeMock);
 			placeFromTrip1.id = 'poi:1';
 			placeFromTrip1.parents = ['city:1'];
-			const placeFromTrip2: Place = cloneDeep(placeMock);
+			const placeFromTrip2: PlacesController.Place = cloneDeep(placeMock);
 			placeFromTrip2.id = 'poi:2';
 			placeFromTrip2.parents = ['city:2'];
-			const placeFromTrip3: Place = cloneDeep(placeMock);
+			const placeFromTrip3: PlacesController.Place = cloneDeep(placeMock);
 			placeFromTrip3.id = 'poi:3';
 			placeFromTrip3.parents = ['city:2'];
 
@@ -60,22 +57,22 @@ describe('PdfController', () => {
 			placeIdsAndPlacesFromTrip.set(placeFromTrip2.id, placeFromTrip2);
 			placeIdsAndPlacesFromTrip.set(placeFromTrip3.id, placeFromTrip3);
 
-			const placesDestinationMap: Map<string, Place> = new Map<string, Place>();
+			const placesDestinationMap: Map<string, PlacesController.Place> = new Map<string, PlacesController.Place>();
 			placesDestinationMap.set('poi:1', destination1);
 			placesDestinationMap.set('poi:2', destination2);
 			placesDestinationMap.set('poi:3', destination2);
 
-			const placeFromFavorites1: Place = cloneDeep(placeMock);
+			const placeFromFavorites1: PlacesController.Place = cloneDeep(placeMock);
 			placeFromFavorites1.id = 'poi:1234';
 			placeFromFavorites1.parents = ['city:1'];
-			const favoritesDetailedMap: Map<string, Place> = new Map<string, Place>();
+			const favoritesDetailedMap: Map<string, PlacesController.Place> = new Map<string, PlacesController.Place>();
 			favoritesDetailedMap.set(placeFromFavorites1.id, placeFromFavorites1);
-			const favoritesDestinationMap: Map<string, Place> = new Map<string, Place>();
+			const favoritesDestinationMap: Map<string, PlacesController.Place> = new Map<string, PlacesController.Place>();
 			favoritesDestinationMap.set(placeFromFavorites1.id, destination1);
 
-			const homeDestination: Place = cloneDeep(placeMock);
+			const homeDestination: PlacesController.Place = cloneDeep(placeMock);
 			homeDestination.id = 'country:999';
-			const homeDestinationMap: Map<string, Place> = new Map<string, Place>();
+			const homeDestinationMap: Map<string, PlacesController.Place> = new Map<string, PlacesController.Place>();
 			homeDestinationMap.set('poi:999', homeDestination);
 
 			sandbox.stub(User, 'getUserSettings').returns(new Promise<User.UserSettings>((resolve) => {
@@ -94,7 +91,7 @@ describe('PdfController', () => {
 			const {
 				destinationIdsWithDestinations,
 				destinationIdsWithPlaces
-			} = await PdfController.buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip);
+			} = await buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip);
 
 			chai.expect(destinationIdsWithDestinations.size).to.eq(2);
 			chai.expect(Array.from(destinationIdsWithDestinations.keys())).to.deep.eq(['city:1', 'city:2']);
@@ -114,7 +111,7 @@ describe('PdfController', () => {
 				resolve(new ApiResponse(200, pdfApiResponses.pdfDone));
 			}));
 			const apiGetStub: SinonStub = sandbox.stub(StApi, 'get');
-			const state: GeneratingState = await PdfController.generatePdf('xyz');
+			const state: GeneratingState = await generatePdf('xyz');
 			chai.expect(apiPostStub.callCount).to.equal(1);
 			chai.expect(apiGetStub.callCount).to.equal(0);
 			chai.expect(state).to.deep.equal(pdfResults.pdfDoneResult);
@@ -125,7 +122,7 @@ describe('PdfController', () => {
 				resolve(new ApiResponse(200, pdfApiResponses.pdfNotFound));
 			}));
 			const apiGetStub: SinonStub = sandbox.stub(StApi, 'get');
-			const state: GeneratingState = await PdfController.generatePdf('xyz');
+			const state: GeneratingState = await generatePdf('xyz');
 			chai.expect(apiPostStub.callCount).to.equal(1);
 			chai.expect(apiGetStub.callCount).to.equal(0);
 			chai.expect(state).to.deep.equal(pdfResults.pdfNotFoundResult);

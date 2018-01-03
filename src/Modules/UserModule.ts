@@ -21,14 +21,14 @@ export default class UserModule {
 	/**
 	 * @experimental
 	 */
-	public setUserSession(userSession: Session|null): Promise<void> {
+	public setUserSession(userSession: Session | null): Promise<void> {
 		return setUserSession(userSession);
 	}
 
 	/**
 	 * @experimental
 	 */
-	public getUserSession(): Promise<Session|null> {
+	public getUserSession(): Promise<Session | null> {
 		return getUserSession();
 	}
 
@@ -76,8 +76,8 @@ export default class UserModule {
 	 * @experimental
 	 */
 	public loginUserWithFacebook(
-		accessToken: string|null,
-		authorizationCode: string|null,
+		accessToken: string | null,
+		authorizationCode: string | null,
 		deviceId?: string,
 		devicePlatform?: string
 	): Promise<AuthenticationResponseCode> {
@@ -88,8 +88,8 @@ export default class UserModule {
 	 * @experimental
 	 */
 	public loginUserWithGoogle(
-		accessToken: string|null,
-		authorizationCode: string|null,
+		accessToken: string | null,
+		authorizationCode: string | null,
 		deviceId?: string,
 		devicePlatform?: string
 	): Promise<AuthenticationResponseCode> {

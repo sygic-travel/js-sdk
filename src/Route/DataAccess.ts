@@ -8,7 +8,7 @@ export async function getRoutes(requests: RouteRequest[]): Promise<Route[]> {
 	const cached = await cache.getBatchMap(keys);
 	const routesData: any[] = keys.map((key: string) => (cached.get(key)));
 	const apiData =  await getFromApi(requests.filter((request: RouteRequest, index: number) => (!routesData[index])));
-	return routesData.map((routeData: object|null) => {
+	return routesData.map((routeData: object | null) => {
 		if (routeData === null) {
 			return apiData.shift();
 		}
@@ -41,7 +41,7 @@ async function getFromApi(requests: RouteRequest[]): Promise<object[]> {
 	}));
 
 	const response: ApiResponse = await StApi.post('/directions/path', apiRequestData);
-	response.data.path.map( (routeData, index) => {
+	response.data.path.map((routeData, index) => {
 		cache.set(createCacheKey(requests[index]), routeData);
 	});
 	return response.data.path;

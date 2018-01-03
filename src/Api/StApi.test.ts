@@ -1,5 +1,5 @@
 import * as chai from 'chai';
-import * as Moxios from 'moxios';
+import * as moxios from 'moxios';
 
 import { setEnvironment } from '../Settings';
 import { setUserSession } from '../User';
@@ -19,27 +19,27 @@ describe('StApi', () => {
 	});
 
 	beforeEach(() => {
-		Moxios.install(axiosInstance);
+		moxios.install(axiosInstance);
 	});
 
 	afterEach(() => {
-		Moxios.uninstall(axiosInstance);
+		moxios.uninstall(axiosInstance);
 	});
 
 	describe('#get', () => {
 		it('should be called with correct base Url', (done) => {
 			get('/');
-			Moxios.wait(() => {
-				const request = Moxios.requests.mostRecent();
+			moxios.wait(() => {
+				const request = moxios.requests.mostRecent();
 				chai.expect(request.config.baseURL).to.equal(testApiURL);
 				done();
-			});
+			}, 5);
 		});
 
 		it('should be called with correct client key', (done) => {
 			get('/');
-			Moxios.wait(() => {
-				const request = Moxios.requests.mostRecent();
+			moxios.wait(() => {
+				const request = moxios.requests.mostRecent();
 				chai.expect(request.headers['x-api-key']).to.equal(testClientKey);
 				done();
 			});
@@ -51,30 +51,30 @@ describe('StApi', () => {
 				refreshToken: 'refresh_token'
 			});
 			get('/');
-			Moxios.wait(() => {
-				const request = Moxios.requests.mostRecent();
+			moxios.wait(() => {
+				const request = moxios.requests.mostRecent();
 				chai.expect(request.headers['Authorization']).to.equal('Bearer ' + accessToken);
-			});
+			}, 5);
 		});
 	});
 
 	describe('#post', () => {
 		it('should be called with correct base Url', (done) => {
 			post('/', null);
-			Moxios.wait(() => {
-				const request = Moxios.requests.mostRecent();
+			moxios.wait(() => {
+				const request = moxios.requests.mostRecent();
 				chai.expect(request.config.baseURL).to.equal(testApiURL);
 				done();
-			});
+			}, 5);
 		});
 
 		it('should be called with correct client key', (done) => {
 			post('/', null);
-			Moxios.wait(() => {
-				const request = Moxios.requests.mostRecent();
+			moxios.wait(() => {
+				const request = moxios.requests.mostRecent();
 				chai.expect(request.headers['x-api-key']).to.equal(testClientKey);
 				done();
-			});
+			}, 5);
 		});
 
 		it('should correctly set access token and call api with it', (done) => {
@@ -83,31 +83,31 @@ describe('StApi', () => {
 				refreshToken: 'refresh_token'
 			});
 			post('/', null);
-			Moxios.wait(() => {
-				const request = Moxios.requests.mostRecent();
+			moxios.wait(() => {
+				const request = moxios.requests.mostRecent();
 				chai.expect(request.headers['Authorization']).to.equal('Bearer ' + accessToken);
 				done();
-			});
+			}, 5);
 		});
 	});
 
 	describe('#put', () => {
 		it('should be called with correct base Url', (done) => {
 			put('/', null);
-			Moxios.wait(() => {
-				const request = Moxios.requests.mostRecent();
+			moxios.wait(() => {
+				const request = moxios.requests.mostRecent();
 				chai.expect(request.config.baseURL).to.equal(testApiURL);
 				done();
-			});
+			}, 5);
 		});
 
 		it('should be called with correct client key', (done) => {
 			put('/', null);
-			Moxios.wait(() => {
-				const request = Moxios.requests.mostRecent();
+			moxios.wait(() => {
+				const request = moxios.requests.mostRecent();
 				chai.expect(request.headers['x-api-key']).to.equal(testClientKey);
 				done();
-			});
+			}, 5);
 		});
 
 		it('should correctly set access token and call api with it', (done) => {
@@ -116,11 +116,11 @@ describe('StApi', () => {
 				refreshToken: 'refresh_token'
 			});
 			put('/', null);
-			Moxios.wait(() => {
-				const request = Moxios.requests.mostRecent();
+			moxios.wait(() => {
+				const request = moxios.requests.mostRecent();
 				chai.expect(request.headers['Authorization']).to.equal('Bearer ' + accessToken);
 				done();
-			});
+			}, 5);
 		});
 	});
 });

@@ -8,7 +8,7 @@ export function mapFlights(
 	airlines: Map<string, Airline>
 ): FlightSearchResult[] {
 	return data.map((flight) => {
-		let inbound: Flight|null = null;
+		let inbound: Flight | null = null;
 		if (flight.routes[1]) {
 			inbound = buildFlight(
 				flight.routes[1],
@@ -47,7 +47,7 @@ function buildFlight(
 		const departureTime = new Date();
 		arrivalTime.setTime(routes[i].aTime * 1000);
 		departureTime.setTime(routes[i].dTime * 1000);
-		let stopOver: number|null = null;
+		let stopOver: number | null = null;
 		if (flightRoutes[i - 1]) {
 			stopOver = (departureTime.getTime() - flightRoutes[i - 1].arrivalTime.getTime()) / 1000;
 		}

@@ -24,7 +24,7 @@ export default class ChangeWatcher {
 	}
 
 	private async checkChanges(): Promise<void> {
-		const session: Session|null = await getUserSession();
+		const session: Session | null = await getUserSession();
 		if (!session) {
 			return;
 		}

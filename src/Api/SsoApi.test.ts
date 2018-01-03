@@ -7,7 +7,7 @@ import { axiosInstance, get, post } from './SsoApi';
 const testApiURL = 'https://test.api/';
 const ssoClient = 'sso_client';
 
-describe('StApi', () => {
+describe('SsoApi', () => {
 	before((done) => {
 		setEnvironment({
 			ssoClientId: ssoClient,
@@ -31,7 +31,7 @@ describe('StApi', () => {
 				const request = Moxios.requests.mostRecent();
 				chai.expect(request.config.baseURL).to.equal(testApiURL);
 				done();
-			});
+			}, 5);
 		});
 	});
 
@@ -42,7 +42,7 @@ describe('StApi', () => {
 				const request = Moxios.requests.mostRecent();
 				chai.expect(request.config.baseURL).to.equal(testApiURL);
 				done();
-			});
+			}, 5);
 		});
 
 		it('should be called with correct Content-Type header', (done) => {
@@ -51,7 +51,7 @@ describe('StApi', () => {
 				const request = Moxios.requests.mostRecent();
 				chai.expect(request.headers['Content-Type']).to.equal('application/json');
 				done();
-			});
+			}, 5);
 		});
 
 		it('should add client id to data if missing', (done) => {
@@ -60,7 +60,7 @@ describe('StApi', () => {
 				const request = Moxios.requests.mostRecent();
 				chai.expect(JSON.parse(request.config.data)['client_id']).to.equal(ssoClient);
 				done();
-			});
+			}, 5);
 		});
 
 		it('should not touch client id to data if present', (done) => {
@@ -72,7 +72,7 @@ describe('StApi', () => {
 				const request = Moxios.requests.mostRecent();
 				chai.expect(JSON.parse(request.config.data)['client_id']).to.equal(clientId);
 				done();
-			});
+			}, 5);
 		});
 
 		it('should add Authorozation header if session is passed', (done) => {
@@ -81,7 +81,7 @@ describe('StApi', () => {
 				const request = Moxios.requests.mostRecent();
 				chai.expect(request.headers['Authorization']).to.equal('Bearer 123');
 				done();
-			});
+			}, 5);
 		});
 	});
 

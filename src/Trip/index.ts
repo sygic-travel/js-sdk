@@ -49,15 +49,15 @@ export {
 };
 
 export async function createTrip(startDate: string, name: string, daysCount: number, placeId?: string): Promise<Trip> {
-	return await Dao.createTrip(mapTripCreateRequest(startDate, name, daysCount, placeId));
+	return Dao.createTrip(mapTripCreateRequest(startDate, name, daysCount, placeId));
 }
 
 export async function getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trip[]> {
-	return await Dao.getTrips(dateFrom, dateTo);
+	return Dao.getTrips(dateFrom, dateTo);
 }
 
 export async function getTripsInTrash(): Promise<Trip[]> {
-	return await Dao.getTripsInTrash();
+	return Dao.getTripsInTrash();
 }
 
 export async function getTripDetailed(id: string): Promise<Trip> {
@@ -106,7 +106,7 @@ export async function updateTrip(id: string, dataToUpdate: TripUpdateData): Prom
 		tripToBeUpdated.isDeleted = dataToUpdate.isDeleted;
 	}
 
-	return await Dao.updateTrip(tripToBeUpdated);
+	return Dao.updateTrip(tripToBeUpdated);
 }
 
 export async function addDaysToTrip(id: string, appendCount: number, prependCount: number): Promise<Trip> {
@@ -241,7 +241,7 @@ export async function addSequenceToDay(
 	tripId: string,
 	dayIndex: number,
 	placeIds: string[],
-	transports?: (TransportSettings|null)[],
+	transports?: (TransportSettings | null)[],
 	positionInDay?: number
 ): Promise<Trip> {
 	const initialLoadings = await Promise.all([
@@ -319,7 +319,7 @@ export async function emptyTripsTrash(): Promise<string[]> {
 
 export async function getTripTemplates(placeId: string): Promise<TripTemplate[]> {
 	const tripTemplatesWithoutPlaces: TripTemplate[] = await Dao.getTripTemplates(placeId);
-	return await Promise.all(tripTemplatesWithoutPlaces.map(populateTripTemplateWithPlaces));
+	return Promise.all(tripTemplatesWithoutPlaces.map(populateTripTemplateWithPlaces));
 }
 
 async function populateTripTemplateWithPlaces(tripTemplateWithoutPlaces: TripTemplate): Promise<TripTemplate> {
@@ -329,7 +329,7 @@ async function populateTripTemplateWithPlaces(tripTemplateWithoutPlaces: TripTem
 
 export async function applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trip> {
 	const tripWithoutPlaces: Trip = await Dao.applyTripTemplate(tripId, templateId, dayIndex);
-	return await populateTripWithPlaces(tripWithoutPlaces);
+	return populateTripWithPlaces(tripWithoutPlaces);
 }
 
 export async function ensureTripSyncedToServer(tripId: string): Promise<void> {

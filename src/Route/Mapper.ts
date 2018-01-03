@@ -58,7 +58,7 @@ export const mapRouteFromApiResponse = (
 export const createRouteRequest = (
 	destination: Location,
 	origin: Location,
-	routeId: string|null = null,
+	routeId: string | null = null,
 	waypoints?: Waypoint[],
 	avoid?: TransportAvoid[],
 	mode?: TransportMode,
@@ -76,9 +76,9 @@ export const createRouteRequest = (
 export const chooseDirection = (
 	modeDirectionsSet: ModeDirections[],
 	mode: TransportMode,
-	routeId: string|null = null,
+	routeId: string | null = null,
 ): Direction => {
-	let chosen: Direction|null = null;
+	let chosen: Direction | null = null;
 	for (const modeDirection of modeDirectionsSet) {
 		if (chosen === null || (modeDirection.mode === mode && !routeId)) {
 			chosen = modeDirection.directions[0];

@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-import { SinonSandbox } from 'sinon';
-import * as sinon from 'sinon';
+import * as dirtyChai from 'dirty-chai';
+import { sandbox as sinonSandbox, SinonSandbox } from 'sinon';
 
 import { ApiResponse, StApi } from '../Api';
 import { Location } from '../Geo';
@@ -13,6 +13,7 @@ import { SearchTagsResult } from './SearchResult';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
+chai.use(dirtyChai);
 
 describe('SearchDataAccess', () => {
 	before((done) => {
@@ -21,7 +22,7 @@ describe('SearchDataAccess', () => {
 	});
 
 	beforeEach(() => {
-		sandbox = sinon.sandbox.create();
+		sandbox = sinonSandbox.create();
 	});
 
 	afterEach(() => {
@@ -40,7 +41,7 @@ describe('SearchDataAccess', () => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
-			return chai.expect(Dao.search(query, location)).to.be.rejected;
+			return chai.expect(Dao.search(query, location)).to.be.rejected('Should be rejected');
 		});
 
 		it('should correctly map search response', () => {
@@ -59,7 +60,7 @@ describe('SearchDataAccess', () => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
-			return chai.expect(Dao.searchReverse(location)).to.be.rejected;
+			return chai.expect(Dao.searchReverse(location)).to.be.rejected('Should be rejected');
 		});
 
 		it('should correctly map search response', () => {
