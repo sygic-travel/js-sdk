@@ -1,4 +1,6 @@
-import { UserInfo, UserLicense } from '../User';
+import * as cloneDeep from 'lodash.clonedeep';
+import { Session, UserInfo, UserLicense} from '../User';
+import { tokenData } from './SsoApiResponses';
 
 export const userInfo: UserInfo = {
 	id: '5665644fa0269',
@@ -15,3 +17,18 @@ export const userInfo: UserInfo = {
 		isActive: true
 	} as UserLicense
 };
+
+export const session: Session = {
+	accessToken: tokenData.access_token,
+	refreshToken: tokenData.refresh_token,
+	suggestedRefreshTimestamp: 11800000,
+	expirationTimestamp: 13600000
+};
+
+export const getFreshSession = (): Session => {
+	const testSession: Session = cloneDeep(session);
+	const now = new Date();
+	testSession.suggestedRefreshTimestamp = now.getTime() + 10000;
+	testSession.expirationTimestamp = now.getTime() + 20000;
+	return testSession;
+}

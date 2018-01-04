@@ -24,7 +24,19 @@ export {
 	UserLicense,
 	UserSettings
 };
-export { getUserSession } from './DataAccess';
+
+export async function getUserSession(): Promise<Session | null> {
+	let session: Session | null = await Dao.getUserSession();
+	const now = new Date();
+	if (session && (now.getTime() > session.suggestedRefreshTimestamp || !session.suggestedRefreshTimestamp)) {
+		const authResponse: AuthResponse = await Dao.getSessionWithRefreshToken(session.refreshToken);
+		if (authResponse.code === 'OK') {
+			setUserSession(authResponse.session);
+			session = authResponse.session;
+		}
+	}
+	return session;
+}
 
 export async function getUserSettings(): Promise<UserSettings> {
 	return Dao.getUserSettings();
@@ -124,7 +136,7 @@ export async function registerUser(
 }
 
 export async function getUserInfo(): Promise<UserInfo> {
-	const session = await Dao.getUserSession();
+	const session = await getUserSession();
 	if (!session) {
 		throw new Error('User session is not set');
 	}

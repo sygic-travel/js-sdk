@@ -2,12 +2,14 @@ import * as chai from 'chai';
 import * as moxios from 'moxios';
 
 import { setEnvironment } from '../Settings';
+import { getFreshSession } from '../TestData/UserInfoExpectedResults';
 import { setUserSession } from '../User';
 import { axiosInstance, get, post, put } from './StApi';
 
+const testSession = getFreshSession();
 const testApiURL = 'https://test.api';
 const testClientKey = '987654321';
-const accessToken = '0987654321';
+const accessToken = testSession.accessToken;
 
 describe('StApi', () => {
 	before((done) => {
@@ -22,8 +24,9 @@ describe('StApi', () => {
 		moxios.install(axiosInstance);
 	});
 
-	afterEach(() => {
+	afterEach((done) => {
 		moxios.uninstall(axiosInstance);
+		setUserSession(null).then(() => { done(); });
 	});
 
 	describe('#get', () => {
@@ -42,19 +45,18 @@ describe('StApi', () => {
 				const request = moxios.requests.mostRecent();
 				chai.expect(request.headers['x-api-key']).to.equal(testClientKey);
 				done();
-			});
+			}, 5);
 		});
 
-		it('should correctly set access token and call api with it', async () => {
-			await setUserSession({
-				accessToken,
-				refreshToken: 'refresh_token'
+		it('should correctly set access token and call api with it', (done) => {
+			setUserSession(testSession).then(() => {
+				get('/');
+				moxios.wait(() => {
+					const request = moxios.requests.mostRecent();
+					chai.expect(request.headers['Authorization']).to.equal('Bearer ' + accessToken);
+					done();
+				}, 5);
 			});
-			get('/');
-			moxios.wait(() => {
-				const request = moxios.requests.mostRecent();
-				chai.expect(request.headers['Authorization']).to.equal('Bearer ' + accessToken);
-			}, 5);
 		});
 	});
 
@@ -78,16 +80,14 @@ describe('StApi', () => {
 		});
 
 		it('should correctly set access token and call api with it', (done) => {
-			setUserSession({
-				accessToken,
-				refreshToken: 'refresh_token'
+			setUserSession(testSession).then(() => {
+				post('/', null);
+				moxios.wait(() => {
+					const request = moxios.requests.mostRecent();
+					chai.expect(request.headers['Authorization']).to.equal('Bearer ' + accessToken);
+					done();
+				}, 5);
 			});
-			post('/', null);
-			moxios.wait(() => {
-				const request = moxios.requests.mostRecent();
-				chai.expect(request.headers['Authorization']).to.equal('Bearer ' + accessToken);
-				done();
-			}, 5);
 		});
 	});
 
@@ -111,16 +111,14 @@ describe('StApi', () => {
 		});
 
 		it('should correctly set access token and call api with it', (done) => {
-			setUserSession({
-				accessToken,
-				refreshToken: 'refresh_token'
+			setUserSession(testSession).then(() => {
+				put('/', null);
+				moxios.wait(() => {
+					const request = moxios.requests.mostRecent();
+					chai.expect(request.headers['Authorization']).to.equal('Bearer ' + accessToken);
+					done();
+				}, 5);
 			});
-			put('/', null);
-			moxios.wait(() => {
-				const request = moxios.requests.mostRecent();
-				chai.expect(request.headers['Authorization']).to.equal('Bearer ' + accessToken);
-				done();
-			}, 5);
 		});
 	});
 });

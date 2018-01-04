@@ -7,7 +7,8 @@ import { ApiResponse, StApi } from '../Api';
 import { initializeChangesWatching, setChangesCallback, stopChangesWatching } from '.';
 import { favoritesCache, tripsDetailedCache } from '../Cache';
 import { setEnvironment } from '../Settings';
-import { setUserSession } from '../User/DataAccess';
+import { getFreshSession } from '../TestData/UserInfoExpectedResults';
+import { setUserSession } from '../User';
 import { ChangeNotification } from './ChangeNotification';
 
 chai.use(dirtyChai);
@@ -17,26 +18,21 @@ let sandbox: SinonSandbox;
 let clock: SinonFakeTimers;
 
 describe('ChangesController', () => {
-	before((done) => {
+	before(() => {
 		setEnvironment({ stApiUrl: 'api', integratorApiKey: '987654321' });
-		setUserSession({
-			accessToken: '12345',
-			refreshToken: '54321'
-		});
-		done();
 	});
 
-	beforeEach(() => {
+	beforeEach((done) => {
 		sandbox = sinoSandbox.create();
 		clock = sandbox.useFakeTimers((new Date()).getTime());
+		setUserSession(getFreshSession()).then(() => { done(); });
 	});
 
-	afterEach(() => {
+	afterEach((done) => {
 		sandbox.restore();
 		clock.restore();
 		stopChangesWatching();
-		tripsDetailedCache.reset();
-		favoritesCache.reset();
+		setUserSession(null).then(() => { done(); });
 	});
 
 	describe('#initializeChangesWatching', () => {

@@ -2,10 +2,12 @@ import * as chai from 'chai';
 import * as Moxios from 'moxios';
 
 import { setEnvironment } from '../Settings';
+import { getFreshSession } from '../TestData/UserInfoExpectedResults';
 import { axiosInstance, get, post } from './SsoApi';
 
 const testApiURL = 'https://test.api/';
 const ssoClient = 'sso_client';
+const testSession = getFreshSession();
 
 describe('SsoApi', () => {
 	before((done) => {
@@ -75,11 +77,11 @@ describe('SsoApi', () => {
 			}, 5);
 		});
 
-		it('should add Authorozation header if session is passed', (done) => {
-			post('/', {}, {accessToken: '123', refreshToken: '321'});
+		it('should add Authorization header if session is passed', (done) => {
+			post('/', {}, testSession);
 			Moxios.wait(() => {
 				const request = Moxios.requests.mostRecent();
-				chai.expect(request.headers['Authorization']).to.equal('Bearer 123');
+				chai.expect(request.headers['Authorization']).to.equal('Bearer ' + testSession.accessToken);
 				done();
 			}, 5);
 		});
