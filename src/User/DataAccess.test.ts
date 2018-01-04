@@ -236,7 +236,7 @@ describe('UserDataAccess', () => {
 				chai.expect(data).to.deep.equal({code: 'OK', session: testSession});
 				chai.expect(apiStub.callCount).to.equal(1);
 				chai.expect(apiStub.getCall(0).args[0]).to.equal('oauth2/token');
-				chai.expect(apiStub.getCall(0).args[1]['token']).to.equal('abcd');
+				chai.expect(apiStub.getCall(0).args[1]['refresh_token']).to.equal('abcd');
 				chai.expect(apiStub.getCall(0).args[1]['grant_type']).to.equal('refresh_token');
 			});
 		});

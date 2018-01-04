@@ -82,7 +82,7 @@ export async function getSessionWithRefreshToken(
 ): Promise<AuthResponse> {
 	const request: any = {
 		grant_type: 'refresh_token',
-		token
+		refresh_token: token
 	};
 
 	return authOnSso(request);
