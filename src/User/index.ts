@@ -28,7 +28,9 @@ export {
 export async function getUserSession(): Promise<Session | null> {
 	let session: Session | null = await Dao.getUserSession();
 	const now = new Date();
-	if (session && (now.getTime() > session.suggestedRefreshTimestamp || !session.suggestedRefreshTimestamp)) {
+	if (session && session.refreshToken &&
+		(now.getTime() > session.suggestedRefreshTimestamp || !session.suggestedRefreshTimestamp)
+	) {
 		const authResponse: AuthResponse = await Dao.getSessionWithRefreshToken(session.refreshToken);
 		if (authResponse.code === 'OK') {
 			setUserSession(authResponse.session);
