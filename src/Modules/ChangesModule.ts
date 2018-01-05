@@ -1,4 +1,4 @@
-import { ChangeNotification, initializeChangesWatching, setChangesCallback, stopChangesWatching } from '../Changes';
+import { initializeChangesWatching, stopChangesWatching } from '../Changes';
 
 /**
  * @experimental
@@ -10,9 +10,5 @@ export default class ChangesModule {
 
 	public stopChangesWatching(): void {
 		return stopChangesWatching();
-	}
-
-	public setChangesCallback(callback: (changeNotifications: ChangeNotification[]) => any | null): void {
-		setChangesCallback(callback);
 	}
 }

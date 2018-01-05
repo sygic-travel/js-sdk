@@ -1,4 +1,3 @@
-import * as Settings from '../Settings';
 import {
 	addDaysToTrip,
 	addPlaceToDay,
@@ -22,7 +21,6 @@ import {
 	swapDaysInTrip,
 	TransportSettings,
 	Trip,
-	TripConflictHandler,
 	TripTemplate,
 	TripUpdateData,
 	updateDayNote,
@@ -117,12 +115,6 @@ export default class TripModule {
 
 	public setTransport(id: string, dayIndex: number, itemIndex: number, settings: TransportSettings): Promise<Trip> {
 		return setTransport(id, dayIndex, itemIndex, settings);
-	}
-
-	public setTripConflictHandler(
-		handler: null | TripConflictHandler
-	): void {
-		Settings.setTripConflictHandler(handler);
 	}
 
 	public emptyTripsTrash(): Promise<string[]> {

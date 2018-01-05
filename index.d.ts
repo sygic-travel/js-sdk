@@ -3,7 +3,6 @@ export function create(settings: Settings): StSDK;
 declare class ChangesModule {
 	public initializeChangesWatching(tickInterval: number): Promise<void>;
 	public stopChangesWatching(): void;
-	public setChangesCallback(callback: (changeNotifications: Changes.ChangeNotification[]) => any | null): void;
 }
 
 declare class CollaborationModule {
@@ -139,7 +138,6 @@ declare class TripModule {
 		itemIndex: number,
 		settings: Trips.TransportSettings
 	): Promise<Trips.Trip>;
-	public setTripConflictHandler(handler: null | Trips.TripConflictHandler): void;
 	public emptyTripsTrash(): Promise<string[]>;
 	public getTripTemplates(placeId: string): Promise<Trips.TripTemplate[]>;
 	public applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trips.Trip>;
