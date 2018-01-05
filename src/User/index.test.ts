@@ -58,5 +58,16 @@ describe('UserController', () => {
 			chai.expect(session).deep.equal(testSession);
 			chai.expect(stub.callCount).equal(0);
 		});
+
+		it('should should not call refresh token when session is incomplete', async () => {
+			const incompleteSession = cloneDeep(testSession);
+			incompleteSession.refreshToken = null;
+			await setUserSession(incompleteSession);
+			const stub: SinonStub = sandbox.stub(Dao, 'getSessionWithRefreshToken');
+			clock.tick(3000000);
+			const session: Session | null = await getUserSession();
+			chai.expect(session).deep.equal(incompleteSession);
+			chai.expect(stub.callCount).equal(0);
+		});
 	});
 });
