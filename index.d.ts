@@ -32,6 +32,10 @@ declare class CustomPlacesModule {
 	public deleteCustomPlace(id: string): Promise<void>;
 }
 
+declare class EventsModule {
+	public setEventsHandler(handler: (event: Events.Event) => any): void;
+}
+
 declare class FavoritesModule {
 	public addPlaceToFavorites(id: string): Promise<void>;
 	public addCustomPlaceToFavorites(name: string, location: Location, address: string): Promise<string>;
@@ -358,6 +362,15 @@ export namespace Places {
 	export interface PlacesStats {
 		categories: SumStatistic[];
 		tags: SumStatistic[];
+	}
+}
+
+export namespace Events {
+	export type EventType = 'user_data_changes' | 'trip_conflict';
+
+	export interface Event {
+		type: EventType;
+		payload: any;
 	}
 }
 
