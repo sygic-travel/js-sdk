@@ -364,7 +364,7 @@ export namespace Places {
 }
 
 export namespace Events {
-	export type EventType = 'user_data_changes' | 'trip_conflict';
+	export type EventType = 'user_data_changes' | 'trip_conflict' | 'invalid_session';
 
 	export interface Event {
 		type: EventType;

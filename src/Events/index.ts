@@ -1,8 +1,10 @@
 import { Event } from './Event';
 
+import { StApi } from '../Api';
 import { ChangeNotification, setChangesCallback } from '../Changes';
 import { setTripConflictHandler } from '../Settings';
 import { Trip, TripConflictClientResolution, TripConflictInfo } from '../Trip';
+import { setUserSession } from '../User';
 
 export { Event };
 
@@ -15,6 +17,7 @@ export function setEventsHandler(handler: (event: Event) => any): void {
 export function initalize(): void {
 	setChangesCallback(handleUserDataChanges);
 	setTripConflictHandler(handleTripConflict);
+	StApi.setInvalidSessionHandler(handleInvalidSession);
 }
 
 function handleUserDataChanges(changes: ChangeNotification[]): void {
@@ -48,4 +51,17 @@ async function handleTripConflict(conflictInfo: TripConflictInfo, trip: Trip): P
 		return 'server';
 	}
 	return conflictResolution;
+}
+
+async function handleInvalidSession(): Promise<void> {
+	const event: Event = {
+		type: 'invalid_session',
+		payload: null
+	};
+
+	await setUserSession(null);
+
+	if (externalEventHandler) {
+		externalEventHandler(event);
+	}
 }
