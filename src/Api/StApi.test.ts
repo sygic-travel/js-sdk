@@ -75,10 +75,8 @@ describe('StApi', () => {
 				request.respondWith({
 					status: 401,
 					response: {
-						data: {
-							error: {
-								id: 'apikey.invalid'
-							}
+						error: {
+							id: 'apikey.invalid'
 						}
 					}
 				});
@@ -117,10 +115,8 @@ describe('StApi', () => {
 				request.respondWith({
 					status: 401,
 					response: {
-						data: {
-							error: {
-								id: 'apikey.invalid'
-							}
+						error: {
+							id: 'apikey.invalid'
 						}
 					}
 				});

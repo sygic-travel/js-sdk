@@ -100,10 +100,9 @@ function buildApiResponse(response: AxiosResponse): ApiResponse {
 function handleError(e: any): Error {
 	if (e.response &&
 		e.response.data &&
-		e.response.data.data &&
-		e.response.data.data.error &&
-		e.response.data.data.error.id &&
-		e.response.data.data.error.id === 'apikey.invalid'
+		e.response.data.error &&
+		e.response.data.error.id &&
+		e.response.data.error.id === 'apikey.invalid'
 	) {
 		if (invalidSessionHandler) {
 			invalidSessionHandler();
