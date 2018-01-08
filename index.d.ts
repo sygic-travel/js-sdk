@@ -3,7 +3,6 @@ export function create(settings: Settings): StSDK;
 declare class ChangesModule {
 	public initializeChangesWatching(tickInterval: number): Promise<void>;
 	public stopChangesWatching(): void;
-	public setChangesCallback(callback: (changeNotifications: Changes.ChangeNotification[]) => any | null): void;
 }
 
 declare class CollaborationModule {
@@ -14,7 +13,7 @@ declare class CollaborationModule {
 	public removeTripCollaboration(collaborationId: string): Promise<void>;
 	public acceptTripCollaboration(collaborationId: string, hash: string): Promise<string>;
 	public resendInvitation(collaborationId: string): Promise<void>;
-	public updateTripCollaboration(collaborationId: string, accessLevel: string): Promise<void>
+	public updateTripCollaboration(collaborationId: string, accessLevel: string): Promise<void>;
 }
 
 declare class CollectionsModule {
@@ -23,13 +22,17 @@ declare class CollectionsModule {
 		filter: Collections.CollectionsFilterJSON,
 		loadPlaces: boolean,
 		photoSize: string
-	): Promise<Collections.Collection[]>
+	): Promise<Collections.Collection[]>;
 }
 
 declare class CustomPlacesModule {
 	public createCustomPlace(data: Places.CustomPlaceFormData): Promise<Places.Place>;
-	public updateCustomPlace(id: string, data: Places.CustomPlaceFormData): Promise<Places.Place>
+	public updateCustomPlace(id: string, data: Places.CustomPlaceFormData): Promise<Places.Place>;
 	public deleteCustomPlace(id: string): Promise<void>;
+}
+
+declare class EventsModule {
+	public setEventsHandler(handler: (event: Events.Event) => any): void;
 }
 
 declare class FavoritesModule {
@@ -40,15 +43,15 @@ declare class FavoritesModule {
 }
 
 declare class ForecastModule {
-	public getDestinationWeather(destinationId: string): Promise<Forecast.Forecast[]>
+	public getDestinationWeather(destinationId: string): Promise<Forecast.Forecast[]>;
 }
 
 declare class FlightsModule {
-	public getFlights(query: Flights.FlightsQuery): Promise<Flights.FlightSearchResult[]>
+	public getFlights(query: Flights.FlightsQuery): Promise<Flights.FlightSearchResult[]>;
 }
 
 declare class HotelsModule {
-	public getHotels(filter: Hotels.HotelsFilterJSON): Promise<Hotels.AvailableHotels>
+	public getHotels(filter: Hotels.HotelsFilterJSON): Promise<Hotels.AvailableHotels>;
 }
 
 declare class PdfModule {
@@ -63,10 +66,10 @@ declare class PlacesModule {
 	public getPlaceMedia(id: string): Promise<Media.Medium[]>;
 	public getPlacesStats(filter: Places.PlacesStatsFilterJSON): Promise<Places.PlacesStats>;
 	public getPlaceGeometry(id: string): Promise<Places.PlaceGeometry>;
-	public getPlaceOpeningHours(id: string, from: string, to: string): Promise<Places.PlaceOpeningHours>
-	public detectParentsByBounds(bounds: Geo.Bounds, zoom: number): Promise<Places.Place[]>
-	public detectParentsByLocation(location: Location): Promise<Places.Place[]>
-	public addPlaceReview(placeId: string, rating: number, message: string): Promise<Places.PlaceReview>
+	public getPlaceOpeningHours(id: string, from: string, to: string): Promise<Places.PlaceOpeningHours>;
+	public detectParentsByBounds(bounds: Geo.Bounds, zoom: number): Promise<Places.Place[]>;
+	public detectParentsByLocation(location: Location): Promise<Places.Place[]>;
+	public addPlaceReview(placeId: string, rating: number, message: string): Promise<Places.PlaceReview>;
 	public deletePlaceReview(reviewId: number): Promise<void>;
 	public getPlaceReviews(placeId: string, limit: number, page: number): Promise<Places.PlaceReviewsData>;
 	public voteOnReview(reviewId: number, voteValue: number): Promise<void>;
@@ -92,8 +95,8 @@ declare class RoutesModule {
 		destination: Location,
 		waypoints: Route.Waypoint[],
 		avoids: Trips.TransportAvoid[]
-	): Promise<Route.Route>
-	public getRoutesForTripDay(tripId: string, dayIndex: number): Promise<Route.TripDayRoutes>
+	): Promise<Route.Route>;
+	public getRoutesForTripDay(tripId: string, dayIndex: number): Promise<Route.TripDayRoutes>;
 }
 
 declare class SearchModule {
@@ -125,7 +128,7 @@ declare class TripModule {
 		tripId: string,
 		dayIndex: number,
 		placeIds: string[],
-		transports?: (Trips.TransportSettings|null)[],
+		transports?: (Trips.TransportSettings | null)[],
 		positionInDay?: number
 	): Promise<Trips.Trip>;
 	public setOvernightPlace(tripId: string, placeId: string, dayIndexes: number[]): Promise<Trips.Trip>;
@@ -135,9 +138,8 @@ declare class TripModule {
 		itemIndex: number,
 		settings: Trips.TransportSettings
 	): Promise<Trips.Trip>;
-	public setTripConflictHandler(handler: null | Trips.TripConflictHandler): void;
 	public emptyTripsTrash(): Promise<string[]>;
-	public getTripTemplates(placeId: string): Promise<Trips.TripTemplate[]>
+	public getTripTemplates(placeId: string): Promise<Trips.TripTemplate[]>;
 	public applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trips.Trip>;
 	public updateItineraryItemUserData(
 		tripId: string,
@@ -147,12 +149,12 @@ declare class TripModule {
 		duration: number | null,
 		note: string | null
 	): Promise<Trips.Trip>;
-	public updateDayNote(tripId: string, dayIndex: number, note: string): Promise<Trips.Trip>
+	public updateDayNote(tripId: string, dayIndex: number, note: string): Promise<Trips.Trip>;
 }
 
 declare class UserModule {
-	public setUserSession(session: User.Session|null): Promise<void>;
-	public getUserSession(): Promise<User.Session|null>;
+	public setUserSession(session: User.Session | null): Promise<void>;
+	public getUserSession(): Promise<User.Session | null>;
 	public getUserSettings(): Promise<User.UserSettings>;
 	public updateUserSettings(settings: User.UserSettings): Promise<User.UserSettings>;
 	public loginUserWithDeviceId(deviceId: string, devideCode: string): Promise<User.AuthenticationResponseCode>;
@@ -165,14 +167,14 @@ declare class UserModule {
 	): Promise<User.AuthenticationResponseCode>;
 	public registerUser(email: string, password: string, name: string): Promise<User.RegistrationResponseCode>;
 	public loginUserWithFacebook(
-		accessToken: string|null,
-		authorizationCode: string|null,
+		accessToken: string | null,
+		authorizationCode: string | null,
 		deviceId?: string,
 		devicePlatform?: string
 	): Promise<User.AuthenticationResponseCode>;
 	public loginUserWithGoogle(
-		accessToken: string|null,
-		authorizationCode: string|null,
+		accessToken: string | null,
+		authorizationCode: string | null,
 		deviceId?: string,
 		devicePlatform?: string
 	): Promise<User.AuthenticationResponseCode>;
@@ -358,6 +360,15 @@ export namespace Places {
 	export interface PlacesStats {
 		categories: SumStatistic[];
 		tags: SumStatistic[];
+	}
+}
+
+export namespace Events {
+	export type EventType = 'user_data_changes' | 'trip_conflict' | 'invalid_session';
+
+	export interface Event {
+		type: EventType;
+		payload: any;
 	}
 }
 
@@ -707,7 +718,7 @@ export namespace Route {
 		'lbs';
 
 	export interface Waypoint {
-		placeId: string|null;
+		placeId: string | null;
 		location: Location;
 	}
 }
@@ -776,19 +787,19 @@ export namespace User {
 	}
 	export interface UserInfo {
 		id: string;
-		name: string|null;
-		email: string|null;
+		name: string | null;
+		email: string | null;
 		roles: string[];
 		dateCreated: string;
 		isEmailSubscribed: boolean;
 		isRegistered: boolean;
-		photoUrl: string|null;
-		licence: UserLicence|null;
+		photoUrl: string | null;
+		licence: UserLicence | null;
 	}
 	export interface UserLicence {
 		isActive: boolean;
 		name: string;
-		expirationAt: string|null;
+		expirationAt: string | null;
 	}
 
 	export type AuthenticationResponseCode = 'OK' | 'ERROR_INVALID_CREDENTIALS' | 'ERROR';
@@ -868,7 +879,7 @@ export namespace Flights {
 		currency: string;
 		deepLink: string;
 		outbound: Flight;
-		inbound: Flight|null;
+		inbound: Flight | null;
 	}
 
 	export interface Airport {
@@ -893,7 +904,7 @@ export namespace Flights {
 		departureTime: Date;
 		arrivalTime: Date;
 		polyline: string;
-		stopOver: number|null;
+		stopOver: number | null;
 	}
 
 	export interface FlightsQuery {
@@ -932,7 +943,7 @@ export namespace Pdf {
 
 	export interface PdfDestination {
 		destination: Places.Place;
-		mainMap: PdfStaticMap|null;
+		mainMap: PdfStaticMap | null;
 		secondaryMaps: PdfStaticMap[];
 		places: Places.Place[];
 	}
@@ -956,6 +967,6 @@ export namespace Pdf {
 	export interface GeneratingState {
 		generatingId: string;
 		state: 'generating' | 'done' | 'not_found' | 'timeout';
-		url: string|null;
+		url: string | null;
 	}
 }

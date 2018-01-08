@@ -12,24 +12,46 @@ axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
 	return config;
 });
 
+let invalidSessionHandler: () => any;
+
+export function setInvalidSessionHandler(handler: () => any): void {
+	invalidSessionHandler = handler;
+}
+
 export async function get(url: string): Promise<ApiResponse> {
-	const response = await axiosInstance.get(url, await buildRequestConfig(url));
-	return buildApiResponse(response);
+	try {
+		const response = await axiosInstance.get(url, await buildRequestConfig(url));
+		return buildApiResponse(response);
+	} catch (e) {
+		throw handleError(e);
+	}
 }
 
 export async function post(url: string, requestData): Promise<ApiResponse> {
-	const response = await axiosInstance.post(url, requestData, await buildRequestConfig(url));
-	return buildApiResponse(response);
+	try {
+		const response = await axiosInstance.post(url, requestData, await buildRequestConfig(url));
+		return buildApiResponse(response);
+	} catch (e) {
+		throw handleError(e);
+	}
 }
 
 export async function delete_(url: string, requestData): Promise<ApiResponse> {
-	const response = await axiosInstance.delete(url, await buildRequestConfig(url, requestData));
-	return buildApiResponse(response);
+	try {
+		const response = await axiosInstance.delete(url, await buildRequestConfig(url, requestData));
+		return buildApiResponse(response);
+	} catch (e) {
+		throw handleError(e);
+	}
 }
 
 export async function put(url: string, requestData): Promise<ApiResponse> {
-	const response = await axiosInstance.put(url, requestData, await buildRequestConfig(url));
-	return buildApiResponse(response);
+	try {
+		const response = await axiosInstance.put(url, requestData, await buildRequestConfig(url));
+		return buildApiResponse(response);
+	} catch (e) {
+		throw handleError(e);
+	}
 }
 
 async function buildRequestConfig(url: string, requestData?: any): Promise<AxiosRequestConfig> {
@@ -73,4 +95,20 @@ function buildApiResponse(response: AxiosResponse): ApiResponse {
 		response.data.data,
 		response.data.server_timestamp
 	);
+}
+
+function handleError(e: any): Error {
+	if (e.response &&
+		e.response.data &&
+		e.response.data.data &&
+		e.response.data.data.error &&
+		e.response.data.data.error.id &&
+		e.response.data.data.error.id === 'apikey.invalid'
+	) {
+		if (invalidSessionHandler) {
+			invalidSessionHandler();
+		}
+		return new Error('Invalid session');
+	}
+	return e;
 }

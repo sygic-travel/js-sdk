@@ -4,7 +4,7 @@ import * as moxios from 'moxios';
 import { setEnvironment } from '../Settings';
 import { getFreshSession } from '../TestData/UserInfoExpectedResults';
 import { setUserSession } from '../User';
-import { axiosInstance, get, post, put } from './StApi';
+import { axiosInstance, get, post, put, setInvalidSessionHandler } from './StApi';
 
 const testSession = getFreshSession();
 const testApiURL = 'https://test.api';
@@ -57,6 +57,75 @@ describe('StApi', () => {
 					done();
 				}, 5);
 			});
+		});
+
+		it('should correctly call external session callback for invalid session error', (done) => {
+			let callcount = 0;
+			setInvalidSessionHandler(() => {
+				callcount++;
+			});
+
+			get('/').catch((e) => {
+				chai.expect(callcount).to.equal(1);
+				chai.expect(e.message).to.equal('Invalid session');
+			});
+
+			moxios.wait(() => {
+				const request = moxios.requests.mostRecent();
+				request.respondWith({
+					status: 401,
+					response: {
+						data: {
+							error: {
+								id: 'apikey.invalid'
+							}
+						}
+					}
+				});
+				done();
+			}, 5);
+		});
+
+		it('should correctly call external session callback for other error', (done) => {
+			let callcount = 0;
+			setInvalidSessionHandler(() => {
+				callcount++;
+			});
+
+			get('/').catch((e) => {
+				chai.expect(callcount).to.equal(0);
+				chai.expect(e.message).to.equal('Request failed with status code 403');
+			});
+
+			moxios.wait(() => {
+				const request = moxios.requests.mostRecent();
+				request.respondWith({
+					status: 403,
+					response: {}
+				});
+				done();
+			}, 5);
+		});
+
+		it('should not fail on session error without session callback', (done) => {
+			get('/').catch((e) => {
+				chai.expect(e.message).to.equal('Invalid session');
+			});
+
+			moxios.wait(() => {
+				const request = moxios.requests.mostRecent();
+				request.respondWith({
+					status: 401,
+					response: {
+						data: {
+							error: {
+								id: 'apikey.invalid'
+							}
+						}
+					}
+				});
+				done();
+			}, 5);
 		});
 	});
 
