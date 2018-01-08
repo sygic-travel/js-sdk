@@ -1,4 +1,4 @@
-import { Event } from './Event';
+import { Event, EventType } from './Event';
 
 import { StApi } from '../Api';
 import { ChangeNotification, setChangesCallback } from '../Changes';
@@ -26,7 +26,7 @@ function handleUserDataChanges(changes: ChangeNotification[]): void {
 	}
 
 	const event: Event = {
-		type: 'user_data_changes',
+		type: EventType.USER_DATA_CHANGES,
 		payload: changes
 	};
 
@@ -39,7 +39,7 @@ async function handleTripConflict(conflictInfo: TripConflictInfo, trip: Trip): P
 	}
 
 	const event: Event = {
-		type: 'trip_conflict',
+		type: EventType.TRIP_CONFLICT,
 		payload: {
 			conflictInfo,
 			trip
@@ -55,7 +55,7 @@ async function handleTripConflict(conflictInfo: TripConflictInfo, trip: Trip): P
 
 async function handleInvalidSession(): Promise<void> {
 	const event: Event = {
-		type: 'invalid_session',
+		type: EventType.INVALID_SESSION,
 		payload: null
 	};
 
