@@ -4,8 +4,9 @@ import { stringify } from 'query-string';
 import { ApiResponse, StApi } from '../Api';
 import { placesDetailedCache as cache } from '../Cache';
 import { Bounds, boundsToMapTileKeys, Location, locationToMapTileKey } from '../Geo';
-import { Medium } from '../Media/Media';
+import { Medium } from '../Media';
 import { Day, ItineraryItem } from '../Trip';
+import { flatten, splitArrayToChunks } from '../Util';
 import { PlacesListFilter } from './ListFilter';
 import {
 	mapPlaceApiResponseToPlaces,
@@ -133,16 +134,22 @@ export async function getPlaceMedia(id: string): Promise<Medium[]> {
 	return apiResponse.data.media.map((mediaItem: any) => camelizeKeys(mediaItem) as Medium);
 }
 
-async function getFromApi(toBeFetchedFromAPI: string[]): Promise<any> {
-	const apiResponse = await StApi.get('places?' + stringify({
-		ids: toBeFetchedFromAPI.join('|')
-	}));
-
-	if (!apiResponse.data.hasOwnProperty('places')) {
-		throw new Error('Wrong API response');
-	}
-
-	return apiResponse.data.places;
+async function getFromApi(toBeFetchedFromAPI: string[]): Promise<any[]> {
+	const CHUNK_SIZE: number = 50;
+	const idsChunks = splitArrayToChunks(toBeFetchedFromAPI, CHUNK_SIZE);
+	const apiRequests: Promise<ApiResponse>[] = idsChunks.map((idsChunk: string[]) => {
+		return StApi.get('places?' + stringify({
+			ids: idsChunk.join('|')
+		}));
+	});
+	const apiResponses: ApiResponse[] = await Promise.all(apiRequests);
+	const chunkedPlaces: any[][] = apiResponses.map((apiResponse: ApiResponse) => {
+		if (!apiResponse.data.hasOwnProperty('places')) {
+			throw new Error('Wrong API response');
+		}
+		return apiResponse.data.places;
+	});
+	return flatten(chunkedPlaces);
 }
 
 export async function getPlaceGeometry(id: string): Promise<PlaceGeometry> {

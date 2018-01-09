@@ -81,3 +81,19 @@ export function toRadians(degrees: number): number {
 export function toDegrees(radians: number): number {
 	return radians * 180 / Math.PI;
 }
+
+export function splitArrayToChunks<T>(arrayToBeSplit: T[], chunkSize: number): T[][] {
+	const chunks: T[][] = [];
+	const chunksCount: number = arrayToBeSplit.length / chunkSize;
+	let j = 0;
+
+	for (let i = 0; i < chunksCount; i++) {
+		chunks[i] = arrayToBeSplit.slice(j, j + chunkSize);
+		j += chunkSize;
+	}
+	return chunks;
+}
+
+export function flatten<T>(arrayOfArrays: T[][]): T[] {
+	return Array.prototype.concat(...arrayOfArrays);
+}
