@@ -243,7 +243,7 @@ async function filterUnnecessaryDestinations(
 	const homeDestinationPlaces: Place[] | undefined = homeDestinationId ?
 		destinationIdsWithPlaces.get(homeDestinationId) : undefined;
 
-	if (homeDestinationId && homeDestinationPlaces && homeDestinationPlaces.length > 1) {
+	if (homeDestinationId && homeDestinationPlaces && homeDestinationPlaces.length === 1) {
 		destinationIdsWithDestinations.delete(homeDestinationId);
 		destinationIdsWithPlaces.delete(homeDestinationId);
 	}
