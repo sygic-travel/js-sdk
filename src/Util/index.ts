@@ -93,3 +93,7 @@ export function splitArrayToChunks<T>(arrayToBeSplit: T[], chunkSize: number): T
 	}
 	return chunks;
 }
+
+export function flatten<T>(arrayOfArrays: T[][]): T[] {
+	return Array.prototype.concat(...arrayOfArrays);
+}

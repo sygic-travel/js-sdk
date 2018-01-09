@@ -12,4 +12,10 @@ describe('UtilController', () => {
 			]);
 		});
 	});
+
+	describe('#flatten', () => {
+		it('should flatten array 1 level deep', () => {
+			chai.expect(Util.flatten([[1, 2], [3, 4], [5, 6, 7]])).to.deep.equal([1, 2, 3, 4, 5, 6, 7]);
+		});
+	});
 });
