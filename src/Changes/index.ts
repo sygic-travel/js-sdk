@@ -28,7 +28,6 @@ export async function initializeChangesWatching(tickInterval?: number): Promise<
 export function stopChangesWatching(): void {
 	if (changeWatcher) {
 		changeWatcher.kill();
-		changeWatcher = null;
 	}
 }
 
