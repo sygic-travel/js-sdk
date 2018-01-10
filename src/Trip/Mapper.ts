@@ -101,11 +101,11 @@ const mapTripDays = (trip): Day[] => trip.days.map((day) => ({
 		isStickyLastInDay: null,
 		transportFromPrevious: itineraryItem.transport_from_previous ? {
 			mode: itineraryItem.transport_from_previous.mode,
-			type: itineraryItem.transport_from_previous.type,
 			avoid: itineraryItem.transport_from_previous.avoid,
 			startTime: itineraryItem.transport_from_previous.start_time,
 			duration: itineraryItem.transport_from_previous.duration,
 			note: itineraryItem.transport_from_previous.note,
+			routeId: itineraryItem.transport_from_previous.route_id ? itineraryItem.transport_from_previous.route_id : null,
 			waypoints: itineraryItem.transport_from_previous.waypoints.map((waypoint) => ({
 				placeId: waypoint.place_id,
 				location: waypoint.location as Location
@@ -231,6 +231,7 @@ const mapTripDayToApiFormat = (day: Day): object => {
 				start_time: itineraryItem.transportFromPrevious.startTime,
 				duration: itineraryItem.transportFromPrevious.duration,
 				note: itineraryItem.transportFromPrevious.note,
+				route_id: itineraryItem.transportFromPrevious.routeId,
 				waypoints: itineraryItem.transportFromPrevious.waypoints.map((waypoint: Waypoint) => ({
 					place_id: waypoint.placeId,
 					location: waypoint.location

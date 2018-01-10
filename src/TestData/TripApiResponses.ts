@@ -87,7 +87,15 @@ export const tripDetail = {
 						"start_time": null,
 						"duration": null,
 						"note": null,
-						"transport_from_previous": null
+						"transport_from_previous": {
+							"mode": "car",
+							"avoid": ["tolls"],
+							"start_time": 123456789,
+							"duration": 3600,
+							"note": 'Note',
+							"waypoints": [],
+							"route_id": "123456"
+						}
 					}
 				],
 				"note": null

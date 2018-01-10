@@ -530,27 +530,28 @@ describe('TripManipulator', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			const inputPlace: Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
 			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			inputTrip.days![1].itinerary[1].transportFromPrevious = null;
+			expectedTrip.days![1].itinerary[1].transportFromPrevious = null;
 
-			if (expectedTrip.days) {
-				const item1: ItineraryItem = {
-					place: inputPlace,
-					placeId: 'poi:530',
-					startTime: null,
-					duration: null,
-					note: null,
-					transportFromPrevious: null,
-					isSticky: true,
-					isStickyFirstInDay: false,
-					isStickyLastInDay: true
-				};
+			const item1: ItineraryItem = {
+				place: inputPlace,
+				placeId: 'poi:530',
+				startTime: null,
+				duration: null,
+				note: null,
+				transportFromPrevious: null,
+				isSticky: true,
+				isStickyFirstInDay: false,
+				isStickyLastInDay: true
+			};
 
-				const item2: ItineraryItem = cloneDeep(item1);
-				item2.isStickyFirstInDay = true;
-				item2.isStickyLastInDay = false;
+			const item2: ItineraryItem = cloneDeep(item1);
+			item2.isStickyFirstInDay = true;
+			item2.isStickyLastInDay = false;
 
-				expectedTrip.days[0].itinerary[1] = item1;
-				expectedTrip.days[1].itinerary[0] = item2;
-			}
+			expectedTrip.days![0].itinerary[1] = item1;
+			expectedTrip.days![1].itinerary[0] = item2;
+
 			const trip = Manipulator.addOrReplaceOvernightPlace(inputTrip, inputPlace, 0, null);
 			chai.expect(trip).to.deep.equal(expectedTrip);
 		});
