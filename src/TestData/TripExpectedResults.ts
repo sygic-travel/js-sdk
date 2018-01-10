@@ -133,7 +133,15 @@ export const tripDetailed = {
 					startTime: null,
 					duration: null,
 					note: null,
-					transportFromPrevious: null,
+					transportFromPrevious: {
+						mode: "car",
+						avoid: ["tolls"],
+						startTime: 123456789,
+						duration: 3600,
+						note: 'Note',
+						waypoints: [],
+						routeId: "123456"
+					},
 					isSticky: false,
 					isStickyFirstInDay: false,
 					isStickyLastInDay: false,
