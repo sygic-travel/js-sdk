@@ -205,6 +205,14 @@ export async function getUserInfo(): Promise<UserInfo> {
 	} as UserInfo;
 }
 
+export async function requestCancelAccount(): Promise<void> {
+	await StApi.post('user/cancel-account', null);
+}
+
+export async function deleteAccount(id: string, hash: string): Promise<void> {
+	await StApi.delete_('users', {id, hash});
+}
+
 async function authOnSso(request): Promise<AuthResponse> {
 	const response: ApiResponse = await SsoApi.post('oauth2/token', request);
 	const now = new Date();
