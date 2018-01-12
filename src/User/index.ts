@@ -144,3 +144,11 @@ export async function getUserInfo(): Promise<UserInfo> {
 	}
 	return Dao.getUserInfo();
 }
+
+export async function deleteAccount(id: string, hash: string): Promise<void> {
+	await Dao.deleteAccount(id, hash);
+}
+
+export async function requestCancelAccount(): Promise<void> {
+	await Dao.requestCancelAccount();
+}

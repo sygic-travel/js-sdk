@@ -1,5 +1,6 @@
 import {
 	AuthenticationResponseCode,
+	deleteAccount,
 	getUserInfo,
 	getUserSession,
 	getUserSettings,
@@ -10,6 +11,7 @@ import {
 	loginUserWithPassword,
 	registerUser,
 	RegistrationResponseCode,
+	requestCancelAccount,
 	Session,
 	setUserSession,
 	updateUserSettings,
@@ -18,6 +20,20 @@ import {
 } from '../User';
 
 export default class UserModule {
+	/**
+	 * @experimental
+	 */
+	public requestCancelAccount(): Promise<void> {
+		return requestCancelAccount();
+	}
+
+	/**
+	 * @experimental
+	 */
+	public deleteAccount(id: string, hash: string): Promise<void> {
+		return deleteAccount(id, hash);
+	}
+
 	/**
 	 * @experimental
 	 */
