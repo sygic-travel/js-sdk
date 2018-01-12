@@ -275,7 +275,6 @@ describe('UserDataAccess', () => {
 			chai.expect(apiStub.getCall(1).args[1]['password']).to.equal('12345678');
 			chai.expect(apiStub.getCall(1).args[1]['name']).to.equal('name');
 			chai.expect(apiStub.getCall(1).args[1]['email_is_verified']).to.be.false('Expect false');
-
 		});
 
 		it('should handle the already registered error', async () => {
@@ -348,6 +347,33 @@ describe('UserDataAccess', () => {
 				}));
 			const userInfo: UserInfo | null = await Dao.getUserInfo();
 			chai.expect(userInfo).deep.equal(userInfoResult);
+		});
+	});
+
+	describe('#requestCancelAccount', () => {
+		it('should call call api properly', async () => {
+			await Dao.setUserSession(testSession);
+			const apiStub: SinonStub = sandbox.stub(StApi, 'post').returns(
+				new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(200, {}));
+				}));
+			await Dao.requestCancelAccount();
+			chai.expect(apiStub.callCount).to.equal(1);
+			chai.expect(apiStub.getCall(0).args[0]).to.equal('user/cancel-account');
+		});
+	});
+
+	describe('#deleteAccount', () => {
+		it('should call call api properly', async () => {
+			const apiStub: SinonStub = sandbox.stub(StApi, 'delete_').returns(
+				new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(200, {}));
+				}));
+			await Dao.deleteAccount('xxx', '12345');
+			chai.expect(apiStub.callCount).to.equal(1);
+			chai.expect(apiStub.getCall(0).args[0]).to.equal('users');
+			chai.expect(apiStub.getCall(0).args[1]['id']).to.equal('xxx');
+			chai.expect(apiStub.getCall(0).args[1]['hash']).to.equal('12345');
 		});
 	});
 });

@@ -166,6 +166,8 @@ declare class UserModule {
 		devideCode?: string
 	): Promise<User.AuthenticationResponseCode>;
 	public registerUser(email: string, password: string, name: string): Promise<User.RegistrationResponseCode>;
+	public requestCancelAccount(): Promise<void>;
+	public deleteAccount(id: string, hash: string): Promise<void>;
 	public loginUserWithFacebook(
 		accessToken: string | null,
 		authorizationCode: string | null,
