@@ -1,6 +1,7 @@
 export function addDaysToDate(date: string, count: number): string {
 	const d = new Date(date);
 	d.setDate(d.getDate() + count);
+	d.setMinutes(d.getMinutes() + d.getTimezoneOffset());
 	return formatDate(d);
 }
 
@@ -11,6 +12,7 @@ export function sleep(ms: number): Promise<void> {
 export function subtractDaysFromDate(date: string, count: number): string {
 	const d = new Date(date);
 	d.setDate(d.getDate() - count);
+	d.setMinutes(d.getMinutes() + d.getTimezoneOffset());
 	return formatDate(d);
 }
 
