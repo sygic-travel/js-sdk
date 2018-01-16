@@ -9,7 +9,7 @@ import { setEnvironment } from '../Settings/';
 import { placeDetailedEiffelTowerWithoutMedia as placeMock } from '../TestData/PlacesExpectedResults';
 import * as Dao from './DataAccess';
 import { calculateMapGrid, generateDestinationMainMap, generateDestinationSecondaryMaps } from './MapGenerator';
-import { PdfQuery, PdfStaticMap, PdfStaticMapSector } from './PdfData';
+import { PdfQuery, PdfStaticMap, PdfStaticMapSector, PlaceSource } from './PdfData';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
@@ -79,7 +79,7 @@ describe('MapGeneratorController', () => {
 				sectors: []
 			});
 
-			const map: PdfStaticMap = await generateDestinationMainMap(destinationPlaces, query);
+			const map: PdfStaticMap = await generateDestinationMainMap(destinationPlaces, new Map<string, PlaceSource>(), query);
 			chai.expect(map.sectors.length).to.be.eq(4);
 
 			const sectorA0: PdfStaticMapSector | undefined = map.sectors.find((s: PdfStaticMapSector) => s.id === 'A0');

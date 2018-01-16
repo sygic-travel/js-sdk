@@ -154,10 +154,10 @@ export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<
 
 async function createDestinationData(
 	destinationId: string,
-	destinationIdsWithPlaces,
-	destinationIdsWithDestinations,
-	placeIdsWithPlaceType,
-	query
+	destinationIdsWithPlaces: Map<string, Place[]>,
+	destinationIdsWithDestinations: Map<string, Place>,
+	placeIdsWithPlaceType: Map<string, PlaceSource>,
+	query: PdfQuery
 ): Promise<PdfDestination> {
 
 	const collectionsForDestination: Collection[] = await getCollectionsForDestinationId(destinationId, imageSize);
@@ -178,7 +178,7 @@ async function createDestinationData(
 	const {
 		mainMap,
 		secondaryMaps
-	} = await generateDestinationMaps(mergedCollectionsAndPlacesFromDestination, query);
+	} = await generateDestinationMaps(mergedCollectionsAndPlacesFromDestination, placeIdsWithPlaceType, query);
 
 	return {
 		destination: destinationIdsWithDestinations.get(destinationId)!,
@@ -205,11 +205,15 @@ function getSuitableCollectionForDestination(collectionsForDestination: Collecti
 	return collectionPlaces;
 }
 
-async function generateDestinationMaps(destinationPlaces: Place[], query: PdfQuery): Promise<{
+async function generateDestinationMaps(
+	destinationPlaces: Place[],
+	placeIdsWithPlaceType: Map<string, PlaceSource>,
+	query: PdfQuery
+): Promise<{
 	mainMap: PdfStaticMap,
 	secondaryMaps: PdfStaticMap[]
 }> {
-	const mainMap: PdfStaticMap = await generateDestinationMainMap(destinationPlaces, query);
+	const mainMap: PdfStaticMap = await generateDestinationMainMap(destinationPlaces, placeIdsWithPlaceType, query);
 	const sectorsForSecondaryMaps: PdfStaticMapSector[] = mainMap.sectors.filter((sector: PdfStaticMapSector) => {
 		return sector.places.length > 5;
 	});
