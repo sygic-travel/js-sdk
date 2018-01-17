@@ -1,17 +1,27 @@
 import { Bounds, isLocationInBounds, Location } from '../Geo';
 import { Place } from '../Places';
 import { getStaticMap } from './DataAccess';
-import { PdfQuery, PdfStaticMap, PdfStaticMapSector, StaticMap } from './PdfData';
+import { PdfQuery, PdfStaticMap, PdfStaticMapSector, PlaceSource, StaticMap } from './PdfData';
 
 export async function generateDestinationMainMap(
 	destinationPlaces: Place[],
+	placeIdsWithPlaceType: Map<string, PlaceSource>,
 	query: PdfQuery
 ): Promise<PdfStaticMap> {
-	const destinationPlacesLocations: Location[] = destinationPlaces.map((place: Place) => place.location);
 	const staticMap: StaticMap = await getStaticMap(
 		query.mainMapWidth,
 		query.mainMapHeight,
-		destinationPlacesLocations
+		destinationPlaces.map((place: Place) => {
+			const placeSource: PlaceSource | undefined = placeIdsWithPlaceType.get(place.id);
+			if (placeSource !== PlaceSource.FROM_COLLECTION) {
+				return {
+					...place.location,
+					image: placeSource === PlaceSource.FROM_TRIP ?
+						'http://a.twobits.cz/i/1x/g/dot.png' : 'http://a.twobits.cz/i/1x/r/dot.png'
+				};
+			}
+			return place.location;
+		})
 	);
 
 	let sectors: PdfStaticMapSector[] = calculateMapGrid(
