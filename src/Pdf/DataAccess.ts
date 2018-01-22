@@ -9,6 +9,14 @@ export async function getStaticMap(
 	points: StaticMapPoint[],
 ): Promise<StaticMap> {
 	const bounds: Bounds = calculateLocationsBounds(points);
+
+	if (bounds.north - bounds.south < .0002 || bounds.east - bounds.west < .0002) {
+		bounds.east += 0.01;
+		bounds.west -= 0.01;
+		bounds.north += 0.01;
+		bounds.south -= 0.01;
+	}
+
 	const apiResponse: ApiResponse = await StApi.post('static-maps', { width, height, points, bounds });
 
 	if (!apiResponse.data.hasOwnProperty('url') || !apiResponse.data.hasOwnProperty('bounds')) {
