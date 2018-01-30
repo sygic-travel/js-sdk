@@ -2,7 +2,7 @@ import { Collection, getCollectionsForDestinationId } from '../Collections';
 import { getFavoritesIds } from '../Favorites';
 import {
 	getPlacesDestinationMap, getPlacesDetailedMap, getPlacesMapFromTrip, mergePlacesArrays,
-	Place, Tag
+	Place
 } from '../Places';
 import { getRoutesForTripDay, TripDayRoutes } from '../Route';
 import { Day, getTripDetailed, Trip } from '../Trip';
@@ -255,11 +255,7 @@ async function filterUnnecessaryDestinations(
 	const destinationIdsToBeDeleted: string[] = [];
 	destinationIdsWithPlaces.forEach((places: Place[], destinationId) => {
 		if (places.length === 1) {
-			const singlePlace: Place = places[0];
-			const airportTag: Tag | undefined = singlePlace.detail!.tags.find((tag: Tag) => (tag.name === 'Airport'));
-			if (airportTag) {
-				destinationIdsToBeDeleted.push(destinationId);
-			}
+			destinationIdsToBeDeleted.push(destinationId);
 		}
 	});
 
