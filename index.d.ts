@@ -180,7 +180,7 @@ declare class UserModule {
 		deviceId?: string,
 		devicePlatform?: string
 	): Promise<User.AuthenticationResponseCode>;
-	public getUserinfo(): Promise<User.UserInfo>;
+	public getUserInfo(): Promise<User.UserInfo>;
 }
 
 declare class UtilityModule {
