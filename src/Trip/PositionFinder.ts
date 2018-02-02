@@ -26,6 +26,7 @@ export function getAddToTripInstructions(
 	let previousDestinationMatch = false;
 	const itinerary = trip.days![dayIndex].itinerary;
 
+	// SPECIAL USECASES
 	// Adding hotel
 	if (isStickyByDefault(place) && (!itinerary.length || !itinerary[itinerary.length - 1].isSticky)) {
 		return {
@@ -62,6 +63,19 @@ export function getAddToTripInstructions(
 		} as AddToTripInstructions;
 	}
 
+	// last day of more days trip with only sticky place
+	if (dayIndex > 0 &&
+		dayIndex === trip.days!.length - 1 &&
+		itinerary.length === 1 &&
+		itinerary[0].isSticky
+	) {
+		return {
+			position: itinerary[0].isStickyFirstInDay ? 1 : 0,
+			shouldDuplicate: false,
+		} as AddToTripInstructions;
+	}
+
+	// AUTOMATIC ALGORITHM
 	while (position < itinerary.length) {
 		let score = {
 			penalty: 0,

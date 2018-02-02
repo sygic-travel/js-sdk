@@ -41,7 +41,7 @@ describe('PositionFinder', () => {
 			trip.days = [{
 				note: null,
 				date: null,
-				itinerary: [buildItem(0, 0, 'poi:2', false, ['city:1'])]
+				itinerary: [buildItem(0, 0, 'poi:2', null, ['city:1'])]
 			}];
 			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
 			chai.expect(result.position).to.equal(1);
@@ -56,8 +56,8 @@ describe('PositionFinder', () => {
 				note: null,
 				date: null,
 				itinerary: [
-					buildItem(0, 0, 'poi:2', false, ['city:1']),
-					buildItem(0, 1, 'poi:3', false, ['city:1'], 'plane')
+					buildItem(0, 0, 'poi:2', null, ['city:1']),
+					buildItem(0, 1, 'poi:3', null, ['city:1'], 'plane')
 				]
 			}];
 			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
@@ -68,8 +68,8 @@ describe('PositionFinder', () => {
 				note: null,
 				date: null,
 				itinerary: [
-					buildItem(0, 1, 'poi:2', false, ['city:1']),
-					buildItem(0, 0, 'poi:3', false, ['city:1'], 'plane')
+					buildItem(0, 1, 'poi:2', null, ['city:1']),
+					buildItem(0, 0, 'poi:3', null, ['city:1'], 'plane')
 				]
 			}];
 			const result2: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
@@ -84,14 +84,14 @@ describe('PositionFinder', () => {
 					note: null,
 					date: null,
 					itinerary: [
-						buildItem(0, 0, 'poi:2', false, ['city:1']),
+						buildItem(0, 0, 'poi:2', null, ['city:1']),
 					]
 				},
 				{
 					note: null,
 					date: null,
 					itinerary: [
-						buildItem(0, 0, 'poi:3', false, ['city:1'], 'plane'),
+						buildItem(0, 0, 'poi:3', null, ['city:1'], 'plane'),
 					]
 				}
 			];
@@ -107,10 +107,10 @@ describe('PositionFinder', () => {
 				note: null,
 				date: null,
 				itinerary: [
-					buildItem(0, 0, 'poi:2', false, ['city:2']),
-					buildItem(0, 1, 'poi:3', false, ['city:2']),
-					buildItem(0, 1, 'poi:4', false, ['city:1']),
-					buildItem(0, 2, 'poi:5', false, ['city:1']),
+					buildItem(0, 0, 'poi:2', null, ['city:2']),
+					buildItem(0, 1, 'poi:3', null, ['city:2']),
+					buildItem(0, 1, 'poi:4', null, ['city:1']),
+					buildItem(0, 2, 'poi:5', null, ['city:1']),
 				]
 			}
 			];
@@ -126,7 +126,7 @@ describe('PositionFinder', () => {
 				note: null,
 				date: null,
 				itinerary: [
-					buildItem(0, 0, 'poi:home', true, ['city:1']),
+					buildItem(0, 0, 'poi:home', 'first', ['city:1']),
 				]
 			}
 			];
@@ -138,13 +138,13 @@ describe('PositionFinder', () => {
 				note: null,
 				date: null,
 				itinerary: [
-					buildItem(0, 0, 'poi:home', true, ['city:1']),
+					buildItem(0, 0, 'poi:home', 'first', ['city:1']),
 				]
 			}, {
 				note: null,
 				date: null,
 				itinerary: [
-					buildItem(0, 0, 'poi:2', true, ['city:1']),
+					buildItem(0, 0, 'poi:2', 'last', ['city:1']),
 				]
 			}
 			];
@@ -164,8 +164,8 @@ describe('PositionFinder', () => {
 				note: null,
 				date: null,
 				itinerary: [
-					buildItem(0, 4, 'poi:2', false, ['city:1']),
-					buildItem(0, 2, 'poi:home', true, ['city:1']),
+					buildItem(0, 4, 'poi:2', null, ['city:1']),
+					buildItem(0, 2, 'poi:home', 'last', ['city:1']),
 				]
 			}
 			];
@@ -181,8 +181,8 @@ describe('PositionFinder', () => {
 				note: null,
 				date: null,
 				itinerary: [
-					buildItem(0, 4, 'poi:2', false, ['city:1']),
-					buildItem(0, 2, 'poi:3', false, ['city:1']),
+					buildItem(0, 4, 'poi:2', null, ['city:1']),
+					buildItem(0, 2, 'poi:3', null, ['city:1']),
 				]
 			}
 			];
@@ -198,19 +198,19 @@ describe('PositionFinder', () => {
 					note: null,
 					date: null,
 					itinerary: [
-						buildItem(0, 2, 'poi:3', true, ['city:1']),
+						buildItem(0, 2, 'poi:3', 'last', ['city:1']),
 					]
 				}, {
 				note: null,
 				date: null,
 				itinerary: [
-					buildItem(0, 2, 'poi:3', true, ['city:1']),
+					buildItem(0, 2, 'poi:3', 'both', ['city:1']),
 				]
 				}, {
 				note: null,
 				date: null,
 				itinerary: [
-					buildItem(0, 2, 'poi:3', true, ['city:1']),
+					buildItem(0, 2, 'poi:3', 'first', ['city:1']),
 				]
 			}
 			];
@@ -226,8 +226,8 @@ describe('PositionFinder', () => {
 				note: null,
 				date: null,
 				itinerary: [
-					buildItem(0, 1, 'poi:2', true, ['city:1']),
-					buildItem(0, 2, 'poi:3', true, ['city:1'], 'plane'),
+					buildItem(0, 1, 'poi:2', 'first', ['city:1']),
+					buildItem(0, 2, 'poi:3', 'last', ['city:1'], 'plane'),
 				]
 			}
 			];
@@ -239,8 +239,8 @@ describe('PositionFinder', () => {
 				note: null,
 				date: null,
 				itinerary: [
-					buildItem(0, 2, 'poi:2', true, ['city:1']),
-					buildItem(0, 1, 'poi:3', true, ['city:1'], 'plane'),
+					buildItem(0, 2, 'poi:2', 'first', ['city:1']),
+					buildItem(0, 1, 'poi:3', 'last', ['city:1'], 'plane'),
 				]
 			}
 			];
@@ -256,8 +256,8 @@ describe('PositionFinder', () => {
 				note: null,
 				date: null,
 				itinerary: [
-					buildItem(0, 1, 'poi:2', true, ['city:1']),
-					buildItem(0, 2, 'poi:3', true, ['city:1'], 'car'),
+					buildItem(0, 1, 'poi:2', 'first', ['city:1']),
+					buildItem(0, 2, 'poi:3', 'last', ['city:1'], 'car'),
 				]
 			}
 			];
@@ -269,8 +269,8 @@ describe('PositionFinder', () => {
 				note: null,
 				date: null,
 				itinerary: [
-					buildItem(0, 2, 'poi:2', true, ['city:1']),
-					buildItem(0, 1, 'poi:3', true, ['city:1'], 'car'),
+					buildItem(0, 2, 'poi:2', 'first', ['city:1']),
+					buildItem(0, 1, 'poi:3', 'last', ['city:1'], 'car'),
 				]
 			}
 			];
@@ -287,8 +287,8 @@ describe('PositionFinder', () => {
 				note: null,
 				date: null,
 				itinerary: [
-					buildItem(0, 0, 'poi:2', false, ['city:1']),
-					buildItem(0, 1, 'poi:3', false, ['city:1']),
+					buildItem(0, 0, 'poi:2', null, ['city:1']),
+					buildItem(0, 1, 'poi:3', null, ['city:1']),
 				]
 			}];
 			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
@@ -304,13 +304,47 @@ describe('PositionFinder', () => {
 				note: null,
 				date: null,
 				itinerary: [
-					buildItem(0, 0, 'poi:2', false, ['city:1']),
-					buildItem(0, 1, 'poi:3', true, ['city:1']),
+					buildItem(0, 0, 'poi:2', null, ['city:1']),
+					buildItem(0, 1, 'poi:3', 'last', ['city:1']),
 				]
 			}];
 			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
 			chai.expect(result.position).to.equal(1);
 			chai.expect(result.shouldDuplicate).to.be.false('Expect false');
+		});
+
+		it('should not duplicate only sticky place in last day which is not also first', () => {
+			const placeIn = buildPlace(0, 0, 'poi:1');
+			const trip = cloneDeep(tripTemplate);
+			trip.days = [{
+				note: null,
+				date: null,
+				itinerary: []
+			}, {
+				note: null,
+				date: null,
+				itinerary: [
+					buildItem(0, 0, 'poi:2', 'first', ['city:1']),
+				]
+			}];
+			const result1: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 1, ['city:1'], userSettings);
+			chai.expect(result1.position).to.equal(1);
+			chai.expect(result1.shouldDuplicate).to.be.false('Expect false');
+
+			trip.days = [{
+				note: null,
+				date: null,
+				itinerary: []
+			}, {
+				note: null,
+				date: null,
+				itinerary: [
+					buildItem(0, 0, 'poi:2', 'last', ['city:1']),
+				]
+			}];
+			const result2: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 1, ['city:1'], userSettings);
+			chai.expect(result2.position).to.equal(0);
+			chai.expect(result2.shouldDuplicate).to.be.false('Expect false');
 		});
 	});
 });
@@ -319,7 +353,7 @@ const buildItem = (
 	lat: number,
 	lng: number,
 	id: string,
-	isSticky: boolean,
+	sticky: string | null,
 	parents?: string[],
 	transport?: TransportMode
 ): ItineraryItem => {
@@ -327,7 +361,9 @@ const buildItem = (
 	const newPlace = buildPlace(lat, lng, id, parents);
 	itineratyItem.place = newPlace;
 	itineratyItem.placeId = newPlace.id;
-	itineratyItem.isSticky = isSticky;
+	itineratyItem.isSticky = !! sticky;
+	itineratyItem.isStickyFirstInDay = !!(sticky && ['both', 'first'].includes(sticky));
+	itineratyItem.isStickyLastInDay = !!(sticky && ['both', 'last'].includes(sticky));
 	if (transport) {
 		itineratyItem.transportFromPrevious = {
 			mode: transport,
