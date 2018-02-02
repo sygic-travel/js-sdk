@@ -67,14 +67,10 @@ describe('RouteDataAccess', () => {
 			chai.expect(routes[1].origin.lat).to.equal(2);
 			chai.expect(routes[2].origin.lat).to.equal(3);
 			chai.expect(routes[3].origin.lat).to.equal(4);
-			chai.expect(routes[0].modeDirections[2].mode).to.equal('plane');
-			chai.expect(routes[1].modeDirections[2].mode).to.equal('plane');
-			chai.expect(routes[2].modeDirections[2].mode).to.equal('plane');
-			chai.expect(routes[3].modeDirections[2].mode).to.equal('plane');
-			chai.expect(routes[0].modeDirections[2].directions.length).to.equal(1);
-			chai.expect(routes[1].modeDirections[2].directions.length).to.equal(1);
-			chai.expect(routes[2].modeDirections[2].directions.length).to.equal(1);
-			chai.expect(routes[3].modeDirections[2].directions.length).to.equal(1);
+			chai.expect(routes[0].modeDirections.length).to.equal(7);
+			chai.expect(routes[1].modeDirections.length).to.equal(7);
+			chai.expect(routes[2].modeDirections.length).to.equal(7);
+			chai.expect(routes[3].modeDirections.length).to.equal(7);
 		});
 	});
 });

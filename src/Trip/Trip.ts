@@ -32,7 +32,7 @@ export enum TripConflictResolution {
 	merged = 'merged',
 	duplicated = 'duplicated',
 	ignored = 'ignored',
-	overrode = 'overrode'
+	overridden = 'overridden'
 }
 
 export function isTripConflictResolution(resolution: string): boolean {

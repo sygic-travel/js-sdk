@@ -1,8 +1,7 @@
 import { Mapper, Route, RouteRequest } from '.';
 import { ApiResponse, StApi } from '../Api';
 import { routesCache as cache } from '../Cache';
-import { TransportMode } from '../Trip';
-import { estimatePlaneDirection } from './Estimator';
+import { estimateModeDirections } from './Estimator';
 
 export async function getRoutes(requests: RouteRequest[]): Promise<Route[]> {
 	const keys: string[] = requests.map(createCacheKey);
@@ -15,15 +14,16 @@ export async function getRoutes(requests: RouteRequest[]): Promise<Route[]> {
 		}
 		return routeData;
 	}).map((routeData, index) => {
-		const route = Mapper.mapRouteFromApiResponse(
+		const route: Route = Mapper.mapRouteFromApiResponse(
 			routeData,
 			requests[index].avoid,
 			requests[index].chosenMode
 		);
-		route.modeDirections.push({
-			mode: TransportMode.plane,
-			directions: [estimatePlaneDirection(route.origin, route.destination)]
-		});
+
+		route.modeDirections = route.modeDirections.concat(
+			estimateModeDirections(route.modeDirections, route.origin, route.destination)
+		);
+
 		route.chosenDirection = Mapper.chooseDirection(
 			route.modeDirections,
 			requests[index].chosenMode,
