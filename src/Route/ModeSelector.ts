@@ -12,25 +12,25 @@ const PLANE_LIMIT_MIN: number = 50000;
 export const selectOptimalMode = (origin: Location, destination: Location): TransportMode => {
 	const distance = getDistance(origin, destination, EARTH_RADIUS);
 	if (distance <= PEDESTRIAN_OPTIMAL_MAX) {
-		return 'pedestrian';
+		return TransportMode.pedestrian;
 	}
 	if (distance <= CAR_OPTIMAL_MAX) {
-		return 'car';
+		return TransportMode.car;
 	}
-	return 'plane';
+	return TransportMode.plane;
 };
 
 export const getAvailableModes = (origin: Location, destination: Location): TransportMode[] => {
 	const distance = getDistance(origin, destination, EARTH_RADIUS);
 	const modes: TransportMode[] = [];
 	if (distance <= PEDESTRIAN_LIMIT_MAX) {
-		modes.push('pedestrian');
+		modes.push(TransportMode.pedestrian);
 	}
 	if (distance <= CAR_LIMIT_MAX) {
-		modes.push('car');
+		modes.push(TransportMode.car);
 	}
 	if (distance > PLANE_LIMIT_MIN) {
-		modes.push('plane');
+		modes.push(TransportMode.plane);
 	}
 	return modes;
 };

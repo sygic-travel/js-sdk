@@ -4,6 +4,7 @@ import { RouteRequest } from '.';
 import { Location } from '../Geo';
 import { route as apiRoute } from '../TestData/DirectionsApiResponses';
 import { route as routeEntity } from '../TestData/DirectionsEntities';
+import { TransportAvoid, TransportMode } from '../Trip';
 
 import * as Mapper from './Mapper';
 
@@ -12,7 +13,7 @@ describe('RouteMapper', () => {
 	describe('#mapRouteFromApiResponse', () => {
 
 		it('should correctly map api response to response', () => {
-			chai.expect(Mapper.mapRouteFromApiResponse(apiRoute, [], 'car'))
+			chai.expect(Mapper.mapRouteFromApiResponse(apiRoute, [], TransportMode.car))
 				.to.deep.equal(routeEntity);
 		});
 
@@ -33,8 +34,8 @@ describe('RouteMapper', () => {
 				origin,
 				destination,
 				routeId: '30:50',
-				avoid: ['highways'],
-				chosenMode: 'car',
+				avoid: [TransportAvoid.highways],
+				chosenMode: TransportMode.car,
 				waypoints: [{
 					placeId: 'abc',
 					location: {
@@ -53,8 +54,8 @@ describe('RouteMapper', () => {
 						lat: 1, lng: 1
 					}
 				}],
-				['highways'],
-				'car'
+				[TransportAvoid.highways],
+				TransportMode.car
 			)).to.deep.equal(expected);
 		});
 
@@ -71,8 +72,8 @@ describe('RouteMapper', () => {
 				origin,
 				destination,
 				routeId: null,
-				avoid: ['unpaved'],
-				chosenMode: 'pedestrian',
+				avoid: [TransportAvoid.unpaved],
+				chosenMode: TransportMode.pedestrian,
 				waypoints: [],
 			};
 			chai.expect(Mapper.createRouteRequest(destination, origin))

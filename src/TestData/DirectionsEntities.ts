@@ -1,5 +1,6 @@
 import { Location } from '../Geo';
 import { Direction, Route } from '../Route';
+import { TransportMode } from '../Trip';
 
 export const route = {
 	origin: {
@@ -15,7 +16,7 @@ export const route = {
 		duration: 30,
 		routeId: '30:800',
 		polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
-		mode: 'car',
+		mode: TransportMode.car,
 		avoid: [],
 		source: 'lbs',
 		isoCodes: [ 'CZ', 'SK' ]
@@ -29,7 +30,7 @@ export const route = {
 					duration: 300,
 					routeId: null,
 					polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvA',
-					mode: 'pedestrian',
+					mode: TransportMode.pedestrian,
 					source: 'osrm',
 					avoid: [],
 					isoCodes: [ 'CZ', 'SK' ]
@@ -44,7 +45,7 @@ export const route = {
 					duration: 30,
 					routeId: '30:800',
 					polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
-					mode: 'car',
+					mode: TransportMode.car,
 					source: 'lbs',
 					avoid: [],
 					isoCodes: [ 'CZ', 'SK' ]
@@ -54,7 +55,7 @@ export const route = {
 					duration: 30,
 					routeId: '30:700',
 					polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
-					mode: 'car',
+					mode: TransportMode.car,
 					source: 'lbs',
 					avoid: [],
 					isoCodes: [ 'CZ', 'SK' ]

@@ -5,7 +5,7 @@ import { getUserInfo, getUserSession, Session, setUserSession } from '.';
 import * as Dao from './DataAccess';
 
 import { session as testSession } from '../TestData/UserInfoExpectedResults';
-import { AuthResponse } from './Session';
+import { AuthenticationResponseCode, AuthResponse } from './Session';
 
 let sandbox: SinonSandbox;
 let clock: SinonFakeTimers;
@@ -40,7 +40,7 @@ describe('UserController', () => {
 			const stub: SinonStub = sandbox.stub(Dao, 'getSessionWithRefreshToken').returns(
 				new Promise<AuthResponse>((resolve) => {
 				resolve({
-					code: 'OK',
+					code: AuthenticationResponseCode.OK,
 					session: refreshedSession
 				});
 			}));

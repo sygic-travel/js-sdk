@@ -1,51 +1,51 @@
 import { Place } from '../Places';
-import { Waypoint } from '../Route/Route';
-import { listToEnum } from '../Util';
+import { Waypoint } from '../Route';
 
-const transportModeValues = listToEnum([
-	'car',
-	'pedestrian',
-	'bike',
-	'plane',
-	'bus',
-	'train',
-	'boat'
-]);
-export function isTransportMode(val: any): val is TransportMode {
-	return typeof val === 'string' && transportModeValues[val] === val;
-}
-export type TransportMode = keyof typeof transportModeValues;
 export const UNBREAKABLE_TRANSPORT_MODES = ['plane', 'bus', 'train', 'boat'];
 
-const transportAvoidValues = listToEnum([
-	'tolls',
-	'highways',
-	'ferries',
-	'unpaved'
-]);
-export type TransportAvoid = keyof typeof transportAvoidValues;
-export function isTransportAvoid(val: any): val is TransportAvoid {
-	return typeof val === 'string' && transportAvoidValues[val] === val;
+export enum TransportMode {
+	car = 'car',
+	pedestrian = 'pedestrian',
+	bike = 'bike',
+	plane = 'plane',
+	bus = 'bus',
+	train = 'train',
+	boat = 'boat'
 }
 
-const conflictResolutionValues = listToEnum([
-	'merged',
-	'duplicated',
-	'ignored',
-	'overrode',
-]);
-export type TripConflictResolution = keyof typeof conflictResolutionValues;
-export function isTripConflictResolution(val: any): val is TripConflictResolution {
-	return typeof val === 'string' && conflictResolutionValues[val] === val;
+export function isTransportMode(mode: string): boolean {
+	return !!TransportMode[mode];
 }
 
-const conflictClientResolutionValues = listToEnum([
-	'server',
-	'local',
-]);
-export type TripConflictClientResolution = keyof typeof conflictClientResolutionValues;
-export function isTripConflictClientResolution(val: any): val is TripConflictClientResolution {
-	return typeof val === 'string' && conflictClientResolutionValues[val] === val;
+export enum TransportAvoid {
+	tolls = 'tolls',
+	highways = 'highways',
+	ferries = 'ferries',
+	unpaved = 'unpaved'
+}
+
+export function isTransportAvoid(avoid: string): boolean {
+	return !!TransportAvoid[avoid];
+}
+
+export enum TripConflictResolution {
+	merged = 'merged',
+	duplicated = 'duplicated',
+	ignored = 'ignored',
+	overrode = 'overrode'
+}
+
+export function isTripConflictResolution(resolution: string): boolean {
+	return !!TripConflictResolution[resolution];
+}
+
+export enum TripConflictClientResolution {
+	server  = 'server',
+	local = 'local'
+}
+
+export function isTripConflictClientResolution(resolution: string): boolean {
+	return !!TripConflictClientResolution[resolution];
 }
 
 export interface TripConflictInfo {

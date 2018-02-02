@@ -6,7 +6,7 @@ import { getRoutesForTripDay, Route, TripDayRoutes } from '.';
 import { Dao as placesDao, Place } from '../Places';
 import { route } from '../TestData/DirectionsEntities';
 import { tripDetailed } from '../TestData/TripExpectedResults';
-import { Dao as tripDao, TransportSettings, Trip } from '../Trip';
+import { Dao as tripDao, TransportMode, TransportSettings, Trip } from '../Trip';
 import * as routesDao from './DataAccess';
 
 let sandbox: SinonSandbox;
@@ -27,7 +27,7 @@ describe('RoutesController', () => {
 			const transportFromPrevious: TransportSettings = {
 				duration: null,
 				startTime: null,
-				mode: 'pedestrian',
+				mode: TransportMode.pedestrian,
 				routeId: null,
 				avoid: [],
 				note: null,

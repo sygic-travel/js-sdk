@@ -11,7 +11,7 @@ import * as TripApiTestData from '../TestData/TripApiResponses';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
 import * as User from '../User';
 import * as Dao from './DataAccess';
-import { Day, ItineraryItem, Trip, TripConflictHandler, TripTemplate } from './Trip';
+import { Day, ItineraryItem, Trip, TripConflictClientResolution, TripConflictHandler, TripTemplate } from './Trip';
 
 let sandbox: SinonSandbox;
 let clock: SinonFakeTimers;
@@ -203,9 +203,10 @@ describe('TripDataAccess', () => {
 
 		it('should call conflict handler on ignored conflict and leave server response', (done) => {
 			let handlerCalled = false;
-			const handler: TripConflictHandler = async (info, trip): Promise<'server' | 'local'> => {
-				handlerCalled = true;
-				return 'server';
+			const handler: TripConflictHandler =
+				async (info, trip): Promise<TripConflictClientResolution.server | TripConflictClientResolution.local> => {
+					handlerCalled = true;
+					return TripConflictClientResolution.server;
 			};
 			setTripConflictHandler(handler);
 			const apiPut: SinonStub = sandbox.stub(StApi, 'put').returns(new Promise<ApiResponse>((resolve) => {
@@ -235,9 +236,10 @@ describe('TripDataAccess', () => {
 
 		it('should call update with newer updated_at when user select local changes', (done) => {
 			let handlerCalled = false;
-			const handler: TripConflictHandler = async (info, trip): Promise<'server' | 'local'> => {
-				handlerCalled = true;
-				return 'local';
+			const handler: TripConflictHandler =
+				async (info, trip): Promise<TripConflictClientResolution.server | TripConflictClientResolution.local> => {
+					handlerCalled = true;
+					return TripConflictClientResolution.local;
 			};
 			setTripConflictHandler(handler);
 			const apiPut: SinonStub = sandbox.stub(StApi, 'put').returns(new Promise<ApiResponse>((resolve) => {

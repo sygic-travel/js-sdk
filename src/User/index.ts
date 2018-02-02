@@ -32,7 +32,7 @@ export async function getUserSession(): Promise<Session | null> {
 		(now.getTime() > session.suggestedRefreshTimestamp || !session.suggestedRefreshTimestamp)
 	) {
 		const authResponse: AuthResponse = await Dao.getSessionWithRefreshToken(session.refreshToken);
-		if (authResponse.code === 'OK') {
+		if (authResponse.code === AuthenticationResponseCode.OK) {
 			setUserSession(authResponse.session);
 			session = authResponse.session;
 		}
@@ -65,7 +65,7 @@ export async function loginUserWithDeviceId(
 	devicePlatform: string
 ): Promise<AuthenticationResponseCode> {
 	const authResponse: AuthResponse = await Dao.getSessionWithDeviceId(deviceId, devicePlatform);
-	if (authResponse.code === 'OK') {
+	if (authResponse.code === AuthenticationResponseCode.OK) {
 		setUserSession(authResponse.session);
 	}
 	return authResponse.code;
@@ -91,9 +91,9 @@ export async function loginUserWithFacebook(
 	devicePlatform?: string
 ): Promise<AuthenticationResponseCode> {
 	const authResponse: AuthResponse = await Dao.getSessionWithThirdPartyAuth(
-		'facebook', accessToken, authorizationCode, deviceId, devicePlatform
+		ThirdPartyAuthType.facebook, accessToken, authorizationCode, deviceId, devicePlatform
 	);
-	if (authResponse.code === 'OK') {
+	if (authResponse.code === AuthenticationResponseCode.OK) {
 		setUserSession(authResponse.session);
 	}
 	return authResponse.code;
@@ -106,9 +106,9 @@ export async function loginUserWithGoogle(
 	devicePlatform?: string
 ): Promise<AuthenticationResponseCode> {
 	const authResponse: AuthResponse = await Dao.getSessionWithThirdPartyAuth(
-		'google', accessToken, authorizationCode, deviceId, devicePlatform
+		ThirdPartyAuthType.google, accessToken, authorizationCode, deviceId, devicePlatform
 	);
-	if (authResponse.code === 'OK') {
+	if (authResponse.code === AuthenticationResponseCode.OK) {
 		setUserSession(authResponse.session);
 	}
 	return authResponse.code;
@@ -122,7 +122,7 @@ export async function loginUserWithJwt(
 	const authResponse: AuthResponse = await Dao.getSessionWithJwt(
 		jwt, deviceId, devicePlatform
 	);
-	if (authResponse.code === 'OK') {
+	if (authResponse.code === AuthenticationResponseCode.OK) {
 		setUserSession(authResponse.session);
 	}
 	return authResponse.code;
@@ -134,7 +134,7 @@ export async function registerUser(
 	name: string
 ): Promise<RegistrationResponseCode> {
 	await Dao.registerUser(email, password, name);
-	return 'OK';
+	return RegistrationResponseCode.OK;
 }
 
 export async function getUserInfo(): Promise<UserInfo> {

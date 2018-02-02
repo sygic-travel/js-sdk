@@ -7,6 +7,7 @@ import { StApi } from '../Api';
 import { Location } from '../Geo';
 import { setEnvironment } from '../Settings';
 import { route } from '../TestData/DirectionsApiResponses';
+import { TransportMode } from '../Trip';
 import * as dao from './DataAccess';
 import { Route } from './Route';
 
@@ -44,7 +45,7 @@ describe('RouteDataAccess', () => {
 				destination: data.destination,
 				waypoints: [],
 				avoid: [],
-				chosenMode: 'car',
+				chosenMode: TransportMode.car,
 			});
 
 			const requests = routesData.map(buildRequest);

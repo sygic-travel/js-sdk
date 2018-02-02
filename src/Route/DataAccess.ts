@@ -1,6 +1,7 @@
 import { Mapper, Route, RouteRequest } from '.';
 import { ApiResponse, StApi } from '../Api';
 import { routesCache as cache } from '../Cache';
+import { TransportMode } from '../Trip';
 import { estimatePlaneDirection } from './Estimator';
 
 export async function getRoutes(requests: RouteRequest[]): Promise<Route[]> {
@@ -20,7 +21,7 @@ export async function getRoutes(requests: RouteRequest[]): Promise<Route[]> {
 			requests[index].chosenMode
 		);
 		route.modeDirections.push({
-			mode: 'plane',
+			mode: TransportMode.plane,
 			directions: [estimatePlaneDirection(route.origin, route.destination)]
 		});
 		route.chosenDirection = Mapper.chooseDirection(

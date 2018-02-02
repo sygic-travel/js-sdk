@@ -5,14 +5,14 @@ import { TransportAvoid, TransportMode } from '../Trip';
 import { Waypoint } from './Route';
 
 const toTranspotModesMapping = {
-	driving: 'car',
-	walking: 'pedestrian',
+	driving: TransportMode.car,
+	walking: TransportMode.pedestrian,
 };
 
 const MODES_ORDER: TransportMode[] = [
-	'plane',
-	'car',
-	'pedestrian'
+	TransportMode.plane,
+	TransportMode.car,
+	TransportMode.pedestrian
 ];
 
 export const mapRouteFromApiResponse = (
