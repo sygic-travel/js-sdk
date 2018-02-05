@@ -6,7 +6,7 @@ import { Place } from '../Places';
 import * as PlaceExpectedResults from '../TestData/PlacesExpectedResults';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
 import * as Manipulator from './Manipulator';
-import { Day, ItineraryItem, TransportSettings, Trip } from './Trip';
+import { Day, ItineraryItem, TransportAvoid, TransportMode, TransportSettings, Trip } from './Trip';
 
 chai.use(dirtyChai);
 
@@ -430,8 +430,8 @@ describe('TripManipulator', () => {
 		it('should immutably set correct transport', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			const transportSettings: TransportSettings = {
-				mode: 'car',
-				avoid: ['tolls'],
+				mode: TransportMode.car,
+				avoid: [TransportAvoid.tolls],
 				startTime: 7200,
 				duration: 3600,
 				routeId: '3600:7200',

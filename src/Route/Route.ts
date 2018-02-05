@@ -14,10 +14,10 @@ export interface Route {
 }
 
 export interface Direction {
-	distance: number;
-	duration: number;
+	distance: number | null;
+	duration: number | null;
 	polyline: string;
-	routeId: string|null;
+	routeId: string | null;
 	mode: TransportMode;
 	avoid: TransportAvoid[];
 	source: DirectionSource;

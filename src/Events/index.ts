@@ -35,7 +35,7 @@ function handleUserDataChanges(changes: ChangeNotification[]): void {
 
 async function handleTripConflict(conflictInfo: TripConflictInfo, trip: Trip): Promise<TripConflictClientResolution> {
 	if (!externalEventHandler) {
-		return 'server';
+		return TripConflictClientResolution.server;
 	}
 
 	const event: Event = {
@@ -48,7 +48,7 @@ async function handleTripConflict(conflictInfo: TripConflictInfo, trip: Trip): P
 
 	const conflictResolution = externalEventHandler(event);
 	if (!conflictResolution) {
-		return 'server';
+		return TripConflictClientResolution.server;
 	}
 	return conflictResolution;
 }

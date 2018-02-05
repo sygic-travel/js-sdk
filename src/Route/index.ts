@@ -34,7 +34,7 @@ export async function getRoutesForTripDay(tripId: string, dayIndex: number): Pro
 	const places: Place[] = await placesDao.getPlacesFromTripDay(day, '100x100');
 	const routes: Route[] = await Dao.getRoutes(createRequests(places, day));
 	return {
-		routes: filterRoutesDirections(routes),
+		routes,
 		userTransportSettings: day.itinerary.slice(1).map(
 			(item: ItineraryItem) => (item.transportFromPrevious)
 		)
@@ -76,17 +76,6 @@ export async function getDirections(
 	waypoints: Waypoint[],
 	avoids: TransportAvoid[]
 ): Promise<Route | null> {
-	let routes: Route[] = await Dao.getRoutes([Mapper.createRouteRequest(destination, origin, null, waypoints, avoids)]);
-	routes = filterRoutesDirections(routes);
+	const routes: Route[] = await Dao.getRoutes([Mapper.createRouteRequest(destination, origin, null, waypoints, avoids)]);
 	return routes.length > 0 ? routes[0] : null;
 }
-
-const filterRoutesDirections = (routes: Route[]): Route[] => {
-	return routes.map((route: Route): Route => {
-		const availableModes = ModeSelector.getAvailableModes(route.origin, route.destination);
-		route.modeDirections = route.modeDirections.filter((modeDirection: ModeDirections) => {
-			return availableModes.indexOf(modeDirection.mode) !== -1;
-		});
-		return route;
-	});
-};

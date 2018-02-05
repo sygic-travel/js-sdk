@@ -8,7 +8,7 @@ import { setEnvironment } from '../Settings';
 import * as ToursApiTestData from '../TestData/ToursApiResponses';
 import * as ToursExpectedResults from '../TestData/ToursExpectedResults';
 import * as Dao from './DataAccess';
-import { ToursQuery } from './ToursQuery';
+import { ToursQuery, ToursQueryDirection, ToursQuerySortBy } from './ToursQuery';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
@@ -36,8 +36,8 @@ describe('TripDataAccess', () => {
 			const toursQuery: ToursQuery = {
 				parentPlaceId: '123123',
 				page: 1,
-				sortBy: 'price',
-				sortDirection: 'asc'
+				sortBy: ToursQuerySortBy.price,
+				sortDirection: ToursQueryDirection.asc
 			};
 
 			return chai.expect(Dao.getTours(toursQuery))

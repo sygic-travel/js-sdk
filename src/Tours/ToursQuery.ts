@@ -1,19 +1,13 @@
-import { listToEnum } from '../Util';
+export enum ToursQuerySortBy {
+	price = 'price',
+	rating = 'rating',
+	top_sellers = 'top_sellers'
+}
 
-const toursQuerySortByValues = listToEnum([
-	'price',
-	'rating',
-	'top_sellers'
-]);
-
-export type ToursQuerySortBy = keyof typeof toursQuerySortByValues;
-
-const toursSortDirectionValues = listToEnum([
-	'asc',
-	'desc'
-]);
-
-export type ToursQueryDirection = keyof typeof toursSortDirectionValues;
+export enum ToursQueryDirection {
+	asc = 'asc',
+	desc = 'desc'
+}
 
 export interface ToursQuery {
 	parentPlaceId: string;

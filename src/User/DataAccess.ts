@@ -155,7 +155,7 @@ export async function registerUser(
 	};
 	const response: ApiResponse = await SsoApi.post('user/register', request, clientSession);
 	if (response.statusCode === 200) {
-		return 'OK';
+		return RegistrationResponseCode.OK;
 	}
 	if (response.statusCode === 401) {
 		// client session is expired, let's reinitialize it
@@ -163,20 +163,20 @@ export async function registerUser(
 		return registerUser(email, password, name);
 	}
 	if (response.statusCode === 409) {
-		return 'ERROR_ALREADY_REGISTERED';
+		return RegistrationResponseCode.ERROR_ALREADY_REGISTERED;
 	}
 	if (response.data && response.data.type) {
 		switch (response.data.type) {
 			case 'validation.password.min_length':
-				return 'ERROR_PASSWORD_MIN_LENGTH';
+				return RegistrationResponseCode.ERROR_PASSWORD_MIN_LENGTH;
 			case 'validation.username.min_length':
 			case 'validation.email.invalid_format':
-				return 'ERROR_EMAIL_INVALID_FORMAT';
+				return RegistrationResponseCode.ERROR_EMAIL_INVALID_FORMAT;
 			default:
-				return 'ERROR';
+				return RegistrationResponseCode.ERROR;
 		}
 	}
-	return 'ERROR';
+	return RegistrationResponseCode.ERROR;
 
 }
 
@@ -218,7 +218,7 @@ async function authOnSso(request): Promise<AuthResponse> {
 	const now = new Date();
 	if (response.statusCode === 200) {
 		return {
-			code: 'OK',
+			code: AuthenticationResponseCode.OK,
 			session: {
 				accessToken: response.data.access_token,
 				refreshToken: response.data.refresh_token,
@@ -227,9 +227,9 @@ async function authOnSso(request): Promise<AuthResponse> {
 			} as Session
 		};
 	}
-	let code: AuthenticationResponseCode = 'ERROR';
+	let code: AuthenticationResponseCode = AuthenticationResponseCode.ERROR;
 	if (response.statusCode === 401) {
-		code = 'ERROR_INVALID_CREDENTIALS';
+		code = AuthenticationResponseCode.ERROR_INVALID_CREDENTIALS;
 	}
 	return {
 		code,

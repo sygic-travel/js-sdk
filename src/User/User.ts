@@ -1,18 +1,16 @@
-import { listToEnum } from '../Util';
-
 export interface UserSettings {
 	homePlaceId: string | null;
 	workPlaceId: string | null;
 }
 
-const thirdPartyAuthTypes = listToEnum([
-	'facebook',
-	'google'
-]);
-export function isThirdPartyAuthType(val: any): val is ThirdPartyAuthType {
-	return typeof val === 'string' && thirdPartyAuthTypes[val] === val;
+export enum ThirdPartyAuthType {
+	facebook = 'facebook',
+	google = 'google'
 }
-export type ThirdPartyAuthType = keyof typeof thirdPartyAuthTypes;
+
+export function isThirdPartyAuthType(authType: string): boolean {
+	return !!ThirdPartyAuthType[authType];
+}
 
 export interface UserInfo {
 	id: string;

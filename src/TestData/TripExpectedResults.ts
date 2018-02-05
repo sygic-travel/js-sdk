@@ -1,6 +1,8 @@
 import * as cloneDeep from 'lodash.clonedeep';
 
-import { Day, ItineraryItem, TransportSettings, Trip, TripMedia, TripPrivileges } from '../Trip/Trip';
+import {
+	Day, ItineraryItem, TransportAvoid, TransportMode, TransportSettings, Trip, TripMedia, TripPrivileges
+} from '../Trip';
 import { placeDetailedEiffelTowerWithoutMedia } from './PlacesExpectedResults';
 
 /* tslint:disable */
@@ -62,7 +64,7 @@ export const itineratyItem: ItineraryItem = {
 };
 
 export const transportSettings: TransportSettings = {
-	mode: 'car',
+	mode: TransportMode.car,
 	routeId: null,
 	startTime: null,
 	waypoints: [],
@@ -134,8 +136,8 @@ export const tripDetailed = {
 					duration: null,
 					note: null,
 					transportFromPrevious: {
-						mode: "car",
-						avoid: ["tolls"],
+						mode: TransportMode.car,
+						avoid: [TransportAvoid.tolls],
 						startTime: 123456789,
 						duration: 3600,
 						note: 'Note',
