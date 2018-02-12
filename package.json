@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "webpack-dev-server",
     "build": "webpack --config ./webpack.prod.config.js",
+    "build-debug": "webpack --config ./webpack.debug.config.js",
     "test": "mocha -r ts-node/register \"src/**/*.test.ts\" --reporter \"list\" --timeout 5000",
     "doc": "typedoc --mode modules --excludeExternals --exclude \"**/*+(.test).ts\"  --out ./doc ./src"
   },
