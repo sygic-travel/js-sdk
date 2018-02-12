@@ -219,6 +219,34 @@ describe('PositionFinder', () => {
 			chai.expect(result.shouldDuplicate).to.be.true('Expect true');
 		});
 
+		it('should not split sticky place which is sticky to previous day', () => {
+			const placeIn = buildPlace(0, 0, 'poi:1');
+			const trip = cloneDeep(tripTemplate);
+			trip.days = [{
+				note: null,
+				date: null,
+				itinerary: [
+					buildItem(0, 2, 'poi:3', 'last', ['city:1']),
+				]
+			}, {
+				note: null,
+				date: null,
+				itinerary: [
+					buildItem(0, 2, 'poi:3', 'first', ['city:1']),
+				]
+			}, {
+				note: null,
+				date: null,
+				itinerary: [
+					buildItem(0, 2, 'poi:4', null, ['city:1']),
+				]
+			}
+			];
+			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 1, [], userSettings);
+			chai.expect(result.position).to.equal(1);
+			chai.expect(result.shouldDuplicate).to.be.false('Expect false');
+		});
+
 		it('should do duplication of place for route with plane between 2 sticky places', () => {
 			const placeIn = buildPlace(0, 0, 'poi:1');
 			const trip = cloneDeep(tripTemplate);

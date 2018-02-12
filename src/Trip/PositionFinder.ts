@@ -28,7 +28,7 @@ export function getAddToTripInstructions(
 
 	// SPECIAL USECASES
 	// Adding hotel
-	if (isStickyByDefault(place) && (!itinerary.length || !itinerary[itinerary.length - 1].isSticky)) {
+	if (isStickyByDefault(place) && (!itinerary.length || !itinerary[itinerary.length - 1].isStickyLastInDay)) {
 		return {
 			position: itinerary.length,
 			shouldDuplicate: false
@@ -91,7 +91,7 @@ export function getAddToTripInstructions(
 			score.penalty += 10;
 		}
 
-		if (hasUnbreakableRoute(item) || (item.isSticky && position === 0)) {
+		if (hasUnbreakableRoute(item) || item.isStickyFirstInDay) {
 			score.penalty += 10;
 			score.shouldSplit = true;
 		}
@@ -116,7 +116,7 @@ export function getAddToTripInstructions(
 				score.penalty += 30;
 				score.shouldSplit = false;
 			}
-			if (item.isSticky) {
+			if (item.isStickyLastInDay) {
 				score.penalty = 30;
 				score.shouldSplit = false;
 			}
