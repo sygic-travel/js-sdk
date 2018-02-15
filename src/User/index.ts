@@ -25,7 +25,7 @@ export {
 	UserSettings
 };
 
-export async function getUserSession(): Promise<Session | null> {
+export async function getSession(): Promise<Session | null> {
 	let session: Session | null = await Dao.getUserSession();
 	const now = new Date();
 	if (session && session.refreshToken &&
@@ -33,7 +33,7 @@ export async function getUserSession(): Promise<Session | null> {
 	) {
 		const authResponse: AuthResponse = await Dao.getSessionWithRefreshToken(session.refreshToken);
 		if (authResponse.code === AuthenticationResponseCode.OK) {
-			setUserSession(authResponse.session);
+			setSession(authResponse.session);
 			session = authResponse.session;
 		}
 	}
@@ -48,7 +48,7 @@ export async function updateUserSettings(settings: UserSettings): Promise<UserSe
 	return Dao.updateUserSettings(settings);
 }
 
-export async function setUserSession(userSession: Session | null): Promise<void> {
+export async function setSession(userSession: Session | null): Promise<void> {
 	await userCache.reset();
 	await favoritesCache.reset();
 	await tripsDetailedCache.reset();
@@ -60,18 +60,18 @@ export async function handleSettingsChange(): Promise<void> {
 	return Dao.handleSettingsChange();
 }
 
-export async function loginUserWithDeviceId(
+export async function signInWithDeviceId(
 	deviceId: string,
 	devicePlatform: string
 ): Promise<AuthenticationResponseCode> {
 	const authResponse: AuthResponse = await Dao.getSessionWithDeviceId(deviceId, devicePlatform);
 	if (authResponse.code === AuthenticationResponseCode.OK) {
-		setUserSession(authResponse.session);
+		setSession(authResponse.session);
 	}
 	return authResponse.code;
 }
 
-export async function loginUserWithPassword(
+export async function signInWithCredentials(
 	email: string,
 	password: string,
 	deviceId?: string,
@@ -79,42 +79,40 @@ export async function loginUserWithPassword(
 ): Promise<AuthenticationResponseCode> {
 	const authResponse: AuthResponse = await Dao.getSessionWithPassword(email, password, deviceId, devicePlatform);
 	if (authResponse.code === 'OK') {
-		await setUserSession(authResponse.session);
+		await setSession(authResponse.session);
 	}
 	return authResponse.code;
 }
 
-export async function loginUserWithFacebook(
+export async function signInWithFacebookAccessToken(
 	accessToken: string | null,
-	authorizationCode: string | null,
 	deviceId?: string,
 	devicePlatform?: string
 ): Promise<AuthenticationResponseCode> {
 	const authResponse: AuthResponse = await Dao.getSessionWithThirdPartyAuth(
-		ThirdPartyAuthType.facebook, accessToken, authorizationCode, deviceId, devicePlatform
+		ThirdPartyAuthType.facebook, accessToken, deviceId, devicePlatform
 	);
 	if (authResponse.code === AuthenticationResponseCode.OK) {
-		await setUserSession(authResponse.session);
+		await setSession(authResponse.session);
 	}
 	return authResponse.code;
 }
 
-export async function loginUserWithGoogle(
+export async function signInWithGoogleIdToken(
 	accessToken: string | null,
-	authorizationCode: string | null,
 	deviceId?: string,
 	devicePlatform?: string
 ): Promise<AuthenticationResponseCode> {
 	const authResponse: AuthResponse = await Dao.getSessionWithThirdPartyAuth(
-		ThirdPartyAuthType.google, accessToken, authorizationCode, deviceId, devicePlatform
+		ThirdPartyAuthType.google, accessToken, deviceId, devicePlatform
 	);
 	if (authResponse.code === AuthenticationResponseCode.OK) {
-		await setUserSession(authResponse.session);
+		await setSession(authResponse.session);
 	}
 	return authResponse.code;
 }
 
-export async function loginUserWithJwt(
+export async function signInWithJwtToken(
 	jwt: string,
 	deviceId?: string,
 	devicePlatform?: string
@@ -123,12 +121,12 @@ export async function loginUserWithJwt(
 		jwt, deviceId, devicePlatform
 	);
 	if (authResponse.code === AuthenticationResponseCode.OK) {
-		await setUserSession(authResponse.session);
+		await setSession(authResponse.session);
 	}
 	return authResponse.code;
 }
 
-export async function registerUser(
+export async function register(
 	email: string,
 	password: string,
 	name: string
@@ -138,7 +136,7 @@ export async function registerUser(
 }
 
 export async function getUserInfo(): Promise<UserInfo> {
-	const session = await getUserSession();
+	const session = await getSession();
 	if (!session) {
 		throw new Error('User session is not set');
 	}

@@ -8,7 +8,7 @@ import { initializeChangesWatching, setChangesCallback, stopChangesWatching } fr
 import { favoritesCache, tripsDetailedCache } from '../Cache';
 import { setEnvironment } from '../Settings';
 import { getFreshSession } from '../TestData/UserInfoExpectedResults';
-import { setUserSession } from '../User';
+import { setSession } from '../User';
 import { ChangeNotification } from './ChangeNotification';
 
 chai.use(dirtyChai);
@@ -25,14 +25,14 @@ describe('ChangesController', () => {
 	beforeEach((done) => {
 		sandbox = sinoSandbox.create();
 		clock = sandbox.useFakeTimers((new Date()).getTime());
-		setUserSession(getFreshSession()).then(() => { done(); });
+		setSession(getFreshSession()).then(() => { done(); });
 	});
 
 	afterEach((done) => {
 		sandbox.restore();
 		clock.restore();
 		stopChangesWatching();
-		setUserSession(null).then(() => { done(); });
+		setSession(null).then(() => { done(); });
 	});
 
 	describe('#initializeChangesWatching', () => {

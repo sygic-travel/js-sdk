@@ -3,7 +3,7 @@ import * as moxios from 'moxios';
 
 import { setEnvironment } from '../Settings';
 import { getFreshSession } from '../TestData/UserInfoExpectedResults';
-import { setUserSession } from '../User';
+import { setSession } from '../User';
 import { axiosInstance, get, post, put, setInvalidSessionHandler } from './StApi';
 
 const testSession = getFreshSession();
@@ -26,7 +26,7 @@ describe('StApi', () => {
 
 	afterEach((done) => {
 		moxios.uninstall(axiosInstance);
-		setUserSession(null).then(() => { done(); });
+		setSession(null).then(() => { done(); });
 	});
 
 	describe('#get', () => {
@@ -49,7 +49,7 @@ describe('StApi', () => {
 		});
 
 		it('should correctly set access token and call api with it', (done) => {
-			setUserSession(testSession).then(() => {
+			setSession(testSession).then(() => {
 				get('/');
 				moxios.wait(() => {
 					const request = moxios.requests.mostRecent();
@@ -145,7 +145,7 @@ describe('StApi', () => {
 		});
 
 		it('should correctly set access token and call api with it', (done) => {
-			setUserSession(testSession).then(() => {
+			setSession(testSession).then(() => {
 				post('/', null);
 				moxios.wait(() => {
 					const request = moxios.requests.mostRecent();
@@ -176,7 +176,7 @@ describe('StApi', () => {
 		});
 
 		it('should correctly set access token and call api with it', (done) => {
-			setUserSession(testSession).then(() => {
+			setSession(testSession).then(() => {
 				put('/', null);
 				moxios.wait(() => {
 					const request = moxios.requests.mostRecent();

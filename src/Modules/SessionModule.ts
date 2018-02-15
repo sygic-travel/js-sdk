@@ -1,25 +1,25 @@
 import {
 	AuthenticationResponseCode,
 	deleteAccount,
+	getSession,
 	getUserInfo,
-	getUserSession,
 	getUserSettings,
-	loginUserWithDeviceId,
-	loginUserWithFacebook,
-	loginUserWithGoogle,
-	loginUserWithJwt,
-	loginUserWithPassword,
-	registerUser,
+	register,
 	RegistrationResponseCode,
 	requestCancelAccount,
 	Session,
-	setUserSession,
+	setSession,
+	signInWithCredentials,
+	signInWithDeviceId,
+	signInWithFacebookAccessToken,
+	signInWithGoogleIdToken,
+	signInWithJwtToken,
 	updateUserSettings,
 	UserInfo,
 	UserSettings,
 } from '../User';
 
-export default class UserModule {
+export default class SessionModule {
 	/**
 	 * @experimental
 	 */
@@ -37,15 +37,15 @@ export default class UserModule {
 	/**
 	 * @experimental
 	 */
-	public setUserSession(userSession: Session | null): Promise<void> {
-		return setUserSession(userSession);
+	public setSession(userSession: Session | null): Promise<void> {
+		return setSession(userSession);
 	}
 
 	/**
 	 * @experimental
 	 */
-	public getUserSession(): Promise<Session | null> {
-		return getUserSession();
+	public getSession(): Promise<Session | null> {
+		return getSession();
 	}
 
 	/**
@@ -65,15 +65,15 @@ export default class UserModule {
 	/**
 	 * @experimental
 	 */
-	public loginUserWithDeviceId(deviceId: string, devideCode: string): Promise<AuthenticationResponseCode> {
-		return loginUserWithDeviceId(deviceId, devideCode);
+	public signInWithDeviceId(deviceId: string, devideCode: string): Promise<AuthenticationResponseCode> {
+		return signInWithDeviceId(deviceId, devideCode);
 	}
 
 	/**
 	 * @experimental
 	 */
-	public loginUserWithJwt(jwt: string, deviceId?: string, devideCode?: string): Promise<AuthenticationResponseCode> {
-		return loginUserWithJwt(jwt, deviceId, devideCode);
+	public signInWithJwtToken(jwt: string, deviceId?: string, devideCode?: string): Promise<AuthenticationResponseCode> {
+		return signInWithJwtToken(jwt, deviceId, devideCode);
 	}
 
 	/**
@@ -85,42 +85,40 @@ export default class UserModule {
 		deviceId?: string,
 		devideCode?: string
 	): Promise<AuthenticationResponseCode> {
-		return loginUserWithPassword(email, password, deviceId, devideCode);
+		return signInWithCredentials(email, password, deviceId, devideCode);
 	}
 
 	/**
 	 * @experimental
 	 */
-	public loginUserWithFacebook(
-		accessToken: string | null,
-		authorizationCode: string | null,
+	public signInWithFacebookAccessToken(
+		token: string | null,
 		deviceId?: string,
 		devicePlatform?: string
 	): Promise<AuthenticationResponseCode> {
-		return loginUserWithFacebook(accessToken, authorizationCode, deviceId, devicePlatform);
+		return signInWithFacebookAccessToken(token, deviceId, devicePlatform);
 	}
 
 	/**
 	 * @experimental
 	 */
-	public loginUserWithGoogle(
-		accessToken: string | null,
-		authorizationCode: string | null,
+	public signInWithGoogleIdToken(
+		token: string | null,
 		deviceId?: string,
 		devicePlatform?: string
 	): Promise<AuthenticationResponseCode> {
-		return loginUserWithGoogle(accessToken, authorizationCode, deviceId, devicePlatform);
+		return signInWithGoogleIdToken(token, deviceId, devicePlatform);
 	}
 
 	/**
 	 * @experimental
 	 */
-	public registerUser(
+	public register(
 		email: string,
 		password: string,
 		name: string
 	): Promise<RegistrationResponseCode> {
-		return registerUser(email, password, name);
+		return register(email, password, name);
 	}
 
 	/**
@@ -128,5 +126,12 @@ export default class UserModule {
 	 */
 	public getUserInfo(): Promise<UserInfo> {
 		return getUserInfo();
+	}
+
+	/**
+	 * @experimental
+	 */
+	public signOut(): Promise<void> {
+		return setSession(null);
 	}
 }

@@ -180,28 +180,12 @@ describe('UserDataAccess', () => {
 			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, tokenData));
 			}));
-			return Dao.getSessionWithThirdPartyAuth(ThirdPartyAuthType.facebook, 'facebook_token', null).then((data) => {
+			return Dao.getSessionWithThirdPartyAuth(ThirdPartyAuthType.facebook, 'facebook_token').then((data) => {
 				chai.expect(data).to.deep.equal({code: 'OK', session: testSession});
 				chai.expect(apiStub.callCount).to.equal(1);
 				chai.expect(apiStub.getCall(0).args[0]).to.equal('oauth2/token');
 				chai.expect(apiStub.getCall(0).args[1]['access_token']).to.equal('facebook_token');
 				chai.expect(apiStub.getCall(0).args[1]['authorization_code']).to.be.undefined('Expect undefined');
-				chai.expect(apiStub.getCall(0).args[1]['device_code']).to.be.undefined('Expect undefined');
-				chai.expect(apiStub.getCall(0).args[1]['device_platform']).to.be.undefined('Expect undefined');
-				chai.expect(apiStub.getCall(0).args[1]['grant_type']).to.equal('facebook');
-			});
-		});
-
-		it('should get the token from api by authorization code', () => {
-			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
-				resolve(new ApiResponse(200, tokenData));
-			}));
-			return Dao.getSessionWithThirdPartyAuth(ThirdPartyAuthType.facebook, null, 'auth_code').then((data) => {
-				chai.expect(data).to.deep.equal({code: 'OK', session: testSession});
-				chai.expect(apiStub.callCount).to.equal(1);
-				chai.expect(apiStub.getCall(0).args[0]).to.equal('oauth2/token');
-				chai.expect(apiStub.getCall(0).args[1]['access_token']).to.be.undefined('Expect undefined');
-				chai.expect(apiStub.getCall(0).args[1]['authorization_code']).to.equal('auth_code');
 				chai.expect(apiStub.getCall(0).args[1]['device_code']).to.be.undefined('Expect undefined');
 				chai.expect(apiStub.getCall(0).args[1]['device_platform']).to.be.undefined('Expect undefined');
 				chai.expect(apiStub.getCall(0).args[1]['grant_type']).to.equal('facebook');
@@ -214,22 +198,13 @@ describe('UserDataAccess', () => {
 			}));
 			return Dao.getSessionWithThirdPartyAuth(
 				ThirdPartyAuthType.facebook,
-				null,
-				'auth_code',
+				'token',
 				'id',
 				'platform'
 			).then((data) => {
 				chai.expect(apiStub.getCall(0).args[1]['device_code']).to.equal('id');
 				chai.expect(apiStub.getCall(0).args[1]['device_platform']).to.equal('platform');
 			});
-		});
-
-		it('should raise error on both token and code passed', (done) => {
-			Dao.getSessionWithThirdPartyAuth(ThirdPartyAuthType.facebook, 'facebook_token', 'auth_code')
-				.catch((e: Error) => {
-					chai.expect(e.message).to.equal('Only one of accessToken, authorizationCode must be provided');
-					done();
-				});
 		});
 	});
 
@@ -258,7 +233,7 @@ describe('UserDataAccess', () => {
 		name: 'name'
 	};
 
-	describe('#registerUser', () => {
+	describe('#register', () => {
 		it('should call api properly', async () => {
 			const response = {id: '132456'};
 			const apiStub: SinonStub = sandbox.stub(SsoApi, 'post');

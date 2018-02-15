@@ -91,22 +91,14 @@ export async function getSessionWithRefreshToken(
 export async function getSessionWithThirdPartyAuth(
 	type: ThirdPartyAuthType,
 	accessToken: string | null,
-	authorizationCode: string | null,
 	deviceId?: string,
 	devicePlatform?: string
 ): Promise<AuthResponse> {
-	if (accessToken && authorizationCode) {
-		throw new Error('Only one of accessToken, authorizationCode must be provided');
-	}
-
 	const request: any = {
 		grant_type: type
 	};
 	if (accessToken) {
 		request.access_token = accessToken;
-	}
-	if (authorizationCode) {
-		request.authorization_code = authorizationCode;
 	}
 	if (devicePlatform) {
 		request.device_platform = devicePlatform;

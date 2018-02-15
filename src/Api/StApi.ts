@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { getIntegratorKey, getStApiUrl } from '../Settings';
-import { getUserSession } from '../User';
+import { getSession } from '../User';
 import { ApiResponse } from './ApiResponse';
 
 export const axiosInstance: AxiosInstance = axios.create();
@@ -73,7 +73,7 @@ async function buildRequestConfig(url: string, requestData?: any): Promise<Axios
 }
 
 async function buildHeaders(): Promise<any> {
-	const userSession = await getUserSession();
+	const userSession = await getSession();
 	const headers = {};
 
 	const clientKey = getIntegratorKey();

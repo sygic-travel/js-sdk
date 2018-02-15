@@ -9,7 +9,7 @@ import { setEnvironment } from '../Settings';
 import * as TestApiResponses from '../TestData/CollaborationsApiResponses';
 import * as TestExpectedResults from '../TestData/CollaborationsExpectedResults';
 import { getFreshSession } from '../TestData/UserInfoExpectedResults';
-import { setUserSession } from '../User';
+import { setSession } from '../User';
 
 import * as Dao from './DataAccess';
 
@@ -25,13 +25,13 @@ describe('CollaborationDataAccess', () => {
 	beforeEach((done) => {
 		sandbox = sinonSandbox.create();
 		Moxios.install(StApi.axiosInstance);
-		setUserSession(getFreshSession()).then(() => { done(); });
+		setSession(getFreshSession()).then(() => { done(); });
 	});
 
 	afterEach((done) => {
 		sandbox.restore();
 		Moxios.uninstall(StApi.axiosInstance);
-		setUserSession(null).then(() => { done(); });
+		setSession(null).then(() => { done(); });
 	});
 
 	describe('#followTrip', () => {
