@@ -1,6 +1,6 @@
 import { handleFavoritesChanges } from '../Favorites';
+import { handleSettingsChange } from '../Session';
 import { handleTripChanges } from '../Trip';
-import { handleSettingsChange } from '../User';
 import { ChangeNotification } from './ChangeNotification';
 import ChangeWatcher from './ChangeWatcher';
 

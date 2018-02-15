@@ -1,5 +1,5 @@
 import * as cloneDeep from 'lodash.clonedeep';
-import { Session, UserInfo, UserLicense} from '../User';
+import { Session, UserInfo, UserLicense} from '../Session';
 import { tokenData } from './SsoApiResponses';
 
 export const userInfo: UserInfo = {

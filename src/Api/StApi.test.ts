@@ -1,9 +1,9 @@
 import * as chai from 'chai';
 import * as moxios from 'moxios';
 
+import { setSession } from '../Session';
 import { setEnvironment } from '../Settings';
 import { getFreshSession } from '../TestData/UserInfoExpectedResults';
-import { setSession } from '../User';
 import { axiosInstance, get, post, put, setInvalidSessionHandler } from './StApi';
 
 const testSession = getFreshSession();

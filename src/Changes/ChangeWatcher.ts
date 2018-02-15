@@ -1,7 +1,7 @@
 import { stringify } from 'query-string';
 
 import { ApiResponse, StApi } from '../Api';
-import { getSession, Session } from '../User';
+import { getSession, Session } from '../Session';
 import { ChangeNotification } from './ChangeNotification';
 
 export default class ChangeWatcher {

@@ -5,7 +5,7 @@ import * as cloneDeep from 'lodash.clonedeep';
 import { Place } from '../Places';
 import { placeDetailedEiffelTowerWithoutMedia as place } from '../TestData/PlacesExpectedResults';
 import { itineratyItem as itineratyItemTemplate, tripDetailed } from '../TestData/TripExpectedResults';
-import { UserSettings } from '../User';
+import { UserSettings } from '../Session';
 import { AddToTripInstructions, getAddToTripInstructions } from './PositionFinder';
 import { ItineraryItem, TransportMode, TransportSettings } from './Trip';
 

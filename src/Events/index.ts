@@ -2,9 +2,9 @@ import { Event, EventType } from './Event';
 
 import { StApi } from '../Api';
 import { ChangeNotification, setChangesCallback } from '../Changes';
+import { setSession } from '../Session';
 import { setTripConflictHandler } from '../Settings';
 import { Trip, TripConflictClientResolution, TripConflictInfo } from '../Trip';
-import { setSession } from '../User';
 
 export { Event };
 

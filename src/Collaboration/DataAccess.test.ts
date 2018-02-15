@@ -9,7 +9,7 @@ import { setEnvironment } from '../Settings';
 import * as TestApiResponses from '../TestData/CollaborationsApiResponses';
 import * as TestExpectedResults from '../TestData/CollaborationsExpectedResults';
 import { getFreshSession } from '../TestData/UserInfoExpectedResults';
-import { setSession } from '../User';
+import { setSession } from '../Session';
 
 import * as Dao from './DataAccess';
 

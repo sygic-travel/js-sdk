@@ -8,11 +8,11 @@ import * as PlacesController from '../Places';
 
 import { buildDestinationsAndPlaces, generatePdf, GeneratingState } from '.';
 
+import * as User from '../Session';
 import { setEnvironment } from '../Settings/';
 import * as pdfApiResponses from '../TestData/PdfApiResponses';
 import * as pdfResults from '../TestData/PdfExpectedResults';
 import { placeDetailedEiffelTowerWithoutMedia as placeMock } from '../TestData/PlacesExpectedResults';
-import * as User from '../User';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);

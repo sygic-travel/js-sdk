@@ -3,7 +3,7 @@ import * as cloneDeep from 'lodash.clonedeep';
 
 import { Place } from '../Places';
 import { Waypoint } from '../Route';
-import { UserSettings } from '../User';
+import { UserSettings } from '../Session';
 import { Day, ItineraryItem, Trip, TripCreateRequest, TripInfo, TripMedia, TripPrivileges, TripTemplate} from './Trip';
 import { decorateDaysWithDate } from './Utility';
 

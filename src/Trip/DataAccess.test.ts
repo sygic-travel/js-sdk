@@ -6,10 +6,10 @@ import { assert, sandbox as sinonSandbox, SinonFakeTimers, SinonSandbox, SinonSt
 
 import { ApiResponse, StApi } from '../Api';
 import { placesDetailedCache as Cache, tripsDetailedCache } from '../Cache';
+import * as User from '../Session';
 import { setEnvironment, setTripConflictHandler } from '../Settings';
 import * as TripApiTestData from '../TestData/TripApiResponses';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
-import * as User from '../User';
 import * as Dao from './DataAccess';
 import { Day, ItineraryItem, Trip, TripConflictClientResolution, TripConflictHandler, TripTemplate } from './Trip';
 

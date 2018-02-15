@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { getSession } from '../Session';
 import { getIntegratorKey, getStApiUrl } from '../Settings';
-import { getSession } from '../User';
 import { ApiResponse } from './ApiResponse';
 
 export const axiosInstance: AxiosInstance = axios.create();

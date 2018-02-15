@@ -17,7 +17,7 @@ import {
 	updateUserSettings,
 	UserInfo,
 	UserSettings,
-} from '../User';
+} from '../Session';
 
 export default class SessionModule {
 	/**

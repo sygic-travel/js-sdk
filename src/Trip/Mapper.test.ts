@@ -5,7 +5,7 @@ import * as cloneDeep from 'lodash.clonedeep';
 import * as ApiResponses from '../TestData/TripApiResponses';
 import * as ExpectedResults from '../TestData/TripExpectedResults';
 import * as Mapper from '../Trip/Mapper';
-import { UserSettings } from '../User';
+import { UserSettings } from '../Session';
 import { Trip, TripCreateRequest } from './Trip';
 
 chai.use(chaiAsPromised);

@@ -6,9 +6,9 @@ import { ApiResponse, StApi } from '../Api';
 
 import { initializeChangesWatching, setChangesCallback, stopChangesWatching } from '.';
 import { favoritesCache, tripsDetailedCache } from '../Cache';
+import { setSession } from '../Session';
 import { setEnvironment } from '../Settings';
 import { getFreshSession } from '../TestData/UserInfoExpectedResults';
-import { setSession } from '../User';
 import { ChangeNotification } from './ChangeNotification';
 
 chai.use(dirtyChai);
