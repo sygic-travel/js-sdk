@@ -21,6 +21,7 @@ import {
 	TripConflictInfo,
 	TripConflictResolution,
 	TripEditor,
+	TripInfo,
 	TripMedia,
 	TripPrivileges,
 	TripTemplate,
@@ -43,6 +44,7 @@ export {
 	TripConflictInfo,
 	TripConflictResolution,
 	TripEditor,
+	TripInfo,
 	TripMedia,
 	TripPrivileges,
 	TripTemplate,
@@ -50,11 +52,11 @@ export {
 	UNBREAKABLE_TRANSPORT_MODES,
 };
 
-export async function getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trip[]> {
+export async function getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<TripInfo[]> {
 	return Dao.getTrips(dateFrom, dateTo);
 }
 
-export async function getTripsInTrash(): Promise<Trip[]> {
+export async function getTripsInTrash(): Promise<TripInfo[]> {
 	return Dao.getTripsInTrash();
 }
 
@@ -72,7 +74,7 @@ export async function cloneTrip(id: string): Promise<string> {
 }
 
 export function getPlacesIdsFromTrip(trip: Trip): string[] {
-	if (!trip.days) {
+	if (!trip.days.length) {
 		return [];
 	}
 
