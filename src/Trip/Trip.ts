@@ -56,7 +56,7 @@ export interface TripConflictInfo {
 
 export type TripConflictHandler = (conflictInfo: TripConflictInfo, trip: Trip) => Promise<TripConflictClientResolution>;
 
-export interface Trip {
+export interface TripInfo {
 	id: string;
 	ownerId: string;
 	privacyLevel: string;
@@ -67,9 +67,12 @@ export interface Trip {
 	isDeleted: boolean;
 	endsOn: string | null;
 	url: string;
-	days: Day[] | null;
 	media: TripMedia;
 	privileges: TripPrivileges;
+}
+
+export interface Trip extends TripInfo {
+	days: Day[];
 }
 
 export interface TripCreateRequest {
