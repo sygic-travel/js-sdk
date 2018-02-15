@@ -1,7 +1,3 @@
-import {TransportSettings, Trip} from "./src/Trip/Trip";
-import {UserSettings} from "./src/User";
-import {Place} from "./src/Places";
-
 export function create(settings: Settings): StSDK;
 
 declare class ChangesModule {
@@ -118,7 +114,7 @@ declare class TripModule {
 	public getTripsInTrash(): Promise<Trips.Trip[]>;
 	public getTripDetailed(id: string): Promise<Trips.Trip>;
 	public getTripEditor(): Trips.TripEditor;
-	public saveTrip(trip: Trip): Promise<Trips.Trip>;
+	public saveTrip(trip: Trips.Trip): Promise<Trips.Trip>;
 	public cloneTrip(id: string): Promise<string>;
 	public ensureTripSyncedToServer(tripId: string): Promise<void>;
 	public emptyTripsTrash(): Promise<string[]>;
@@ -563,20 +559,20 @@ export namespace Trips {
 			trip: Trip,
 			appendCount: number,
 			prependCount: number,
-			userSettings: UserSettings | null
+			userSettings: User.UserSettings | null
 		): Trip;
-		removeDay(trip: Trip, dayIndex: number, userSettings: UserSettings | null): Trip;
+		removeDay(trip: Trip, dayIndex: number, userSettings: User.UserSettings | null): Trip;
 		swapDaysInTrip(
 			trip: Trip,
 			firstDayIndex: number,
 			secondDayIndex: number,
-			userSettings: UserSettings | null
+			userSettings: User.UserSettings | null
 		): Trip;
 		addPlaceToDay(
 			trip: Trip,
-			place: Place,
+			place: Places.Place,
 			dayIndex: number,
-			userSettings: UserSettings | null,
+			userSettings: User.UserSettings | null,
 			positionInDay?: number // If not passed the place is added to the end
 		): Trip;
 		duplicatePlace(
@@ -584,37 +580,37 @@ export namespace Trips {
 			dayIndex: number,
 			placeIndex: number,
 			resetTransport: boolean,
-			userSettings: UserSettings | null
+			userSettings: User.UserSettings | null
 		): Trip;
 		movePlaceInDay(
 			trip: Trip,
 			dayIndex: number,
 			positionFrom: number,
 			positionTo: number,
-			userSettings: UserSettings | null
+			userSettings: User.UserSettings | null
 		): Trip;
 		removePlacesFromDay(
 			trip: Trip,
 			dayIndex: number,
 			positionsInDay: number[],
-			userSettings: UserSettings | null
+			userSettings: User.UserSettings | null
 		): Trip;
 		removeAllPlacesFromDay(
 			tripToBeUpdated: Trip,
 			dayIndex: number,
-			userSettings: UserSettings | null
+			userSettings: User.UserSettings | null
 		): Trip;
 		addOrReplaceOvernightPlace(
 			trip: Trip,
-			place: Place,
+			place: Places.Place,
 			dayIndex: number,
-			userSettings: UserSettings | null
+			userSettings: User.UserSettings | null
 		): Trip;
 		removePlaceFromDayByPlaceId(
 			trip: Trip,
 			placeId: string,
 			dayIndex: number,
-			userSettings: UserSettings | null
+			userSettings: User.UserSettings | null
 		): Trip;
 		setTransport(
 			trip: Trip,

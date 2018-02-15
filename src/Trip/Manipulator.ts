@@ -2,7 +2,7 @@ import * as cloneDeep from 'lodash.clonedeep';
 
 import { Day, Trip, UNBREAKABLE_TRANSPORT_MODES } from '.';
 import { isStickyByDefault, Place } from '../Places';
-import {UserSettings} from '../User';
+import { UserSettings } from '../User';
 import { addDaysToDate, subtractDaysFromDate } from '../Util';
 import { resolveStickiness } from './Mapper';
 import { ItineraryItem, TransportSettings } from './Trip';
