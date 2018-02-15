@@ -1,5 +1,4 @@
-import { Location } from '../Geo';
-import { Bounds } from '../Geo/Bounds';
+import { Bounds, Location } from '../Geo';
 import { Detail, Tag } from './PlaceDetail';
 
 export interface Place {
