@@ -1,7 +1,7 @@
 import * as cloneDeep from 'lodash.clonedeep';
 
 import {
-	Day, ItineraryItem, TransportAvoid, TransportMode, TransportSettings, Trip, TripMedia, TripPrivileges
+	Day, ItineraryItem, TransportAvoid, TransportMode, TransportSettings, Trip, TripInfo, TripMedia, TripPrivileges
 } from '../Trip';
 import { placeDetailedEiffelTowerWithoutMedia } from './PlacesExpectedResults';
 
@@ -16,7 +16,6 @@ export const tripList = [{
 	startsOn: '2017-04-08',
 	endsOn: '2017-04-10',
 	updatedAt: '2017-04-09T06:42:25+00:00',
-	days: null,
 	isDeleted: false,
 	privileges: {
 		'delete': true,
@@ -38,7 +37,7 @@ export const tripList = [{
 		},
 		videoPreview: null
 	} as TripMedia
-} as Trip];
+} as TripInfo];
 
 const itineraryPlace1 = cloneDeep(placeDetailedEiffelTowerWithoutMedia);
 const itineraryPlace2 = cloneDeep(placeDetailedEiffelTowerWithoutMedia);
