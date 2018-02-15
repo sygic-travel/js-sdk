@@ -211,8 +211,8 @@ export function duplicateItineraryItem(
 	if (resetTransport) {
 		itemToAdd.transportFromPrevious = null;
 	}
-	tripToBeUpdated.days![dayIndex].itinerary.splice(itemIndex + 1, 0, itemToAdd);
-	return resolveStickiness(tripToBeUpdated, userSettings);
+	trip.days![dayIndex].itinerary.splice(itemIndex + 1, 0, itemToAdd);
+	return resolveStickiness(trip, userSettings);
 }
 
 export function movePlaceInDay(
