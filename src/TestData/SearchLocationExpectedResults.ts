@@ -2,7 +2,7 @@
 import { Address, AddressFields, SearchResult } from '../Search/SearchResult';
 import { Location } from '../Geo';
 import { Place } from '../Places';
-import { PlaceDetail } from '../Places/PlaceDetail';
+import { Detail } from '../Places/PlaceDetail';
 import { MainMedia } from '../Media/Media';
 
 export const searchLocations = [{
@@ -87,6 +87,6 @@ export const searchLocations = [{
 				landscape: null
 			} as MainMedia,
 			references: []
-		} as PlaceDetail
+		} as Detail
 	} as Place
 } as SearchResult];

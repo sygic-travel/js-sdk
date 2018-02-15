@@ -5,14 +5,14 @@ import {
 	deletePlaceReview,
 	detectParentsByBounds,
 	detectParentsByLocation,
-	getPlaceDetailed,
+	getDetailedPlace,
 	getPlaceGeometry,
 	getPlaceMedia,
 	getPlaceOpeningHours,
 	getPlaceReviews,
 	getPlaces,
 	getPlacesDestinationMap,
-	getPlacesDetailed,
+	getDetailedPlaces,
 	getPlacesStats,
 	Place,
 	PlaceGeometry,
@@ -40,11 +40,11 @@ export default class PlacesModule {
 	}
 
 	public getPlaceDetailed(id: string, photoSize: string): Promise<Place> {
-		return getPlaceDetailed(id, photoSize);
+		return getDetailedPlace(id, photoSize);
 	}
 
 	public getPlacesDetailed(ids: string[], photoSize: string): Promise<Place[]> {
-		return getPlacesDetailed(ids, photoSize);
+		return getDetailedPlaces(ids, photoSize);
 	}
 
 	public getPlaceMedia(id: string): Promise<Medium[]> {

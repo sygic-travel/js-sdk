@@ -1,6 +1,6 @@
 import { Location } from '../Geo';
 import { Bounds } from '../Geo/Bounds';
-import { PlaceDetail, Tag } from './PlaceDetail';
+import { Detail, Tag } from './PlaceDetail';
 
 export interface Place {
 	id: string;
@@ -21,7 +21,11 @@ export interface Place {
 	starRating: number | null;
 	starRatingUnofficial: number | null;
 	customerRating: number | null;
-	detail: PlaceDetail | null;
+	detail: Detail | null;
+}
+
+export interface DetailedPlace extends Place {
+	detail: Detail;
 }
 
 export interface CustomPlaceFormData {
@@ -39,7 +43,7 @@ export function isStickyByDefault(place: Place): boolean {
 	return place.categories.indexOf('sleeping') !== -1;
 }
 
-export function hasTag(key: string, detail: PlaceDetail): boolean {
+export function hasTag(key: string, detail: Detail): boolean {
 	const found = detail.tags.find((tag: Tag) => tag.key === key);
 	return !!found;
 }

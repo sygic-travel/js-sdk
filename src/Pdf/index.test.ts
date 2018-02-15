@@ -86,7 +86,7 @@ describe('PdfController', () => {
 			sandbox.stub(FavoritesController, 'getFavoritesIds').returns(new Promise<string[]>((resolve) =>
 				(resolve(['poi:1234']))
 			));
-			sandbox.stub(PlacesController, 'getPlacesDetailedMap').returns(favoritesDetailedMap);
+			sandbox.stub(PlacesController, 'getDetailedPlacesMap').returns(favoritesDetailedMap);
 
 			const {
 				destinationIdsWithDestinations,

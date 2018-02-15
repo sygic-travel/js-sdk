@@ -211,7 +211,7 @@ describe('TripController', () => {
 
 			sandbox.stub(TripDao, 'updateTrip').returnsArg(0);
 
-			const getPlacesStub = sandbox.stub(PlaceController, 'getPlacesDetailed');
+			const getPlacesStub = sandbox.stub(PlaceController, 'getDetailedPlaces');
 			getPlacesStub.withArgs(['poi:123456']).returns(
 				new Promise<(PlaceController.Place | null)[]>((resolve) => { resolve([hotel]); })
 			);
@@ -272,7 +272,7 @@ describe('TripController', () => {
 			// Stubs for fetching trip
 			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => {resolve(inputTrip); }));
 			sandbox.stub(Mapper, 'putPlacesToTrip').returns(new Promise<Trip>((resolve) => {resolve(inputTrip); }));
-			const getPlacesStub = sandbox.stub(PlaceController, 'getPlacesDetailed');
+			const getPlacesStub = sandbox.stub(PlaceController, 'getDetailedPlaces');
 			getPlacesStub.returns(new Promise<PlaceController.Place[]>((resolve) => {resolve([]); }));
 
 			// Update trip stub
@@ -312,7 +312,7 @@ describe('TripController', () => {
 			// Stubs for fetching trip
 			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => { resolve(inputTrip); }));
 			sandbox.stub(Mapper, 'putPlacesToTrip').returns(new Promise<Trip>((resolve) => { resolve(inputTrip); }));
-			const getPlacesStub = sandbox.stub(PlaceController, 'getPlacesDetailed');
+			const getPlacesStub = sandbox.stub(PlaceController, 'getDetailedPlaces');
 			getPlacesStub.returns(new Promise<PlaceController.Place[]>((resolve) => {resolve([]); }));
 
 			// Update trip stub
@@ -387,7 +387,7 @@ describe('TripController', () => {
 		it('should remove places from days by place id', async () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			sandbox.stub(TripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => { resolve(inputTrip); }));
-			sandbox.stub(PlaceController, 'getPlacesDetailed').returns(
+			sandbox.stub(PlaceController, 'getDetailedPlaces').returns(
 				new Promise<PlaceController.Place[]>((resolve) => {resolve([]); })
 			);
 			sandbox.stub(TripDao, 'updateTrip').callsFake((trip) => {

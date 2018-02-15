@@ -1,5 +1,5 @@
 import { ApiResponse, StApi } from '../Api';
-import { getPlacesDetailed } from '../Places';
+import { getDetailedPlaces } from '../Places';
 import { Collection } from './Collection';
 import { CollectionsFilter } from './Filter';
 import { mapCollectionApiResponseToCollection, mapCollectionsApiResponseToCollections } from './Mapper';
@@ -11,7 +11,7 @@ export async function getCollection(collectionId: number, photoSize: string): Pr
 	}
 
 	const collection = mapCollectionApiResponseToCollection(apiResponse.data.collection);
-	collection.places = await getPlacesDetailed(collection.placeIds, photoSize);
+	collection.places = await getDetailedPlaces(collection.placeIds, photoSize);
 	return collection;
 }
 
@@ -28,7 +28,7 @@ export async function getCollections(
 	const collections = await mapCollectionsApiResponseToCollections(apiResponse.data.collections);
 	if (loadPlaces === true) {
 		await Promise.all(collections.map(async (collection: Collection) => {
-			collection.places = await getPlacesDetailed(collection.placeIds, photoSize);
+			collection.places = await getDetailedPlaces(collection.placeIds, photoSize);
 		}));
 	}
 	return collections;

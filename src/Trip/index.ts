@@ -1,5 +1,5 @@
 import { ChangeNotification } from '../Changes';
-import { DESTINATION_BREAK_LEVELS, getPlaceDetailed, getPlacesDetailed, Place } from '../Places';
+import { DESTINATION_BREAK_LEVELS, getDetailedPlace, getDetailedPlaces, Place } from '../Places';
 import { getUserSettings, UserSettings } from '../User';
 import { addDaysToDate } from '../Util/index';
 import * as Dao from './DataAccess';
@@ -64,7 +64,7 @@ export async function getTripDetailed(id: string): Promise<Trip> {
 	const tripWithoutPlaces: Trip = await Dao.getTripDetailed(id);
 	if (tripWithoutPlaces.days) {
 		const placesIds: string[] = getPlacesIdsFromTrip(tripWithoutPlaces);
-		return putPlacesToTrip(tripWithoutPlaces, await getPlacesDetailed(placesIds, '300x300'));
+		return putPlacesToTrip(tripWithoutPlaces, await getDetailedPlaces(placesIds, '300x300'));
 	}
 	return tripWithoutPlaces;
 }
@@ -217,7 +217,7 @@ export async function removePlaceFromDaysByPlaceId(
 
 export async function setOvernightPlace(tripId: string, placeId: string, dayIndexes: number[]): Promise<Trip> {
 	let tripToBeUpdated: Trip = await getTripDetailed(tripId);
-	const place: Place = await getPlaceDetailed(placeId, '300x300');
+	const place: Place = await getDetailedPlace(placeId, '300x300');
 	const settings: UserSettings = await getUserSettings();
 	dayIndexes.forEach((dayIndex: number) => {
 		tripToBeUpdated = TripManipulator.addOrReplaceOvernightPlace(tripToBeUpdated, place, dayIndex, settings);
@@ -246,7 +246,7 @@ export async function addSequenceToDay(
 ): Promise<Trip> {
 	const initialLoadings = await Promise.all([
 		getTripDetailed(tripId),
-		getPlacesDetailed(placeIds, '300x300'),
+		getDetailedPlaces(placeIds, '300x300'),
 		getUserSettings(),
 	]);
 	let trip: Trip = initialLoadings[0];
@@ -258,7 +258,7 @@ export async function addSequenceToDay(
 	}
 
 	if (typeof positionInDay === 'undefined' || positionInDay === null) {
-		const destinations = await getPlacesDetailed(places[0].parents, '300x300');
+		const destinations = await getDetailedPlaces(places[0].parents, '300x300');
 		const suitableDestinations = destinations.filter((place) => DESTINATION_BREAK_LEVELS.includes(place.level));
 		const addToTripInstructions: AddToTripInstructions = getAddToTripInstructions(
 			places[0],
@@ -338,5 +338,5 @@ export async function ensureTripSyncedToServer(tripId: string): Promise<void> {
 
 async function populateTripWithPlaces(trip: Trip): Promise<Trip> {
 	const placesIds: string[] = getPlacesIdsFromTrip(trip);
-	return putPlacesToTrip(trip, await getPlacesDetailed(placesIds, '300x300'));
+	return putPlacesToTrip(trip, await getDetailedPlaces(placesIds, '300x300'));
 }

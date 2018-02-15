@@ -38,7 +38,7 @@ describe('CollectionsDataAccess', () => {
 			const apiStub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, TestData.collection));
 			}));
-			sandbox.stub(PlacesDao, 'getPlacesDetailed').returns(new Promise<Place[]>((resolve) => {
+			sandbox.stub(PlacesDao, 'getDetailedPlaces').returns(new Promise<Place[]>((resolve) => {
 				resolve([]);
 			}));
 

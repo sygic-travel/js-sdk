@@ -6,10 +6,10 @@ import 'mocha';
 import * as sinon from 'sinon';
 
 import {
+	getDetailedPlace,
+	getDetailedPlaces,
 	getPlaceDestination,
-	getPlaceDetailed,
 	getPlaces,
-	getPlacesDetailed,
 	isPlaceDestination,
 	mergePlacesArrays,
 	Place,
@@ -49,7 +49,7 @@ describe('PlacesController', () => {
 			const guid = 'region:1948650';
 			const photoSize = '150x150';
 
-			return chai.expect(getPlaceDetailed(guid, photoSize))
+			return chai.expect(getDetailedPlace(guid, photoSize))
 				.to.eventually.deep.equal(ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
 		});
 	});
@@ -73,7 +73,7 @@ describe('PlacesController', () => {
 				}));
 			}));
 
-			return chai.expect(getPlacesDetailed(['poi:1', 'poi:2'], '150x150'))
+			return chai.expect(getDetailedPlaces(['poi:1', 'poi:2'], '150x150'))
 				.to.eventually.deep.equal([expectedResult1, expectedResult2]);
 		});
 	});
