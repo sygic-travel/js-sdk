@@ -79,7 +79,7 @@ export async function loginUserWithPassword(
 ): Promise<AuthenticationResponseCode> {
 	const authResponse: AuthResponse = await Dao.getSessionWithPassword(email, password, deviceId, devicePlatform);
 	if (authResponse.code === 'OK') {
-		setUserSession(authResponse.session);
+		await setUserSession(authResponse.session);
 	}
 	return authResponse.code;
 }
@@ -94,7 +94,7 @@ export async function loginUserWithFacebook(
 		ThirdPartyAuthType.facebook, accessToken, authorizationCode, deviceId, devicePlatform
 	);
 	if (authResponse.code === AuthenticationResponseCode.OK) {
-		setUserSession(authResponse.session);
+		await setUserSession(authResponse.session);
 	}
 	return authResponse.code;
 }
@@ -109,7 +109,7 @@ export async function loginUserWithGoogle(
 		ThirdPartyAuthType.google, accessToken, authorizationCode, deviceId, devicePlatform
 	);
 	if (authResponse.code === AuthenticationResponseCode.OK) {
-		setUserSession(authResponse.session);
+		await setUserSession(authResponse.session);
 	}
 	return authResponse.code;
 }
@@ -123,7 +123,7 @@ export async function loginUserWithJwt(
 		jwt, deviceId, devicePlatform
 	);
 	if (authResponse.code === AuthenticationResponseCode.OK) {
-		setUserSession(authResponse.session);
+		await setUserSession(authResponse.session);
 	}
 	return authResponse.code;
 }
