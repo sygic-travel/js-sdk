@@ -251,39 +251,6 @@ export function removeAllPlacesFromDay(
 	return resolveStickiness(resultTrip, userSettings);
 }
 
-export function replaceLastStickyPlace(
-	trip: Trip,
-	place: Place,
-	dayIndex: number,
-	userSettings: UserSettings | null
-): Trip {
-	checkDayExists(trip, dayIndex);
-
-	let resultTrip = cloneDeep(trip);
-	if (
-		trip.days![dayIndex].itinerary.length &&
-		trip.days![dayIndex].itinerary[trip.days![dayIndex].itinerary.length - 1].isSticky
-	) {
-		resultTrip = removePlacesFromDay(
-			resultTrip,
-			dayIndex,
-			[resultTrip.days[dayIndex].itinerary.length - 1],
-			userSettings
-		);
-		resultTrip = addPlaceToDay(resultTrip, place, dayIndex, userSettings, resultTrip.days[dayIndex].itinerary.length);
-	}
-	const nextDayIndex = dayIndex + 1;
-	if (
-		trip.days![nextDayIndex] &&
-		trip.days![nextDayIndex].itinerary.length &&
-		trip.days![nextDayIndex].itinerary[0].isSticky
-	) {
-		resultTrip = removePlacesFromDay(resultTrip, nextDayIndex, [0], userSettings);
-		resultTrip = addPlaceToDay(resultTrip, place, nextDayIndex, userSettings, 0);
-	}
-	return resolveStickiness(resultTrip, userSettings);
-}
-
 export function addOrReplaceOvernightPlace(
 	trip: Trip,
 	place: Place,
