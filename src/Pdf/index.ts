@@ -1,7 +1,7 @@
 import { Collection, getCollectionsForDestinationId } from '../Collections';
 import { getFavoritesIds } from '../Favorites';
 import {
-	getPlacesDestinationMap, getDetailedPlacesMap, getPlacesMapFromTrip, mergePlacesArrays,
+	getDetailedPlacesMap, getPlacesDestinationMap, getPlacesMapFromTrip, mergePlacesArrays,
 	Place
 } from '../Places';
 import { getRoutesForTripDay, TripDayRoutes } from '../Route';

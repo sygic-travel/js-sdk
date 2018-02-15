@@ -113,43 +113,13 @@ declare class TripModule {
 	public getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trips.Trip[]>;
 	public getTripsInTrash(): Promise<Trips.Trip[]>;
 	public getTripDetailed(id: string): Promise<Trips.Trip>;
-	public createTrip(startDate: string, name: string, daysCount: number, placeId?: string): Promise<Trips.Trip>;
-	public updateTrip(id: string, dataToUpdate: Trips.TripUpdateData): Promise<Trips.Trip>;
+	public getTripEditor(): Trips.TripEditor;
+	public saveTrip(trip: Trips.Trip): Promise<Trips.Trip>;
 	public cloneTrip(id: string): Promise<string>;
 	public ensureTripSyncedToServer(tripId: string): Promise<void>;
-	public addDaysToTrip(id: string, appendCount: number, prependCount: number): Promise<Trips.Trip>;
-	public removeDayFromTrip(id: string, dayIndex: number): Promise<Trips.Trip>;
-	public swapDaysInTrip(id: string, firstDayIndex: number, secondDayIndex: number): Promise<Trips.Trip>;
-	public movePlaceInDay(id: string, dayIndex: number, positionFrom: number, positionTo: number): Promise<Trips.Trip>;
-	public removePlacesFromDay(id: string, dayIndex: number, positionsInDay: number[]): Promise<Trips.Trip>;
-	public removeAllPlacesFromDay(id: string, dayIndex: number): Promise<Trips.Trip>;
-	public addPlaceToDay(tripId: string, placeId: string, dayIndex: number, positionInDay?: number): Promise<Trips.Trip>;
-	public addSequenceToDay(
-		tripId: string,
-		dayIndex: number,
-		placeIds: string[],
-		transports?: (Trips.TransportSettings | null)[],
-		positionInDay?: number
-	): Promise<Trips.Trip>;
-	public setOvernightPlace(tripId: string, placeId: string, dayIndexes: number[]): Promise<Trips.Trip>;
-	public setTransport(
-		id: string,
-		dayIndex: number,
-		itemIndex: number,
-		settings: Trips.TransportSettings
-	): Promise<Trips.Trip>;
 	public emptyTripsTrash(): Promise<string[]>;
 	public getTripTemplates(placeId: string): Promise<Trips.TripTemplate[]>;
 	public applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trips.Trip>;
-	public updateItineraryItemUserData(
-		tripId: string,
-		dayIndex: number,
-		itemIndex: number,
-		startTime: number | null,
-		duration: number | null,
-		note: string | null
-	): Promise<Trips.Trip>;
-	public updateDayNote(tripId: string, dayIndex: number, note: string): Promise<Trips.Trip>;
 }
 
 declare class UserModule {
@@ -582,6 +552,96 @@ export namespace Trips {
 	export interface TripConflictInfo {
 		lastUserName: string;
 		lastUpdatedAt: string;
+	}
+
+	export interface TripEditor {
+		addDaysToTrip(
+			trip: Trip,
+			appendCount: number,
+			prependCount: number,
+			userSettings: User.UserSettings | null
+		): Trip;
+		removeDay(trip: Trip, dayIndex: number, userSettings: User.UserSettings | null): Trip;
+		swapDaysInTrip(
+			trip: Trip,
+			firstDayIndex: number,
+			secondDayIndex: number,
+			userSettings: User.UserSettings | null
+		): Trip;
+		addPlaceToDay(
+			trip: Trip,
+			place: Places.Place,
+			dayIndex: number,
+			userSettings: User.UserSettings | null,
+			positionInDay?: number // If not passed the place is added to the end
+		): Trip;
+		duplicatePlace(
+			trip: Trip,
+			dayIndex: number,
+			placeIndex: number,
+			resetTransport: boolean,
+			userSettings: User.UserSettings | null
+		): Trip;
+		movePlaceInDay(
+			trip: Trip,
+			dayIndex: number,
+			positionFrom: number,
+			positionTo: number,
+			userSettings: User.UserSettings | null
+		): Trip;
+		removePlacesFromDay(
+			trip: Trip,
+			dayIndex: number,
+			positionsInDay: number[],
+			userSettings: User.UserSettings | null
+		): Trip;
+		removeAllPlacesFromDay(
+			tripToBeUpdated: Trip,
+			dayIndex: number,
+			userSettings: User.UserSettings | null
+		): Trip;
+		addOrReplaceOvernightPlace(
+			trip: Trip,
+			place: Places.Place,
+			dayIndex: number,
+			userSettings: User.UserSettings | null
+		): Trip;
+		removePlaceFromDayByPlaceId(
+			trip: Trip,
+			placeId: string,
+			dayIndex: number,
+			userSettings: User.UserSettings | null
+		): Trip;
+		setTransport(
+			trip: Trip,
+			dayIndex: number,
+			itemIndex: number,
+			settings: TransportSettings | null
+		): Trip;
+		updatePlaceUserData(
+			trip: Trip,
+			dayIndex: number,
+			itemIndex: number,
+			startTime: number | null,
+			duration: number | null,
+			note: string | null
+		): Trip;
+		updateDayNote(trip: Trip, dayIndex: number, note: string): Trip;
+		smartAddPlaceToDay(
+			trip: Trip,
+			placeId: string,
+			dayIndex: number,
+			positionInDay?: number // If not passed automatic algorithm is used
+		): Promise<Trip>;
+		smartAddSequenceToDay(
+			trip: Trip,
+			dayIndex: number,
+			placeIds: string[],
+			transports?: (TransportSettings | null)[],
+			positionInDay?: number // If not passed automatic algorithm is used
+		): Promise<Trip>;
+		createTrip(startDate: string, name: string, daysCount: number, placeId?: string): Promise<Trip>;
+		setStartDate(trip: Trip, startDate: string): Trip;
 	}
 
 	export interface ItineraryItem {

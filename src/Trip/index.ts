@@ -1,5 +1,5 @@
 import { ChangeNotification } from '../Changes';
-import { DESTINATION_BREAK_LEVELS, getDetailedPlace, getDetailedPlaces, Place } from '../Places';
+import { DESTINATION_BREAK_LEVELS, getDetailedPlaces, Place } from '../Places';
 import { getUserSettings, UserSettings } from '../User';
 import { addDaysToDate } from '../Util/index';
 import * as Dao from './DataAccess';
@@ -20,6 +20,7 @@ import {
 	TripConflictHandler,
 	TripConflictInfo,
 	TripConflictResolution,
+	TripEditor,
 	TripMedia,
 	TripPrivileges,
 	TripTemplate,
@@ -41,16 +42,13 @@ export {
 	TripConflictHandler,
 	TripConflictInfo,
 	TripConflictResolution,
+	TripEditor,
 	TripMedia,
 	TripPrivileges,
 	TripTemplate,
 	TripUpdateData,
 	UNBREAKABLE_TRANSPORT_MODES,
 };
-
-export async function createTrip(startDate: string, name: string, daysCount: number, placeId?: string): Promise<Trip> {
-	return Dao.createTrip(mapTripCreateRequest(startDate, name, daysCount, placeId));
-}
 
 export async function getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trip[]> {
 	return Dao.getTrips(dateFrom, dateTo);
@@ -85,173 +83,57 @@ export function getPlacesIdsFromTrip(trip: Trip): string[] {
 	]), initAcc);
 }
 
-export async function updateTrip(id: string, dataToUpdate: TripUpdateData): Promise<Trip> {
-	const tripToBeUpdated: Trip = await getTripDetailed(id);
-
-	if (dataToUpdate.name) {
-		tripToBeUpdated.name = dataToUpdate.name;
-	}
-
-	if (dataToUpdate.startsOn) {
-		tripToBeUpdated.startsOn = dataToUpdate.startsOn;
-		tripToBeUpdated.endsOn = addDaysToDate(dataToUpdate.startsOn,
-			tripToBeUpdated.days ? tripToBeUpdated.days.length - 1 : 0);
-	}
-
-	if (dataToUpdate.privacyLevel) {
-		tripToBeUpdated.privacyLevel = dataToUpdate.privacyLevel;
-	}
-
-	if (dataToUpdate.isDeleted !== undefined) {
-		tripToBeUpdated.isDeleted = dataToUpdate.isDeleted;
-	}
-
-	return Dao.updateTrip(tripToBeUpdated);
+export async function saveTrip(trip: Trip): Promise<Trip> {
+	return Dao.updateTrip(trip);
 }
 
-export async function addDaysToTrip(id: string, appendCount: number, prependCount: number): Promise<Trip> {
-	let tripToBeUpdated = await getTripDetailed(id);
-	for (let i = 0; i < appendCount; i++) {
-		tripToBeUpdated = TripManipulator.addDay(tripToBeUpdated, await getUserSettings());
-	}
-	for (let i = 0; i < prependCount; i++) {
-		tripToBeUpdated = TripManipulator.prependDayToTrip(tripToBeUpdated, await getUserSettings());
-	}
-	return Dao.updateTrip(tripToBeUpdated);
-}
-
-export async function removeDayFromTrip(id: string, dayIndex: number): Promise<Trip> {
-	return Dao.updateTrip(TripManipulator.removeDayFromTrip(await getTripDetailed(id), dayIndex, await getUserSettings()));
-}
-
-export async function swapDaysInTrip(id: string, firstDayIndex: number, secondDayIndex: number): Promise<Trip>  {
-	return Dao.updateTrip(TripManipulator.swapDaysInTrip(
-		await getTripDetailed(id),
-		firstDayIndex,
-		secondDayIndex,
-		await getUserSettings()
-	));
-}
-
-export async function setTransport(
-	tripId: string,
-	dayIndex: number,
-	itemIndex: number,
-	settings: TransportSettings): Promise<Trip>  {
-	return Dao.updateTrip(TripManipulator.setTransport(await getTripDetailed(tripId), dayIndex, itemIndex, settings));
-}
-
-export async function updateItineraryItemUserData(
-	tripId: string,
-	dayIndex: number,
-	itemIndex: number,
-	startTime: number | null,
-	duration: number | null,
-	note: string | null,
-	): Promise<Trip>  {
-	return Dao.updateTrip(
-		TripManipulator.updateItineraryItemUserData(
-			await getTripDetailed(tripId),
-			dayIndex,
-			itemIndex,
-			startTime,
-			duration,
-			note
-		)
-	);
-}
-
-export async function updateDayNote(
-	tripId: string,
-	dayIndex: number,
-	note: string
-): Promise<Trip> {
-	return Dao.updateTrip(
-		TripManipulator.updateDayNote(await getTripDetailed(tripId), dayIndex, note)
-	);
-}
-
-export async function movePlaceInDay(
-	id: string,
-	dayIndex: number,
-	positionFrom: number,
-	positionTo: number): Promise<Trip> {
-	return Dao.updateTrip(TripManipulator.movePlaceInDay(
-		await getTripDetailed(id),
-		dayIndex,
-		positionFrom,
-		positionTo,
-		await getUserSettings())
-	);
-}
-
-export async function removePlacesFromDay(id: string, dayIndex: number, positionsInDay: number[]): Promise<Trip> {
-	return Dao.updateTrip(
-		TripManipulator.removePlacesFromDay(await getTripDetailed(id), dayIndex, positionsInDay, await getUserSettings())
-	);
-}
-
-export async function removeAllPlacesFromDay(id: string, dayIndex: number): Promise<Trip> {
-	return Dao.updateTrip(
-		TripManipulator.removeAllPlacesFromDay(await getTripDetailed(id), dayIndex, await getUserSettings())
-	);
-}
-
-export async function removePlaceFromDaysByPlaceId(
-	tripId: string,
-	placeId: string,
-	daysIndexes: number[]
-): Promise<Trip> {
-	let tripToBeUpdated: Trip = await getTripDetailed(tripId);
-	const userSettings: UserSettings = await getUserSettings();
-	daysIndexes.forEach((dayIndex: number) => {
-		tripToBeUpdated = TripManipulator.removePlaceFromDayByPlaceId(
-			tripToBeUpdated,
-			placeId,
-			dayIndex,
-			userSettings
-		);
-	});
-	return Dao.updateTrip(tripToBeUpdated);
-}
-
-export async function setOvernightPlace(tripId: string, placeId: string, dayIndexes: number[]): Promise<Trip> {
-	let tripToBeUpdated: Trip = await getTripDetailed(tripId);
-	const place: Place = await getDetailedPlace(placeId, '300x300');
-	const settings: UserSettings = await getUserSettings();
-	dayIndexes.forEach((dayIndex: number) => {
-		tripToBeUpdated = TripManipulator.addOrReplaceOvernightPlace(tripToBeUpdated, place, dayIndex, settings);
-	});
-	return Dao.updateTrip(tripToBeUpdated);
+export function getTripEditor(): TripEditor {
+	return {
+		addDaysToTrip: TripManipulator.addDaysToTrip,
+		removeDay: TripManipulator.removeDayFromTrip,
+		swapDaysInTrip: TripManipulator.swapDaysInTrip,
+		addPlaceToDay: TripManipulator.addPlaceToDay,
+		duplicatePlace: TripManipulator.duplicateItineraryItem,
+		movePlaceInDay: TripManipulator.movePlaceInDay,
+		removePlacesFromDay: TripManipulator.removePlacesFromDay,
+		removeAllPlacesFromDay: TripManipulator.removeAllPlacesFromDay,
+		removePlaceFromDaysByPlaceId: TripManipulator.removePlaceFromDaysByPlaceId,
+		addOrReplaceOvernightPlace: TripManipulator.addOrReplaceOvernightPlace,
+		setTransport: TripManipulator.setTransport,
+		updatePlaceUserData: TripManipulator.updateItineraryItemUserData,
+		updateDayNote: TripManipulator.updateDayNote,
+		smartAddPlaceToDay: addPlaceToDay,
+		smartAddSequenceToDay: addSequenceToDay,
+		createTrip,
+		setStartDate
+	} as TripEditor;
 }
 
 /**
  * See {@link https://confluence.sygic.com/display/STV/Sticky+Places+in+Itinerary}
  */
 export async function addPlaceToDay(
-	tripId: string,
+	trip: Trip,
 	placeId: string,
 	dayIndex: number,
 	positionInDay?: number
 ): Promise<Trip> {
-	return addSequenceToDay(tripId, dayIndex, [placeId], [null], positionInDay);
+	return addSequenceToDay(trip, dayIndex, [placeId], [null], positionInDay);
 }
 
 export async function addSequenceToDay(
-	tripId: string,
+	trip: Trip,
 	dayIndex: number,
 	placeIds: string[],
 	transports?: (TransportSettings | null)[],
 	positionInDay?: number
 ): Promise<Trip> {
 	const initialLoadings = await Promise.all([
-		getTripDetailed(tripId),
 		getDetailedPlaces(placeIds, '300x300'),
 		getUserSettings(),
 	]);
-	let trip: Trip = initialLoadings[0];
-	const places: Place[] = initialLoadings[1];
-	const userSettings: UserSettings = initialLoadings[2];
+	const places: Place[] = initialLoadings[0];
+	const userSettings: UserSettings = initialLoadings[1];
 
 	if (!trip.days || !trip.days[dayIndex]) {
 		throw new Error('Trip does not have day on index ' + dayIndex);
@@ -269,7 +151,7 @@ export async function addSequenceToDay(
 		);
 		positionInDay = addToTripInstructions.position;
 		if (addToTripInstructions.shouldDuplicate) {
-			trip = TripManipulator.duplicateItineraryItem(trip, dayIndex, addToTripInstructions.position, true);
+			trip = TripManipulator.duplicateItineraryItem(trip, dayIndex, addToTripInstructions.position, true, userSettings);
 			positionInDay++;
 		}
 	}
@@ -288,7 +170,7 @@ export async function addSequenceToDay(
 		}
 		sequenceIndex++;
 	}
-	return Dao.updateTrip(trip);
+	return trip;
 }
 
 export async function handleTripChanges(changeNotifications: ChangeNotification[]): Promise<ChangeNotification[]> {
@@ -322,11 +204,6 @@ export async function getTripTemplates(placeId: string): Promise<TripTemplate[]>
 	return Promise.all(tripTemplatesWithoutPlaces.map(populateTripTemplateWithPlaces));
 }
 
-async function populateTripTemplateWithPlaces(tripTemplateWithoutPlaces: TripTemplate): Promise<TripTemplate> {
-	tripTemplateWithoutPlaces.trip = await populateTripWithPlaces(tripTemplateWithoutPlaces.trip);
-	return tripTemplateWithoutPlaces;
-}
-
 export async function applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trip> {
 	const tripWithoutPlaces: Trip = await Dao.applyTripTemplate(tripId, templateId, dayIndex);
 	return populateTripWithPlaces(tripWithoutPlaces);
@@ -336,7 +213,22 @@ export async function ensureTripSyncedToServer(tripId: string): Promise<void> {
 	return Dao.syncChangedTripToServer(tripId);
 }
 
+async function populateTripTemplateWithPlaces(tripTemplateWithoutPlaces: TripTemplate): Promise<TripTemplate> {
+	tripTemplateWithoutPlaces.trip = await populateTripWithPlaces(tripTemplateWithoutPlaces.trip);
+	return tripTemplateWithoutPlaces;
+}
+
 async function populateTripWithPlaces(trip: Trip): Promise<Trip> {
 	const placesIds: string[] = getPlacesIdsFromTrip(trip);
 	return putPlacesToTrip(trip, await getDetailedPlaces(placesIds, '300x300'));
+}
+
+async function createTrip(startDate: string, name: string, daysCount: number, placeId?: string): Promise<Trip> {
+	return Dao.createTrip(mapTripCreateRequest(startDate, name, daysCount, placeId));
+}
+
+function setStartDate(trip: Trip, startsOn: string): Trip {
+	trip.startsOn = startsOn;
+	trip.endsOn = addDaysToDate(startsOn, trip.days ? trip.days.length - 1 : 0);
+	return trip;
 }

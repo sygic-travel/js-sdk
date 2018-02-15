@@ -23,7 +23,7 @@ describe('TripManipulator', () => {
 
 	};
 
-	describe('#addDay', () => {
+	describe('#appendDay', () => {
 		it('should add day to trip', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
@@ -37,7 +37,7 @@ describe('TripManipulator', () => {
 				} as Day);
 			}
 
-			return chai.expect(Manipulator.addDay(inputTrip, null)).to.deep.equal(expectedTrip);
+			return chai.expect(Manipulator.appendDay(inputTrip, null)).to.deep.equal(expectedTrip);
 		});
 
 		it('should add day to trip and add sticky place by default to new day', () => {
@@ -49,7 +49,7 @@ describe('TripManipulator', () => {
 					place.categories = ['sleeping'];
 				}
 			}
-			const returnedTrip = Manipulator.addDay(inputTrip, null);
+			const returnedTrip = Manipulator.appendDay(inputTrip, null);
 
 			return chai.expect(returnedTrip.days && returnedTrip.days[1].itinerary[0].placeId)
 				.to.equal(inputTrip.days && inputTrip.days[0].itinerary[1].placeId);
@@ -493,24 +493,24 @@ describe('TripManipulator', () => {
 	describe('#duplicateItineraryItem', () => {
 		it('should throw an error when invalid dayIndex is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			chai.expect(() => Manipulator.duplicateItineraryItem(inputTrip, 100, 0))
+			chai.expect(() => Manipulator.duplicateItineraryItem(inputTrip, 100, 0, false, null))
 				.to.throw(Error, 'Invalid dayIndex');
 		});
 		it('should throw an error when invalid itemIndex is passed', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			chai.expect(() => Manipulator.duplicateItineraryItem(inputTrip, 0, 1000))
+			chai.expect(() => Manipulator.duplicateItineraryItem(inputTrip, 0, 1000, false, null))
 				.to.throw(Error, 'Invalid itemIndex');
 		});
 		it('should duplicate place correctly', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			inputTrip.days![0].itinerary[1].transportFromPrevious = cloneDeep(TripExpectedResults.transportSettings);
-			const trip = Manipulator.duplicateItineraryItem(inputTrip, 0, 1);
-			chai.expect(trip.days![0].itinerary[1]).to.deep.equal(trip.days![0].itinerary[2]);
+			const trip = Manipulator.duplicateItineraryItem(inputTrip, 0, 1, false, null);
+			chai.expect(trip.days![0].itinerary[1].placeId).to.equal(trip.days![0].itinerary[2].placeId);
 		});
 		it('should duplicate place and reset transport correctly', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			inputTrip.days![0].itinerary[1].transportFromPrevious = cloneDeep(TripExpectedResults.transportSettings);
-			const trip = Manipulator.duplicateItineraryItem(inputTrip, 0, 1, true);
+			const trip = Manipulator.duplicateItineraryItem(inputTrip, 0, 1, true, null);
 			chai.expect(trip.days![0].itinerary[1].placeId).to.equal(trip.days![0].itinerary[2].placeId);
 			chai.expect(trip.days![0].itinerary[1].transportFromPrevious).to.deep.equal(TripExpectedResults.transportSettings);
 			chai.expect(trip.days![0].itinerary[2].transportFromPrevious).to.be.null('Expected null');
@@ -647,6 +647,21 @@ describe('TripManipulator', () => {
 			const day: Day = resultTrip.days![0];
 			chai.expect(day.itinerary.length).to.be.equal(1);
 			chai.expect(day.itinerary[0].placeId).to.be.equal('poi:1');
+		});
+	});
+
+	describe('#removePlacesFromDaysByPlaceId', () => {
+		it('should remove places from days by place id', async () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const resultTrip: Trip = Manipulator.removePlaceFromDaysByPlaceId(inputTrip, 'poi:2', [0, 1], null);
+			const day1: Day = resultTrip.days![0];
+			const day2: Day = resultTrip.days![1];
+
+			chai.expect(day1.itinerary.length).to.be.equal(1);
+			chai.expect(day1.itinerary[0].placeId).to.be.equal('poi:1');
+
+			chai.expect(day2.itinerary.length).to.be.equal(1);
+			chai.expect(day2.itinerary[0].placeId).to.be.equal('poi:3');
 		});
 	});
 });
