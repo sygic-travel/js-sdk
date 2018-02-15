@@ -2,14 +2,14 @@ import * as cloneDeep from 'lodash.clonedeep';
 
 import { Day, Trip, UNBREAKABLE_TRANSPORT_MODES } from '.';
 import { isStickyByDefault, Place } from '../Places';
-import { UserSettings } from '../User';
+import {UserSettings} from '../User';
 import { addDaysToDate, subtractDaysFromDate } from '../Util';
 import { resolveStickiness } from './Mapper';
 import { ItineraryItem, TransportSettings } from './Trip';
 import { decorateDaysWithDate } from './Utility';
 
 // Day methods
-export function addDay(tripToBeUpdated: Trip, userSettings: UserSettings | null): Trip {
+export function appendDay(tripToBeUpdated: Trip, userSettings: UserSettings | null): Trip {
 	if (!tripToBeUpdated.days) {
 		throw new Error('days property in Trip cannot be null');
 	}
@@ -60,6 +60,20 @@ export function prependDayToTrip(tripToBeUpdated: Trip, userSettings: UserSettin
 		}
 	}
 	return resolveStickiness(resultTrip, userSettings);
+}
+
+export function addDaysToTrip(
+	trip: Trip, appendCount: number,
+	prependCount: number,
+	userSettings: UserSettings | null
+): Trip {
+	for (let i = 0; i < appendCount; i++) {
+		trip = appendDay(trip, null);
+	}
+	for (let i = 0; i < prependCount; i++) {
+		trip = prependDayToTrip(trip, null);
+	}
+	return resolveStickiness(trip, userSettings);
 }
 
 export function removeDayFromTrip(tripToBeUpdated: Trip, dayIndex: number, userSettings: UserSettings | null): Trip {
@@ -188,7 +202,8 @@ export function duplicateItineraryItem(
 	tripToBeUpdated: Trip,
 	dayIndex: number,
 	itemIndex: number,
-	resetTransport: boolean = false
+	resetTransport: boolean,
+	userSettings: UserSettings | null
 ): Trip {
 	checkItemExists(tripToBeUpdated, dayIndex, itemIndex);
 	const trip: Trip = cloneDeep(tripToBeUpdated);
@@ -196,8 +211,8 @@ export function duplicateItineraryItem(
 	if (resetTransport) {
 		itemToAdd.transportFromPrevious = null;
 	}
-	trip.days![dayIndex].itinerary.splice(itemIndex + 1, 0, itemToAdd);
-	return trip;
+	tripToBeUpdated.days![dayIndex].itinerary.splice(itemIndex + 1, 0, itemToAdd);
+	return resolveStickiness(tripToBeUpdated, userSettings);
 }
 
 export function movePlaceInDay(
@@ -342,4 +357,22 @@ export function removePlaceFromDayByPlaceId(
 			return itineraryItem.placeId !== placeId;
 		});
 	return resolveStickiness(resultTrip, userSettings);
+}
+
+export function removePlaceFromDaysByPlaceId(
+	trip: Trip,
+	placeId: string,
+	daysIndexes: number[],
+	userSettings: UserSettings | null
+): Trip {
+	let resultTrip = cloneDeep(trip);
+	daysIndexes.forEach((dayIndex: number) => {
+		resultTrip = removePlaceFromDayByPlaceId(
+			resultTrip,
+			placeId,
+			dayIndex,
+			userSettings
+		);
+	});
+	return resultTrip;
 }
