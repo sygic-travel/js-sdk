@@ -3,8 +3,8 @@ import { Medium } from '../Media/Media';
 import { Day, Trip } from '../Trip/';
 import * as Dao from './DataAccess';
 import { PlacesListFilter, PlacesListFilterJSON } from './ListFilter';
-import { CustomPlaceFormData, hasTag, isStickyByDefault, Place } from './Place';
-import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
+import { CustomPlaceFormData, DetailedPlace, hasTag, isStickyByDefault, Place } from './Place';
+import { Description, Detail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
 import { DayOpeningHours, PlaceOpeningHours } from './PlaceOpeningHours';
 import { PlaceReview } from './PlaceReview';
@@ -23,7 +23,7 @@ export {
 	PlacesListFilterJSON,
 	PlacesStatsFilterJSON,
 	PlaceGeometry,
-	PlaceDetail,
+	Detail,
 	PlaceOpeningHours,
 	PlaceReview,
 	PlaceReviewsData,
@@ -44,21 +44,21 @@ export async function getPlacesStats(filter: PlacesStatsFilter): Promise<PlacesS
 	return Dao.getPlacesStats(filter);
 }
 
-export async function getPlaceDetailed(id: string, photoSize: string): Promise<Place> {
-	return Dao.getPlaceDetailed(id, photoSize);
+export async function getDetailedPlace(id: string, photoSize: string): Promise<DetailedPlace> {
+	return Dao.getDetailedPlace(id, photoSize);
 }
 
-export async function getPlacesDetailed(ids: string[], photoSize: string): Promise<Place[]> {
-	return Dao.getPlacesDetailed(ids, photoSize);
+export async function getDetailedPlaces(ids: string[], photoSize: string): Promise<DetailedPlace[]> {
+	return Dao.getDetailedPlaces(ids, photoSize);
 }
 
-export async function getPlacesDetailedMap(ids: string[], photoSize: string): Promise<Map<string, Place>> {
-	const placesDetailed: Place[] = await getPlacesDetailed(ids, photoSize);
-	const placesDetailedMap: Map<string, Place> = new Map<string, Place>();
-	placesDetailed.forEach((placeDetailed: Place) => {
-		placesDetailedMap.set(placeDetailed.id, placeDetailed);
+export async function getDetailedPlacesMap(ids: string[], photoSize: string): Promise<Map<string, Place>> {
+	const detailedPlaces: Place[] = await getDetailedPlaces(ids, photoSize);
+	const detailedPlacesMap: Map<string, Place> = new Map<string, Place>();
+	detailedPlaces.forEach((placeDetailed: Place) => {
+		detailedPlacesMap.set(placeDetailed.id, placeDetailed);
 	});
-	return placesDetailedMap;
+	return detailedPlacesMap;
 }
 
 export async function getPlaceMedia(id: string): Promise<Medium[]> {
@@ -129,14 +129,14 @@ export async function getPlacesMapFromTrip(trip: Trip, imageSize: string): Promi
 }
 
 export async function getPlacesDestinationMap(placesIds: string[], imageSize: string): Promise<Map<string, Place>> {
-	const places: Place[] = await Dao.getPlacesDetailed(placesIds, imageSize);
+	const places: Place[] = await Dao.getDetailedPlaces(placesIds, imageSize);
 
 	const placesParentIds: Set<string> = new Set<string>();
 	places.forEach((place: Place) => {
 		place.parents.forEach((parentId: string) => placesParentIds.add(parentId));
 	});
 
-	const parentPlaces: Place[] = await Dao.getPlacesDetailed(Array.from(placesParentIds), imageSize);
+	const parentPlaces: Place[] = await Dao.getDetailedPlaces(Array.from(placesParentIds), imageSize);
 	const parentPlacesMap: Map<string, Place> = new Map<string, Place>();
 	parentPlaces.forEach((parentPlace: Place) => {
 		parentPlacesMap.set(parentPlace.id, parentPlace);

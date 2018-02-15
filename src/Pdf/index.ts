@@ -1,7 +1,7 @@
 import { Collection, getCollectionsForDestinationId } from '../Collections';
 import { getFavoritesIds } from '../Favorites';
 import {
-	getPlacesDestinationMap, getPlacesDetailedMap, getPlacesMapFromTrip, mergePlacesArrays,
+	getPlacesDestinationMap, getDetailedPlacesMap, getPlacesMapFromTrip, mergePlacesArrays,
 	Place
 } from '../Places';
 import { getRoutesForTripDay, TripDayRoutes } from '../Route';
@@ -124,7 +124,7 @@ export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<
 		}
 	});
 
-	const userFavoritesMap: Map<string, Place> = await getPlacesDetailedMap(
+	const userFavoritesMap: Map<string, Place> = await getDetailedPlacesMap(
 		await getFavoritesIds(),
 		imageSize
 	);

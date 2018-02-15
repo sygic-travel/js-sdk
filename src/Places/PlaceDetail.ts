@@ -1,6 +1,6 @@
 import { MainMedia } from '../Media/Media';
 
-export interface PlaceDetail {
+export interface Detail {
 	tags: Tag[];
 	address: string | null;
 	admission: string | null;
