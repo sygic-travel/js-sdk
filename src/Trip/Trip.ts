@@ -1,5 +1,6 @@
 import { Place } from '../Places';
 import { Waypoint } from '../Route';
+import { UserSettings } from '../User';
 
 export const UNBREAKABLE_TRANSPORT_MODES = ['plane', 'bus', 'train', 'boat'];
 
@@ -146,4 +147,94 @@ export interface TripTemplate {
 	description: string;
 	duration: number | null;
 	trip: Trip;
+}
+
+export interface TripEditor {
+	addDaysToTrip(
+		trip: Trip,
+		appendCount: number,
+		prependCount: number,
+		userSettings: UserSettings | null
+	): Trip;
+	removeDay(trip: Trip, dayIndex: number, userSettings: UserSettings | null): Trip;
+	swapDaysInTrip(
+		trip: Trip,
+		firstDayIndex: number,
+		secondDayIndex: number,
+		userSettings: UserSettings | null
+	): Trip;
+	addPlaceToDay(
+		trip: Trip,
+		place: Place,
+		dayIndex: number,
+		userSettings: UserSettings | null,
+		positionInDay?: number // If not passed the place is added to the end
+	): Trip;
+	duplicatePlace(
+		trip: Trip,
+		dayIndex: number,
+		placeIndex: number,
+		resetTransport: boolean,
+		userSettings: UserSettings | null
+	): Trip;
+	movePlaceInDay(
+		trip: Trip,
+		dayIndex: number,
+		positionFrom: number,
+		positionTo: number,
+		userSettings: UserSettings | null
+	): Trip;
+	removePlacesFromDay(
+		trip: Trip,
+		dayIndex: number,
+		positionsInDay: number[],
+		userSettings: UserSettings | null
+	): Trip;
+	removeAllPlacesFromDay(
+		tripToBeUpdated: Trip,
+		dayIndex: number,
+		userSettings: UserSettings | null
+	): Trip;
+	addOrReplaceOvernightPlace(
+		trip: Trip,
+		place: Place,
+		dayIndex: number,
+		userSettings: UserSettings | null
+	): Trip;
+	removePlaceFromDaysByPlaceId(
+		trip: Trip,
+		placeId: string,
+		dayIndexes: number[],
+		userSettings: UserSettings | null
+	): Trip;
+	setTransport(
+		trip: Trip,
+		dayIndex: number,
+		itemIndex: number,
+		settings: TransportSettings | null
+	): Trip;
+	updatePlaceUserData(
+		trip: Trip,
+		dayIndex: number,
+		itemIndex: number,
+		startTime: number | null,
+		duration: number | null,
+		note: string | null
+	): Trip;
+	updateDayNote(trip: Trip, dayIndex: number, note: string): Trip;
+	smartAddPlaceToDay(
+		trip: Trip,
+		placeId: string,
+		dayIndex: number,
+		positionInDay?: number // If not passed automatic algorithm is used
+	): Promise<Trip>;
+	smartAddSequenceToDay(
+		trip: Trip,
+		dayIndex: number,
+		placeIds: string[],
+		transports?: (TransportSettings | null)[],
+		positionInDay?: number // If not passed automatic algorithm is used
+	): Promise<Trip>;
+	createTrip(startDate: string, name: string, daysCount: number, placeId?: string): Promise<Trip>;
+	setStartDate(trip: Trip, startDate: string): Trip;
 }
