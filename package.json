@@ -24,6 +24,7 @@
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "dirty-chai": "^2.0.1",
+    "lodash.clonedeep": "^4.5.0",
     "mocha": "^4.1.0",
     "moxios": "^0.4.0",
     "optimize-js-plugin": "^0.0.4",
@@ -44,10 +45,10 @@
   "dependencies": {
     "@mapbox/polyline": "^0.2.0",
     "@types/geojson": "^1.0.2",
+    "@types/lodash.clonedeep": "^4.5.3",
     "axios": "^0.17.1",
     "cookies-js": "^1.2.3",
     "humps": "^2.0.1",
-    "lodash.clonedeep": "^4.5.0",
     "query-string": "^5.0.1"
   }
 }

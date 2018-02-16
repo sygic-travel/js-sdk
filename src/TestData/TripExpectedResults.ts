@@ -1,4 +1,4 @@
-import * as cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from '../Util';
 
 import {
 	Day, ItineraryItem, TransportAvoid, TransportMode, TransportSettings, Trip, TripInfo, TripMedia, TripPrivileges

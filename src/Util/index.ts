@@ -91,3 +91,7 @@ export function splitArrayToChunks<T>(arrayToBeSplit: T[], chunkSize: number): T
 export function flatten<T>(arrayOfArrays: T[][]): T[] {
 	return Array.prototype.concat(...arrayOfArrays);
 }
+
+export function cloneDeep<T>(obj: T): T {
+	return JSON.parse(JSON.stringify(obj));
+}

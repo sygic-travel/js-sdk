@@ -1,5 +1,5 @@
 import { camelizeKeys, decamelizeKeys } from 'humps';
-import * as cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from '../Util';
 
 import { Place } from '../Places';
 import { Waypoint } from '../Route';

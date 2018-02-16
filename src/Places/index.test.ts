@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as dirtyChai from 'dirty-chai';
-import * as cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from '../Util';
 import 'mocha';
 import * as sinon from 'sinon';
 

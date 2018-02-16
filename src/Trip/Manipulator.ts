@@ -1,4 +1,4 @@
-import * as cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from '../Util';
 
 import { Day, Trip, UNBREAKABLE_TRANSPORT_MODES } from '.';
 import { isStickyByDefault, Place } from '../Places';
