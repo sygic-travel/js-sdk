@@ -5,6 +5,7 @@ import {
 	AuthenticationResponseCode,
 	AuthResponse,
 	RegistrationResponseCode,
+	ResetPasswordResponseCode,
 	Session
 } from './Session';
 import {
@@ -18,6 +19,7 @@ export {
 	AuthenticationResponseCode,
 	AuthResponse,
 	RegistrationResponseCode,
+	ResetPasswordResponseCode,
 	ThirdPartyAuthType,
 	Session,
 	UserInfo,
@@ -149,4 +151,8 @@ export async function deleteAccount(id: string, hash: string): Promise<void> {
 
 export async function requestCancelAccount(): Promise<void> {
 	await Dao.requestCancelAccount();
+}
+
+export async function resetPassword(email: string): Promise<ResetPasswordResponseCode> {
+	return Dao.resetPassword(email);
 }

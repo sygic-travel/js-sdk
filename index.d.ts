@@ -153,6 +153,7 @@ declare class SessionModule {
 		devicePlatform?: string
 	): Promise<Sessions.AuthenticationResponseCode>;
 	public getUserInfo(): Promise<Sessions.UserInfo>;
+	public resetPassword(email: string): Promise<Sessions.ResetPasswordResponseCode>;
 }
 
 declare class UtilityModule {
@@ -875,6 +876,12 @@ export namespace Sessions {
 		'ERROR_EMAIL_INVALID_FORMAT' |
 		'ERROR_PASSWORD_MIN_LENGTH';
 
+	export enum ResetPasswordResponseCode {
+		OK = 'OK',
+		ERROR_USER_NOT_FOUND = 'ERROR_USER_NOT_FOUND',
+		ERROR_EMAIL_INVALID_FORMAT = 'ERROR_EMAIL_INVALID_FORMAT',
+		ERROR = 'ERROR'
+	}
 }
 
 export namespace Changes {

@@ -4,6 +4,7 @@ import {
 	AuthenticationResponseCode,
 	AuthResponse,
 	RegistrationResponseCode,
+	ResetPasswordResponseCode,
 	Session,
 	ThirdPartyAuthType,
 	UserInfo,
@@ -203,6 +204,26 @@ export async function requestCancelAccount(): Promise<void> {
 
 export async function deleteAccount(id: string, hash: string): Promise<void> {
 	await StApi.delete_('users', {id, hash});
+}
+
+export async function resetPassword(email: string): Promise<ResetPasswordResponseCode> {
+	const clientSession: Session = await getClientSession();
+	const request: any = {
+		email,
+	};
+	const response: ApiResponse = await SsoApi.post('user/reset-password', request, clientSession);
+
+	if (response.statusCode === 401) {
+		await getClientSession();
+		return resetPassword(email);
+	}
+
+	switch (response.statusCode) {
+		case 200: return ResetPasswordResponseCode.OK;
+		case 404: return ResetPasswordResponseCode.ERROR_USER_NOT_FOUND;
+		case 422: return ResetPasswordResponseCode.ERROR_EMAIL_INVALID_FORMAT;
+		default: return ResetPasswordResponseCode.ERROR;
+	}
 }
 
 async function authOnSso(request): Promise<AuthResponse> {

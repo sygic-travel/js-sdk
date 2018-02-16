@@ -7,6 +7,8 @@ import {
 	register,
 	RegistrationResponseCode,
 	requestCancelAccount,
+	resetPassword,
+	ResetPasswordResponseCode,
 	Session,
 	setSession,
 	signInWithCredentials,
@@ -133,5 +135,12 @@ export default class SessionModule {
 	 */
 	public signOut(): Promise<void> {
 		return setSession(null);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public resetPassword(email: string): Promise<ResetPasswordResponseCode> {
+		return resetPassword(email);
 	}
 }
