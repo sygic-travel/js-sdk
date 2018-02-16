@@ -8,7 +8,7 @@ import { setEnvironment } from '../Settings';
 import * as ToursApiTestData from '../TestData/ToursApiResponses';
 import * as ToursExpectedResults from '../TestData/ToursExpectedResults';
 import * as Dao from './DataAccess';
-import { ToursQuery, ToursQueryDirection, ToursQuerySortBy } from './ToursQuery';
+import { ToursQueryDirection, ToursViatorQuery, ToursViatorQuerySortBy } from './Tour';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
@@ -27,20 +27,20 @@ describe('TripDataAccess', () => {
 		sandbox.restore();
 	});
 
-	describe('#getTours', () => {
+	describe('#getViatorTours', () => {
 		it('should correctly map tours response', () => {
 			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, cloneDeep(ToursApiTestData.toursList)));
 			}));
 
-			const toursQuery: ToursQuery = {
+			const toursQuery: ToursViatorQuery = {
 				parentPlaceId: '123123',
 				page: 1,
-				sortBy: ToursQuerySortBy.price,
-				sortDirection: ToursQueryDirection.asc
+				sortBy: ToursViatorQuerySortBy.PRICE,
+				sortDirection: ToursQueryDirection.ASC
 			};
 
-			return chai.expect(Dao.getTours(toursQuery))
+			return chai.expect(Dao.getToursViator(toursQuery))
 				.to.eventually.deep.equal(ToursExpectedResults.toursList);
 		});
 	});

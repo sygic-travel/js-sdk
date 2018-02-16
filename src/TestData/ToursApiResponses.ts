@@ -11,11 +11,14 @@ export const toursList = {
 			photo_url: 'xyz',
 			price: 465.17,
 			original_price: 0.0,
-			duration: 'Flexible'
+			duration: 'Flexible',
+			duration_min: null,
+			duration_max: null,
+			flags: []
 		},
 		{
 			id: '8328P2',
-			supplier: 'viator',
+			supplier: 'get_your_guide',
 			title: 'Private Vilnius Old Town Walking Tour',
 			perex: 'xyz',
 			url: 'xyz',
@@ -24,7 +27,10 @@ export const toursList = {
 			photo_url: 'xyz',
 			price: 12.21,
 			original_price: 0.0,
-			duration: '2 hours 30 minutes'
+			duration: '2 hours 30 minutes',
+			duration_min: 1800,
+			duration_max: 7200,
+			flags: ['flag']
 		}
 	]
 };

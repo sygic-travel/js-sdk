@@ -108,7 +108,8 @@ declare class SearchModule {
 }
 
 declare class ToursModule {
-	public getTours(toursQuery: Tours.ToursQuery): Promise<Tours.Tour[]>;
+	public getToursViator(toursQuery: Tours.ToursViatorQuery): Promise<Tours.Tour[]>;
+	public getToursGetYourGuide(toursQuery: Tours.ToursGetYourGuideQuery): Promise<Tours.Tour[]>;
 }
 
 declare class TripModule {
@@ -897,18 +898,51 @@ export namespace Tours {
 		photoUrl: string;
 		price: number;
 		originalPrice: number;
-		duration: string;
+		duration: string | null;
+		durationMin: number | null;
+		durationMax: number | null;
+		flags: string[];
 	}
 
-	export interface ToursQuery {
+	export enum ToursViatorQuerySortBy {
+		PRICE = 'price',
+		RATING = 'rating',
+		TOP_SELLERS = 'top_sellers'
+	}
+
+	export enum ToursGetYourGuideQuerySortBy {
+		PRICE = 'price',
+		RATING = 'rating',
+		DURATION = 'duration',
+		POPULARITY = 'top_sellers'
+	}
+
+	export interface ToursViatorQuery {
 		parentPlaceId: string;
-		page?: number;
-		sortBy?: ToursQuerySortBy;
-		sortDirection?: ToursQueryDirection;
+		page: number | null;
+		sortBy: ToursViatorQuerySortBy | null;
+		sortDirection: ToursQueryDirection | null;
 	}
 
-	export type ToursQueryDirection = 'asc' | 'desc';
-	export type ToursQuerySortBy = 'price' | 'rating' | 'top_sellers' ;
+	export interface ToursGetYourGuideQuery {
+		query: string | null;
+		bounds: Geo.Bounds | null;
+		parentPlaceId: string | null;
+		page: number | null;
+		tags: number[];
+		count: number | null;
+		startDate: string | null;
+		endDate: string | null;
+		durationMin: number | null;
+		durationMax: number | null;
+		sortBy: ToursGetYourGuideQuerySortBy | null;
+		sortDirection: ToursQueryDirection | null;
+	}
+
+	export enum ToursQueryDirection {
+		ASC = 'asc',
+		DESC = 'desc'
+	}
 }
 
 export namespace Collections {
