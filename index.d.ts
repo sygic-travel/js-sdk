@@ -32,7 +32,9 @@ declare class CustomPlacesModule {
 }
 
 declare class EventsModule {
-	public setEventsHandler(handler: (event: Events.Event) => any): void;
+	public setSessionExpiredHandler(handler: () => any): void;
+	public setTripUpdateConflictHandler(handler: (conflictInfo: Trips.TripConflictInfo, trip: Trips.Trip) => any): void;
+	public setSynchronizationHandler(handler: (changes: Changes.ChangeNotification[]) => any): void;
 }
 
 declare class FavoritesModule {
@@ -335,15 +337,6 @@ export namespace Places {
 	export interface PlacesStats {
 		categories: SumStatistic[];
 		tags: SumStatistic[];
-	}
-}
-
-export namespace Events {
-	export type EventType = 'user_data_changes' | 'trip_conflict' | 'invalid_session';
-
-	export interface Event {
-		type: EventType;
-		payload: any;
 	}
 }
 
