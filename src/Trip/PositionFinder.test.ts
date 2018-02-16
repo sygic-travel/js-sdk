@@ -1,6 +1,6 @@
 import * as chai from 'chai';
 import * as dirtyChai from 'dirty-chai';
-import * as cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from '../Util';
 
 import { Place } from '../Places';
 import { placeDetailedEiffelTowerWithoutMedia as place } from '../TestData/PlacesExpectedResults';

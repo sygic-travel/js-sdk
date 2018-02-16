@@ -8,13 +8,14 @@
     "dev": "webpack-dev-server",
     "build": "webpack --config ./webpack.prod.config.js",
     "build-debug": "webpack --config ./webpack.debug.config.js",
-    "test": "mocha -r ts-node/register \"src/**/*.test.ts\" --reporter \"list\" --timeout 5000",
+    "test": "TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\" }' mocha -r ts-node/register \"src/**/*.test.ts\" --reporter \"list\" --timeout 5000",
     "doc": "typedoc --mode modules --excludeExternals --exclude \"**/*+(.test).ts\"  --out ./doc ./src"
   },
   "devDependencies": {
     "@types/chai": "^4.0.10",
     "@types/chai-as-promised": "^7.1.0",
     "@types/humps": "^1.1.2",
+    "@types/lodash.clonedeep": "^4.5.3",
     "@types/mocha": "^2.2.40",
     "@types/moxios": "^0.4.8",
     "@types/node": "^7.0.8",
@@ -24,6 +25,7 @@
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "dirty-chai": "^2.0.1",
+    "lodash.clonedeep": "^4.5.0",
     "mocha": "^4.1.0",
     "moxios": "^0.4.0",
     "optimize-js-plugin": "^0.0.4",
@@ -47,7 +49,6 @@
     "axios": "^0.17.1",
     "cookies-js": "^1.2.3",
     "humps": "^2.0.1",
-    "lodash.clonedeep": "^4.5.0",
     "query-string": "^5.0.1"
   }
 }

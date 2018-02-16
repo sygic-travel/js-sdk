@@ -1,10 +1,12 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as dirtyChai from 'dirty-chai';
-import * as cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from '../Util';
 import 'mocha';
 import * as sinon from 'sinon';
 
+import { ApiResponse, StApi } from '../Api';
+import { setEnvironment } from '../Settings';
 import {
 	getDetailedPlace,
 	getDetailedPlaces,
@@ -15,9 +17,7 @@ import {
 	Place,
 	PlacesListFilter,
 	PlacesListFilterJSON
-} from '.';
-import { ApiResponse, StApi } from '../Api';
-import { setEnvironment } from '../Settings';
+} from './index';
 
 import * as TestData from '../TestData/PlacesApiResponses';
 import * as ExpectedResults from '../TestData/PlacesExpectedResults';

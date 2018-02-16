@@ -1,7 +1,7 @@
 import * as chai from 'chai';
-import * as cloneDeep from 'lodash.clonedeep';
 import { sandbox as sinonSandbox, SinonFakeTimers, SinonSandbox, SinonStub } from 'sinon';
 import { getSession, getUserInfo, Session, setSession } from '.';
+import { cloneDeep } from '../Util';
 import * as Dao from './DataAccess';
 
 import { session as testSession } from '../TestData/UserInfoExpectedResults';
@@ -61,7 +61,7 @@ describe('UserController', () => {
 
 		it('should should not call refresh token when session is incomplete', async () => {
 			const incompleteSession = cloneDeep(testSession);
-			incompleteSession.refreshToken = null;
+			incompleteSession.refreshToken = '';
 			await setSession(incompleteSession);
 			const stub: SinonStub = sandbox.stub(Dao, 'getSessionWithRefreshToken');
 			clock.tick(3000000);

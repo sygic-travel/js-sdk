@@ -1,5 +1,5 @@
-import * as cloneDeep from 'lodash.clonedeep';
 import { Session, UserInfo, UserLicense} from '../Session';
+import { cloneDeep } from '../Util';
 import { tokenData } from './SsoApiResponses';
 
 export const userInfo: UserInfo = {
@@ -31,4 +31,4 @@ export const getFreshSession = (): Session => {
 	testSession.suggestedRefreshTimestamp = now.getTime() + 10000;
 	testSession.expirationTimestamp = now.getTime() + 20000;
 	return testSession;
-}
+};

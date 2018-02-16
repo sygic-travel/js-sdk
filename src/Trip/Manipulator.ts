@@ -1,4 +1,4 @@
-import * as cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from '../Util';
 
 import { Day, Trip, UNBREAKABLE_TRANSPORT_MODES } from '.';
 import { isStickyByDefault, Place } from '../Places';
@@ -27,7 +27,7 @@ export function appendDay(tripToBeUpdated: Trip, userSettings: UserSettings | nu
 		const lastItem = resultTrip.days[resultTrip.days.length - 2].itinerary[
 			resultTrip.days[resultTrip.days.length - 2].itinerary.length - 1
 		];
-		if (isStickyByDefault(lastItem.place)) {
+		if (lastItem.place && isStickyByDefault(lastItem.place)) {
 			resultTrip = addPlaceToDay(resultTrip, lastItem.place, resultTrip.days.length - 1, userSettings, 0);
 		}
 	}
@@ -37,17 +37,26 @@ export function appendDay(tripToBeUpdated: Trip, userSettings: UserSettings | nu
 export function prependDayToTrip(tripToBeUpdated: Trip, userSettings: UserSettings | null): Trip {
 	let resultTrip = cloneDeep(tripToBeUpdated);
 
+	if (!resultTrip.days) {
+		throw new Error('days property in Trip cannot be null');
+	}
+
+	if (!resultTrip.startsOn) {
+		throw new Error('startsOn property in Trip cannot be null');
+	}
+
 	resultTrip.days.unshift({
 		itinerary: [],
 		note: null,
 		date: null
 	} as Day);
+
 	resultTrip.startsOn = subtractDaysFromDate(resultTrip.startsOn, 1);
 	resultTrip.days = decorateDaysWithDate(resultTrip.startsOn, resultTrip.days);
 
 	if (resultTrip.days[1].itinerary.length > 0) {
 		const firstItem = resultTrip.days[1].itinerary[0];
-		if (isStickyByDefault(firstItem.place)) {
+		if (firstItem.place && isStickyByDefault(firstItem.place)) {
 			resultTrip = addPlaceToDay(resultTrip, firstItem.place, 0, userSettings, 0);
 		}
 	}
@@ -75,7 +84,7 @@ export function removeDayFromTrip(tripToBeUpdated: Trip, dayIndex: number, userS
 
 	if (dayIndex === 0 && resultTrip.startsOn) {
 		resultTrip.startsOn = addDaysToDate(resultTrip.startsOn, 1);
-	} else {
+	} else if (resultTrip.endsOn) {
 		resultTrip.endsOn = subtractDaysFromDate(resultTrip.endsOn, 1);
 	}
 
