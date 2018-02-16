@@ -81,7 +81,7 @@ export default class SessionModule {
 	/**
 	 * @experimental
 	 */
-	public loginUserWithPassword(
+	public signInWithCredentials(
 		email: string,
 		password: string,
 		deviceId?: string,
