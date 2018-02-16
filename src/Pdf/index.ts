@@ -5,8 +5,8 @@ import {
 	Place
 } from '../Places';
 import { getRoutesForTripDay, TripDayRoutes } from '../Route';
+import { getUserSettings, UserSettings } from '../Session';
 import { Day, getTripDetailed, Trip } from '../Trip';
-import { getUserSettings, UserSettings } from '../User';
 import { sleep } from '../Util';
 import * as Dao from './DataAccess';
 import { generateDestinationMainMap, generateDestinationSecondaryMaps } from './MapGenerator';

@@ -15,7 +15,7 @@ import * as PlaceTestData from '../TestData/PlacesApiResponses';
 import * as PlaceExpectedResults from '../TestData/PlacesExpectedResults';
 import * as TripTestData from '../TestData/TripApiResponses';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
-import * as User from '../User';
+import * as User from '../Session';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);

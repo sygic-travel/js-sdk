@@ -122,35 +122,38 @@ declare class TripModule {
 	public applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trips.Trip>;
 }
 
-declare class UserModule {
-	public setUserSession(session: User.Session | null): Promise<void>;
-	public getUserSession(): Promise<User.Session | null>;
-	public getUserSettings(): Promise<User.UserSettings>;
-	public updateUserSettings(settings: User.UserSettings): Promise<User.UserSettings>;
-	public loginUserWithDeviceId(deviceId: string, devideCode: string): Promise<User.AuthenticationResponseCode>;
-	public loginUserWithJwt(jwt: string, deviceId?: string, devideCode?: string): Promise<User.AuthenticationResponseCode>;
-	public loginUserWithPassword(
+declare class SessionModule {
+	public setSession(session: Sessions.Session | null): Promise<void>;
+	public getSession(): Promise<Sessions.Session | null>;
+	public getUserSettings(): Promise<Sessions.UserSettings>;
+	public updateUserSettings(settings: Sessions.UserSettings): Promise<Sessions.UserSettings>;
+	public signInWithDeviceId(deviceId: string, devideCode: string): Promise<Sessions.AuthenticationResponseCode>;
+	public signInWithJwtToken(
+		jwt: string,
+		deviceId?: string,
+		devideCode?: string
+	): Promise<Sessions.AuthenticationResponseCode>;
+	public signInWithCredentials(
 		email: string,
 		password: string,
 		deviceId?: string,
 		devideCode?: string
-	): Promise<User.AuthenticationResponseCode>;
-	public registerUser(email: string, password: string, name: string): Promise<User.RegistrationResponseCode>;
+	): Promise<Sessions.AuthenticationResponseCode>;
+	public register(email: string, password: string, name: string): Promise<Sessions.RegistrationResponseCode>;
 	public requestCancelAccount(): Promise<void>;
 	public deleteAccount(id: string, hash: string): Promise<void>;
-	public loginUserWithFacebook(
+	public signInWithFacebookAccessToken(
 		accessToken: string | null,
-		authorizationCode: string | null,
 		deviceId?: string,
 		devicePlatform?: string
-	): Promise<User.AuthenticationResponseCode>;
-	public loginUserWithGoogle(
+	): Promise<Sessions.AuthenticationResponseCode>;
+	public signInWithGoogleIdToken(
 		accessToken: string | null,
-		authorizationCode: string | null,
 		deviceId?: string,
 		devicePlatform?: string
-	): Promise<User.AuthenticationResponseCode>;
-	public getUserInfo(): Promise<User.UserInfo>;
+	): Promise<Sessions.AuthenticationResponseCode>;
+	public getUserInfo(): Promise<Sessions.UserInfo>;
+	public resetPassword(email: string): Promise<Sessions.ResetPasswordResponseCode>;
 }
 
 declare class UtilityModule {
@@ -170,7 +173,7 @@ export class StSDK {
 	public search: SearchModule;
 	public tours: ToursModule;
 	public trip: TripModule;
-	public user: UserModule;
+	public session: SessionModule;
 	public utility: UtilityModule;
 }
 
@@ -562,20 +565,20 @@ export namespace Trips {
 			trip: Trip,
 			appendCount: number,
 			prependCount: number,
-			userSettings: User.UserSettings | null
+			userSettings: Sessions.UserSettings | null
 		): Trip;
-		removeDay(trip: Trip, dayIndex: number, userSettings: User.UserSettings | null): Trip;
+		removeDay(trip: Trip, dayIndex: number, userSettings: Sessions.UserSettings | null): Trip;
 		swapDaysInTrip(
 			trip: Trip,
 			firstDayIndex: number,
 			secondDayIndex: number,
-			userSettings: User.UserSettings | null
+			userSettings: Sessions.UserSettings | null
 		): Trip;
 		addPlaceToDay(
 			trip: Trip,
 			place: Places.Place,
 			dayIndex: number,
-			userSettings: User.UserSettings | null,
+			userSettings: Sessions.UserSettings | null,
 			positionInDay?: number // If not passed the place is added to the end
 		): Trip;
 		duplicatePlace(
@@ -583,37 +586,37 @@ export namespace Trips {
 			dayIndex: number,
 			placeIndex: number,
 			resetTransport: boolean,
-			userSettings: User.UserSettings | null
+			userSettings: Sessions.UserSettings | null
 		): Trip;
 		movePlaceInDay(
 			trip: Trip,
 			dayIndex: number,
 			positionFrom: number,
 			positionTo: number,
-			userSettings: User.UserSettings | null
+			userSettings: Sessions.UserSettings | null
 		): Trip;
 		removePlacesFromDay(
 			trip: Trip,
 			dayIndex: number,
 			positionsInDay: number[],
-			userSettings: User.UserSettings | null
+			userSettings: Sessions.UserSettings | null
 		): Trip;
 		removeAllPlacesFromDay(
 			tripToBeUpdated: Trip,
 			dayIndex: number,
-			userSettings: User.UserSettings | null
+			userSettings: Sessions.UserSettings | null
 		): Trip;
 		addOrReplaceOvernightPlace(
 			trip: Trip,
 			place: Places.Place,
 			dayIndex: number,
-			userSettings: User.UserSettings | null
+			userSettings: Sessions.UserSettings | null
 		): Trip;
 		removePlaceFromDayByPlaceId(
 			trip: Trip,
 			placeId: string,
 			dayIndex: number,
-			userSettings: User.UserSettings | null
+			userSettings: Sessions.UserSettings | null
 		): Trip;
 		setTransport(
 			trip: Trip,
@@ -841,7 +844,7 @@ export namespace Forecast {
 	}
 }
 
-export namespace User {
+export namespace Sessions {
 	export interface UserSettings {
 		homePlaceId: string | null;
 		workPlaceId: string | null;
@@ -873,6 +876,12 @@ export namespace User {
 		'ERROR_EMAIL_INVALID_FORMAT' |
 		'ERROR_PASSWORD_MIN_LENGTH';
 
+	export enum ResetPasswordResponseCode {
+		OK = 'OK',
+		ERROR_USER_NOT_FOUND = 'ERROR_USER_NOT_FOUND',
+		ERROR_EMAIL_INVALID_FORMAT = 'ERROR_EMAIL_INVALID_FORMAT',
+		ERROR = 'ERROR'
+	}
 }
 
 export namespace Changes {

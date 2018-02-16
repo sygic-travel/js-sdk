@@ -2,9 +2,9 @@ import { Event, EventType } from './Event';
 
 import { StApi } from '../Api';
 import { ChangeNotification, setChangesCallback } from '../Changes';
+import { setSession } from '../Session';
 import { setTripConflictHandler } from '../Settings';
 import { Trip, TripConflictClientResolution, TripConflictInfo } from '../Trip';
-import { setUserSession } from '../User';
 
 export { Event };
 
@@ -59,7 +59,7 @@ async function handleInvalidSession(): Promise<void> {
 		payload: null
 	};
 
-	await setUserSession(null);
+	await setSession(null);
 
 	if (externalEventHandler) {
 		externalEventHandler(event);

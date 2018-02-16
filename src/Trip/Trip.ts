@@ -1,6 +1,6 @@
 import { Place } from '../Places';
 import { Waypoint } from '../Route';
-import { UserSettings } from '../User';
+import { UserSettings } from '../Session';
 
 export const UNBREAKABLE_TRANSPORT_MODES = ['plane', 'bus', 'train', 'boat'];
 

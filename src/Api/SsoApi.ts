@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { Session } from '../Session/Session';
 import { getSsoApiUrl, getSsoClientId } from '../Settings';
-import { Session } from '../User/Session';
 import { ApiResponse } from './ApiResponse';
 
 export const axiosInstance: AxiosInstance = axios.create();

@@ -4,9 +4,9 @@ import { sandbox as sinonSandbox, SinonFakeTimers, SinonSandbox, SinonStub } fro
 
 import { Changes } from '../../index';
 import { ApiResponse, StApi } from '../Api';
+import { setUserSession } from '../Session/DataAccess';
 import { setEnvironment } from '../Settings';
 import { session as testSession } from '../TestData/UserInfoExpectedResults';
-import { setUserSession } from '../User/DataAccess';
 import ChangeWatcher from './ChangeWatcher';
 import ChangeNotification = Changes.ChangeNotification;
 
