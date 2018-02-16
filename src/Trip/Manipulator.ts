@@ -1,9 +1,7 @@
-import { cloneDeep } from '../Util';
-
 import { Day, Trip, UNBREAKABLE_TRANSPORT_MODES } from '.';
 import { isStickyByDefault, Place } from '../Places';
 import { UserSettings } from '../Session';
-import { addDaysToDate, subtractDaysFromDate } from '../Util';
+import { addDaysToDate, cloneDeep, subtractDaysFromDate } from '../Util';
 import { resolveStickiness } from './Mapper';
 import { ItineraryItem, TransportSettings } from './Trip';
 import { decorateDaysWithDate } from './Utility';
