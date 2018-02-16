@@ -61,8 +61,8 @@ declare class PdfModule {
 
 declare class PlacesModule {
 	public getPlaces(filter: Places.PlacesListFilterJSON): Promise<Places.Place[]>;
-	public getPlaceDetailed(id: string, photoSize: string): Promise<Places.Place>;
-	public getPlacesDetailed(ids: string[], photoSize: string): Promise<Places.Place[]>;
+	public getDetailedPlace(id: string, photoSize: string): Promise<Places.Place>;
+	public getDetailedPlaces(ids: string[], photoSize: string): Promise<Places.Place[]>;
 	public getPlaceMedia(id: string): Promise<Media.Medium[]>;
 	public getPlacesStats(filter: Places.PlacesStatsFilterJSON): Promise<Places.PlacesStats>;
 	public getPlaceGeometry(id: string): Promise<Places.PlaceGeometry>;

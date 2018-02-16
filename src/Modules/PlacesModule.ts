@@ -39,11 +39,11 @@ export default class PlacesModule {
 		return getPlaces(new PlacesListFilter(filter));
 	}
 
-	public getPlaceDetailed(id: string, photoSize: string): Promise<Place> {
+	public getDetailedPlace(id: string, photoSize: string): Promise<Place> {
 		return getDetailedPlace(id, photoSize);
 	}
 
-	public getPlacesDetailed(ids: string[], photoSize: string): Promise<Place[]> {
+	public getDetailedPlaces(ids: string[], photoSize: string): Promise<Place[]> {
 		return getDetailedPlaces(ids, photoSize);
 	}
 
