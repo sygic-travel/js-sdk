@@ -5,6 +5,8 @@ import { cloneDeep } from '../Util';
 import 'mocha';
 import * as sinon from 'sinon';
 
+import { ApiResponse, StApi } from '../Api';
+import { setEnvironment } from '../Settings';
 import {
 	getDetailedPlace,
 	getDetailedPlaces,
@@ -15,9 +17,7 @@ import {
 	Place,
 	PlacesListFilter,
 	PlacesListFilterJSON
-} from '.';
-import { ApiResponse, StApi } from '../Api';
-import { setEnvironment } from '../Settings';
+} from './index';
 
 import * as TestData from '../TestData/PlacesApiResponses';
 import * as ExpectedResults from '../TestData/PlacesExpectedResults';

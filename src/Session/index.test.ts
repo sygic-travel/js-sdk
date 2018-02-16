@@ -61,7 +61,7 @@ describe('UserController', () => {
 
 		it('should should not call refresh token when session is incomplete', async () => {
 			const incompleteSession = cloneDeep(testSession);
-			incompleteSession.refreshToken = null;
+			incompleteSession.refreshToken = '';
 			await setSession(incompleteSession);
 			const stub: SinonStub = sandbox.stub(Dao, 'getSessionWithRefreshToken');
 			clock.tick(3000000);
