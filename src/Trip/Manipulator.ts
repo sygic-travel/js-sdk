@@ -279,7 +279,7 @@ export function addOrReplaceOvernightPlace(
 	// Remove old sticky places
 	if (
 		trip.days[dayIndex].itinerary.length &&
-		trip.days[dayIndex].itinerary[trip.days![dayIndex].itinerary.length - 1].isSticky
+		trip.days[dayIndex].itinerary[trip.days![dayIndex].itinerary.length - 1].isStickyLastInDay
 	) {
 		resultTrip = removePlacesFromDay(
 			resultTrip,
@@ -292,7 +292,7 @@ export function addOrReplaceOvernightPlace(
 	if (
 		trip.days[nextDayIndex] &&
 		trip.days[nextDayIndex].itinerary.length &&
-		trip.days[nextDayIndex].itinerary[0].isSticky
+		trip.days[nextDayIndex].itinerary[0].isStickyFirstInDay
 	) {
 		resultTrip = removePlacesFromDay(resultTrip, nextDayIndex, [0], userSettings);
 	}
