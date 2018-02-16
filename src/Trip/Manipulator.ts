@@ -10,10 +10,6 @@ import { decorateDaysWithDate } from './Utility';
 
 // Day methods
 export function appendDay(tripToBeUpdated: Trip, userSettings: UserSettings | null): Trip {
-	if (!tripToBeUpdated.days) {
-		throw new Error('days property in Trip cannot be null');
-	}
-
 	if (!tripToBeUpdated.endsOn) {
 		throw new Error('endsOn property in Trip cannot be null');
 	}
@@ -39,10 +35,6 @@ export function appendDay(tripToBeUpdated: Trip, userSettings: UserSettings | nu
 }
 
 export function prependDayToTrip(tripToBeUpdated: Trip, userSettings: UserSettings | null): Trip {
-	if (!tripToBeUpdated.days) {
-		throw new Error('days property in Trip cannot be null');
-	}
-
 	let resultTrip = cloneDeep(tripToBeUpdated);
 
 	resultTrip.days.unshift({
@@ -143,7 +135,7 @@ export function updateDayNote(trip: Trip, dayIndex: number, note: string): Trip 
 	checkDayExists(trip, dayIndex);
 
 	const resultTrip: Trip = cloneDeep(trip);
-	resultTrip.days![dayIndex].note = note;
+	resultTrip.days[dayIndex].note = note;
 	return resultTrip;
 }
 
@@ -159,7 +151,7 @@ export function addPlaceToDay(
 	if (
 		typeof positionInDay !== 'undefined' &&
 		positionInDay !== null &&
-		(tripToBeUpdated.days![dayIndex].itinerary.length < positionInDay || positionInDay < 0)
+		(tripToBeUpdated.days[dayIndex].itinerary.length < positionInDay || positionInDay < 0)
 	) {
 		throw new Error('Invalid positionInDay');
 	}
@@ -182,8 +174,8 @@ export function addPlaceToDay(
 	}
 
 	let nextItem: ItineraryItem | null = null;
-	if (tripToBeUpdated.days![dayIndex].itinerary[positionInDay!]) {
-		nextItem = tripToBeUpdated.days![dayIndex].itinerary[positionInDay!];
+	if (tripToBeUpdated.days[dayIndex].itinerary[positionInDay!]) {
+		nextItem = tripToBeUpdated.days[dayIndex].itinerary[positionInDay!];
 	}
 
 	if (nextItem &&
@@ -211,7 +203,7 @@ export function duplicateItineraryItem(
 	if (resetTransport) {
 		itemToAdd.transportFromPrevious = null;
 	}
-	trip.days![dayIndex].itinerary.splice(itemIndex + 1, 0, itemToAdd);
+	trip.days[dayIndex].itinerary.splice(itemIndex + 1, 0, itemToAdd);
 	return resolveStickiness(trip, userSettings);
 }
 
@@ -277,8 +269,8 @@ export function addOrReplaceOvernightPlace(
 	let resultTrip = cloneDeep(trip);
 	// Remove old sticky places
 	if (
-		trip.days![dayIndex].itinerary.length &&
-		trip.days![dayIndex].itinerary[trip.days![dayIndex].itinerary.length - 1].isSticky
+		trip.days[dayIndex].itinerary.length &&
+		trip.days[dayIndex].itinerary[trip.days![dayIndex].itinerary.length - 1].isSticky
 	) {
 		resultTrip = removePlacesFromDay(
 			resultTrip,
@@ -289,9 +281,9 @@ export function addOrReplaceOvernightPlace(
 	}
 	const nextDayIndex = dayIndex + 1;
 	if (
-		trip.days![nextDayIndex] &&
-		trip.days![nextDayIndex].itinerary.length &&
-		trip.days![nextDayIndex].itinerary[0].isSticky
+		trip.days[nextDayIndex] &&
+		trip.days[nextDayIndex].itinerary.length &&
+		trip.days[nextDayIndex].itinerary[0].isSticky
 	) {
 		resultTrip = removePlacesFromDay(resultTrip, nextDayIndex, [0], userSettings);
 	}
@@ -321,10 +313,6 @@ function checkDayExists(
 	dayIndex: number,
 	propertyName: string = 'dayIndex'
 ): boolean {
-	if (!trip.days) {
-		throw new Error('days property in Trip cannot be null');
-	}
-
 	if (!trip.days[dayIndex]) {
 		throw new Error('Invalid ' + propertyName);
 	}
@@ -338,7 +326,7 @@ function checkItemExists(
 	propertyName: string = 'itemIndex'
 ): boolean {
 	checkDayExists(trip, dayIndex);
-	if (!trip.days![dayIndex].itinerary[itemIndex]) {
+	if (!trip.days[dayIndex].itinerary[itemIndex]) {
 		throw new Error('Invalid ' + propertyName);
 	}
 	return true;

@@ -110,8 +110,8 @@ declare class ToursModule {
 }
 
 declare class TripModule {
-	public getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trips.Trip[]>;
-	public getTripsInTrash(): Promise<Trips.Trip[]>;
+	public getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trips.TripInfo[]>;
+	public getTripsInTrash(): Promise<Trips.TripInfo[]>;
 	public getTripDetailed(id: string): Promise<Trips.Trip>;
 	public getTripEditor(): Trips.TripEditor;
 	public saveTrip(trip: Trips.Trip): Promise<Trips.Trip>;
@@ -522,7 +522,7 @@ export namespace SpreadV2 {
 }
 
 export namespace Trips {
-	export interface Trip {
+	export interface TripInfo {
 		id: string;
 		ownerId: string;
 		privacyLevel: string;
@@ -533,9 +533,12 @@ export namespace Trips {
 		isDeleted: boolean;
 		endsOn: string | null;
 		url: string;
-		days: Day[] | null;
 		media: TripMedia;
 		privileges: TripPrivileges;
+	}
+
+	export interface Trip extends Trips.TripInfo {
+		days: Day[] | null;
 	}
 
 	export interface Day {

@@ -11,6 +11,7 @@ import {
 	saveTrip,
 	Trip,
 	TripEditor,
+	TripInfo,
 	TripTemplate,
 } from '../Trip';
 
@@ -18,11 +19,11 @@ import {
  * @experimental
  */
 export default class TripModule {
-	public getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trip[]> {
+	public getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<TripInfo[]> {
 		return getTrips(dateFrom, dateTo);
 	}
 
-	public getTripsInTrash(): Promise<Trip[]> {
+	public getTripsInTrash(): Promise<TripInfo[]> {
 		return getTripsInTrash();
 	}
 
