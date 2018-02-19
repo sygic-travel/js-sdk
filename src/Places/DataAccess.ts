@@ -7,7 +7,7 @@ import { Bounds, boundsToMapTileKeys, Location, locationToMapTileKey } from '../
 import { Medium } from '../Media';
 import { Day, ItineraryItem } from '../Trip';
 import { flatten, splitArrayToChunks } from '../Util';
-import { PlacesListFilter } from './ListFilter';
+import { PlacesQuery } from './ListFilter';
 import {
 	mapPlaceApiResponseToPlaces,
 	mapPlaceDetailedApiResponseToPlace,
@@ -25,7 +25,7 @@ import { PlaceReviewsData } from './PlaceReviewsData';
 import { PlacesStats } from './Stats';
 import { PlacesStatsFilter } from './StatsFilter';
 
-export async function getPlaces(filter: PlacesListFilter): Promise<Place[]> {
+export async function getPlaces(filter: PlacesQuery): Promise<Place[]> {
 	const apiResponse: ApiResponse =
 		filter.mapSpread ? await getPlacesWithMapSpread(filter) : await StApi.get('places/list?' + filter.toQueryString());
 	if (!apiResponse.data.hasOwnProperty('places')) {
@@ -245,7 +245,7 @@ export async function getPlacesStats(filter: PlacesStatsFilter): Promise<PlacesS
 	} as PlacesStats;
 }
 
-async function getPlacesWithMapSpread(filter: PlacesListFilter): Promise<ApiResponse> {
+async function getPlacesWithMapSpread(filter: PlacesQuery): Promise<ApiResponse> {
 
 	const mapTiles: string[] = boundsToMapTileKeys(filter.bounds as Bounds, filter.zoom as number);
 

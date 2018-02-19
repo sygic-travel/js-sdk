@@ -1,12 +1,13 @@
 import { Location } from '../Geo';
+import { Suitability, Type } from '../Media';
 import * as Media from '../Media/Media';
-import { Description, Detail, Place, PlaceReview, PlaceReviewsData, Reference, Tag } from '../Places';
+import { Category, Description, Detail, Level, Place, PlaceReview, PlaceReviewsData, Reference, Tag } from '../Places';
 import { PlacesStats, SumStatistic } from '../Places/Stats';
 
 /* tslint:disable */
 export const placeDetailedEiffelTowerWithoutMedia: Place = {
 	id: 'poi:530',
-	level: 'poi',
+	level: Level.POI,
 	marker: 'sightseeing:tower:lookout:observation',
 	starRating: 4,
 	starRatingUnofficial: null,
@@ -24,8 +25,8 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 	perex: 'Built by Gustave Eiffel for the 1889 World’s Fair, Eiffel Tower became the world\'s tallest man-made structure until the Chrysler Building…',
 	url: 'https://travel.sygic.com/go/poi:530',
 	thumbnailUrl: 'https://media-cdn.sygictraveldata.com/media/poi:530',
-	categories: ['sightseeing'],
-	parents: ['city:14', 'region:303', 'country:14', 'continent:1'],
+	categories: [Category.SIGHTSEEING],
+	parentIds: ['city:14', 'region:303', 'country:14', 'continent:1'],
 	detail: {
 		tags: [
 			{
@@ -47,15 +48,14 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 			text: 'Built by Gustave Eiffel for the 1889 World’s Fair, Eiffel Tower became the world\'s tallest man-made structure until the Chrysler Building in New York was finished in 1930. Although it is one of the world\'s most visited tourist attractions now, it was not accepted well by the French at the time. Also, it was supposed to be taken down after 20 years since it was meant to be only a temporary exhibit. Fortunately, Gustave Eiffel convinced the government to keep the construction and use it as a radiotelegraph station.\n\nThere are 1,665 steps leading to the top, but you can take the stairs only to the second floor. A lift takes you to the top floor. Originally, only the second floor was open to the public, but now all three levels are accessible and boast award-winning restaurants. In the evening, Eiffel Tower is illuminated with 20,000 light bulbs.\n\nPlease note that there are no locker rooms, so do not bring large baggage or pushchairs if you cannot fold them.',
 			provider: null,
 			translationProvider: null,
-			link: 'www.travel.sygic.com',
-			isTranslated: true
+			url: 'www.travel.sygic.com',
 		} as Description,
 		email: null,
 		duration: 3600,
 		openingHours: 'Open daily:\nMid-June - early Sep: 9 a.m. - 12:45 a.m. \nLast lift at midnight (11 p.m. to the top).\nStairs: 9 a.m. - 12:45 a.m. \n(Last admission at midnight.)\n\nRest of the year: 9:30 a.m. - 11:45 p.m. \nLast lift at 11 p.m. (10:30 p.m. to the top).\nStairs: 9:30 a.m. - 6:30 p.m. \n(Last admission at 6 p.m.)',
 		phone: '+33 892 70 12 39',
 		mediaCount: 0,
-		media: {
+		mainMedia: {
 			square: null,
 			videoPreview: null,
 			portrait: null,
@@ -113,7 +113,7 @@ export const places = [{
 	starRatingUnofficial: null,
 	customerRating: 8.6,
 	categories: ['sightseeing'],
-	parents: ['city:5', 'region:26009', 'region:26011', 'country:5', 'continent:1'],
+	parentIds: ['city:5', 'region:26009', 'region:26011', 'country:5', 'continent:1'],
 	detail: null
 } as Place];
 
@@ -124,19 +124,10 @@ export const mappedMedia = {
 			width: 4114,
 			height: 4235
 		} as Media.Original,
-		suitability: ['square'],
 		urlTemplate: 'https://media-cdn.sygictraveldata.com/media/{size}/612664395a40232133447d33247d383632393531',
-		urlWithSize: 'https://media-cdn.sygictraveldata.com/media/400x400/612664395a40232133447d33247d383632393531',
-		createdAt: '2015-03-17T14:48:02+0000',
-		source: {
-			provider: 'wikipedia',
-			name: 'Wikimedia Commons',
-			externalId: 'File:Paris - Eiffelturm und Marsfeld2.jpg'
-		} as Media.Source,
-		type: 'photo',
-		createdBy: 'x',
 		url: 'https://media-cdn.sygictraveldata.com/media/612664395a40232133447d33247d383632393531.jpg',
-		quadkey: null,
+		suitability: [Suitability.SQUARE],
+		type: Type.PHOTO,
 		attribution: {
 			titleUrl: 'http://commons.wikimedia.org/wiki/File:Paris_-_Eiffelturm_und_Marsfeld2.jpg',
 			license: 'CC BY 3.0',
@@ -155,19 +146,10 @@ export const mappedMedia = {
 			width: 2048,
 			height: 3072
 		},
-		suitability: ['portrait'],
 		urlTemplate: 'https://media-cdn.sygictraveldata.com/media/{size}/612664395a40232133447d33247d383336353933333937',
-		urlWithSize: 'https://media-cdn.sygictraveldata.com/media/400x400/612664395a40232133447d33247d383336353933333937',
-		createdAt: '2017-04-19T12:00:34+0000',
-		source: {
-			provider: 'wikipedia',
-			name: 'Wikimedia Commons',
-			externalId: 'File:Tour Eiffel - 20150801 13h38 (10610).jpg'
-		} as Media.Source,
-		type: 'photo',
-		createdBy: '53d8a9428f8ff',
 		url: 'https://media-cdn.sygictraveldata.com/media/612664395a40232133447d33247d383336353933333937.jpg',
-		quadkey: '120220011012003000',
+		suitability: [Suitability.PORTRAIT],
+		type: Type.PHOTO,
 		attribution: {
 			titleUrl: 'https://commons.wikimedia.org/wiki/File:Tour_Eiffel_-_20150801_13h38_(10610).jpg',
 			license: 'CC BY-SA 4.0',
@@ -189,19 +171,10 @@ export const mappedMedia = {
 			width: 2048,
 			height: 1536
 		} as Media.Original,
-		suitability: ['landscape'],
 		urlTemplate: 'https://media-cdn.sygictraveldata.com/media/{size}/612664395a40232133447d33247d3832343230303032',
-		urlWithSize: 'https://media-cdn.sygictraveldata.com/media/400x400/612664395a40232133447d33247d3832343230303032',
-		createdAt: '1970-01-01T00:00:00+0000',
-		source: {
-			provider: 'wikipedia',
-			name: 'Wikimedia Commons',
-			externalId: 'File:Tour Eiffel, Paris.JPG'
-		} as Media.Source,
-		type: 'photo',
-		createdBy: '53d8a9428f8ff',
 		url: 'https://media-cdn.sygictraveldata.com/media/612664395a40232133447d33247d3832343230303032.jpg',
-		quadkey: '120220011012000332',
+		suitability: [Suitability.LANDSCAPE],
+		type: Type.PHOTO,
 		attribution: {
 			titleUrl: 'http://commons.wikimedia.org/wiki/File:Tour_Eiffel,_Paris.JPG',
 			license: 'CC BY-SA 3.0',
@@ -294,7 +267,7 @@ export const placesStatsData = {
 
 export const customPlace = {
 		id: 'c:1',
-		level: 'poi',
+		level: Level.POI,
 		rating: 0,
 		location: {
 			lat: -18.894964,
@@ -311,7 +284,7 @@ export const customPlace = {
 		starRating: null,
 		starRatingUnofficial: null,
 		customerRating: null,
-		parents: [],
+		parentIds: [],
 		perex: '',
 		thumbnailUrl: null,
 		detail: {
@@ -323,7 +296,7 @@ export const customPlace = {
 			openingHours: null,
 			phone: null,
 			mediaCount: 0,
-			media: {
+			mainMedia: {
 				landscape: null,
 				portrait: null,
 				square: null,

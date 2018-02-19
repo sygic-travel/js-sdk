@@ -2,8 +2,8 @@ import { Bounds, Location } from '../Geo';
 import { Medium } from '../Media/Media';
 import { Day, Trip } from '../Trip/';
 import * as Dao from './DataAccess';
-import { PlacesListFilter, PlacesListFilterJSON } from './ListFilter';
-import { CustomPlaceFormData, DetailedPlace, hasTag, isStickyByDefault, Place } from './Place';
+import { PlacesListFilterJSON, PlacesQuery } from './ListFilter';
+import { Category, CustomPlaceFormData, DetailedPlace, hasTag, isStickyByDefault, Level, Place } from './Place';
 import { Description, Detail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
 import { DayOpeningHours, PlaceOpeningHours } from './PlaceOpeningHours';
@@ -13,11 +13,13 @@ import { PlacesStats } from './Stats';
 import { PlacesStatsFilter, PlacesStatsFilterJSON } from './StatsFilter';
 
 export {
+	Category,
 	CustomPlaceFormData,
 	hasTag,
 	isStickyByDefault,
 	DayOpeningHours,
-	PlacesListFilter,
+	Level,
+	PlacesQuery,
 	PlacesStatsFilter,
 	Place,
 	PlacesListFilterJSON,
@@ -34,9 +36,9 @@ export {
 	Dao,
 };
 
-export const DESTINATION_BREAK_LEVELS = ['city', 'town', 'village', 'island'];
+export const DESTINATION_BREAK_LEVELS = [Level.CITY, Level.TOWN, Level.VILLAGE, Level.ISLAND];
 
-export async function getPlaces(filter: PlacesListFilter): Promise<Place[]> {
+export async function getPlaces(filter: PlacesQuery): Promise<Place[]> {
 	return Dao.getPlaces(filter);
 }
 
@@ -133,7 +135,7 @@ export async function getPlacesDestinationMap(placesIds: string[], imageSize: st
 
 	const placesParentIds: Set<string> = new Set<string>();
 	places.forEach((place: Place) => {
-		place.parents.forEach((parentId: string) => placesParentIds.add(parentId));
+		place.parentIds.forEach((parentId: string) => placesParentIds.add(parentId));
 	});
 
 	const parentPlaces: Place[] = await Dao.getDetailedPlaces(Array.from(placesParentIds), imageSize);
@@ -156,7 +158,7 @@ export function getPlaceDestination(place: Place, parentPlacesMap: Map<string, P
 		return place;
 	}
 
-	const reversedPlaceParentIds = place.parents.slice().reverse();
+	const reversedPlaceParentIds = place.parentIds.slice().reverse();
 
 	for (const parentId of reversedPlaceParentIds) {
 		const parentPlace: Place | undefined = parentPlacesMap.get(parentId);

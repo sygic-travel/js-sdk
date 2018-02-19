@@ -83,7 +83,7 @@ export function getAddToTripInstructions(
 		};
 		const item: ItineraryItem = itinerary[position];
 
-		const matchedDestinations = item.place!.parents.filter(
+		const matchedDestinations = item.place!.parentIds.filter(
 			(parentId: string) => acceptableDestinationsIds.includes(parentId)
 		);
 

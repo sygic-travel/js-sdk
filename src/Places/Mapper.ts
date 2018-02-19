@@ -1,16 +1,13 @@
 import { camelizeKeys } from 'humps';
 
-import { Location } from '../Geo';
-import { Bounds } from '../Geo/Bounds';
-import { MainMedia } from '../Media/Media';
+import { Bounds, Location } from '../Geo';
+import { MainMedia, Medium } from '../Media';
 import { DetailedPlace, Place } from './Place';
-import { Description, Detail, Reference, Tag } from './PlaceDetail';
+import { Detail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
 import { PlaceOpeningHours } from './PlaceOpeningHours';
 import { PlaceReview } from './PlaceReview';
 import { PlaceReviewsData } from './PlaceReviewsData';
-
-const defaultPhotoSize = '300x300';
 
 export const mapPlaceApiResponseToPlaces = (places: any): Place[] => {
 	return places.map((place) => {
@@ -43,7 +40,7 @@ export const mapPlace = (place, detail: Detail | null) => {
 		thumbnailUrl: place.thumbnail_url,
 		marker: place.marker,
 		categories: place.categories,
-		parents: place.parent_ids,
+		parentIds: place.parent_ids,
 		starRating: place.star_rating,
 		starRatingUnofficial: place.star_rating_unofficial,
 		customerRating: place.customer_rating,
@@ -53,19 +50,23 @@ export const mapPlace = (place, detail: Detail | null) => {
 
 const mapPlaceDetail = (place, photoSize): Detail => {
 	const tags: Tag[] = place.tags.map((tag) => (camelizeKeys(tag) as Tag));
-	const description: Description | null = place.description ? camelizeKeys(place.description) as Description : null;
 	const references: Reference[] = place.references.map((reference) => camelizeKeys(reference));
 	const resultPlaceDetail = {
 		tags,
 		address: place.address,
 		admission: place.admission,
-		description,
+		description: place.description ? {
+			provider: place.description.provider,
+			translationProvider: place.description.translation_provider,
+			text: place.description.text,
+			url: place.description.link
+		} : null,
 		email: place.email,
 		duration: place.duration,
 		openingHours: place.opening_hours,
 		mediaCount: place.media_count,
 		phone: place.phone,
-		media: mapMainMediaToMedia(camelizeKeys(place.main_media), photoSize),
+		mainMedia: mapMainMediaToMedia(camelizeKeys(place.main_media), photoSize),
 		references
 	} as Detail;
 
@@ -88,8 +89,16 @@ export const mapMainMediaToMedia = (mainMedia, photoSize: string): MainMedia => 
 			const mediaId = mainMedia.usage[key];
 			mappedMedia[key] = mainMedia.media.reduce((acc, item) => {
 				if (item.id === mediaId) {
-					item.urlWithSize = item.urlTemplate.replace(/{size}/i, photoSize || defaultPhotoSize);
-					return item;
+					return {
+						original: item.original,
+						suitability: item.suitability,
+						urlTemplate: item.urlTemplate,
+						type: item.type,
+						url: item.url,
+						attribution: item.attribution,
+						id: item.id,
+						location: item.location
+					} as Medium;
 				}
 				return acc;
 			}, null);

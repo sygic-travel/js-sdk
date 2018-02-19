@@ -9,7 +9,7 @@ export interface Detail {
 	email: string | null;
 	openingHours: string | null;
 	phone: string | null;
-	media: MainMedia;
+	mainMedia: MainMedia;
 	references: Reference[];
 	/**
 	 * @experimental
@@ -38,8 +38,16 @@ export interface Tag {
 
 export interface Description {
 	text: string;
-	provider: string | null;
-	translationProvider: string | null;
-	link: string | null;
-	isTranslated: boolean;
+	provider: DescriptionProvider | null;
+	translationProvider: TranslationProvider | null;
+	url: string | null;
+}
+
+export enum DescriptionProvider {
+	WIKIPEDIA = 'wikipedia',
+	WIKIVOYAGE = 'wikivoyage',
+}
+
+export enum TranslationProvider {
+	GOOGLE,
 }

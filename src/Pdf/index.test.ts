@@ -45,13 +45,13 @@ describe('PdfController', () => {
 			const placeIdsAndPlacesFromTrip: Map<string, PlacesController.Place> = new Map<string, PlacesController.Place>();
 			const placeFromTrip1: PlacesController.Place = cloneDeep(placeMock);
 			placeFromTrip1.id = 'poi:1';
-			placeFromTrip1.parents = ['city:1'];
+			placeFromTrip1.parentIds = ['city:1'];
 			const placeFromTrip2: PlacesController.Place = cloneDeep(placeMock);
 			placeFromTrip2.id = 'poi:2';
-			placeFromTrip2.parents = ['city:2'];
+			placeFromTrip2.parentIds = ['city:2'];
 			const placeFromTrip3: PlacesController.Place = cloneDeep(placeMock);
 			placeFromTrip3.id = 'poi:3';
-			placeFromTrip3.parents = ['city:2'];
+			placeFromTrip3.parentIds = ['city:2'];
 
 			placeIdsAndPlacesFromTrip.set(placeFromTrip1.id, placeFromTrip1);
 			placeIdsAndPlacesFromTrip.set(placeFromTrip2.id, placeFromTrip2);
@@ -64,7 +64,7 @@ describe('PdfController', () => {
 
 			const placeFromFavorites1: PlacesController.Place = cloneDeep(placeMock);
 			placeFromFavorites1.id = 'poi:1234';
-			placeFromFavorites1.parents = ['city:1'];
+			placeFromFavorites1.parentIds = ['city:1'];
 			const favoritesDetailedMap: Map<string, PlacesController.Place> = new Map<string, PlacesController.Place>();
 			favoritesDetailedMap.set(placeFromFavorites1.id, placeFromFavorites1);
 			const favoritesDestinationMap: Map<string, PlacesController.Place> = new Map<string, PlacesController.Place>();

@@ -9,8 +9,8 @@ import { setEnvironment } from '../Settings';
 import * as TestData from '../TestData/PlacesApiResponses';
 import * as ExpectedResults from '../TestData/PlacesExpectedResults';
 import * as Dao from './DataAccess';
-import { PlacesListFilter, PlacesListFilterJSON } from './ListFilter';
-import { CustomPlaceFormData, Place } from './Place';
+import { PlacesListFilterJSON, PlacesQuery } from './ListFilter';
+import { Category, CustomPlaceFormData, Place } from './Place';
 import { PlaceGeometry } from './PlaceGeometry';
 import { DayOpeningHours, PlaceOpeningHours } from './PlaceOpeningHours';
 import { PlacesStatsFilter } from './StatsFilter';
@@ -42,13 +42,13 @@ describe('PlacesDataAccess', () => {
 			}));
 
 			const placesFilterJSON: PlacesListFilterJSON = {
-				categories: ['eating'],
+				categories: [Category.EATING],
 				limit: 20,
 				parents: ['city:1'],
 				tags: []
 			};
 
-			return chai.expect(Dao.getPlaces(new PlacesListFilter(placesFilterJSON)))
+			return chai.expect(Dao.getPlaces(new PlacesQuery(placesFilterJSON)))
 				.to.eventually.deep.equal(ExpectedResults.places);
 		});
 
@@ -56,7 +56,7 @@ describe('PlacesDataAccess', () => {
 			const stub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, { places: [] }));
 			}));
-			const filter = new PlacesListFilter({
+			const filter = new PlacesQuery({
 				bounds: {
 					south: 0,
 					west: 0,
@@ -77,7 +77,7 @@ describe('PlacesDataAccess', () => {
 			const stub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve, reject) => {
 				reject(new Error('Something went wrong'));
 			}));
-			const filter = new PlacesListFilter({
+			const filter = new PlacesQuery({
 				bounds: {
 					south: 0,
 					west: 0,

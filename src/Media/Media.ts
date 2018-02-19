@@ -1,16 +1,18 @@
 import { Location } from '../Geo';
 
-export type mediaType =
-	'photo' |
-	'photo360' |
-	'video' |
-	'video360';
+export enum Type {
+	PHOTO = 'photo',
+	PHOTO_360 = 'photo_360',
+	VIDEO = 'video',
+	VIDEO_360 = 'video_360'
+}
 
-export type mediaSuitability =
-	'portrait' |
-	'landscape' |
-	'square' |
-	'video_preview';
+export enum Suitability {
+	PORTRAIT = 'portrait',
+	LANDSCAPE = 'landscape',
+	SQUARE = 'square',
+	VIDEO_PREVIEW = 'video_preview'
+}
 
 export interface MainMedia {
 	square: Medium | null;
@@ -21,15 +23,11 @@ export interface MainMedia {
 
 export interface Medium {
 	original: Original;
-	suitability: mediaSuitability[];
+	suitability: Suitability[];
 	urlTemplate: string;
 	urlWithSize: string;
-	createdAt: string;
-	source: Source;
-	type: mediaType;
-	createdBy: string;
+	type: Type;
 	url: string;
-	quadkey: string | null;
 	attribution: Attribution;
 	id: string;
 	location: Location | null;
@@ -43,12 +41,6 @@ export interface Attribution {
 	author: string | null;
 	title: string | null;
 	licenseUrl: string | null;
-}
-
-export interface Source {
-	provider: string;
-	name: string | null;
-	externalId: string | null;
 }
 
 export interface Original {

@@ -140,7 +140,7 @@ export async function addSequenceToDay(
 	}
 
 	if (typeof positionInDay === 'undefined' || positionInDay === null) {
-		const destinations = await getDetailedPlaces(places[0].parents, '300x300');
+		const destinations = await getDetailedPlaces(places[0].parentIds, '300x300');
 		const suitableDestinations = destinations.filter((place) => DESTINATION_BREAK_LEVELS.includes(place.level));
 		const addToTripInstructions: AddToTripInstructions = getAddToTripInstructions(
 			places[0],

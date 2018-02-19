@@ -19,8 +19,8 @@ import {
 	PlaceOpeningHours,
 	PlaceReview,
 	PlaceReviewsData,
-	PlacesListFilter,
 	PlacesListFilterJSON,
+	PlacesQuery,
 	PlacesStats,
 	PlacesStatsFilter,
 	PlacesStatsFilterJSON,
@@ -36,7 +36,7 @@ import {
 
 export default class PlacesModule {
 	public getPlaces(filter: PlacesListFilterJSON): Promise<Place[]> {
-		return getPlaces(new PlacesListFilter(filter));
+		return getPlaces(new PlacesQuery(filter));
 	}
 
 	public getDetailedPlace(id: string, photoSize: string): Promise<Place> {

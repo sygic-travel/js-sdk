@@ -11,7 +11,7 @@ export interface PlacesListFilterQuery extends PlacesFilterQuery {
 	limit?: number;
 }
 
-export class PlacesListFilter extends PlacesFilter {
+export class PlacesQuery extends PlacesFilter {
 	protected _mapSpread?: number;
 	protected _limit?: number;
 
@@ -22,17 +22,17 @@ export class PlacesListFilter extends PlacesFilter {
 		this.validate();
 	}
 
-	public cloneSetBounds(value: Bounds | null): PlacesListFilter {
+	public cloneSetBounds(value: Bounds | null): PlacesQuery {
 		const that = Object.create(this);
 		return Object.assign(that, this, {_bounds: value});
 	}
 
-	public cloneSetMapTiles(value: string[]): PlacesListFilter {
+	public cloneSetMapTiles(value: string[]): PlacesQuery {
 		const that = Object.create(this);
 		return Object.assign(that, this, {_mapTiles: value});
 	}
 
-	public cloneSetLimit(value: number): PlacesListFilter {
+	public cloneSetLimit(value: number): PlacesQuery {
 		const that = Object.create(this);
 		return Object.assign(that, this, {_limit: value});
 	}

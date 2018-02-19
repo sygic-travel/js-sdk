@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { Address, AddressFields, SearchResult } from '../Search/SearchResult';
 import { Location } from '../Geo';
-import { Place } from '../Places';
+import { Category, Level, Place } from '../Places';
 import { Detail } from '../Places/PlaceDetail';
 import { MainMedia } from '../Media/Media';
 
@@ -48,8 +48,8 @@ export const searchLocations = [{
 	} as Address,
 	place: {
 		id: 'poi:203997',
-		level: 'poi',
-		categories: ['shopping'],
+		level: Level.POI,
+		categories: [Category.SHOPPING],
 		rating: 0.002,
 		quadkey: '120213203332231310',
 		location: {
@@ -67,7 +67,7 @@ export const searchLocations = [{
 		starRating: null,
 		starRatingUnofficial: null,
 		customerRating: null,
-		parents: [],
+		parentIds: [],
 		detail: {
 			tags: [{
 				key: 'Optician',
@@ -80,7 +80,7 @@ export const searchLocations = [{
 			email: null,
 			openingHours: null,
 			phone: null,
-			media: {
+			mainMedia: {
 				square: null,
 				videoPreview: null,
 				portrait: null,

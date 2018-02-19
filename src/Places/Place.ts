@@ -3,8 +3,8 @@ import { Detail, Tag } from './PlaceDetail';
 
 export interface Place {
 	id: string;
-	level: string;
-	categories: string[];
+	level: Level;
+	categories: Category[];
 	rating: number;
 	quadkey: string;
 	location: Location;
@@ -16,7 +16,7 @@ export interface Place {
 	url: string | null;
 	thumbnailUrl: string | null;
 	marker: string;
-	parents: string[];
+	parentIds: string[];
 	starRating: number | null;
 	starRatingUnofficial: number | null;
 	customerRating: number | null;
@@ -39,10 +39,41 @@ export interface CustomPlaceFormData {
 }
 
 export function isStickyByDefault(place: Place): boolean {
-	return place.categories.indexOf('sleeping') !== -1;
+	return place.categories.indexOf(Category.SLEEPING) !== -1;
 }
 
 export function hasTag(key: string, detail: Detail): boolean {
 	const found = detail.tags.find((tag: Tag) => tag.key === key);
 	return !!found;
+}
+
+export enum Level {
+	CONTINENT = 'continent',
+	COUNTRY = 'country',
+	STATE = 'state',
+	REGION = 'region',
+	COUNTY = 'county',
+	CITY = 'city',
+	TOWN = 'town',
+	VILLAGE = 'village',
+	SETTLEMENT = 'settlement',
+	LOCALITY = 'locality',
+	NEIGHBOURHOOD = 'neighbourhood',
+	ARCHIPELAGO = 'archipelago',
+	ISLAND = 'island',
+	POI = 'poi' ,
+}
+
+export enum Category {
+	DISCOVERING = 'discovering',
+	EATING = 'eating',
+	GOING_OUT = 'going_out',
+	HIKING = 'hiking',
+	PLAYING = 'playing',
+	RELAXING = 'relaxing',
+	SHOPPING = 'shopping',
+	SIGHTSEEING = 'sightseeing',
+	SLEEPING = 'sleeping',
+	DOING_SPORTS = 'doing_sports',
+	TRAVELING = 'traveling',
 }

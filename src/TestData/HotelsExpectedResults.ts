@@ -25,7 +25,7 @@ export const hotels = [{
 			thumbnailUrl: 'https://alpha-media-cdn.sygictraveldata.com/media/poi:345430',
 			marker: 'sightseeing:art:artwork',
 			categories: ['sightseeing'],
-			parents: ['city:5', 'region:26009', 'region:26011', 'country:5', 'continent:1'],
+			parentIds: ['city:5', 'region:26009', 'region:26011', 'country:5', 'continent:1'],
 			detail: null
 		} as Place,
 		bookingCom: {
