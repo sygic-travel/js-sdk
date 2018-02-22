@@ -1,5 +1,5 @@
 import * as chai from 'chai';
-import * as cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from '../Util';
 import { sandbox as sinonSandbox, SinonSandbox } from 'sinon';
 
 import { getRoutesForTripDay, Route, TripDayRoutes } from '.';
@@ -23,7 +23,7 @@ describe('RoutesController', () => {
 
 	describe('#getRoutesForTripDay', () => {
 		it('should build explicit flags correctly', async () => {
-			const trip = cloneDeep(tripDetailed);
+			const trip: Trip = cloneDeep(tripDetailed);
 			const transportFromPrevious: TransportSettings = {
 				duration: null,
 				startTime: null,
@@ -36,14 +36,16 @@ describe('RoutesController', () => {
 			trip.days[0].itinerary[1].transportFromPrevious = transportFromPrevious;
 			trip.days[0].itinerary.push(cloneDeep(trip.days[0].itinerary[0]));
 			sandbox.stub(tripDao, 'getTripDetailed').returns(new Promise<Trip>((resolve) => {resolve(trip); }));
-			sandbox.stub(placesDao, 'getPlacesFromTripDay').returns(new Promise<Place[]>((resolve) => {resolve([
-				trip.days[0].itinerary[0].place,
-				trip.days[0].itinerary[1].place,
-				trip.days[0].itinerary[2].place
-			]); }));
+			sandbox.stub(placesDao, 'getPlacesFromTripDay').returns(new Promise<Place[]>((resolve) => {
+				resolve([
+					trip.days[0].itinerary[0].place!,
+					trip.days[0].itinerary[1].place!,
+					trip.days[0].itinerary[2].place!
+				]);
+			}));
 			sandbox.stub(routesDao, 'getRoutes').returns(new Promise<Route[]>((resolve) => {resolve([
-					cloneDeep(route),
-					cloneDeep(route),
+				cloneDeep(route),
+				cloneDeep(route),
 			]); }));
 			const dayRoutes: TripDayRoutes = await getRoutesForTripDay('12345', 0);
 			chai.expect(dayRoutes.routes.length).to.equal(2);

@@ -1,17 +1,23 @@
-import { Event, EventType } from './Event';
-
 import { StApi } from '../Api';
 import { ChangeNotification, setChangesCallback } from '../Changes';
+import { setSession } from '../Session';
 import { setTripConflictHandler } from '../Settings';
 import { Trip, TripConflictClientResolution, TripConflictInfo } from '../Trip';
-import { setUserSession } from '../User';
 
-export { Event };
+let synchronizationHandler: (changes: ChangeNotification[]) => any;
+let tripUpdateConflictHandler: (conflictInfo: TripConflictInfo, trip: Trip) => any;
+let sessionExpiredHandler: () => any;
 
-let externalEventHandler: (event: Event) => any;
+export function setSynchronizationHandler(handler: (changes: ChangeNotification[]) => any): void {
+	synchronizationHandler = handler;
+}
 
-export function setEventsHandler(handler: (event: Event) => any): void {
-	externalEventHandler = handler;
+export function setTripUpdateConflictHandler(handler: (conflictInfo: TripConflictInfo, trip: Trip) => any): void {
+	tripUpdateConflictHandler = handler;
+}
+
+export function setSessionExpiredHandler(handler: () => any): void {
+	sessionExpiredHandler = handler;
 }
 
 export function initalize(): void {
@@ -21,32 +27,19 @@ export function initalize(): void {
 }
 
 function handleUserDataChanges(changes: ChangeNotification[]): void {
-	if (!externalEventHandler) {
+	if (!synchronizationHandler) {
 		return;
 	}
 
-	const event: Event = {
-		type: EventType.USER_DATA_CHANGES,
-		payload: changes
-	};
-
-	externalEventHandler(event);
+	synchronizationHandler(changes);
 }
 
 async function handleTripConflict(conflictInfo: TripConflictInfo, trip: Trip): Promise<TripConflictClientResolution> {
-	if (!externalEventHandler) {
+	if (!tripUpdateConflictHandler) {
 		return TripConflictClientResolution.server;
 	}
 
-	const event: Event = {
-		type: EventType.TRIP_CONFLICT,
-		payload: {
-			conflictInfo,
-			trip
-		}
-	};
-
-	const conflictResolution = externalEventHandler(event);
+	const conflictResolution = tripUpdateConflictHandler(conflictInfo, trip);
 	if (!conflictResolution) {
 		return TripConflictClientResolution.server;
 	}
@@ -54,14 +47,9 @@ async function handleTripConflict(conflictInfo: TripConflictInfo, trip: Trip): P
 }
 
 async function handleInvalidSession(): Promise<void> {
-	const event: Event = {
-		type: EventType.INVALID_SESSION,
-		payload: null
-	};
+	await setSession(null);
 
-	await setUserSession(null);
-
-	if (externalEventHandler) {
-		externalEventHandler(event);
+	if (sessionExpiredHandler) {
+		sessionExpiredHandler();
 	}
 }

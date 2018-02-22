@@ -102,7 +102,7 @@ describe('PlacesDataAccess', () => {
 			}));
 			const guid = 'region:1948650';
 
-			return Dao.getPlaceDetailed(guid, photoSize).then((result) => {
+			return Dao.getDetailedPlace(guid, photoSize).then((result) => {
 				assert.calledOnce(stub);
 				return chai.expect(result).to.deep.equal(ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
 			});
@@ -117,7 +117,7 @@ describe('PlacesDataAccess', () => {
 			Cache.set(guid, TestData.placeDetailedEiffelTowerWithoutMedia.place);
 
 			assert.notCalled(stub);
-			return chai.expect(Dao.getPlaceDetailed(guid, photoSize))
+			return chai.expect(Dao.getDetailedPlace(guid, photoSize))
 				.to.eventually.deep.equal(ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
 		});
 	});
@@ -142,7 +142,7 @@ describe('PlacesDataAccess', () => {
 				}));
 			}));
 
-			return Dao.getPlacesDetailed(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
+			return Dao.getDetailedPlaces(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
 				assert.calledOnce(stub);
 				return chai.expect(result).to.deep.equal(expectedPlaces);
 			});
@@ -156,7 +156,7 @@ describe('PlacesDataAccess', () => {
 
 			const stub = sandbox.stub(StApi, 'get');
 
-			return Dao.getPlacesDetailed(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
+			return Dao.getDetailedPlaces(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
 				assert.notCalled(stub);
 				return chai.expect(result).to.deep.equal(expectedPlaces);
 			});
@@ -172,7 +172,7 @@ describe('PlacesDataAccess', () => {
 				}));
 			}));
 
-			return Dao.getPlacesDetailed(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
+			return Dao.getDetailedPlaces(['poi:1', 'poi:2', 'poi:3', 'poi:4'], photoSize).then((result) => {
 				assert.calledOnce(stub);
 				return chai.expect(result).to.deep.equal(expectedPlaces);
 			});

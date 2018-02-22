@@ -17,7 +17,7 @@ import {
 	mapPlaceReview,
 	mapPlaceReviewsData
 } from './Mapper';
-import { CustomPlaceFormData, Place } from './Place';
+import { CustomPlaceFormData, DetailedPlace, Place } from './Place';
 import { PlaceGeometry } from './PlaceGeometry';
 import { PlaceOpeningHours } from './PlaceOpeningHours';
 import { PlaceReview } from './PlaceReview';
@@ -34,7 +34,7 @@ export async function getPlaces(filter: PlacesListFilter): Promise<Place[]> {
 	return mapPlaceApiResponseToPlaces(apiResponse.data.places);
 }
 
-export async function getPlaceDetailed(id: string, photoSize: string): Promise<any> {
+export async function getDetailedPlace(id: string, photoSize: string): Promise<DetailedPlace> {
 	let result = null;
 	const fromCache = await cache.get(id);
 
@@ -77,7 +77,7 @@ export async function deleteCustomPlace(id: string): Promise<void> {
 	return;
 }
 
-export async function getPlacesDetailed(ids: string[], photoSize: string): Promise<Place[]> {
+export async function getDetailedPlaces(ids: string[], photoSize: string): Promise<DetailedPlace[]> {
 	const placesFromCache: any[] = [];
 	let placesFromApi: any[] = [];
 	const toBeFetchedFromAPI: string[] = [];
@@ -123,7 +123,7 @@ export async function getPlacesDetailed(ids: string[], photoSize: string): Promi
 
 export async function getPlacesFromTripDay(day: Day, imageSize: string): Promise<Place[]> {
 	const placesIds: string[] = day.itinerary.map((item: ItineraryItem) => (item.placeId));
-	return getPlacesDetailed(placesIds, imageSize);
+	return getDetailedPlaces(placesIds, imageSize);
 }
 
 export async function getPlaceMedia(id: string): Promise<Medium[]> {

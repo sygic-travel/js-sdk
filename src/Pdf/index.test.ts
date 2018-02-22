@@ -1,6 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-import * as cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from '../Util';
 import { sandbox as sinonSandbox, SinonSandbox, SinonStub } from 'sinon';
 import { ApiResponse, StApi } from '../Api';
 import * as FavoritesController from '../Favorites';
@@ -8,11 +8,11 @@ import * as PlacesController from '../Places';
 
 import { buildDestinationsAndPlaces, generatePdf, GeneratingState } from '.';
 
+import * as User from '../Session';
 import { setEnvironment } from '../Settings/';
 import * as pdfApiResponses from '../TestData/PdfApiResponses';
 import * as pdfResults from '../TestData/PdfExpectedResults';
 import { placeDetailedEiffelTowerWithoutMedia as placeMock } from '../TestData/PlacesExpectedResults';
-import * as User from '../User';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
@@ -86,7 +86,7 @@ describe('PdfController', () => {
 			sandbox.stub(FavoritesController, 'getFavoritesIds').returns(new Promise<string[]>((resolve) =>
 				(resolve(['poi:1234']))
 			));
-			sandbox.stub(PlacesController, 'getPlacesDetailedMap').returns(favoritesDetailedMap);
+			sandbox.stub(PlacesController, 'getDetailedPlacesMap').returns(favoritesDetailedMap);
 
 			const {
 				destinationIdsWithDestinations,

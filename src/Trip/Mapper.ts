@@ -1,22 +1,26 @@
 import { camelizeKeys, decamelizeKeys } from 'humps';
-import * as cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from '../Util';
 
 import { Place } from '../Places';
 import { Waypoint } from '../Route';
-import { UserSettings } from '../User';
-import { Day, ItineraryItem, Trip, TripCreateRequest, TripMedia, TripPrivileges, TripTemplate } from './Trip';
+import { UserSettings } from '../Session';
+import { Day, ItineraryItem, Trip, TripCreateRequest, TripInfo, TripMedia, TripPrivileges, TripTemplate} from './Trip';
 import { decorateDaysWithDate } from './Utility';
 
 const MAX_TRIP_DAYS_COUNT = 81;
 
 export const mapTripListApiResponseToTripsList = (trips: any): Trip[] => {
 	return trips.map((trip) => {
-		return mapTrip(trip, null, null);
+		return mapTripInfo(trip);
 	});
 };
 
 export const mapTripDetailedApiResponseToTrip = (tripDetailed: any, userSettings: UserSettings | null): Trip => {
-	return mapTrip(tripDetailed, mapTripDays(tripDetailed), userSettings);
+	const trip: Trip = {
+		...mapTripInfo(tripDetailed),
+		days: decorateDaysWithDate(tripDetailed.starts_on, mapTripDays(tripDetailed))
+	};
+	return resolveStickiness(trip, userSettings);
 };
 
 export const mapTripCreateRequestToApiFormat = (request: TripCreateRequest): object => {
@@ -68,8 +72,8 @@ export const mapTripCreateRequest = (
 	} as TripCreateRequest;
 };
 
-export const mapTrip = (trip, days: Day[] | null, userSettings: UserSettings | null): Trip => {
-	const resultTrip = {
+const mapTripInfo = (trip): TripInfo => {
+	return {
 		id: trip.id,
 		ownerId: trip.owner_id,
 		privacyLevel: trip.privacy_level,
@@ -82,10 +86,7 @@ export const mapTrip = (trip, days: Day[] | null, userSettings: UserSettings | n
 		url: trip.url,
 		media: camelizeKeys(trip.media) as TripMedia,
 		privileges: camelizeKeys(trip.privileges) as TripPrivileges,
-		days: decorateDaysWithDate(trip.starts_on, days)
-	} as Trip;
-
-	return resolveStickiness(resultTrip, userSettings);
+	} as TripInfo;
 };
 
 const mapTripDays = (trip): Day[] => trip.days.map((day) => ({

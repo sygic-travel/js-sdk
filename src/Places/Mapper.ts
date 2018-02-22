@@ -3,8 +3,8 @@ import { camelizeKeys } from 'humps';
 import { Location } from '../Geo';
 import { Bounds } from '../Geo/Bounds';
 import { MainMedia } from '../Media/Media';
-import { Place } from './Place';
-import { Description, PlaceDetail, Reference, Tag } from './PlaceDetail';
+import { DetailedPlace, Place } from './Place';
+import { Description, Detail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
 import { PlaceOpeningHours } from './PlaceOpeningHours';
 import { PlaceReview } from './PlaceReview';
@@ -18,19 +18,16 @@ export const mapPlaceApiResponseToPlaces = (places: any): Place[] => {
 	});
 };
 
-export const mapPlaceDetailedApiResponseToPlace = (place: any, photoSize: string): Place => {
+export const mapPlaceDetailedApiResponseToPlace = (place: any, photoSize: string): DetailedPlace => {
 	const detail = mapPlaceDetail(place, photoSize);
 	return mapPlace(place, detail);
 };
 
-export const mapPlaceDetailedBatchApiResponseToPlaces = (places: any, photoSize: string): Place[] => {
-	return places.map((place) => {
-		const detail = mapPlaceDetail(place, photoSize);
-		return mapPlace(place, detail);
-	});
+export const mapPlaceDetailedBatchApiResponseToPlaces = (places: any, photoSize: string): DetailedPlace[] => {
+	return places.map((place) => mapPlaceDetailedApiResponseToPlace(place, photoSize));
 };
 
-export const mapPlace = (place, detail: PlaceDetail | null) => {
+export const mapPlace = (place, detail: Detail | null) => {
 	return {
 		id: place.id,
 		level: place.level,
@@ -51,10 +48,10 @@ export const mapPlace = (place, detail: PlaceDetail | null) => {
 		starRatingUnofficial: place.star_rating_unofficial,
 		customerRating: place.customer_rating,
 		detail
-	} as Place;
+	} as DetailedPlace;
 };
 
-const mapPlaceDetail = (place, photoSize): PlaceDetail => {
+const mapPlaceDetail = (place, photoSize): Detail => {
 	const tags: Tag[] = place.tags.map((tag) => (camelizeKeys(tag) as Tag));
 	const description: Description | null = place.description ? camelizeKeys(place.description) as Description : null;
 	const references: Reference[] = place.references.map((reference) => camelizeKeys(reference));
@@ -69,7 +66,7 @@ const mapPlaceDetail = (place, photoSize): PlaceDetail => {
 		phone: place.phone,
 		media: mapMainMediaToMedia(camelizeKeys(place.main_media), photoSize),
 		references
-	} as PlaceDetail;
+	} as Detail;
 
 	if (place.owner_id) {
 		resultPlaceDetail.ownerId = place.owner_id;

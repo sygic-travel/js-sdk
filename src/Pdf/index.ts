@@ -1,12 +1,12 @@
 import { Collection, getCollectionsForDestinationId } from '../Collections';
 import { getFavoritesIds } from '../Favorites';
 import {
-	getPlacesDestinationMap, getPlacesDetailedMap, getPlacesMapFromTrip, mergePlacesArrays,
+	getDetailedPlacesMap, getPlacesDestinationMap, getPlacesMapFromTrip, mergePlacesArrays,
 	Place
 } from '../Places';
 import { getRoutesForTripDay, TripDayRoutes } from '../Route';
+import { getUserSettings, UserSettings } from '../Session';
 import { Day, getTripDetailed, Trip } from '../Trip';
-import { getUserSettings, UserSettings } from '../User';
 import { sleep } from '../Util';
 import * as Dao from './DataAccess';
 import { generateDestinationMainMap, generateDestinationSecondaryMaps } from './MapGenerator';
@@ -124,7 +124,7 @@ export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<
 		}
 	});
 
-	const userFavoritesMap: Map<string, Place> = await getPlacesDetailedMap(
+	const userFavoritesMap: Map<string, Place> = await getDetailedPlacesMap(
 		await getFavoritesIds(),
 		imageSize
 	);

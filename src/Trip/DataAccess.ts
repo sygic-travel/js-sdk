@@ -3,8 +3,8 @@ import { stringify } from 'query-string';
 
 import { ApiResponse, StApi } from '../Api';
 import { tripsDetailedCache as tripsDetailedCache } from '../Cache';
+import { getUserSettings, UserSettings } from '../Session';
 import { getTripConflictHandler } from '../Settings';
-import { getUserSettings, UserSettings } from '../User';
 import { dateToW3CString } from '../Util';
 import {
 	mapTripCreateRequestToApiFormat,

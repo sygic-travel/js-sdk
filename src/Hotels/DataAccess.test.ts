@@ -1,5 +1,5 @@
 import * as chai from 'chai';
-import * as cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from '../Util';
 import { sandbox as sinonSandbox, SinonSandbox } from 'sinon';
 
 import { ApiResponse, StApi } from '../Api';

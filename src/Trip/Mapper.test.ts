@@ -1,11 +1,11 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-import * as cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from '../Util';
 
 import * as ApiResponses from '../TestData/TripApiResponses';
 import * as ExpectedResults from '../TestData/TripExpectedResults';
 import * as Mapper from '../Trip/Mapper';
-import { UserSettings } from '../User';
+import { UserSettings } from '../Session';
 import { Trip, TripCreateRequest } from './Trip';
 
 chai.use(chaiAsPromised);

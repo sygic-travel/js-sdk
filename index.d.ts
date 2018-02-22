@@ -32,7 +32,9 @@ declare class CustomPlacesModule {
 }
 
 declare class EventsModule {
-	public setEventsHandler(handler: (event: Events.Event) => any): void;
+	public setSessionExpiredHandler(handler: () => any): void;
+	public setTripUpdateConflictHandler(handler: (conflictInfo: Trips.TripConflictInfo, trip: Trips.Trip) => any): void;
+	public setSynchronizationHandler(handler: (changes: Changes.ChangeNotification[]) => any): void;
 }
 
 declare class FavoritesModule {
@@ -61,8 +63,8 @@ declare class PdfModule {
 
 declare class PlacesModule {
 	public getPlaces(filter: Places.PlacesListFilterJSON): Promise<Places.Place[]>;
-	public getPlaceDetailed(id: string, photoSize: string): Promise<Places.Place>;
-	public getPlacesDetailed(ids: string[], photoSize: string): Promise<Places.Place[]>;
+	public getDetailedPlace(id: string, photoSize: string): Promise<Places.Place>;
+	public getDetailedPlaces(ids: string[], photoSize: string): Promise<Places.Place[]>;
 	public getPlaceMedia(id: string): Promise<Media.Medium[]>;
 	public getPlacesStats(filter: Places.PlacesStatsFilterJSON): Promise<Places.PlacesStats>;
 	public getPlaceGeometry(id: string): Promise<Places.PlaceGeometry>;
@@ -110,77 +112,50 @@ declare class ToursModule {
 }
 
 declare class TripModule {
-	public getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trips.Trip[]>;
-	public getTripsInTrash(): Promise<Trips.Trip[]>;
+	public getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trips.TripInfo[]>;
+	public getTripsInTrash(): Promise<Trips.TripInfo[]>;
 	public getTripDetailed(id: string): Promise<Trips.Trip>;
-	public createTrip(startDate: string, name: string, daysCount: number, placeId?: string): Promise<Trips.Trip>;
-	public updateTrip(id: string, dataToUpdate: Trips.TripUpdateData): Promise<Trips.Trip>;
+	public getTripEditor(): Trips.TripEditor;
+	public saveTrip(trip: Trips.Trip): Promise<Trips.Trip>;
 	public cloneTrip(id: string): Promise<string>;
 	public ensureTripSyncedToServer(tripId: string): Promise<void>;
-	public addDaysToTrip(id: string, appendCount: number, prependCount: number): Promise<Trips.Trip>;
-	public removeDayFromTrip(id: string, dayIndex: number): Promise<Trips.Trip>;
-	public swapDaysInTrip(id: string, firstDayIndex: number, secondDayIndex: number): Promise<Trips.Trip>;
-	public movePlaceInDay(id: string, dayIndex: number, positionFrom: number, positionTo: number): Promise<Trips.Trip>;
-	public removePlacesFromDay(id: string, dayIndex: number, positionsInDay: number[]): Promise<Trips.Trip>;
-	public removeAllPlacesFromDay(id: string, dayIndex: number): Promise<Trips.Trip>;
-	public addPlaceToDay(tripId: string, placeId: string, dayIndex: number, positionInDay?: number): Promise<Trips.Trip>;
-	public addSequenceToDay(
-		tripId: string,
-		dayIndex: number,
-		placeIds: string[],
-		transports?: (Trips.TransportSettings | null)[],
-		positionInDay?: number
-	): Promise<Trips.Trip>;
-	public setOvernightPlace(tripId: string, placeId: string, dayIndexes: number[]): Promise<Trips.Trip>;
-	public setTransport(
-		id: string,
-		dayIndex: number,
-		itemIndex: number,
-		settings: Trips.TransportSettings
-	): Promise<Trips.Trip>;
 	public emptyTripsTrash(): Promise<string[]>;
 	public getTripTemplates(placeId: string): Promise<Trips.TripTemplate[]>;
 	public applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trips.Trip>;
-	public updateItineraryItemUserData(
-		tripId: string,
-		dayIndex: number,
-		itemIndex: number,
-		startTime: number | null,
-		duration: number | null,
-		note: string | null
-	): Promise<Trips.Trip>;
-	public updateDayNote(tripId: string, dayIndex: number, note: string): Promise<Trips.Trip>;
 }
 
-declare class UserModule {
-	public setUserSession(session: User.Session | null): Promise<void>;
-	public getUserSession(): Promise<User.Session | null>;
-	public getUserSettings(): Promise<User.UserSettings>;
-	public updateUserSettings(settings: User.UserSettings): Promise<User.UserSettings>;
-	public loginUserWithDeviceId(deviceId: string, devideCode: string): Promise<User.AuthenticationResponseCode>;
-	public loginUserWithJwt(jwt: string, deviceId?: string, devideCode?: string): Promise<User.AuthenticationResponseCode>;
-	public loginUserWithPassword(
+declare class SessionModule {
+	public setSession(session: Sessions.Session | null): Promise<void>;
+	public getSession(): Promise<Sessions.Session | null>;
+	public getUserSettings(): Promise<Sessions.UserSettings>;
+	public updateUserSettings(settings: Sessions.UserSettings): Promise<Sessions.UserSettings>;
+	public signInWithDeviceId(deviceId: string, devideCode: string): Promise<Sessions.AuthenticationResponseCode>;
+	public signInWithJwtToken(
+		jwt: string,
+		deviceId?: string,
+		devideCode?: string
+	): Promise<Sessions.AuthenticationResponseCode>;
+	public signInWithCredentials(
 		email: string,
 		password: string,
 		deviceId?: string,
 		devideCode?: string
-	): Promise<User.AuthenticationResponseCode>;
-	public registerUser(email: string, password: string, name: string): Promise<User.RegistrationResponseCode>;
+	): Promise<Sessions.AuthenticationResponseCode>;
+	public register(email: string, password: string, name: string): Promise<Sessions.RegistrationResponseCode>;
 	public requestCancelAccount(): Promise<void>;
 	public deleteAccount(id: string, hash: string): Promise<void>;
-	public loginUserWithFacebook(
+	public signInWithFacebookAccessToken(
 		accessToken: string | null,
-		authorizationCode: string | null,
 		deviceId?: string,
 		devicePlatform?: string
-	): Promise<User.AuthenticationResponseCode>;
-	public loginUserWithGoogle(
+	): Promise<Sessions.AuthenticationResponseCode>;
+	public signInWithGoogleIdToken(
 		accessToken: string | null,
-		authorizationCode: string | null,
 		deviceId?: string,
 		devicePlatform?: string
-	): Promise<User.AuthenticationResponseCode>;
-	public getUserInfo(): Promise<User.UserInfo>;
+	): Promise<Sessions.AuthenticationResponseCode>;
+	public getUserInfo(): Promise<Sessions.UserInfo>;
+	public resetPassword(email: string): Promise<Sessions.ResetPasswordResponseCode>;
 }
 
 declare class UtilityModule {
@@ -200,7 +175,7 @@ export class StSDK {
 	public search: SearchModule;
 	public tours: ToursModule;
 	public trip: TripModule;
-	public user: UserModule;
+	public session: SessionModule;
 	public utility: UtilityModule;
 }
 
@@ -362,15 +337,6 @@ export namespace Places {
 	export interface PlacesStats {
 		categories: SumStatistic[];
 		tags: SumStatistic[];
-	}
-}
-
-export namespace Events {
-	export type EventType = 'user_data_changes' | 'trip_conflict' | 'invalid_session';
-
-	export interface Event {
-		type: EventType;
-		payload: any;
 	}
 }
 
@@ -552,7 +518,7 @@ export namespace SpreadV2 {
 }
 
 export namespace Trips {
-	export interface Trip {
+	export interface TripInfo {
 		id: string;
 		ownerId: string;
 		privacyLevel: string;
@@ -563,9 +529,12 @@ export namespace Trips {
 		isDeleted: boolean;
 		endsOn: string | null;
 		url: string;
-		days: Day[] | null;
 		media: TripMedia;
 		privileges: TripPrivileges;
+	}
+
+	export interface Trip extends Trips.TripInfo {
+		days: Day[] | null;
 	}
 
 	export interface Day {
@@ -582,6 +551,96 @@ export namespace Trips {
 	export interface TripConflictInfo {
 		lastUserName: string;
 		lastUpdatedAt: string;
+	}
+
+	export interface TripEditor {
+		addDaysToTrip(
+			trip: Trip,
+			appendCount: number,
+			prependCount: number,
+			userSettings: Sessions.UserSettings | null
+		): Trip;
+		removeDay(trip: Trip, dayIndex: number, userSettings: Sessions.UserSettings | null): Trip;
+		swapDaysInTrip(
+			trip: Trip,
+			firstDayIndex: number,
+			secondDayIndex: number,
+			userSettings: Sessions.UserSettings | null
+		): Trip;
+		addPlaceToDay(
+			trip: Trip,
+			place: Places.Place,
+			dayIndex: number,
+			userSettings: Sessions.UserSettings | null,
+			positionInDay?: number // If not passed the place is added to the end
+		): Trip;
+		duplicatePlace(
+			trip: Trip,
+			dayIndex: number,
+			placeIndex: number,
+			resetTransport: boolean,
+			userSettings: Sessions.UserSettings | null
+		): Trip;
+		movePlaceInDay(
+			trip: Trip,
+			dayIndex: number,
+			positionFrom: number,
+			positionTo: number,
+			userSettings: Sessions.UserSettings | null
+		): Trip;
+		removePlacesFromDay(
+			trip: Trip,
+			dayIndex: number,
+			positionsInDay: number[],
+			userSettings: Sessions.UserSettings | null
+		): Trip;
+		removeAllPlacesFromDay(
+			tripToBeUpdated: Trip,
+			dayIndex: number,
+			userSettings: Sessions.UserSettings | null
+		): Trip;
+		addOrReplaceOvernightPlace(
+			trip: Trip,
+			place: Places.Place,
+			dayIndex: number,
+			userSettings: Sessions.UserSettings | null
+		): Trip;
+		removePlaceFromDayByPlaceId(
+			trip: Trip,
+			placeId: string,
+			dayIndex: number,
+			userSettings: Sessions.UserSettings | null
+		): Trip;
+		setTransport(
+			trip: Trip,
+			dayIndex: number,
+			itemIndex: number,
+			settings: TransportSettings | null
+		): Trip;
+		updatePlaceUserData(
+			trip: Trip,
+			dayIndex: number,
+			itemIndex: number,
+			startTime: number | null,
+			duration: number | null,
+			note: string | null
+		): Trip;
+		updateDayNote(trip: Trip, dayIndex: number, note: string): Trip;
+		smartAddPlaceToDay(
+			trip: Trip,
+			placeId: string,
+			dayIndex: number,
+			positionInDay?: number // If not passed automatic algorithm is used
+		): Promise<Trip>;
+		smartAddSequenceToDay(
+			trip: Trip,
+			dayIndex: number,
+			placeIds: string[],
+			transports?: (TransportSettings | null)[],
+			positionInDay?: number // If not passed automatic algorithm is used
+		): Promise<Trip>;
+		createTrip(startDate: string, name: string, daysCount: number, placeId?: string): Promise<Trip>;
+		setStartDate(trip: Trip, startDate: string): Trip;
 	}
 
 	export interface ItineraryItem {
@@ -778,7 +837,7 @@ export namespace Forecast {
 	}
 }
 
-export namespace User {
+export namespace Sessions {
 	export interface UserSettings {
 		homePlaceId: string | null;
 		workPlaceId: string | null;
@@ -810,6 +869,12 @@ export namespace User {
 		'ERROR_EMAIL_INVALID_FORMAT' |
 		'ERROR_PASSWORD_MIN_LENGTH';
 
+	export enum ResetPasswordResponseCode {
+		OK = 'OK',
+		ERROR_USER_NOT_FOUND = 'ERROR_USER_NOT_FOUND',
+		ERROR_EMAIL_INVALID_FORMAT = 'ERROR_EMAIL_INVALID_FORMAT',
+		ERROR = 'ERROR'
+	}
 }
 
 export namespace Changes {

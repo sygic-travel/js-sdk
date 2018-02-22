@@ -1,9 +1,6 @@
 import { Location } from '../Geo';
 import * as Media from '../Media/Media';
-import { Place } from '../Places/Place';
-import { Description, PlaceDetail, Reference, Tag } from '../Places/PlaceDetail';
-import { PlaceReview } from '../Places/PlaceReview';
-import { PlaceReviewsData } from '../Places/PlaceReviewsData';
+import { Description, Detail, Place, PlaceReview, PlaceReviewsData, Reference, Tag } from '../Places';
 import { PlacesStats, SumStatistic } from '../Places/Stats';
 
 /* tslint:disable */
@@ -91,7 +88,7 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 			flags: []
 		} as Reference],
 		ownerId: '12345'
-	} as PlaceDetail
+	} as Detail
 };
 
 export const places = [{

@@ -1,7 +1,7 @@
 import { ItineraryItem, Trip, UNBREAKABLE_TRANSPORT_MODES } from '.';
 import { EARTH_RADIUS, getDistance, Location } from '../Geo';
 import { isStickyByDefault, Place } from '../Places';
-import { UserSettings } from '../User';
+import { UserSettings } from '../Session';
 
 export interface AddToTripInstructions {
 	position: number;

@@ -23,3 +23,10 @@ export enum RegistrationResponseCode {
 	ERROR_PASSWORD_MIN_LENGTH = 'ERROR_PASSWORD_MIN_LENGTH',
 	ERROR = 'ERROR'
 }
+
+export enum ResetPasswordResponseCode {
+	OK = 'OK',
+	ERROR_USER_NOT_FOUND = 'ERROR_USER_NOT_FOUND',
+	ERROR_EMAIL_INVALID_FORMAT = 'ERROR_EMAIL_INVALID_FORMAT',
+	ERROR = 'ERROR'
+}

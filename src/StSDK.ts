@@ -13,9 +13,9 @@ import PdfModule from './Modules/PdfModule';
 import PlacesModule from './Modules/PlacesModule';
 import RoutesModule from './Modules/RoutesModule';
 import SearchModule from './Modules/SearchModule';
+import SessionModule from './Modules/SessionModule';
 import ToursModule from './Modules/ToursModule';
 import TripModule from './Modules/TripModule';
-import UserModule from './Modules/UserModule';
 import UtilityModule from './Modules/UtilityModule';
 
 export default class StSDK extends BaseSDK {
@@ -32,8 +32,8 @@ export default class StSDK extends BaseSDK {
 	public hotels: HotelsModule = new HotelsModule();
 	public routes: RoutesModule = new RoutesModule();
 	public search: SearchModule = new SearchModule();
+	public session: SessionModule = new SessionModule();
 	public tours: ToursModule = new ToursModule();
 	public trip: TripModule = new TripModule();
-	public user: UserModule = new UserModule();
 	public utility: UtilityModule = new UtilityModule();
 }

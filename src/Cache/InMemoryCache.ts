@@ -1,4 +1,4 @@
-import * as cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from '../Util';
 import { ICache } from './ICache';
 
 export class InMemoryCache implements ICache {

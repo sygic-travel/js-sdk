@@ -1,7 +1,7 @@
 import * as chai from 'chai';
-import * as cloneDeep from 'lodash.clonedeep';
 import { sandbox as sinonSandbox, SinonFakeTimers, SinonSandbox, SinonStub } from 'sinon';
-import { getUserInfo, getUserSession, Session, setUserSession } from '.';
+import { getSession, getUserInfo, Session, setSession } from '.';
+import { cloneDeep } from '../Util';
 import * as Dao from './DataAccess';
 
 import { session as testSession } from '../TestData/UserInfoExpectedResults';
@@ -14,16 +14,16 @@ describe('UserController', () => {
 
 	describe('#getUserInfo', () => {
 		it('should throw an exception when no user session is set', async () => {
-			await setUserSession(null);
+			await setSession(null);
 			getUserInfo().catch((e: Error) => {
 				chai.expect(e.message).equal('User session is not set');
 			});
 		});
 	});
 
-	describe('#getUserSession', () => {
+	describe('#getSession', () => {
 		beforeEach(async () => {
-			await setUserSession(testSession);
+			await setSession(testSession);
 			sandbox = sinonSandbox.create();
 			clock = sandbox.useFakeTimers(10000000);
 		});
@@ -45,7 +45,7 @@ describe('UserController', () => {
 				});
 			}));
 			clock.tick(2000000);
-			const session: Session | null = await getUserSession();
+			const session: Session | null = await getSession();
 			chai.expect(session).deep.equal(refreshedSession);
 			chai.expect(stub.callCount).equal(1);
 
@@ -54,18 +54,18 @@ describe('UserController', () => {
 		it('should should not call refresh token when session is fresh', async () => {
 			const stub: SinonStub = sandbox.stub(Dao, 'getSessionWithRefreshToken');
 			clock.tick(1000000);
-			const session: Session | null = await getUserSession();
+			const session: Session | null = await getSession();
 			chai.expect(session).deep.equal(testSession);
 			chai.expect(stub.callCount).equal(0);
 		});
 
 		it('should should not call refresh token when session is incomplete', async () => {
 			const incompleteSession = cloneDeep(testSession);
-			incompleteSession.refreshToken = null;
-			await setUserSession(incompleteSession);
+			incompleteSession.refreshToken = '';
+			await setSession(incompleteSession);
 			const stub: SinonStub = sandbox.stub(Dao, 'getSessionWithRefreshToken');
 			clock.tick(3000000);
-			const session: Session | null = await getUserSession();
+			const session: Session | null = await getSession();
 			chai.expect(session).deep.equal(incompleteSession);
 			chai.expect(stub.callCount).equal(0);
 		});

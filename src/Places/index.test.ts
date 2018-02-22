@@ -1,23 +1,23 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as dirtyChai from 'dirty-chai';
-import * as cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from '../Util';
 import 'mocha';
 import * as sinon from 'sinon';
 
+import { ApiResponse, StApi } from '../Api';
+import { setEnvironment } from '../Settings';
 import {
+	getDetailedPlace,
+	getDetailedPlaces,
 	getPlaceDestination,
-	getPlaceDetailed,
 	getPlaces,
-	getPlacesDetailed,
 	isPlaceDestination,
 	mergePlacesArrays,
 	Place,
 	PlacesListFilter,
 	PlacesListFilterJSON
-} from '.';
-import { ApiResponse, StApi } from '../Api';
-import { setEnvironment } from '../Settings';
+} from './index';
 
 import * as TestData from '../TestData/PlacesApiResponses';
 import * as ExpectedResults from '../TestData/PlacesExpectedResults';
@@ -49,7 +49,7 @@ describe('PlacesController', () => {
 			const guid = 'region:1948650';
 			const photoSize = '150x150';
 
-			return chai.expect(getPlaceDetailed(guid, photoSize))
+			return chai.expect(getDetailedPlace(guid, photoSize))
 				.to.eventually.deep.equal(ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
 		});
 	});
@@ -73,7 +73,7 @@ describe('PlacesController', () => {
 				}));
 			}));
 
-			return chai.expect(getPlacesDetailed(['poi:1', 'poi:2'], '150x150'))
+			return chai.expect(getDetailedPlaces(['poi:1', 'poi:2'], '150x150'))
 				.to.eventually.deep.equal([expectedResult1, expectedResult2]);
 		});
 	});

@@ -1,15 +1,15 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as dirtyChai from 'dirty-chai';
-import * as cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from '../Util';
 import { assert, sandbox as sinonSandbox, SinonFakeTimers, SinonSandbox, SinonStub } from 'sinon';
 
 import { ApiResponse, StApi } from '../Api';
 import { placesDetailedCache as Cache, tripsDetailedCache } from '../Cache';
+import * as User from '../Session';
 import { setEnvironment, setTripConflictHandler } from '../Settings';
 import * as TripApiTestData from '../TestData/TripApiResponses';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
-import * as User from '../User';
 import * as Dao from './DataAccess';
 import { Day, ItineraryItem, Trip, TripConflictClientResolution, TripConflictHandler, TripTemplate } from './Trip';
 
