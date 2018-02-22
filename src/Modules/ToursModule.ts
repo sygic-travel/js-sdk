@@ -1,10 +1,13 @@
-import { getTours, Tour, ToursQuery } from '../Tours';
+import { getToursGetYourGuide, getToursViator, Tour, ToursGetYourGuideQuery, ToursViatorQuery } from '../Tours';
 
 /**
  * @experimental
  */
 export default class ToursModule {
-	public getTours(toursQuery: ToursQuery): Promise<Tour[]> {
-		return getTours(toursQuery);
+	public getToursViator(toursQuery: ToursViatorQuery): Promise<Tour[]> {
+		return getToursViator(toursQuery);
+	}
+	public getToursGetYourGuide(toursQuery: ToursGetYourGuideQuery): Promise<Tour[]> {
+		return getToursGetYourGuide(toursQuery);
 	}
 }

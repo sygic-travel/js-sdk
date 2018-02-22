@@ -13,7 +13,10 @@ export function mapToursApiResponseToTours(tours: any): Tour[] {
 			photoUrl: tour.photo_url,
 			price: tour.price,
 			originalPrice: tour.original_price,
-			duration: tour.duration
+			duration: tour.duration,
+			durationMin: tour.duration_min,
+			durationMax: tour.duration_max,
+			flags: tour.flags,
 		} as Tour;
 	});
 }
