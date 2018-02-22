@@ -1,4 +1,5 @@
 import * as chai from 'chai';
+import { TransportMode } from './Trip';
 import * as Validator from './Validator';
 
 describe('Validator', () => {
@@ -10,22 +11,22 @@ describe('Validator', () => {
 				.to.throw(Error, 'Invalid transport mode nonSenseValue');
 		});
 		it('should throw an error when invalid avoid is passed', () => {
-			chai.expect(() => Validator.validateTransportSettings({mode: 'car'}))
+			chai.expect(() => Validator.validateTransportSettings({mode: TransportMode.CAR}))
 				.to.throw(Error, 'avoid must be an array');
-			chai.expect(() => Validator.validateTransportSettings({mode: 'car', avoid: ['xxx']}))
+			chai.expect(() => Validator.validateTransportSettings({mode: TransportMode.CAR, avoid: ['xxx']}))
 				.to.throw(Error, 'Invalid avoid value xxx');
 		});
 		it('should throw an error when invalid startTime is passed', () => {
-			chai.expect(() => Validator.validateTransportSettings({mode: 'car', avoid: []}))
+			chai.expect(() => Validator.validateTransportSettings({mode: TransportMode.CAR, avoid: []}))
 				.to.throw(Error, 'Missing startTime');
-			chai.expect(() => Validator.validateTransportSettings({mode: 'car', avoid: [], startTime: -1}))
+			chai.expect(() => Validator.validateTransportSettings({mode: TransportMode.CAR, avoid: [], startTime: -1}))
 				.to.throw(Error, 'Invalid startTime value -1');
-			chai.expect(() => Validator.validateTransportSettings({mode: 'car', avoid: [], startTime: 1000000}))
+			chai.expect(() => Validator.validateTransportSettings({mode: TransportMode.CAR, avoid: [], startTime: 1000000}))
 				.to.throw(Error, 'Invalid startTime value 1000000');
 		});
 		it('should throw an error when invalid duration is passed', () => {
 			const settings = {
-				mode: 'car',
+				mode: TransportMode.CAR,
 				type: 'fastest',
 				avoid: [],
 				startTime: 3600,
@@ -37,7 +38,7 @@ describe('Validator', () => {
 		});
 		it('should throw an error when invalid note is passed', () => {
 			const settings = {
-				mode: 'car',
+				mode: TransportMode.CAR,
 				type: 'fastest',
 				avoid: [],
 				startTime: 3600,
@@ -50,7 +51,7 @@ describe('Validator', () => {
 		});
 		it('should throw an error when invalid note is passed', () => {
 			const settings = {
-				mode: 'car',
+				mode: TransportMode.CAR,
 				type: 'fastest',
 				avoid: [],
 				startTime: 3600,
@@ -66,7 +67,7 @@ describe('Validator', () => {
 		});
 		it('should pass correct settings', () => {
 			const settings = {
-				mode: 'car',
+				mode: TransportMode.CAR,
 				type: 'fastest',
 				avoid: [],
 				startTime: 3600,

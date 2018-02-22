@@ -430,8 +430,8 @@ describe('TripManipulator', () => {
 		it('should immutably set correct transport', () => {
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			const transportSettings: TransportSettings = {
-				mode: TransportMode.car,
-				avoid: [TransportAvoid.tolls],
+				mode: TransportMode.CAR,
+				avoid: [TransportAvoid.TOLLS],
 				startTime: 7200,
 				duration: 3600,
 				routeId: '3600:7200',

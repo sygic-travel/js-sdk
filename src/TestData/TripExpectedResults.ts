@@ -63,7 +63,7 @@ export const itineratyItem: ItineraryItem = {
 };
 
 export const transportSettings: TransportSettings = {
-	mode: TransportMode.car,
+	mode: TransportMode.CAR,
 	routeId: null,
 	startTime: null,
 	waypoints: [],
@@ -135,8 +135,8 @@ export const tripDetailed = {
 					duration: null,
 					note: null,
 					transportFromPrevious: {
-						mode: TransportMode.car,
-						avoid: [TransportAvoid.tolls],
+						mode: TransportMode.CAR,
+						avoid: [TransportAvoid.TOLLS],
 						startTime: 123456789,
 						duration: 3600,
 						note: 'Note',

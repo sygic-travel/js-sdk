@@ -57,7 +57,7 @@ describe('PositionFinder', () => {
 				date: null,
 				itinerary: [
 					buildItem(0, 0, 'poi:2', null, ['city:1']),
-					buildItem(0, 1, 'poi:3', null, ['city:1'], TransportMode.plane)
+					buildItem(0, 1, 'poi:3', null, ['city:1'], TransportMode.PLANE)
 				]
 			}];
 			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
@@ -69,7 +69,7 @@ describe('PositionFinder', () => {
 				date: null,
 				itinerary: [
 					buildItem(0, 1, 'poi:2', null, ['city:1']),
-					buildItem(0, 0, 'poi:3', null, ['city:1'], TransportMode.plane)
+					buildItem(0, 0, 'poi:3', null, ['city:1'], TransportMode.PLANE)
 				]
 			}];
 			const result2: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
@@ -91,7 +91,7 @@ describe('PositionFinder', () => {
 					note: null,
 					date: null,
 					itinerary: [
-						buildItem(0, 0, 'poi:3', null, ['city:1'], TransportMode.plane),
+						buildItem(0, 0, 'poi:3', null, ['city:1'], TransportMode.PLANE),
 					]
 				}
 			];
@@ -255,7 +255,7 @@ describe('PositionFinder', () => {
 				date: null,
 				itinerary: [
 					buildItem(0, 1, 'poi:2', 'first', ['city:1']),
-					buildItem(0, 2, 'poi:3', 'last', ['city:1'], TransportMode.plane),
+					buildItem(0, 2, 'poi:3', 'last', ['city:1'], TransportMode.PLANE),
 				]
 			}
 			];
@@ -268,7 +268,7 @@ describe('PositionFinder', () => {
 				date: null,
 				itinerary: [
 					buildItem(0, 2, 'poi:2', 'first', ['city:1']),
-					buildItem(0, 1, 'poi:3', 'last', ['city:1'], TransportMode.plane),
+					buildItem(0, 1, 'poi:3', 'last', ['city:1'], TransportMode.PLANE),
 				]
 			}
 			];
@@ -285,7 +285,7 @@ describe('PositionFinder', () => {
 				date: null,
 				itinerary: [
 					buildItem(0, 1, 'poi:2', 'first', ['city:1']),
-					buildItem(0, 2, 'poi:3', 'last', ['city:1'], TransportMode.car),
+					buildItem(0, 2, 'poi:3', 'last', ['city:1'], TransportMode.CAR),
 				]
 			}
 			];
@@ -298,7 +298,7 @@ describe('PositionFinder', () => {
 				date: null,
 				itinerary: [
 					buildItem(0, 2, 'poi:2', 'first', ['city:1']),
-					buildItem(0, 1, 'poi:3', 'last', ['city:1'], TransportMode.car),
+					buildItem(0, 1, 'poi:3', 'last', ['city:1'], TransportMode.CAR),
 				]
 			}
 			];

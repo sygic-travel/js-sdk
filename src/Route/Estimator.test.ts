@@ -14,8 +14,8 @@ const destination: Location = {lat: 11, lng: 11};
 describe('Estimator', () => {
 	describe('#estimateDummyDirection', () => {
 		it('should correctly build dummy direction', () => {
-			const direction: Direction = Estimator.estimateDummyDirection(TransportMode.train, origin, destination);
-			chai.expect(direction.mode).to.equal(TransportMode.train);
+			const direction: Direction = Estimator.estimateDummyDirection(TransportMode.TRAIN, origin, destination);
+			chai.expect(direction.mode).to.equal(TransportMode.TRAIN);
 			chai.expect(direction.polyline).to.equal('_c`|@_c`|@_ibE_ibE');
 			chai.expect(direction.distance).to.be.null('Expect null');
 			chai.expect(direction.duration).to.be.null('Expect null');
@@ -29,7 +29,7 @@ describe('Estimator', () => {
 	describe('#estimateCarDirection', () => {
 		it('should correctly build car direction when distance is from 0 to 2 km', () => {
 			const direction: Direction = Estimator.estimateCarDirection(1000, origin, destination);
-			chai.expect(direction.mode).to.equal(TransportMode.car);
+			chai.expect(direction.mode).to.equal(TransportMode.CAR);
 			chai.expect(direction.polyline).to.equal('_c`|@_c`|@_ibE_ibE');
 			chai.expect(direction.distance).to.equal(1800);
 			chai.expect(direction.duration).to.equal(133);
@@ -41,7 +41,7 @@ describe('Estimator', () => {
 
 		it('should correctly build car direction when distance is from 2 to 6 km', () => {
 			const direction: Direction = Estimator.estimateCarDirection(5000, origin, destination);
-			chai.expect(direction.mode).to.equal(TransportMode.car);
+			chai.expect(direction.mode).to.equal(TransportMode.CAR);
 			chai.expect(direction.polyline).to.equal('_c`|@_c`|@_ibE_ibE');
 			chai.expect(direction.distance).to.equal(8000);
 			chai.expect(direction.duration).to.equal(667);
@@ -53,7 +53,7 @@ describe('Estimator', () => {
 
 		it('should correctly build car direction when distance is from more than 6 km', () => {
 			const direction: Direction = Estimator.estimateCarDirection(30000, origin, destination);
-			chai.expect(direction.mode).to.equal(TransportMode.car);
+			chai.expect(direction.mode).to.equal(TransportMode.CAR);
 			chai.expect(direction.polyline).to.equal('_c`|@_c`|@_ibE_ibE');
 			chai.expect(direction.distance).to.equal(36000);
 			chai.expect(direction.duration).to.equal(2038);
@@ -65,7 +65,7 @@ describe('Estimator', () => {
 
 		it('should correctly build car direction when distance is from more than 40 km', () => {
 			const direction: Direction = Estimator.estimateCarDirection(50000, origin, destination);
-			chai.expect(direction.mode).to.equal(TransportMode.car);
+			chai.expect(direction.mode).to.equal(TransportMode.CAR);
 			chai.expect(direction.polyline).to.equal('_c`|@_c`|@_ibE_ibE');
 			chai.expect(direction.distance).to.equal(60000);
 			chai.expect(direction.duration).to.equal(2000);
@@ -79,7 +79,7 @@ describe('Estimator', () => {
 	describe('#estimatePedestrianDirection', () => {
 		it('should correctly build pedestrian direction when distance is from 0 to 2 km', () => {
 			const direction: Direction = Estimator.estimatePedestrianDirection(1000, origin, destination);
-			chai.expect(direction.mode).to.equal(TransportMode.pedestrian);
+			chai.expect(direction.mode).to.equal(TransportMode.PEDESTRIAN);
 			chai.expect(direction.polyline).to.equal('_c`|@_c`|@_ibE_ibE');
 			chai.expect(direction.distance).to.equal(1350);
 			chai.expect(direction.duration).to.equal(750);
@@ -91,7 +91,7 @@ describe('Estimator', () => {
 
 		it('should correctly build pedestrian direction when distance is from 2 to 6 km', () => {
 			const direction: Direction = Estimator.estimatePedestrianDirection(5000, origin, destination);
-			chai.expect(direction.mode).to.equal(TransportMode.pedestrian);
+			chai.expect(direction.mode).to.equal(TransportMode.PEDESTRIAN);
 			chai.expect(direction.polyline).to.equal('_c`|@_c`|@_ibE_ibE');
 			chai.expect(direction.distance).to.equal(6100);
 			chai.expect(direction.duration).to.equal(3750);
@@ -103,7 +103,7 @@ describe('Estimator', () => {
 
 		it('should correctly build pedestrian direction when distance is from more than 6 km', () => {
 			const direction: Direction = Estimator.estimatePedestrianDirection(7000, origin, destination);
-			chai.expect(direction.mode).to.equal(TransportMode.pedestrian);
+			chai.expect(direction.mode).to.equal(TransportMode.PEDESTRIAN);
 			chai.expect(direction.polyline).to.equal('_c`|@_c`|@_ibE_ibE');
 			chai.expect(direction.distance).to.equal(7742);
 			chai.expect(direction.duration).to.equal(5250);
@@ -130,12 +130,12 @@ describe('Estimator', () => {
 	describe('#estimateMissingDirections', () => {
 		it('should estimate and build missing car, pedestrian, bike, plane, bus, train, boat directions', () => {
 			const inputModeDirections: ModeDirections[] = [{
-				mode: TransportMode.car,
+				mode: TransportMode.CAR,
 				directions: [{
 					distance: null,
 					duration: null,
 					polyline: '',
-					mode: TransportMode.car,
+					mode: TransportMode.CAR,
 					avoid: [],
 					source: 'estimator',
 					isoCodes: [],
@@ -149,7 +149,7 @@ describe('Estimator', () => {
 			);
 			chai.expect(modeDirections.length).to.equal(6);
 			const modeDirectionThatShouldntBeThere = modeDirections.find((modeDirection: ModeDirections) =>
-				modeDirection.mode === TransportMode.car
+				modeDirection.mode === TransportMode.CAR
 			);
 			chai.expect(modeDirectionThatShouldntBeThere).to.be.undefined('Expect undefined');
 		});

@@ -8,10 +8,10 @@ const CAR_OPTIMAL_MAX: number = 1000000;
 export const selectOptimalMode = (origin: Location, destination: Location): TransportMode => {
 	const distance = getDistance(origin, destination, EARTH_RADIUS);
 	if (distance <= PEDESTRIAN_OPTIMAL_MAX) {
-		return TransportMode.pedestrian;
+		return TransportMode.PEDESTRIAN;
 	}
 	if (distance <= CAR_OPTIMAL_MAX) {
-		return TransportMode.car;
+		return TransportMode.CAR;
 	}
-	return TransportMode.plane;
+	return TransportMode.PLANE;
 };

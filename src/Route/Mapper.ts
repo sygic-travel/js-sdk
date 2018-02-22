@@ -5,14 +5,14 @@ import { TransportAvoid, TransportMode } from '../Trip';
 import { Waypoint } from './Route';
 
 const toTranspotModesMapping = {
-	driving: TransportMode.car,
-	walking: TransportMode.pedestrian,
+	driving: TransportMode.CAR,
+	walking: TransportMode.PEDESTRIAN,
 };
 
 const MODES_ORDER: TransportMode[] = [
-	TransportMode.plane,
-	TransportMode.car,
-	TransportMode.pedestrian
+	TransportMode.PLANE,
+	TransportMode.CAR,
+	TransportMode.PEDESTRIAN
 ];
 
 export const mapRouteFromApiResponse = (
@@ -24,7 +24,7 @@ export const mapRouteFromApiResponse = (
 	routeBuild.directions = routeBuild.directions.map((direction): Direction => {
 		direction.mode = toTranspotModesMapping[direction.mode] ? toTranspotModesMapping[direction.mode] : direction.mode;
 		if (!direction.avoid) {
-			direction.avoid = direction.mode === 'car' ? transportAvoid : [];
+			direction.avoid = direction.mode === TransportMode.CAR ? transportAvoid : [];
 		}
 		return direction as Direction;
 	});
@@ -67,7 +67,7 @@ export const createRouteRequest = (
 		origin,
 		destination,
 		waypoints: waypoints ? waypoints : [],
-		avoid: avoid ? avoid : ['unpaved'],
+		avoid: avoid ? avoid : [TransportAvoid.UNPAVED],
 		chosenMode: mode ? mode : ModeSelector.selectOptimalMode(origin, destination),
 		routeId
 	} as RouteRequest;

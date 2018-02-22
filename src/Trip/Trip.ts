@@ -2,27 +2,35 @@ import { Place } from '../Places';
 import { Waypoint } from '../Route';
 import { UserSettings } from '../Session';
 
-export const UNBREAKABLE_TRANSPORT_MODES = ['plane', 'bus', 'train', 'boat'];
-
 export enum TransportMode {
-	car = 'car',
-	pedestrian = 'pedestrian',
-	bike = 'bike',
-	plane = 'plane',
-	bus = 'bus',
-	train = 'train',
-	boat = 'boat'
+	CAR = 'car',
+	PEDESTRIAN = 'pedestrian',
+	BIKE = 'bike',
+	PLANE = 'plane',
+	BUS = 'bus',
+	TRAIN = 'train',
+	BOAT = 'boat'
 }
 
+export const UNBREAKABLE_TRANSPORT_MODES = [
+	TransportMode.PLANE,
+	TransportMode.BUS,
+	TransportMode.TRAIN,
+	TransportMode.BOAT
+];
+
 export function isTransportMode(mode: string): boolean {
-	return !!TransportMode[mode];
+	if (!mode) {
+		return false;
+	}
+	return !!TransportMode[mode.toUpperCase()];
 }
 
 export enum TransportAvoid {
-	tolls = 'tolls',
-	highways = 'highways',
-	ferries = 'ferries',
-	unpaved = 'unpaved'
+	TOLLS = 'tolls',
+	HIGHWAYS = 'highways',
+	FERRIES = 'ferries',
+	UNPAVED = 'unpaved'
 }
 
 export function isTransportAvoid(avoid: string): boolean {
@@ -30,10 +38,10 @@ export function isTransportAvoid(avoid: string): boolean {
 }
 
 export enum TripConflictResolution {
-	merged = 'merged',
-	duplicated = 'duplicated',
-	ignored = 'ignored',
-	overridden = 'overridden'
+	MERGED = 'merged',
+	DUPLICATED = 'duplicated',
+	IGNORED = 'ignored',
+	OVERRIDDEN = 'overridden'
 }
 
 export function isTripConflictResolution(resolution: string): boolean {
@@ -41,8 +49,8 @@ export function isTripConflictResolution(resolution: string): boolean {
 }
 
 export enum TripConflictClientResolution {
-	server  = 'server',
-	local = 'local'
+	SERVER  = 'server',
+	LOCAL = 'local'
 }
 
 export function isTripConflictClientResolution(resolution: string): boolean {

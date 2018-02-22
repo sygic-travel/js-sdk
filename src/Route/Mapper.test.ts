@@ -13,7 +13,7 @@ describe('RouteMapper', () => {
 	describe('#mapRouteFromApiResponse', () => {
 
 		it('should correctly map api response to response', () => {
-			chai.expect(Mapper.mapRouteFromApiResponse(apiRoute, [], TransportMode.car))
+			chai.expect(Mapper.mapRouteFromApiResponse(apiRoute, [], TransportMode.CAR))
 				.to.deep.equal(routeEntity);
 		});
 
@@ -34,8 +34,8 @@ describe('RouteMapper', () => {
 				origin,
 				destination,
 				routeId: '30:50',
-				avoid: [TransportAvoid.highways],
-				chosenMode: TransportMode.car,
+				avoid: [TransportAvoid.HIGHWAYS],
+				chosenMode: TransportMode.CAR,
 				waypoints: [{
 					placeId: 'abc',
 					location: {
@@ -54,8 +54,8 @@ describe('RouteMapper', () => {
 						lat: 1, lng: 1
 					}
 				}],
-				[TransportAvoid.highways],
-				TransportMode.car
+				[TransportAvoid.HIGHWAYS],
+				TransportMode.CAR
 			)).to.deep.equal(expected);
 		});
 
@@ -72,8 +72,8 @@ describe('RouteMapper', () => {
 				origin,
 				destination,
 				routeId: null,
-				avoid: [TransportAvoid.unpaved],
-				chosenMode: TransportMode.pedestrian,
+				avoid: [TransportAvoid.UNPAVED],
+				chosenMode: TransportMode.PEDESTRIAN,
 				waypoints: [],
 			};
 			chai.expect(Mapper.createRouteRequest(destination, origin))
