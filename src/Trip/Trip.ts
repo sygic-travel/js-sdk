@@ -9,7 +9,8 @@ export enum TransportMode {
 	PLANE = 'plane',
 	BUS = 'bus',
 	TRAIN = 'train',
-	BOAT = 'boat'
+	BOAT = 'boat',
+	PUBLIC_TRANSIT = 'public_transit'
 }
 
 export const UNBREAKABLE_TRANSPORT_MODES = [

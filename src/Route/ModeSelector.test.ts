@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 
-import * as Selector from './ModeSelector';
 import { TransportMode } from '../Trip';
+import * as Selector from './ModeSelector';
 
 describe('ModeSelector', () => {
 

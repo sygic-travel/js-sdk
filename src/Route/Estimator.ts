@@ -28,6 +28,7 @@ export const estimateModeDirections = (
 				case TransportMode.BOAT:
 				case TransportMode.BUS:
 				case TransportMode.TRAIN:
+				case TransportMode.PUBLIC_TRANSIT:
 					newDirection = estimateDummyDirection(transportMode, origin, destination);
 					break;
 				case TransportMode.CAR:

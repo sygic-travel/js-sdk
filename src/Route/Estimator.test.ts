@@ -128,7 +128,7 @@ describe('Estimator', () => {
 	});
 
 	describe('#estimateMissingDirections', () => {
-		it('should estimate and build missing car, pedestrian, bike, plane, bus, train, boat directions', () => {
+		it('should estimate missing car, pedestrian, bike, plane, bus, train, boat, public_transit directions', () => {
 			const inputModeDirections: ModeDirections[] = [{
 				mode: TransportMode.CAR,
 				directions: [{
@@ -147,7 +147,7 @@ describe('Estimator', () => {
 				origin,
 				destination
 			);
-			chai.expect(modeDirections.length).to.equal(6);
+			chai.expect(modeDirections.length).to.equal(7);
 			const modeDirectionThatShouldntBeThere = modeDirections.find((modeDirection: ModeDirections) =>
 				modeDirection.mode === TransportMode.CAR
 			);

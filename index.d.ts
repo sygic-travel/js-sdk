@@ -709,7 +709,8 @@ export namespace Trips {
 		'plane' |
 		'bus' |
 		'train' |
-		'boat';
+		'boat' |
+		'public_transit';
 
 	export type TransportType = 'fastest' |
 		'shortest' |
