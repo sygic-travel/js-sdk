@@ -183,8 +183,8 @@ export class StSDK {
 export namespace Places {
 	export interface Place {
 		id: string;
-		level: string;
-		categories: string[];
+		level: Level;
+		categories: Category[];
 		rating: number;
 		quadkey: string;
 		location: Geo.Location;
@@ -193,14 +193,45 @@ export namespace Places {
 		nameSuffix: string | null;
 		originalName: string | null;
 		perex: string | null;
-		url: string;
+		url: string | null;
 		thumbnailUrl: string | null;
 		marker: string;
-		parents: string[];
+		parentIds: string[];
 		starRating: number | null;
 		starRatingUnofficial: number | null;
 		customerRating: number | null;
-		detail: PlaceDetail | null;
+		detail: Detail | null;
+	}
+
+	export enum Level {
+		CONTINENT = 'continent',
+		COUNTRY = 'country',
+		STATE = 'state',
+		REGION = 'region',
+		COUNTY = 'county',
+		CITY = 'city',
+		TOWN = 'town',
+		VILLAGE = 'village',
+		SETTLEMENT = 'settlement',
+		LOCALITY = 'locality',
+		NEIGHBOURHOOD = 'neighbourhood',
+		ARCHIPELAGO = 'archipelago',
+		ISLAND = 'island',
+		POI = 'poi' ,
+	}
+
+	export enum Category {
+		DISCOVERING = 'discovering',
+		EATING = 'eating',
+		GOING_OUT = 'going_out',
+		HIKING = 'hiking',
+		PLAYING = 'playing',
+		RELAXING = 'relaxing',
+		SHOPPING = 'shopping',
+		SIGHTSEEING = 'sightseeing',
+		SLEEPING = 'sleeping',
+		DOING_SPORTS = 'doing_sports',
+		TRAVELING = 'traveling',
 	}
 
 	export interface CustomPlaceFormData {
@@ -250,7 +281,7 @@ export namespace Places {
 		OR
 	}
 
-	export interface PlaceDetail {
+	export interface Detail {
 		tags: Tag[];
 		address: string | null;
 		admission: string | null;
@@ -265,6 +296,7 @@ export namespace Places {
 		 * @experimental
 		 */
 		ownerId?: string;
+		mediaCount: number;
 	}
 
 	export interface Reference {
@@ -287,10 +319,18 @@ export namespace Places {
 
 	export interface Description {
 		text: string;
-		provider: string | null;
-		translationProvider: string | null;
-		link: null | null;
-		isTranslated: boolean;
+		provider: DescriptionProvider | null;
+		translationProvider: TranslationProvider | null;
+		url: string | null;
+	}
+
+	export enum DescriptionProvider {
+		WIKIPEDIA = 'wikipedia',
+		WIKIVOYAGE = 'wikivoyage',
+	}
+
+	export enum TranslationProvider {
+		GOOGLE,
 	}
 
 	export interface PlaceGeometry {
@@ -398,18 +438,6 @@ export namespace Geo {
 }
 
 export namespace Media {
-	export type mediaType =
-		'photo' |
-		'photo360' |
-		'video' |
-		'video360';
-
-	export type mediaSuitability =
-		'portrait' |
-		'landscape' |
-		'square' |
-		'video_preview';
-
 	export interface MainMedia {
 		square: Medium | null;
 		videoPreview: Medium | null;
@@ -419,17 +447,28 @@ export namespace Media {
 
 	export interface Medium {
 		original: Original;
-		suitability: mediaSuitability[];
+		suitability: Suitability[];
 		urlTemplate: string;
-		createdAt: string;
-		source: Source;
-		type: mediaType;
-		createdBy: string;
+		urlWithSize: string;
+		type: Type;
 		url: string;
-		quadkey: string | null;
 		attribution: Attribution;
 		id: string;
 		location: Geo.Location | null;
+	}
+
+	export enum Type {
+		PHOTO = 'photo',
+		PHOTO_360 = 'photo_360',
+		VIDEO = 'video',
+		VIDEO_360 = 'video_360'
+	}
+
+	export enum Suitability {
+		PORTRAIT = 'portrait',
+		LANDSCAPE = 'landscape',
+		SQUARE = 'square',
+		VIDEO_PREVIEW = 'video_preview'
 	}
 
 	export interface Attribution {
@@ -440,12 +479,6 @@ export namespace Media {
 		author: string | null;
 		title: string | null;
 		licenseUrl: string | null;
-	}
-
-	export interface Source {
-		provider: string;
-		name: string | null;
-		externalId: string | null;
 	}
 
 	export interface Original {
