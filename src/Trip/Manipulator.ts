@@ -1,4 +1,4 @@
-import { Day, Trip, UNBREAKABLE_TRANSPORT_MODES } from '.';
+import { Day, Trip } from '.';
 import { isStickyByDefault, Place } from '../Places';
 import { UserSettings } from '../Session';
 import { addDaysToDate, cloneDeep, subtractDaysFromDate } from '../Util';
@@ -178,19 +178,6 @@ export function addPlaceToDay(
 
 	if (typeof positionInDay === 'undefined' || positionInDay === null) {
 		positionInDay = resultTrip.days[dayIndex].itinerary.length;
-	}
-
-	let nextItem: ItineraryItem | null = null;
-	if (tripToBeUpdated.days[dayIndex].itinerary[positionInDay!]) {
-		nextItem = tripToBeUpdated.days[dayIndex].itinerary[positionInDay!];
-	}
-
-	if (nextItem &&
-		nextItem.transportFromPrevious &&
-		!UNBREAKABLE_TRANSPORT_MODES.includes(nextItem.transportFromPrevious.mode)
-	) {
-		itineraryItem.transportFromPrevious = cloneDeep(nextItem.transportFromPrevious);
-		itineraryItem.transportFromPrevious!.waypoints = []; // Quickfix for waypoints duplication
 	}
 
 	resultTrip.days[dayIndex].itinerary.splice(positionInDay, 0, itineraryItem);

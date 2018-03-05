@@ -277,7 +277,7 @@ describe('PositionFinder', () => {
 			chai.expect(result2.shouldDuplicate).to.be.true('Expect true');
 		});
 
-		it('should not do duplication for route with car between 2 sticky places', () => {
+		it('should not split route and duplicate sticky place', () => {
 			const placeIn = buildPlace(0, 0, 'poi:1');
 			const trip = cloneDeep(tripTemplate);
 			trip.days = [{
@@ -290,8 +290,8 @@ describe('PositionFinder', () => {
 			}
 			];
 			const result: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
-			chai.expect(result.position).to.equal(1);
-			chai.expect(result.shouldDuplicate).to.be.false('Expect false');
+			chai.expect(result.position).to.equal(0);
+			chai.expect(result.shouldDuplicate).to.be.true('Expect true');
 
 			trip.days = [{
 				note: null,
@@ -304,7 +304,7 @@ describe('PositionFinder', () => {
 			];
 			const result2: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 0, ['city:1'], userSettings);
 			chai.expect(result2.position).to.equal(1);
-			chai.expect(result2.shouldDuplicate).to.be.false('Expect false');
+			chai.expect(result2.shouldDuplicate).to.be.true('Expect true');
 		});
 
 		it('should correctly add hotel if there is no sticky place', () => {
