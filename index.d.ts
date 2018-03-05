@@ -39,7 +39,7 @@ declare class EventsModule {
 
 declare class FavoritesModule {
 	public addPlaceToFavorites(id: string): Promise<void>;
-	public addCustomPlaceToFavorites(name: string, location: Location, address: string): Promise<string>;
+	public addCustomPlaceToFavorites(name: string, location: Geo.Location, address: string): Promise<string>;
 	public getFavoritesIds(): Promise<string[]>;
 	public removePlaceFromFavorites(id: string): Promise<void>;
 }
@@ -70,7 +70,7 @@ declare class PlacesModule {
 	public getPlaceGeometry(id: string): Promise<Places.PlaceGeometry>;
 	public getPlaceOpeningHours(id: string, from: string, to: string): Promise<Places.PlaceOpeningHours>;
 	public detectParentsByBounds(bounds: Geo.Bounds, zoom: number): Promise<Places.Place[]>;
-	public detectParentsByLocation(location: Location): Promise<Places.Place[]>;
+	public detectParentsByLocation(location: Geo.Location): Promise<Places.Place[]>;
 	public addPlaceReview(placeId: string, rating: number, message: string): Promise<Places.PlaceReview>;
 	public deletePlaceReview(reviewId: number): Promise<void>;
 	public getPlaceReviews(placeId: string, limit: number, page: number): Promise<Places.PlaceReviewsData>;
@@ -93,8 +93,8 @@ declare class PlacesModule {
 
 declare class RoutesModule {
 	public getDirections(
-		origin: Location,
-		destination: Location,
+		origin: Geo.Location,
+		destination: Geo.Location,
 		waypoints: Route.Waypoint[],
 		avoids: Trips.TransportAvoid[]
 	): Promise<Route.Route>;
@@ -102,8 +102,8 @@ declare class RoutesModule {
 }
 
 declare class SearchModule {
-	public search(query: string, location?: Location): Promise<Search.SearchResult[]>;
-	public searchReverse(location: Location): Promise<Search.SearchResult[]>;
+	public search(query: string, location?: Geo.Location): Promise<Search.SearchResult[]>;
+	public searchReverse(location: Geo.Location): Promise<Search.SearchResult[]>;
 	public searchTags(query: string): Promise<Search.SearchTagsResult[]>;
 }
 
@@ -160,7 +160,7 @@ declare class SessionModule {
 }
 
 declare class UtilityModule {
-	public locationToMapTileKey(location: Location, zoom: number): string;
+	public locationToMapTileKey(location: Geo.Location, zoom: number): string;
 }
 
 export class StSDK {
@@ -187,7 +187,7 @@ export namespace Places {
 		categories: string[];
 		rating: number;
 		quadkey: string;
-		location: Location;
+		location: Geo.Location;
 		boundingBox: Geo.Bounds | null;
 		name: string;
 		nameSuffix: string | null;
@@ -205,7 +205,7 @@ export namespace Places {
 
 	export interface CustomPlaceFormData {
 		name: string;
-		location: Location;
+		location: Geo.Location;
 		address?: string;
 		description?: string;
 		phone?: string;
@@ -429,7 +429,7 @@ export namespace Media {
 		quadkey: string | null;
 		attribution: Attribution;
 		id: string;
-		location: Location | null;
+		location: Geo.Location | null;
 	}
 
 	export interface Attribution {
@@ -664,7 +664,7 @@ export namespace Trips {
 		startTime: number | null; // Number of seconds from midnight.
 		duration: number | null; // Time in seconds spent on the transport.
 		note: string | null;
-		waypoints: Location[];
+		waypoints: Geo.Location[];
 	}
 
 	export interface TripPrivileges {
@@ -743,8 +743,8 @@ export namespace Route {
 	}
 
 	export interface Route {
-		origin: Location;
-		destination: Location;
+		origin: Geo.Location;
+		destination: Geo.Location;
 		chosenDirection: Direction;
 		modeDirections: ModeDirections[];
 	}
@@ -766,9 +766,9 @@ export namespace Route {
 	}
 
 	export interface RouteRequest {
-		origin: Location;
-		destination: Location;
-		waypoints?: Location[];
+		origin: Geo.Location;
+		destination: Geo.Location;
+		waypoints?: Geo.Location[];
 		avoid: Trips.TransportAvoid[];
 		type: Trips.TransportType;
 		chosenMode: Trips.TransportMode;
@@ -781,7 +781,7 @@ export namespace Route {
 
 	export interface Waypoint {
 		placeId: string | null;
-		location: Location;
+		location: Geo.Location;
 	}
 }
 
@@ -803,7 +803,7 @@ export namespace Search {
 	}
 
 	export interface SearchResult {
-		location: Location;
+		location: Geo.Location;
 		type: string | null;
 		address: Address | null;
 		distance: number | null;
@@ -984,7 +984,7 @@ export namespace Flights {
 	}
 
 	export interface Airport {
-		location: Location;
+		location: Geo.Location;
 		name: string;
 		cityName: string;
 		iata: string;
@@ -1009,8 +1009,8 @@ export namespace Flights {
 	}
 
 	export interface FlightsQuery {
-		origin: Location;
-		destination: Location;
+		origin: Geo.Location;
+		destination: Geo.Location;
 		date: string;
 		returnDate: string;
 		currency?: string;
