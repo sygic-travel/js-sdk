@@ -1,6 +1,7 @@
 import { Mapper, Route, RouteRequest } from '.';
 import { ApiResponse, StApi } from '../Api';
 import { routesCache as cache } from '../Cache';
+import { flatten, splitArrayToChunks } from '../Util';
 import { estimateModeDirections } from './Estimator';
 
 export async function getRoutes(requests: RouteRequest[]): Promise<Route[]> {
@@ -41,11 +42,22 @@ async function getFromApi(requests: RouteRequest[]): Promise<object[]> {
 		avoid: request.avoid,
 	}));
 
-	const response: ApiResponse = await StApi.post('/directions/path', apiRequestData);
-	response.data.path.map((routeData, index) => {
-		cache.set(createCacheKey(requests[index]), routeData);
+	const CHUNK_SIZE: number = 50;
+	const apiRequestDataChunks = splitArrayToChunks(apiRequestData, CHUNK_SIZE);
+	const apiRequests: Promise<ApiResponse>[] = apiRequestDataChunks.map((apiRequestDataChunk) => {
+		return StApi.post('/directions/path', apiRequestDataChunk);
 	});
-	return response.data.path;
+	const apiResponses: ApiResponse[] = await Promise.all(apiRequests);
+
+	const chunkedPaths: any[][] = apiResponses.map((apiResponse: ApiResponse) => {
+		apiResponse.data.path.map((routeData, index) => {
+			cache.set(createCacheKey(requests[index]), routeData);
+		});
+		return apiResponse.data.path;
+	});
+
+	return flatten(chunkedPaths);
+
 }
 
 const createCacheKey = (request: RouteRequest): string => {
