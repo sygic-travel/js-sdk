@@ -111,6 +111,10 @@ export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<
 	placeIdsWithDestinations.forEach((destination: Place, placeId: string) => {
 		placeIdsWithPlaceType.set(placeId, PlaceSource.FROM_TRIP);
 
+		if (!destination) {
+			return;
+		}
+
 		if (!destinationIdsWithDestinations.has(destination.id)) {
 			destinationIdsWithDestinations.set(destination.id, destination);
 		}
