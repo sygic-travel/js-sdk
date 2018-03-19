@@ -3,7 +3,7 @@ import { cloneDeep } from '../Util';
 
 import { CategoriesCoefficients, SpreadSizeConfig } from '.';
 import { Bounds } from '../Geo';
-import { Place } from '../Places';
+import { Category, Level, Place } from '../Places';
 import { CanvasSize } from '../Spread';
 import { spread } from './Spreader';
 
@@ -19,7 +19,7 @@ const canvas: CanvasSize = {
 };
 const place: Place = {
 	id: 'poi:1',
-	level: 'poi',
+	level: Level.POI,
 	rating: 10,
 	quadkey: '0123',
 	location: {lat: 0.1, lng: 0.1},
@@ -30,7 +30,7 @@ const place: Place = {
 	url: '',
 	marker: 'resataurant',
 	categories: [],
-	parents: [],
+	parentIds: [],
 	perex: '',
 	thumbnailUrl: 'http://example.com',
 	starRating: null,
@@ -125,7 +125,7 @@ describe('Spreader', () => {
 		config.zoomLevelLimits = [0.5];
 		const lowRatingPlace = cloneDeep(place);
 		lowRatingPlace.rating = 0.6;
-		lowRatingPlace.categories = ['traveling'];
+		lowRatingPlace.categories = [Category.TRAVELING];
 		const spreaded = spread([lowRatingPlace], [], [config], bounds, canvas, categoriesCoefficients);
 		chai.expect(spreaded.hidden.length).to.equal(1);
 		chai.expect(spreaded.visible.length).to.equal(0);
@@ -136,7 +136,7 @@ describe('Spreader', () => {
 		config.zoomLevelLimits = [0.5];
 		const lowRatingPlace = cloneDeep(place);
 		lowRatingPlace.rating = 0.6;
-		lowRatingPlace.categories = ['traveling'];
+		lowRatingPlace.categories = [Category.TRAVELING];
 		const spreaded = spread([], [lowRatingPlace], [config], bounds, canvas, categoriesCoefficients);
 		chai.expect(spreaded.hidden.length).to.equal(0);
 		chai.expect(spreaded.visible.length).to.equal(1);
@@ -147,7 +147,7 @@ describe('Spreader', () => {
 		config.zoomLevelLimits = [0.5];
 		const place1 = cloneDeep(place);
 		place1.rating = 0.6;
-		place1.categories = ['traveling'];
+		place1.categories = [Category.TRAVELING];
 		const place2 = {...place};
 		place2.location = {lat: 0.3, lng: 0.3};
 		place2.id = 'poi:2';

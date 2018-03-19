@@ -65,7 +65,7 @@ const placeFilter: SygicTravelSDK.Places.PlacesListFilterJSON = {
     categoriesOperator: 'OR',
     tags: ['indian_cousine', 'mexican_counsine'],
     tagsOperator: 'OR',
-    parents: ['city:1', 'city:5'], // filter out only places that has certain parents
+    parentIds: ['city:1', 'city:5'], // filter out only places that has certain parentIds
     parentsOperator: 'OR',
     levels: ['poi'],
     limit: 20,
@@ -83,8 +83,8 @@ const placeFilter: SygicTravelSDK.Places.PlacesListFilterJSON = {
 | categoriesOperator | 'AND' or 'OR' specifies which logic operator will be applied for multiple categories. The default value is AND.|
 | tags | Limits results by tags. It is possible to pass multiple tags. To get possible values check [Places section in API documentation](http://docs.sygictravelapi.com/1.0/).|
 | tagsOperator | 'AND' or 'OR' specifies which logic operator will be applied for multiple tags. The default value is AND.|
-| parents | Limits results by ID of parent place. It is possible to pass multiple parents. |
-| parentsOperator | 'AND' or 'OR' specifies which logic operator will be applied for multiple parents. The default value is AND.|
+| parentIds | Limits results by ID of parent place. It is possible to pass multiple parentIds. |
+| parentsOperator | 'AND' or 'OR' specifies which logic operator will be applied for multiple parentIds. The default value is AND.|
 | levels | Limits results by levels. For multiple levels the AND operator applies. To get possible values check [Places section in API documentation](http://docs.sygictravelapi.com/1.0/). |
 | limit | Limits the number of results. Default value is 10. Maximum value is 512. |
 | zoom | Zoom level of map. This is required for mapSpread. |
@@ -106,7 +106,7 @@ const placeFilter: SygicTravelSDK.Places.PlacesListFilterJSON = {
     },
     categories: ['eating'], // filter out only certain categories
     tags: [], // filter out only certain tags
-    parents: ['city:1'], // filter out only places that has certain parents
+    parentIds: ['city:1'], // filter out only places that has certain parentIds
     levels: null,
     limit: 20
 };
@@ -154,7 +154,7 @@ const placeFilter: SygicTravelSDK.Places.PlacesListFilterJSON = {
     mapSpread: null,
     categories: ['eating'],
     tags: [],
-    parents: ['city:1'],
+    parentIds: ['city:1'],
     levels: ['poi']
 };
 

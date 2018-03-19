@@ -2,7 +2,7 @@ import * as chai from 'chai';
 import * as dirtyChai from 'dirty-chai';
 import { cloneDeep } from '../Util';
 
-import { Place } from '../Places';
+import { Category, Place } from '../Places';
 import * as PlaceExpectedResults from '../TestData/PlacesExpectedResults';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
 import * as Manipulator from './Manipulator';
@@ -46,7 +46,7 @@ describe('TripManipulator', () => {
 				inputTrip.days = [inputTrip.days[0]];
 				const place = inputTrip.days[0].itinerary[1].place;
 				if (place) {
-					place.categories = ['sleeping'];
+					place.categories = [Category.SLEEPING];
 				}
 			}
 			const returnedTrip = Manipulator.appendDay(inputTrip, null);
@@ -79,7 +79,7 @@ describe('TripManipulator', () => {
 				inputTrip.days = [inputTrip.days[0]];
 				const place = inputTrip.days[0].itinerary[0].place;
 				if (place) {
-					place.categories = ['sleeping'];
+					place.categories = [Category.SLEEPING];
 				}
 			}
 			const returnedTrip = Manipulator.prependDayToTrip(inputTrip, null);

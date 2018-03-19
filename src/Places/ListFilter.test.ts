@@ -2,22 +2,23 @@ import * as chai from 'chai';
 import * as dirtyChai from 'dirty-chai';
 
 import { LogicalOperator } from './Filter';
-import { PlacesListFilter, PlacesListFilterJSON } from './ListFilter';
+import { PlacesListFilterJSON, PlacesQuery } from './ListFilter';
+import { Category } from './Place';
 
 chai.use(dirtyChai);
 
-describe('PlacesListFilter', () => {
+describe('PlacesQuery', () => {
 	describe('#filterToQueryString', () => {
 		it('should build querystring from paramteres', () => {
 			const placesFilterJSON: PlacesListFilterJSON = {
-				categories: ['eating'],
+				categories: [Category.EATING],
 				limit: 20,
 				parents: ['city:1'],
 				query: '&ahoj=test?foo$bar',
 				tags: []
 			};
 
-			const placesFilter = new PlacesListFilter(placesFilterJSON);
+			const placesFilter = new PlacesQuery(placesFilterJSON);
 			const expectedQuerystring = 'query=%26ahoj%3Dtest%3Ffoo%24bar&categories=eating&parents=city%3A1&limit=20';
 
 			chai.expect(placesFilter.toQueryString()).to.equal(expectedQuerystring);
@@ -25,26 +26,26 @@ describe('PlacesListFilter', () => {
 
 		it('should build query string respecting logical operators for categories', () => {
 			let placesFilterJSON: PlacesListFilterJSON = {
-				categories: ['eating', 'doing sport'],
+				categories: [Category.EATING, Category.SHOPPING],
 			};
-			let placesFilter = new PlacesListFilter(placesFilterJSON);
-			let expectedQuerystring = 'categories=eating%2Cdoing%20sport';
+			let placesFilter = new PlacesQuery(placesFilterJSON);
+			let expectedQuerystring = 'categories=eating%2Cshopping';
 			chai.expect(placesFilter.toQueryString()).to.equal(expectedQuerystring);
 
 			placesFilterJSON = {
-				categories: ['eating', 'doing sport'],
+				categories: [Category.EATING, Category.SHOPPING],
 				categoriesOperator: LogicalOperator.AND
 			};
-			placesFilter = new PlacesListFilter(placesFilterJSON);
-			expectedQuerystring = 'categories=eating%2Cdoing%20sport';
+			placesFilter = new PlacesQuery(placesFilterJSON);
+			expectedQuerystring = 'categories=eating%2Cshopping';
 			chai.expect(placesFilter.toQueryString()).to.equal(expectedQuerystring);
 
 			placesFilterJSON = {
-				categories: ['eating', 'doing sport'],
+				categories: [Category.EATING, Category.SHOPPING],
 				categoriesOperator: LogicalOperator.OR
 			};
-			placesFilter = new PlacesListFilter(placesFilterJSON);
-			expectedQuerystring = 'categories=eating%7Cdoing%20sport';
+			placesFilter = new PlacesQuery(placesFilterJSON);
+			expectedQuerystring = 'categories=eating%7Cshopping';
 			chai.expect(placesFilter.toQueryString()).to.equal(expectedQuerystring);
 		});
 
@@ -52,7 +53,7 @@ describe('PlacesListFilter', () => {
 			let placesFilterJSON: PlacesListFilterJSON = {
 				tags: ['restaurant', 'parking']
 			};
-			let placesFilter = new PlacesListFilter(placesFilterJSON);
+			let placesFilter = new PlacesQuery(placesFilterJSON);
 			let expectedQuerystring = 'tags=restaurant%2Cparking';
 			chai.expect(placesFilter.toQueryString()).to.equal(expectedQuerystring);
 
@@ -60,7 +61,7 @@ describe('PlacesListFilter', () => {
 				tags: ['restaurant', 'parking'],
 				tagsOperator: LogicalOperator.AND
 			};
-			placesFilter = new PlacesListFilter(placesFilterJSON);
+			placesFilter = new PlacesQuery(placesFilterJSON);
 			expectedQuerystring = 'tags=restaurant%2Cparking';
 			chai.expect(placesFilter.toQueryString()).to.equal(expectedQuerystring);
 
@@ -68,7 +69,7 @@ describe('PlacesListFilter', () => {
 				tags: ['restaurant', 'parking'],
 				tagsOperator: LogicalOperator.OR
 			};
-			placesFilter = new PlacesListFilter(placesFilterJSON);
+			placesFilter = new PlacesQuery(placesFilterJSON);
 			expectedQuerystring = 'tags=restaurant%7Cparking';
 			chai.expect(placesFilter.toQueryString()).to.equal(expectedQuerystring);
 		});
@@ -77,7 +78,7 @@ describe('PlacesListFilter', () => {
 			let placesFilterJSON: PlacesListFilterJSON = {
 				parents: ['city:1', 'city:2']
 			};
-			let placesFilter = new PlacesListFilter(placesFilterJSON);
+			let placesFilter = new PlacesQuery(placesFilterJSON);
 			let expectedQuerystring = 'parents=city%3A1%2Ccity%3A2';
 			chai.expect(placesFilter.toQueryString()).to.equal(expectedQuerystring);
 
@@ -85,7 +86,7 @@ describe('PlacesListFilter', () => {
 				parents: ['city:1', 'city:2'],
 				parentsOperator: LogicalOperator.AND
 			};
-			placesFilter = new PlacesListFilter(placesFilterJSON);
+			placesFilter = new PlacesQuery(placesFilterJSON);
 			expectedQuerystring = 'parents=city%3A1%2Ccity%3A2';
 			chai.expect(placesFilter.toQueryString()).to.equal(expectedQuerystring);
 
@@ -93,7 +94,7 @@ describe('PlacesListFilter', () => {
 				parents: ['city:1', 'city:2'],
 				parentsOperator: LogicalOperator.OR
 			};
-			placesFilter = new PlacesListFilter(placesFilterJSON);
+			placesFilter = new PlacesQuery(placesFilterJSON);
 			expectedQuerystring = 'parents=city%3A1%7Ccity%3A2';
 			chai.expect(placesFilter.toQueryString()).to.equal(expectedQuerystring);
 		});
@@ -101,7 +102,7 @@ describe('PlacesListFilter', () => {
 
 	describe('#cloneSetBounds', () => {
 		it('should return new object', () => {
-			const filter = new PlacesListFilter({
+			const filter = new PlacesQuery({
 				zoom: 1
 			});
 			const bounds = {
@@ -119,7 +120,7 @@ describe('PlacesListFilter', () => {
 
 	describe('#cloneSetLimit', () => {
 		it('should return new object', () => {
-			const filter = new PlacesListFilter({
+			const filter = new PlacesQuery({
 				zoom: 1
 			});
 			const modifiedFilter = filter.cloneSetLimit(5);
@@ -131,7 +132,7 @@ describe('PlacesListFilter', () => {
 
 	describe('#cloneSetMapTile', () => {
 		it('should return new object', () => {
-			const filter = new PlacesListFilter({
+			const filter = new PlacesQuery({
 				zoom: 1
 			});
 			const modifiedFilter = filter.cloneSetMapTiles(['123']);
@@ -144,7 +145,7 @@ describe('PlacesListFilter', () => {
 	describe('#validate', () => {
 		it('should raise error on missing bounds in filter', () => {
 			const createFilter = () => {
-				return new PlacesListFilter({
+				return new PlacesQuery({
 					mapSpread: 1,
 					zoom: 5
 				});
@@ -154,7 +155,7 @@ describe('PlacesListFilter', () => {
 
 		it('should raise error on missing zoom in filter', () => {
 			const createFilter = () => {
-				return new PlacesListFilter({
+				return new PlacesQuery({
 					mapSpread: 1,
 					bounds: {
 						south: 0,
@@ -169,7 +170,7 @@ describe('PlacesListFilter', () => {
 
 		it('should raise error on limit zoom used with map spread', () => {
 			const createFilter = () => {
-				return new PlacesListFilter({
+				return new PlacesQuery({
 					mapSpread: 1,
 					limit: 5,
 					bounds: {

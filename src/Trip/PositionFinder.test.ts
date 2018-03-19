@@ -2,7 +2,7 @@ import * as chai from 'chai';
 import * as dirtyChai from 'dirty-chai';
 import { cloneDeep } from '../Util';
 
-import { Place } from '../Places';
+import { Category, Place } from '../Places';
 import { placeDetailedEiffelTowerWithoutMedia as place } from '../TestData/PlacesExpectedResults';
 import { itineratyItem as itineratyItemTemplate, tripDetailed } from '../TestData/TripExpectedResults';
 import { UserSettings } from '../Session';
@@ -309,7 +309,7 @@ describe('PositionFinder', () => {
 
 		it('should correctly add hotel if there is no sticky place', () => {
 			const placeIn = buildPlace(0, 0, 'poi:1');
-			placeIn.categories = ['sleeping'];
+			placeIn.categories = [Category.SLEEPING];
 			const trip = cloneDeep(tripTemplate);
 			trip.days = [{
 				note: null,
@@ -326,7 +326,7 @@ describe('PositionFinder', () => {
 
 		it('should correctly add hotel if there is already hotel', () => {
 			const placeIn = buildPlace(0, 0, 'poi:1');
-			placeIn.categories = ['sleeping'];
+			placeIn.categories = [Category.SLEEPING];
 			const trip = cloneDeep(tripTemplate);
 			trip.days = [{
 				note: null,
@@ -414,7 +414,7 @@ const buildPlace = (lat: number, lng: number, id: string, parents?: string[]): P
 		newPlace.id = id;
 	}
 	if (parents) {
-		newPlace.parents = parents;
+		newPlace.parentIds = parents;
 	}
 	return newPlace;
 };

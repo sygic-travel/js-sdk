@@ -1,16 +1,17 @@
 import * as queryString from 'querystring';
 import { Bounds } from '../Geo/Bounds';
+import { Category, Level } from './Place';
 
 export interface PlacesFilterJSON {
 	query?: string;
 	mapTiles?: string[];
-	categories?: string[];
+	categories?: Category[];
 	categoriesOperator?: LogicalOperator;
 	tags?: string[];
 	tagsOperator?: LogicalOperator;
 	parents?: string[];
 	parentsOperator?: LogicalOperator;
-	levels?: string[];
+	levels?: Level[];
 	bounds?: Bounds;
 	zoom?: number;
 }
@@ -38,13 +39,13 @@ export enum LogicalOperator {
 export abstract class PlacesFilter {
 	protected _query?: string;
 	protected _mapTiles?: string[];
-	protected _categories?: string[];
+	protected _categories?: Category[];
 	protected _categoriesOperator?: LogicalOperator;
 	protected _tags?: string[];
 	protected _tagsOperator?: LogicalOperator;
 	protected _parents?: string[];
 	protected _parentsOperator?: LogicalOperator;
-	protected _levels?: string[];
+	protected _levels?: Level[];
 	protected _bounds?: Bounds;
 	protected _zoom?: number;
 

@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 import { CanvasSize, SpreadSizeConfig } from '.';
 import { Bounds } from '../Geo';
-import { Place } from '../Places';
+import { Level, Place } from '../Places';
 import { spread } from './Spreader';
 
 const bounds: Bounds = {
@@ -16,7 +16,7 @@ const canvas: CanvasSize = {
 };
 const place: Place = {
 	id: 'poi:1',
-	level: 'poi',
+	level: Level.POI,
 	rating: 10,
 	quadkey: '0123',
 	location: {lat: 0.1, lng: 0.1},
@@ -27,7 +27,7 @@ const place: Place = {
 	url: '',
 	marker: 'resataurant',
 	categories: [],
-	parents: [],
+	parentIds: [],
 	perex: '',
 	starRatingUnofficial: null,
 	starRating: null,

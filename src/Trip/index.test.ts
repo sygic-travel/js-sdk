@@ -1,8 +1,8 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as dirtyChai from 'dirty-chai';
-import { cloneDeep } from '../Util';
 import { sandbox as sinonSandbox, SinonSandbox, SinonStub } from 'sinon';
+import { cloneDeep } from '../Util';
 
 import * as TripController from '.';
 import { Day, ItineraryItem, Trip } from './Trip';
@@ -10,12 +10,12 @@ import { Day, ItineraryItem, Trip } from './Trip';
 import { ApiResponse, StApi } from '../Api';
 import { tripsDetailedCache } from '../Cache';
 import * as PlaceController from '../Places';
+import * as User from '../Session';
 import { setEnvironment } from '../Settings';
 import * as PlaceTestData from '../TestData/PlacesApiResponses';
 import * as PlaceExpectedResults from '../TestData/PlacesExpectedResults';
 import * as TripTestData from '../TestData/TripApiResponses';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
-import * as User from '../Session';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
@@ -122,7 +122,7 @@ describe('TripController', () => {
 		it('should correctly add hotel to last position in day', () => {
 			const hotel: PlaceController.Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
 			hotel.id = 'poi:123456';
-			hotel.categories = ['sleeping'];
+			hotel.categories = [PlaceController.Category.SLEEPING];
 
 			const newPoi: PlaceController.Place = cloneDeep(hotel);
 			newPoi.categories = [];

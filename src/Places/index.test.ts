@@ -1,9 +1,9 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as dirtyChai from 'dirty-chai';
-import { cloneDeep } from '../Util';
 import 'mocha';
 import * as sinon from 'sinon';
+import { cloneDeep } from '../Util';
 
 import { ApiResponse, StApi } from '../Api';
 import { setEnvironment } from '../Settings';
@@ -15,12 +15,13 @@ import {
 	isPlaceDestination,
 	mergePlacesArrays,
 	Place,
-	PlacesListFilter,
-	PlacesListFilterJSON
+	PlacesListFilterJSON,
+	PlacesQuery
 } from './index';
 
 import * as TestData from '../TestData/PlacesApiResponses';
 import * as ExpectedResults from '../TestData/PlacesExpectedResults';
+import { Category, Level } from './Place';
 
 let sandbox: sinon.SinonSandbox;
 chai.use(chaiAsPromised);
@@ -85,13 +86,13 @@ describe('PlacesController', () => {
 			}));
 
 			const placesFilterJSON: PlacesListFilterJSON = {
-				categories: ['eating'],
+				categories: [Category.EATING],
 				limit: 20,
 				parents: ['city:1'],
 				tags: []
 			};
 
-			return chai.expect(getPlaces(new PlacesListFilter(placesFilterJSON))).to.be.rejected('Should be rejected');
+			return chai.expect(getPlaces(new PlacesQuery(placesFilterJSON))).to.be.rejected('Should be rejected');
 		});
 
 		it('should return array of places', () => {
@@ -100,13 +101,13 @@ describe('PlacesController', () => {
 			}));
 
 			const placesFilterJSON: PlacesListFilterJSON = {
-				categories: ['eating'],
+				categories: [Category.EATING],
 				limit: 20,
 				parents: ['city:1'],
 				tags: []
 			};
 
-			return chai.expect(getPlaces(new PlacesListFilter(placesFilterJSON)))
+			return chai.expect(getPlaces(new PlacesQuery(placesFilterJSON)))
 				.to.eventually.have.lengthOf(1);
 		});
 
@@ -116,13 +117,13 @@ describe('PlacesController', () => {
 			}));
 
 			const placesFilterJSON: PlacesListFilterJSON = {
-				categories: ['eating'],
+				categories: [Category.EATING],
 				limit: 20,
 				parents: ['city:1'],
 				tags: []
 			};
 
-			return chai.expect(getPlaces(new PlacesListFilter(placesFilterJSON)))
+			return chai.expect(getPlaces(new PlacesQuery(placesFilterJSON)))
 				.to.eventually.deep.equal(ExpectedResults.places);
 		});
 	});
@@ -130,15 +131,15 @@ describe('PlacesController', () => {
 	describe('#isPlaceDestination', () => {
 		it('should return true if passed place id is a destination', () => {
 			const place: Place = cloneDeep(ExpectedResults.placeDetailedEiffelTowerWithoutMedia);
-			place.level = 'city';
+			place.level = Level.CITY;
 			chai.expect(isPlaceDestination(place)).to.be.true('Expected true');
-			place.level = 'town';
+			place.level = Level.TOWN;
 			chai.expect(isPlaceDestination(place)).to.be.true('Expected true');
-			place.level = 'village';
+			place.level = Level.VILLAGE;
 			chai.expect(isPlaceDestination(place)).to.be.true('Expected true');
-			place.level = 'island';
+			place.level = Level.ISLAND;
 			chai.expect(isPlaceDestination(place)).to.be.true('Expected true');
-			place.level = 'poi';
+			place.level = Level.POI;
 			chai.expect(isPlaceDestination(place)).to.be.false('Expected false');
 		});
 	});
@@ -150,22 +151,22 @@ describe('PlacesController', () => {
 
 			const parent1: Place = cloneDeep(place);
 			parent1.id = 'city:14';
-			parent1.level = 'city';
+			parent1.level = Level.CITY;
 			parentPlacesMap.set(parent1.id, parent1);
 
 			const parent2: Place = cloneDeep(place);
 			parent2.id = 'region:303';
-			parent2.level = 'region';
+			parent2.level = Level.REGION;
 			parentPlacesMap.set(parent2.id, parent2);
 
 			const parent3: Place = cloneDeep(place);
 			parent3.id = 'city:14';
-			parent3.level = 'city';
+			parent3.level = Level.CITY;
 			parentPlacesMap.set(parent3.id, parent3);
 
 			const parent4: Place = cloneDeep(place);
 			parent4.id = 'city:14';
-			parent4.level = 'city';
+			parent4.level = Level.CITY;
 			parentPlacesMap.set(parent4.id, parent4);
 
 			chai.expect(getPlaceDestination(place, parentPlacesMap)).to.equal(parent4);
