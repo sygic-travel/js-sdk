@@ -16,21 +16,21 @@ export const route = {
 		duration: 30,
 		routeId: '30:800',
 		polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
-		mode: TransportMode.car,
+		mode: TransportMode.CAR,
 		avoid: [],
 		source: 'lbs',
 		isoCodes: [ 'CZ', 'SK' ]
 	} as Direction,
 	modeDirections: [
 		{
-			mode: 'pedestrian',
+			mode: TransportMode.PEDESTRIAN,
 			directions: [
 				{
 					distance: 530,
 					duration: 300,
 					routeId: null,
 					polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvA',
-					mode: TransportMode.pedestrian,
+					mode: TransportMode.PEDESTRIAN,
 					source: 'osrm',
 					avoid: [],
 					isoCodes: [ 'CZ', 'SK' ]
@@ -38,14 +38,14 @@ export const route = {
 			]
 		},
 		{
-			mode: 'car',
+			mode: TransportMode.CAR,
 			directions: [
 				{
 					distance: 800,
 					duration: 30,
 					routeId: '30:800',
 					polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
-					mode: TransportMode.car,
+					mode: TransportMode.CAR,
 					source: 'lbs',
 					avoid: [],
 					isoCodes: [ 'CZ', 'SK' ]
@@ -55,7 +55,7 @@ export const route = {
 					duration: 30,
 					routeId: '30:700',
 					polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
-					mode: TransportMode.car,
+					mode: TransportMode.CAR,
 					source: 'lbs',
 					avoid: [],
 					isoCodes: [ 'CZ', 'SK' ]

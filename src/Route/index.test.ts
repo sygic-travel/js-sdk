@@ -27,7 +27,7 @@ describe('RoutesController', () => {
 			const transportFromPrevious: TransportSettings = {
 				duration: null,
 				startTime: null,
-				mode: TransportMode.pedestrian,
+				mode: TransportMode.PEDESTRIAN,
 				routeId: null,
 				avoid: [],
 				note: null,

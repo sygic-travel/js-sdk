@@ -14,7 +14,9 @@ import {
 	mapTripToApiFormat,
 	mapTripToApiUpdateFormat
 } from './Mapper';
-import { Trip, TripConflictClientResolution, TripConflictInfo, TripCreateRequest, TripTemplate } from './Trip';
+import { Trip, TripConflictClientResolution, TripConflictInfo,
+	TripConflictResolution, TripCreateRequest, TripTemplate
+} from './Trip';
 
 interface ChangedTrip {
 	trip: Trip;
@@ -104,7 +106,7 @@ export async function syncChangedTripToServer(tripId: string): Promise<void> {
 	}
 	const tripResponse: ApiResponse = await putTripToApi(changedTrip.apiData);
 	clearTimeout(changedTrip.timeout);
-	if (tripResponse.data.conflict_resolution === 'ignored') {
+	if (tripResponse.data.conflict_resolution === TripConflictResolution.IGNORED) {
 		const conflictInfo = camelizeKeys(tripResponse.data.conflict_info) as TripConflictInfo;
 		return handleIgnoredConflict(conflictInfo, changedTrip.trip, tripResponse);
 	}
@@ -175,7 +177,7 @@ async function handleIgnoredConflict(
 		return;
 	}
 	const clientConflictResolution: TripConflictClientResolution = await conflictHandler(conflictInfo, tripToBeUpdated);
-	if (clientConflictResolution === 'local') {
+	if (clientConflictResolution ===  TripConflictClientResolution.LOCAL) {
 		const updateRequestData = mapTripToApiUpdateFormat(tripToBeUpdated) as any;
 		updateRequestData.updated_at = dateToW3CString(new Date());
 		tripServerResponse = await putTripToApi(updateRequestData);

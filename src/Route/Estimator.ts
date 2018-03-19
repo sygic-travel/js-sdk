@@ -18,25 +18,26 @@ export const estimateModeDirections = (
 	const airDistance: number = getDistance(origin, destination, EARTH_RADIUS);
 	return Object.keys(TransportMode).reduce((acc: ModeDirections[], transportMode: string) => {
 		const transportModeInDirections: ModeDirections | undefined = modeDirections.find((modeDirection: ModeDirections) => (
-			modeDirection.mode === transportMode
+			modeDirection.mode === TransportMode[transportMode]
 		));
 
 		if (transportModeInDirections === undefined) {
 			let newDirection: Direction | null;
 			switch (transportMode) {
-				case TransportMode.bike:
-				case TransportMode.boat:
-				case TransportMode.bus:
-				case TransportMode.train:
+				case TransportMode.BIKE:
+				case TransportMode.BOAT:
+				case TransportMode.BUS:
+				case TransportMode.TRAIN:
+				case TransportMode.PUBLIC_TRANSIT:
 					newDirection = estimateDummyDirection(transportMode, origin, destination);
 					break;
-				case TransportMode.car:
+				case TransportMode.CAR:
 					newDirection = estimateCarDirection(airDistance, origin, destination);
 					break;
-				case TransportMode.pedestrian:
+				case TransportMode.PEDESTRIAN:
 					newDirection = estimatePedestrianDirection(airDistance, origin, destination);
 					break;
-				case TransportMode.plane:
+				case TransportMode.PLANE:
 					newDirection = estimatePlaneDirection(airDistance, origin, destination);
 					break;
 				default:
@@ -75,7 +76,7 @@ export const estimateCarDirection = (
 	}
 
 	direction.duration = Math.round((airDistance / carSpeed) * 3.6);
-	direction.mode = TransportMode.car;
+	direction.mode = TransportMode.CAR;
 	return direction;
 };
 
@@ -93,7 +94,7 @@ export const estimatePedestrianDirection = (
 		direction.distance = Math.round(airDistance * 1.106);
 	}
 	direction.duration = Math.round((airDistance / PEDESTRIAN_SPEED) * 3.6);
-	direction.mode = TransportMode.pedestrian;
+	direction.mode = TransportMode.PEDESTRIAN;
 	return direction;
 };
 
@@ -105,7 +106,7 @@ export const estimatePlaneDirection = (
 	const direction: Direction = createDummyDirection(origin, destination);
 	direction.distance = airDistance;
 	direction.duration = Math.round((airDistance / PLANE_SPEED) * 3.6 + 40 * 60);
-	direction.mode = TransportMode.plane;
+	direction.mode = TransportMode.PLANE;
 	return direction;
 };
 
@@ -123,7 +124,7 @@ const createDummyDirection = (origin: Location, destination: Location): Directio
 	distance: null,
 	duration: null,
 	polyline: encode([[origin.lat, origin.lng], [destination.lat, destination.lng]]),
-	mode: TransportMode.car,
+	mode: TransportMode.CAR,
 	avoid: [],
 	source: 'estimator',
 	isoCodes: [],

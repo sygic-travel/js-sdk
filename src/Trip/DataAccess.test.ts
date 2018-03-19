@@ -1,7 +1,6 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as dirtyChai from 'dirty-chai';
-import { cloneDeep } from '../Util';
 import { assert, sandbox as sinonSandbox, SinonFakeTimers, SinonSandbox, SinonStub } from 'sinon';
 
 import { ApiResponse, StApi } from '../Api';
@@ -10,8 +9,12 @@ import * as User from '../Session';
 import { setEnvironment, setTripConflictHandler } from '../Settings';
 import * as TripApiTestData from '../TestData/TripApiResponses';
 import * as TripExpectedResults from '../TestData/TripExpectedResults';
+import { cloneDeep } from '../Util';
 import * as Dao from './DataAccess';
-import { Day, ItineraryItem, Trip, TripConflictClientResolution, TripConflictHandler, TripTemplate } from './Trip';
+import {
+	Day, ItineraryItem, Trip, TripConflictClientResolution, TripConflictHandler, TripConflictResolution,
+	TripTemplate
+} from './Trip';
 
 let sandbox: SinonSandbox;
 let clock: SinonFakeTimers;
@@ -201,18 +204,18 @@ describe('TripDataAccess', () => {
 			});
 		});
 
-		it('should call conflict handler on ignored conflict and leave server response', (done) => {
+		it('should call conflict handler on IGNORED conflict and leave SERVER response', (done) => {
 			let handlerCalled = false;
 			const handler: TripConflictHandler =
-				async (info, trip): Promise<TripConflictClientResolution.server | TripConflictClientResolution.local> => {
+				async (info, trip): Promise<TripConflictClientResolution.SERVER | TripConflictClientResolution.LOCAL> => {
 					handlerCalled = true;
-					return TripConflictClientResolution.server;
+					return TripConflictClientResolution.SERVER;
 			};
 			setTripConflictHandler(handler);
 			const apiPut: SinonStub = sandbox.stub(StApi, 'put').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
 					trip: TripApiTestData.tripDetail.trip,
-					conflict_resolution: 'ignored',
+					conflict_resolution: TripConflictResolution.IGNORED,
 					conflict_info: {
 						last_user_name: 'Lojza',
 						last_updated_at: '2017-10-10T10:10:10+02:00'
@@ -234,18 +237,18 @@ describe('TripDataAccess', () => {
 			});
 		});
 
-		it('should call update with newer updated_at when user select local changes', (done) => {
+		it('should call update with newer updated_at when user select LOCAL changes', (done) => {
 			let handlerCalled = false;
 			const handler: TripConflictHandler =
-				async (info, trip): Promise<TripConflictClientResolution.server | TripConflictClientResolution.local> => {
+				async (info, trip): Promise<TripConflictClientResolution.SERVER | TripConflictClientResolution.LOCAL> => {
 					handlerCalled = true;
-					return TripConflictClientResolution.local;
+					return TripConflictClientResolution.LOCAL;
 			};
 			setTripConflictHandler(handler);
 			const apiPut: SinonStub = sandbox.stub(StApi, 'put').returns(new Promise<ApiResponse>((resolve) => {
 				resolve(new ApiResponse(200, {
 					trip: TripApiTestData.tripDetail.trip,
-					conflict_resolution: 'ignored',
+					conflict_resolution: TripConflictResolution.IGNORED,
 					conflict_info: {
 						last_user_name: 'Lojza',
 						last_updated_at: '2017-10-10T10:10:10+02:00'

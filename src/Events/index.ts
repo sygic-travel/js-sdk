@@ -36,12 +36,12 @@ function handleUserDataChanges(changes: ChangeNotification[]): void {
 
 async function handleTripConflict(conflictInfo: TripConflictInfo, trip: Trip): Promise<TripConflictClientResolution> {
 	if (!tripUpdateConflictHandler) {
-		return TripConflictClientResolution.server;
+		return TripConflictClientResolution.SERVER;
 	}
 
 	const conflictResolution = tripUpdateConflictHandler(conflictInfo, trip);
 	if (!conflictResolution) {
-		return TripConflictClientResolution.server;
+		return TripConflictClientResolution.SERVER;
 	}
 	return conflictResolution;
 }
