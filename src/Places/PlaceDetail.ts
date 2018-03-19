@@ -15,6 +15,7 @@ export interface Detail {
 	 * @experimental
 	 */
 	ownerId?: string;
+	mediaCount: number;
 }
 
 export interface Reference {

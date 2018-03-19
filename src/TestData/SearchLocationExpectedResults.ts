@@ -86,7 +86,8 @@ export const searchLocations = [{
 				portrait: null,
 				landscape: null
 			} as MainMedia,
-			references: []
+			references: [],
+			mediaCount: 1
 		} as Detail
 	} as Place
 } as SearchResult];

@@ -52,6 +52,7 @@ export const placeDetailedEiffelTowerWithoutMedia = {
 		"opening_hours": "Open daily:\nMid-June - early Sep: 9 a.m. - 12:45 a.m. \nLast lift at midnight (11 p.m. to the top).\nStairs: 9 a.m. - 12:45 a.m. \n(Last admission at midnight.)\n\nRest of the year: 9:30 a.m. - 11:45 p.m. \nLast lift at 11 p.m. (10:30 p.m. to the top).\nStairs: 9:30 a.m. - 6:30 p.m. \n(Last admission at 6 p.m.)",
 		"is_deleted": false,
 		"phone": "+33 892 70 12 39",
+		"media_count": 0,
 		"description": {
 			"text": "Built by Gustave Eiffel for the 1889 World’s Fair, Eiffel Tower became the world's tallest man-made structure until the Chrysler Building in New York was finished in 1930. Although it is one of the world's most visited tourist attractions now, it was not accepted well by the French at the time. Also, it was supposed to be taken down after 20 years since it was meant to be only a temporary exhibit. Fortunately, Gustave Eiffel convinced the government to keep the construction and use it as a radiotelegraph station.\n\nThere are 1,665 steps leading to the top, but you can take the stairs only to the second floor. A lift takes you to the top floor. Originally, only the second floor was open to the public, but now all three levels are accessible and boast award-winning restaurants. In the evening, Eiffel Tower is illuminated with 20,000 light bulbs.\n\nPlease note that there are no locker rooms, so do not bring large baggage or pushchairs if you cannot fold them.",
 			"provider": null,
@@ -356,7 +357,8 @@ export const customPlaceData = {
 		"parent_ids": [],
 		"perex": "",
 		"description": null,
-		"thumbnail_url": null
+		"thumbnail_url": null,
+		"media_count": 0
 	}
 };
 /* tslint:enable */
