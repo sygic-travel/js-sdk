@@ -91,7 +91,8 @@ export const searchLocations = {
 				description: null,
 				origin_custom_poi: null,
 				main_media: null,
-				references: []
+				references: [],
+				media_count: 1
 			}
 		}
 	]
