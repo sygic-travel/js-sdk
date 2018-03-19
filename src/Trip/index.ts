@@ -26,7 +26,6 @@ import {
 	TripPrivileges,
 	TripTemplate,
 	TripUpdateData,
-	UNBREAKABLE_TRANSPORT_MODES,
 } from './Trip';
 
 export {
@@ -49,7 +48,6 @@ export {
 	TripPrivileges,
 	TripTemplate,
 	TripUpdateData,
-	UNBREAKABLE_TRANSPORT_MODES,
 };
 
 export async function getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<TripInfo[]> {

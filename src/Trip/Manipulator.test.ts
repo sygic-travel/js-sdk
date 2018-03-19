@@ -401,15 +401,6 @@ describe('TripManipulator', () => {
 			return chai.expect(Manipulator.addPlaceToDay(inputTrip, inputPlace, 0, null, positionInDay))
 				.to.deep.equal(expectedTrip);
 		});
-
-		it('should correctly add place and add duplicate transport when breaking explicit route', () => {
-			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			const inputPlace: Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
-			inputTrip.days![0].itinerary[1].transportFromPrevious = cloneDeep(TripExpectedResults.transportSettings);
-			const trip = Manipulator.addPlaceToDay(inputTrip, inputPlace, 0, null, 1);
-			chai.expect(trip.days![0].itinerary[2].transportFromPrevious).to.deep.equal(TripExpectedResults.transportSettings);
-			chai.expect(trip.days![0].itinerary[1].transportFromPrevious).to.deep.equal(TripExpectedResults.transportSettings);
-		});
 	});
 
 	describe('#setTransport', () => {

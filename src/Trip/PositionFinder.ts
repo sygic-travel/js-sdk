@@ -1,4 +1,4 @@
-import { ItineraryItem, Trip, UNBREAKABLE_TRANSPORT_MODES } from '.';
+import { ItineraryItem, Trip } from '.';
 import { EARTH_RADIUS, getDistance, Location } from '../Geo';
 import { isStickyByDefault, Place } from '../Places';
 import { UserSettings } from '../Session';
@@ -160,5 +160,5 @@ export function getAddToTripInstructions(
 }
 
 function hasUnbreakableRoute(item: ItineraryItem): boolean {
-	return !!(item.transportFromPrevious && UNBREAKABLE_TRANSPORT_MODES.includes(item.transportFromPrevious.mode));
+	return !!item.transportFromPrevious;
 }
