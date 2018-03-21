@@ -93,6 +93,7 @@ export const mapMainMediaToMedia = (mainMedia, photoSize: string): MainMedia => 
 						original: item.original,
 						suitability: item.suitability,
 						urlTemplate: item.urlTemplate,
+						urlWithSize: item.urlTemplate.replace(/{size}/i, photoSize),
 						type: item.type,
 						url: item.url,
 						attribution: item.attribution,

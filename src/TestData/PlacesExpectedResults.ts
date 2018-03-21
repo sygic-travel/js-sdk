@@ -125,6 +125,7 @@ export const mappedMedia = {
 			height: 4235
 		} as Media.Original,
 		urlTemplate: 'https://media-cdn.sygictraveldata.com/media/{size}/612664395a40232133447d33247d383632393531',
+		urlWithSize: 'https://media-cdn.sygictraveldata.com/media/400x400/612664395a40232133447d33247d383632393531',
 		url: 'https://media-cdn.sygictraveldata.com/media/612664395a40232133447d33247d383632393531.jpg',
 		suitability: [Suitability.SQUARE],
 		type: Type.PHOTO,
@@ -147,6 +148,7 @@ export const mappedMedia = {
 			height: 3072
 		},
 		urlTemplate: 'https://media-cdn.sygictraveldata.com/media/{size}/612664395a40232133447d33247d383336353933333937',
+		urlWithSize: 'https://media-cdn.sygictraveldata.com/media/400x400/612664395a40232133447d33247d383336353933333937',
 		url: 'https://media-cdn.sygictraveldata.com/media/612664395a40232133447d33247d383336353933333937.jpg',
 		suitability: [Suitability.PORTRAIT],
 		type: Type.PHOTO,
@@ -172,6 +174,7 @@ export const mappedMedia = {
 			height: 1536
 		} as Media.Original,
 		urlTemplate: 'https://media-cdn.sygictraveldata.com/media/{size}/612664395a40232133447d33247d3832343230303032',
+		urlWithSize: 'https://media-cdn.sygictraveldata.com/media/400x400/612664395a40232133447d33247d3832343230303032',
 		url: 'https://media-cdn.sygictraveldata.com/media/612664395a40232133447d33247d3832343230303032.jpg',
 		suitability: [Suitability.LANDSCAPE],
 		type: Type.PHOTO,
