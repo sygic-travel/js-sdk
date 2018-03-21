@@ -23,13 +23,13 @@ export const estimateModeDirections = (
 
 		if (transportModeInDirections === undefined) {
 			let newDirection: Direction | null;
-			switch (transportMode) {
+			switch (TransportMode[transportMode]) {
 				case TransportMode.BIKE:
 				case TransportMode.BOAT:
 				case TransportMode.BUS:
 				case TransportMode.TRAIN:
 				case TransportMode.PUBLIC_TRANSIT:
-					newDirection = estimateDummyDirection(transportMode, origin, destination);
+					newDirection = estimateDummyDirection(TransportMode[transportMode], origin, destination);
 					break;
 				case TransportMode.CAR:
 					newDirection = estimateCarDirection(airDistance, origin, destination);

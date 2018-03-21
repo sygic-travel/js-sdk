@@ -5,12 +5,12 @@ import { UserSettings } from '../Session';
 export enum TransportMode {
 	CAR = 'car',
 	PEDESTRIAN = 'pedestrian',
+	PUBLIC_TRANSIT = 'public_transit',
 	BIKE = 'bike',
-	PLANE = 'plane',
 	BUS = 'bus',
 	TRAIN = 'train',
 	BOAT = 'boat',
-	PUBLIC_TRANSIT = 'public_transit'
+	PLANE = 'plane'
 }
 
 export const UNBREAKABLE_TRANSPORT_MODES = [
