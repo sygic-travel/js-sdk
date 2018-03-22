@@ -59,7 +59,8 @@ const mapPlaceDetail = (place, photoSize): Detail => {
 			provider: place.description.provider,
 			translationProvider: place.description.translation_provider,
 			text: place.description.text,
-			url: place.description.link
+			url: place.description.link,
+			isTranslated: place.description.is_translated
 		} : null,
 		email: place.email,
 		duration: place.duration,
