@@ -49,6 +49,7 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 			provider: null,
 			translationProvider: null,
 			url: 'www.travel.sygic.com',
+			isTranslated: true
 		} as Description,
 		email: null,
 		duration: 3600,
