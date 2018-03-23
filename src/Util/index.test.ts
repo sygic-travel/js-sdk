@@ -23,6 +23,8 @@ describe('UtilController', () => {
 		it('should correctly add days to date', () => {
 			chai.expect(Util.addDaysToDate('2017-01-01', 2)).to.equal('2017-01-03');
 			chai.expect(Util.addDaysToDate('2017-12-31', 1)).to.equal('2018-01-01');
+			// Daylight saving time
+			chai.expect(Util.addDaysToDate('2018-03-24', 2)).to.equal('2018-03-26');
 		});
 	});
 
@@ -30,6 +32,8 @@ describe('UtilController', () => {
 		it('should correctly subtract days from date', () => {
 			chai.expect(Util.subtractDaysFromDate('2017-01-03', 2)).to.equal('2017-01-01');
 			chai.expect(Util.subtractDaysFromDate('2018-01-01', 1)).to.equal('2017-12-31');
+			// Daylight saving time
+			chai.expect(Util.subtractDaysFromDate('2018-10-29', 2)).to.equal('2018-10-27');
 		});
 	});
 });
