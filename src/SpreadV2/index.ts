@@ -13,7 +13,8 @@ export function spread(
 	bounds: Bounds,
 	canvas: CanvasSize,
 	sizesConfig?: SpreadSizeConfig[],
-	categoriesCoefficients?: CategoriesCoefficients | null
+	categoriesCoefficients?: CategoriesCoefficients | null,
+	useLocalRating: boolean = false
 ): Spreader.SpreadResult {
 	if (!sizesConfig) {
 		sizesConfig = getSizesConfig();
@@ -21,5 +22,5 @@ export function spread(
 	if (!categoriesCoefficients && categoriesCoefficients !== null) {
 		categoriesCoefficients = getCategoriesConfig();
 	}
-	return Spreader.spread(places, vipPlaces, sizesConfig, bounds, canvas, categoriesCoefficients);
+	return Spreader.spread(places, vipPlaces, sizesConfig, bounds, canvas, categoriesCoefficients, useLocalRating);
 }
