@@ -55,6 +55,7 @@ const mapPlaceDetail = (place, photoSize): Detail => {
 		tags,
 		address: place.address,
 		admission: place.admission,
+		area: place.area,
 		description: place.description ? {
 			provider: place.description.provider,
 			translationProvider: place.description.translation_provider,

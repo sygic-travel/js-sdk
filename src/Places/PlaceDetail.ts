@@ -4,6 +4,7 @@ export interface Detail {
 	tags: Tag[];
 	address: string | null;
 	admission: string | null;
+	area: number | null;
 	duration: number | null;
 	description: Description | null;
 	email: string | null;

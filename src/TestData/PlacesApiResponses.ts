@@ -9,6 +9,7 @@ export const placeDetailedEiffelTowerWithoutMedia = {
 			"lat": 48.858262,
 			"lng": 2.2944955
 		},
+		"area": 100,
 		"bounding_box": null,
 		"name": "Eiffel Tower",
 		"name_suffix": "Paris, France",
@@ -324,6 +325,7 @@ export const customPlaceData = {
 		"id": "c:1",
 		"level": "poi",
 		"rating": 0,
+		"area": null,
 		"location": {
 			"lat": -18.894964,
 			"lng": 47.51632
