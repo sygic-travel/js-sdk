@@ -105,9 +105,10 @@ export default class PlacesModule {
 		bounds: Bounds,
 		canvas: CanvasSize,
 		sizesConfig?: SpreadSizeConfigV2[],
-		categoriesCoefficients?: CategoriesCoefficients | null
+		categoriesCoefficients?: CategoriesCoefficients | null,
+		useLocalRating: boolean = false
 	): SpreadResultV2 {
-		return spreadV2(places, vipPlaces, bounds, canvas, sizesConfig, categoriesCoefficients);
+		return spreadV2(places, vipPlaces, bounds, canvas, sizesConfig, categoriesCoefficients, useLocalRating);
 	}
 
 	public getPlacesDestinationMap(placeIds: string[], imageSize: string): Promise<Map<string, Place>> {

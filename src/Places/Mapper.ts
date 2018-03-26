@@ -29,6 +29,7 @@ export const mapPlace = (place, detail: Detail | null) => {
 		id: place.id,
 		level: place.level,
 		rating: place.rating,
+		ratingLocal: place.rating_local,
 		location: place.location as Location,
 		quadkey: place.quadkey,
 		name: place.name,
@@ -55,6 +56,7 @@ const mapPlaceDetail = (place, photoSize): Detail => {
 		tags,
 		address: place.address,
 		admission: place.admission,
+		area: place.area,
 		description: place.description ? {
 			provider: place.description.provider,
 			translationProvider: place.description.translation_provider,

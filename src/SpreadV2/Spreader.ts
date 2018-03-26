@@ -14,17 +14,21 @@ export function spread(
 	markerSizes: SpreadSizeConfig[],
 	bounds: Bounds,
 	canvas: CanvasSize,
-	categoriesCoefficients?: CategoriesCoefficients | null
+	categoriesCoefficients?: CategoriesCoefficients | null,
+	useLocalRating: boolean = false
 ): SpreadResult {
 	const zoom = getZoomFromBounds(bounds, canvas.width);
 	const finalResult = vipPlaces.reduce((result: SpreadResult, place: Place): SpreadResult => {
-		return detectRenderSize(result, place, markerSizes, bounds, canvas, zoom, true);
+		return detectRenderSize(result, place, markerSizes, bounds, canvas, zoom, true, useLocalRating);
 	}, {
 		hidden: [],
 		visible: []
 	});
 	return places.reduce((result: SpreadResult, place: Place): SpreadResult => {
-		return detectRenderSize(result, place, markerSizes, bounds, canvas, zoom, false, categoriesCoefficients);
+		return detectRenderSize(
+			result, place, markerSizes, bounds, canvas,
+			zoom, false, useLocalRating, categoriesCoefficients
+		);
 	}, finalResult);
 }
 
@@ -36,11 +40,12 @@ const detectRenderSize = (
 	canvas: CanvasSize,
 	zoom: number,
 	ignoreDisabledCategories: boolean,
+	useLocalRating: boolean,
 	categoriesCoefficients?: CategoriesCoefficients | null
 ): SpreadResult => {
-	let spreadRating = place.rating;
+	let spreadRating = useLocalRating ? place.ratingLocal : place.rating;
 	if (categoriesCoefficients && place.level === 'poi') {
-		spreadRating = place.rating * getRatingCoeficientFromCategories(categoriesCoefficients, place.categories);
+		spreadRating = spreadRating * getRatingCoeficientFromCategories(categoriesCoefficients, place.categories);
 	}
 
 	if (!place.location) {

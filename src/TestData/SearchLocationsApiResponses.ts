@@ -48,6 +48,7 @@ export const searchLocations = {
 				level: "poi",
 				type: "poi",
 				rating: 0.002,
+				rating_local: 0.003,
 				quadkey: "120213203332231310",
 				location: {
 					lat: 49.8479662,
@@ -83,6 +84,7 @@ export const searchLocations = {
 				],
 				address: null,
 				admission: null,
+				area: null,
 				duration: 3600,
 				email: null,
 				opening_hours: null,

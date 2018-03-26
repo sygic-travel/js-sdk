@@ -87,7 +87,8 @@ declare class PlacesModule {
 		bounds: Geo.Bounds,
 		canvas: Spread.CanvasSize,
 		sizesConfig?: SpreadV2.SpreadSizeConfig[],
-		categoriesCoefficients?: SpreadV2.CategoriesCoefficients | null
+		categoriesCoefficients?: SpreadV2.CategoriesCoefficients | null,
+		useLocalRating?: boolean
 	): SpreadV2.SpreadResult;
 }
 

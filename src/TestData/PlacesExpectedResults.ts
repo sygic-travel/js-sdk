@@ -13,6 +13,7 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 	starRatingUnofficial: null,
 	customerRating: 8.6,
 	rating: 7.9110977331847,
+	ratingLocal: 8.9110977331847,
 	location: {
 		lat: 48.858262,
 		lng: 2.2944955
@@ -44,6 +45,7 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 		],
 		address: 'Champ de Mars, 5 Avenue Anatole France, 75007 Paris, France',
 		admission: 'Lift entrance ticket* / to the top / by stairs*\nAdults: €11 / €17 / €7 \nYouth (12 - 24): €8.50 / €14.50 / €5\nChildren (4 - 11), disabled: €4 / €8 / €3\n*valid to 2nd floor\n\nThe access waiting time to the monument is likely to be over 2 hours unless you book online.\n\nAn extra ticket for the top floor may be purchased on the 2nd floor, depending on weather conditions.',
+		area: 100,
 		description: {
 			text: 'Built by Gustave Eiffel for the 1889 World’s Fair, Eiffel Tower became the world\'s tallest man-made structure until the Chrysler Building in New York was finished in 1930. Although it is one of the world\'s most visited tourist attractions now, it was not accepted well by the French at the time. Also, it was supposed to be taken down after 20 years since it was meant to be only a temporary exhibit. Fortunately, Gustave Eiffel convinced the government to keep the construction and use it as a radiotelegraph station.\n\nThere are 1,665 steps leading to the top, but you can take the stairs only to the second floor. A lift takes you to the top floor. Originally, only the second floor was open to the public, but now all three levels are accessible and boast award-winning restaurants. In the evening, Eiffel Tower is illuminated with 20,000 light bulbs.\n\nPlease note that there are no locker rooms, so do not bring large baggage or pushchairs if you cannot fold them.',
 			provider: null,
@@ -97,6 +99,7 @@ export const places = [{
 	id: 'poi:345430',
 	level: 'poi',
 	rating: 10.004,
+	ratingLocal: 10.004,
 	location: {
 		lat: 50.0866003,
 		lng: 14.4105518
@@ -273,6 +276,7 @@ export const customPlace = {
 		id: 'c:1',
 		level: Level.POI,
 		rating: 0,
+		ratingLocal: 0,
 		location: {
 			lat: -18.894964,
 			lng: 47.51632
@@ -294,6 +298,7 @@ export const customPlace = {
 		detail: {
 			tags: [],
 			address: null,
+			area: null,
 			admission: null,
 			duration: 3600,
 			email: null,
