@@ -6,6 +6,7 @@ export interface Place {
 	level: Level;
 	categories: Category[];
 	rating: number;
+	ratingLocal: number;
 	quadkey: string;
 	location: Location;
 	boundingBox: Bounds | null;

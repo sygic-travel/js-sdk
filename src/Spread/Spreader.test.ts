@@ -18,6 +18,7 @@ const place: Place = {
 	id: 'poi:1',
 	level: Level.POI,
 	rating: 10,
+	ratingLocal: 10,
 	quadkey: '0123',
 	location: {lat: 0.1, lng: 0.1},
 	boundingBox: null,

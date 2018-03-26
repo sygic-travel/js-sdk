@@ -51,6 +51,7 @@ export const searchLocations = [{
 		level: Level.POI,
 		categories: [Category.SHOPPING],
 		rating: 0.002,
+		ratingLocal: 0.003,
 		quadkey: '120213203332231310',
 		location: {
 			lat: 49.8479662,

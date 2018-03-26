@@ -4,6 +4,7 @@ export const placeDetailedEiffelTowerWithoutMedia = {
 		"id": "poi:530",
 		"level": "poi",
 		"rating": 7.9110977331847,
+		"rating_local": 8.9110977331847,
 		"quadkey": "120220011012000332",
 		"location": {
 			"lat": 48.858262,
@@ -214,6 +215,7 @@ export const places = {
 			"id": "poi:345430",
 			"level": "poi",
 			"rating": 10.004,
+			"rating_local": 10.004,
 			"quadkey": "120212302033311321",
 			"location": {
 				"lat": 50.0866003,
@@ -325,6 +327,7 @@ export const customPlaceData = {
 		"id": "c:1",
 		"level": "poi",
 		"rating": 0,
+		"rating_local": 0,
 		"area": null,
 		"location": {
 			"lat": -18.894964,

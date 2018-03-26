@@ -13,6 +13,7 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 	starRatingUnofficial: null,
 	customerRating: 8.6,
 	rating: 7.9110977331847,
+	ratingLocal: 8.9110977331847,
 	location: {
 		lat: 48.858262,
 		lng: 2.2944955
@@ -98,6 +99,7 @@ export const places = [{
 	id: 'poi:345430',
 	level: 'poi',
 	rating: 10.004,
+	ratingLocal: 10.004,
 	location: {
 		lat: 50.0866003,
 		lng: 14.4105518
@@ -274,6 +276,7 @@ export const customPlace = {
 		id: 'c:1',
 		level: Level.POI,
 		rating: 0,
+		ratingLocal: 0,
 		location: {
 			lat: -18.894964,
 			lng: 47.51632

@@ -7,6 +7,7 @@ export const hotels = [{
 			id: 'hotel:12345',
 			level: 'poi',
 			rating: 10.004,
+			ratingLocal: 10.004,
 			location: {
 				lat: 50.0866003,
 				lng: 14.4105518
