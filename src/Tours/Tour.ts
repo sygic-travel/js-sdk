@@ -27,7 +27,7 @@ export enum ToursGetYourGuideQuerySortBy {
 	PRICE = 'price',
 	RATING = 'rating',
 	DURATION = 'duration',
-	POPULARITY = 'top_sellers'
+	POPULARITY = 'popularity'
 }
 
 export interface ToursViatorQuery {
