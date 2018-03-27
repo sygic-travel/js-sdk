@@ -31,6 +31,29 @@ export async function getToursViator(toursQuery: ToursViatorQuery): Promise<Tour
 }
 
 export async function getToursGetYourGuide(toursQuery: ToursGetYourGuideQuery): Promise<Tour[]> {
+	const query: any = buildGetYourGuideFilterQuery(toursQuery);
+	if (toursQuery.sortDirection !== null) {
+		query.sort_direction = toursQuery.sortDirection;
+	}
+
+	if (toursQuery.sortBy !== null) {
+		query.sort_by = toursQuery.sortBy;
+	}
+
+	if (toursQuery.count !== null) {
+		query.count = toursQuery.count;
+	}
+
+	const apiResponse: ApiResponse = await StApi.get('tours/get-your-guide?' + stringify(query));
+
+	if (!apiResponse.data.hasOwnProperty('tours')) {
+		throw new Error('Wrong API response');
+	}
+
+	return mapToursApiResponseToTours(apiResponse.data.tours);
+}
+
+function buildGetYourGuideFilterQuery(toursQuery: ToursGetYourGuideQuery): any {
 	const query: any = {};
 
 	if (toursQuery.query !== null) {
@@ -56,16 +79,9 @@ export async function getToursGetYourGuide(toursQuery: ToursGetYourGuideQuery): 
 		query.tags = toursQuery.tags.join(',');
 	}
 
-	if (toursQuery.count !== null) {
-		query.count = toursQuery.count;
-	}
-
-	if (toursQuery.durationMin !== null) {
-		query.duration_min = toursQuery.durationMin;
-	}
-
-	if (toursQuery.durationMax !== null) {
-		query.duration_max = toursQuery.durationMax;
+	if (toursQuery.durationMin !== null || toursQuery.durationMax !== null) {
+		query.duration = (toursQuery.durationMin ? toursQuery.durationMin : '') + ':'
+		+ (toursQuery.durationMax ? toursQuery.durationMax : '');
 	}
 
 	if (toursQuery.startDate !== null) {
@@ -76,19 +92,5 @@ export async function getToursGetYourGuide(toursQuery: ToursGetYourGuideQuery): 
 		query.end_date = toursQuery.endDate;
 	}
 
-	if (toursQuery.sortDirection !== null) {
-		query.sort_direction = toursQuery.sortDirection;
-	}
-
-	if (toursQuery.sortBy !== null) {
-		query.sort_by = toursQuery.sortBy;
-	}
-
-	const apiResponse: ApiResponse = await StApi.get('tours/get-your-guide?' + stringify(query));
-
-	if (!apiResponse.data.hasOwnProperty('tours')) {
-		throw new Error('Wrong API response');
-	}
-
-	return mapToursApiResponseToTours(apiResponse.data.tours);
+	return query;
 }

@@ -70,8 +70,8 @@ describe('TripDataAccess', () => {
 			};
 
 			await Dao.getToursGetYourGuide(toursQuery);
-			chai.expect(stub.getCall(0).args[0]).to.equal('tours/get-your-guide?count=10&duration_max=100000&' +
-				'duration_min=10&end_date=2018-03-02&parent_place_id=city%3A1&start_date=2018-03-01');
+			chai.expect(stub.getCall(0).args[0]).to.equal('tours/get-your-guide?count=10&duration=10%3A100000&' +
+				'end_date=2018-03-02&parent_place_id=city%3A1&start_date=2018-03-01');
 
 			toursQuery.bounds = {
 				south: 1,
@@ -86,7 +86,7 @@ describe('TripDataAccess', () => {
 			toursQuery.query = 'test';
 			await Dao.getToursGetYourGuide(toursQuery);
 			chai.expect(stub.getCall(1).args[0]).to.equal('tours/get-your-guide?bounds=1%2C1%2C2%2C2&count=10' +
-				'&duration_max=100000&duration_min=10&end_date=2018-03-02&page=2&parent_place_id=city%3A1&query=test&' +
+				'&duration=10%3A100000&end_date=2018-03-02&page=2&parent_place_id=city%3A1&query=test&' +
 				'sort_by=price&sort_direction=desc&start_date=2018-03-01&tags=1%2C2%2C3');
 		});
 	});
