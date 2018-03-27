@@ -111,6 +111,7 @@ declare class SearchModule {
 declare class ToursModule {
 	public getToursViator(toursQuery: Tours.ToursViatorQuery): Promise<Tours.Tour[]>;
 	public getToursGetYourGuide(toursQuery: Tours.ToursGetYourGuideQuery): Promise<Tours.Tour[]>;
+	public getGetYourGuideTagStats(toursQuery: ToursGetYourGuideQuery): Promise<Tours.ToursTagStats[]>;
 }
 
 declare class TripModule {
@@ -972,6 +973,12 @@ export namespace Tours {
 		durationMax: number | null;
 		sortBy: ToursGetYourGuideQuerySortBy | null;
 		sortDirection: ToursQueryDirection | null;
+	}
+
+	export interface ToursTagStats {
+		id: number;
+		name: string;
+		count: number;
 	}
 
 	export enum ToursQueryDirection {

@@ -2,7 +2,7 @@ import { stringify } from 'query-string';
 
 import { ApiResponse, StApi } from '../Api';
 import { mapToursApiResponseToTours } from './Mapper';
-import { Tour, ToursGetYourGuideQuery, ToursViatorQuery } from './Tour';
+import { Tour, ToursGetYourGuideQuery, ToursTagStats, ToursViatorQuery } from './Tour';
 
 export async function getToursViator(toursQuery: ToursViatorQuery): Promise<Tour[]> {
 	const query: any = {
@@ -28,6 +28,18 @@ export async function getToursViator(toursQuery: ToursViatorQuery): Promise<Tour
 	}
 
 	return mapToursApiResponseToTours(apiResponse.data.tours);
+}
+
+export async function getGetYourGuideTagStats(toursQuery: ToursGetYourGuideQuery): Promise<ToursTagStats[]> {
+	const query: any = buildGetYourGuideFilterQuery(toursQuery);
+
+	const apiResponse: ApiResponse = await StApi.get('tours/get-your-guide/stats?' + stringify(query));
+
+	if (!apiResponse.data.hasOwnProperty('tag_stats')) {
+		throw new Error('Wrong API response');
+	}
+
+	return apiResponse.data.tag_stats;
 }
 
 export async function getToursGetYourGuide(toursQuery: ToursGetYourGuideQuery): Promise<Tour[]> {

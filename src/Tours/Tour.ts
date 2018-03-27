@@ -43,13 +43,19 @@ export interface ToursGetYourGuideQuery {
 	parentPlaceId: string | null;
 	page: number | null;
 	tags: number[];
-	count: number | null;
 	startDate: string | null;
 	endDate: string | null;
 	durationMin: number | null;
 	durationMax: number | null;
-	sortBy: ToursGetYourGuideQuerySortBy | null;
-	sortDirection: ToursQueryDirection | null;
+	count?: number | null;
+	sortBy?: ToursGetYourGuideQuerySortBy | null;
+	sortDirection?: ToursQueryDirection | null;
+}
+
+export interface ToursTagStats {
+	id: number;
+	name: string;
+	count: number;
 }
 
 export enum ToursQueryDirection {

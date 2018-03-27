@@ -90,4 +90,43 @@ describe('TripDataAccess', () => {
 				'sort_by=price&sort_direction=desc&start_date=2018-03-01&tags=1%2C2%2C3');
 		});
 	});
+
+	describe('#getGetYourGuideTagStats', () => {
+		it('should call api with correct parameters', async () => {
+			const stub: SinonStub = sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, { tag_stats: []}));
+			}));
+
+			const toursQuery: ToursGetYourGuideQuery = {
+				query: null,
+				bounds: null,
+				parentPlaceId: 'city:1',
+				page: null,
+				tags: [],
+				count: 10,
+				startDate: '2018-03-01',
+				endDate: '2018-03-02',
+				durationMin: 10,
+				durationMax: 100000
+			};
+
+			await Dao.getGetYourGuideTagStats(toursQuery);
+			chai.expect(stub.getCall(0).args[0]).to.equal('tours/get-your-guide/stats?duration=10%3A100000&' +
+				'end_date=2018-03-02&parent_place_id=city%3A1&start_date=2018-03-01');
+
+			toursQuery.bounds = {
+				south: 1,
+				west: 1,
+				north: 2,
+				east: 2
+			};
+			toursQuery.page = 2;
+			toursQuery.tags = [1, 2, 3];
+			toursQuery.query = 'test';
+			await Dao.getGetYourGuideTagStats(toursQuery);
+			chai.expect(stub.getCall(1).args[0]).to.equal('tours/get-your-guide/stats?bounds=1%2C1%2C2%2C2' +
+				'&duration=10%3A100000&end_date=2018-03-02&page=2&parent_place_id=city%3A1&query=test&' +
+				'start_date=2018-03-01&tags=1%2C2%2C3');
+		});
+	});
 });
