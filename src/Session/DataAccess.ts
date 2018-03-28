@@ -11,7 +11,7 @@ import {
 	UserLicense,
 	UserSettings
 } from '.';
-import { ApiResponse, SsoApi, StApi, } from '../Api';
+import { ApiResponse, SsoApi, StApi } from '../Api';
 import { sessionCache, userCache } from '../Cache';
 
 const SETTINGS_KEY = 'settings';
