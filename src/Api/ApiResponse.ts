@@ -3,7 +3,7 @@ export class ApiResponse {
 	private _data: any;
 	private _serverTimestamp: string | null;
 
-	constructor(statusCode: number, data: object, serverTimestamp?: string) {
+	constructor(statusCode: number, data: object | null, serverTimestamp?: string) {
 		this._statusCode = statusCode;
 		this._data = data;
 		this._serverTimestamp = serverTimestamp || null;

@@ -1,6 +1,7 @@
-import { Mapper, Route, RouteRequest } from '.';
-import { ApiResponse, StApi } from '../Api';
+import { DirectionSendResponseCode, Mapper, Route, RouteRequest } from '.';
+import {ApiResponse, StApi} from '../Api';
 import { routesCache as cache } from '../Cache';
+import { Location } from '../Geo';
 import { flatten, splitArrayToChunks } from '../Util';
 import { estimateModeDirections } from './Estimator';
 
@@ -58,6 +59,30 @@ async function getFromApi(requests: RouteRequest[]): Promise<object[]> {
 
 	return flatten(chunkedPaths);
 
+}
+
+export async function sendDirections(
+	email: string,
+	destinationLocation: Location,
+	destinationName: string | null = null
+) {
+	const apiRequestData: any = {
+		user_email: email,
+		destination: {
+			name: destinationName,
+			location: destinationLocation
+		}
+	};
+
+	try {
+		await StApi.post('directions/send-by-email', apiRequestData);
+		return DirectionSendResponseCode.OK;
+	} catch (e) {
+		if (e.response.data.status_code === 422) {
+			return DirectionSendResponseCode.ERROR_INVALID_INPUT;
+		}
+	}
+	return DirectionSendResponseCode.ERROR;
 }
 
 const createCacheKey = (request: RouteRequest): string => {

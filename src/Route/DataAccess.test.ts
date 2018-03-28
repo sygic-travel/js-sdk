@@ -1,15 +1,15 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-import { cloneDeep } from '../Util';
-import { sandbox as sinonSandbox, SinonSandbox } from 'sinon';
-import { RouteRequest } from '.';
-import { StApi } from '../Api';
+import { sandbox as sinonSandbox, SinonSandbox, SinonStub } from 'sinon';
+
+import { ApiResponse, StApi } from '../Api';
 import { Location } from '../Geo';
 import { setEnvironment } from '../Settings';
 import { route } from '../TestData/DirectionsApiResponses';
 import { TransportMode } from '../Trip';
+import { cloneDeep } from '../Util';
 import * as dao from './DataAccess';
-import { Route } from './Route';
+import { DirectionSendResponseCode, Route, RouteRequest } from './Route';
 
 import { routesCache } from '../Cache';
 
@@ -71,6 +71,30 @@ describe('RouteDataAccess', () => {
 			chai.expect(routes[1].modeDirections.length).to.equal(8);
 			chai.expect(routes[2].modeDirections.length).to.equal(8);
 			chai.expect(routes[3].modeDirections.length).to.equal(8);
+		});
+	});
+
+	describe('#sendDirections', () => {
+		it('should send correct request based on parameters', async () => {
+			const apiStub: SinonStub = sandbox.stub(StApi, 'post').returns(
+				new Promise((resolve) => resolve(new ApiResponse( 200, null)))
+			);
+
+			const location: Location = {
+				lat: 1,
+				lng: 2
+			};
+
+			const result: DirectionSendResponseCode = await dao.sendDirections('email@example.com', location, 'Some name');
+			chai.expect(result).to.equal(DirectionSendResponseCode.OK);
+			chai.expect(apiStub.getCall(0).args[0]).to.equal('directions/send-by-email');
+			chai.expect(apiStub.getCall(0).args[1]).to.deep.equal({
+				user_email: 'email@example.com',
+				destination: {
+					name: 'Some name',
+					location
+				}
+			});
 		});
 	});
 });

@@ -1,5 +1,8 @@
 import { Location } from '../Geo';
-import { getDirections, getRoutesForTripDay, Route, TripDayRoutes, Waypoint } from '../Route';
+import {
+	DirectionSendResponseCode, getDirections, getRoutesForTripDay,
+	Route, sendDirections, TripDayRoutes, Waypoint
+} from '../Route';
 import { TransportAvoid } from '../Trip';
 
 export default class RoutesModule {
@@ -14,5 +17,13 @@ export default class RoutesModule {
 		avoids: TransportAvoid[]
 	): Promise<Route | null> {
 		return getDirections(origin, destination, waypoints, avoids);
+	}
+
+	public sendDirections(
+		email: string,
+		destinationLocation: Location,
+		destinationName: string | null = null
+	): Promise<DirectionSendResponseCode> {
+		return sendDirections(email, destinationLocation, destinationName);
 	}
 }
