@@ -5,6 +5,12 @@ import { ApiResponse } from './ApiResponse';
 
 export const axiosInstance: AxiosInstance = axios.create();
 
+export enum CommonResponseCode {
+	OK,
+	NOT_FOUND,
+	ERROR
+}
+
 axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
 	if (!config.baseURL) {
 		throw new Error('API Url not set');
@@ -36,7 +42,7 @@ export async function post(url: string, requestData): Promise<ApiResponse> {
 	}
 }
 
-export async function delete_(url: string, requestData): Promise<ApiResponse> {
+export async function delete_(url: string, requestData?): Promise<ApiResponse> {
 	try {
 		const response = await axiosInstance.delete(url, await buildRequestConfig(url, requestData));
 		return buildApiResponse(response);

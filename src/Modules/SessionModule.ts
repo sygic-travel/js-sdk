@@ -1,3 +1,4 @@
+import { CommonResponseCode } from '../Api/StApi';
 import {
 	AuthenticationResponseCode,
 	deleteAccount,
@@ -16,9 +17,10 @@ import {
 	signInWithFacebookAccessToken,
 	signInWithGoogleIdToken,
 	signInWithJwtToken,
+	unsubscribeEmail,
 	updateUserSettings,
 	UserInfo,
-	UserSettings,
+	UserSettings
 } from '../Session';
 
 export default class SessionModule {
@@ -142,5 +144,12 @@ export default class SessionModule {
 	 */
 	public resetPassword(email: string): Promise<ResetPasswordResponseCode> {
 		return resetPassword(email);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public unsubscribeEmail(hash?: string): Promise<CommonResponseCode> {
+		return unsubscribeEmail(hash);
 	}
 }

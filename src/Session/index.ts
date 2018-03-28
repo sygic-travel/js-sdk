@@ -1,3 +1,4 @@
+import { CommonResponseCode } from '../Api/StApi';
 import { favoritesCache, tripsDetailedCache, userCache } from '../Cache';
 import { reset as resetChanges } from '../Changes';
 import * as Dao from './DataAccess';
@@ -155,4 +156,17 @@ export async function requestCancelAccount(): Promise<void> {
 
 export async function resetPassword(email: string): Promise<ResetPasswordResponseCode> {
 	return Dao.resetPassword(email);
+}
+
+export async function unsubscribeEmail(hash?: string): Promise<CommonResponseCode> {
+	if (hash) {
+		return Dao.unsubscribeEmail(hash);
+	}
+
+	const session = await getSession();
+	if (!session) {
+		throw new Error('User session is not set');
+	}
+
+	return Dao.unsubscribeEmail();
 }

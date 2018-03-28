@@ -1,6 +1,7 @@
 import * as chai from 'chai';
-import { sandbox as sinonSandbox, SinonFakeTimers, SinonSandbox, SinonStub } from 'sinon';
-import { getSession, getUserInfo, Session, setSession } from '.';
+import { sandbox as sinonSandbox, SinonFakeTimers, SinonSandbox, SinonSpyCall, SinonStub } from 'sinon';
+import { getSession, getUserInfo, Session, setSession, unsubscribeEmail} from '.';
+import { ApiResponse, StApi } from '../Api';
 import { cloneDeep } from '../Util';
 import * as Dao from './DataAccess';
 
@@ -68,6 +69,48 @@ describe('UserController', () => {
 			const session: Session | null = await getSession();
 			chai.expect(session).deep.equal(incompleteSession);
 			chai.expect(stub.callCount).equal(0);
+		});
+	});
+
+	describe('#unsubscribeEmail', () => {
+		beforeEach(async () => {
+			sandbox = sinonSandbox.create();
+		});
+
+		afterEach(async () => {
+			sandbox.restore();
+		});
+
+		it('should call api with hash parameter when provided', async () => {
+			const apiStub: SinonStub = sandbox.stub(StApi, 'delete_').returns(
+				new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(200, {}));
+				}));
+			await unsubscribeEmail('abcdefgh');
+			const call: SinonSpyCall = apiStub.getCall(0);
+			chai.expect(call.args).to.have.length(2);
+			chai.expect(call.args[1]).to.deep.eq({
+				hash: 'abcdefgh'
+			});
+		});
+
+		it('should call api with session set and without hash parameter', async () => {
+			await setSession(testSession);
+			const apiStub: SinonStub = sandbox.stub(StApi, 'delete_').returns(
+				new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(200, {}));
+				}));
+			await unsubscribeEmail();
+			const call: SinonSpyCall = apiStub.getCall(0);
+			chai.expect(call.args).to.have.length(2);
+			chai.expect(call.args[1]).to.be.null;
+		});
+
+		it('should throw error when calling api without session set and without hash parameter', async () => {
+			await setSession(null);
+			unsubscribeEmail().catch((e: Error) => {
+				chai.expect(e.message).equal('User session is not set');
+			});
 		});
 	});
 });
