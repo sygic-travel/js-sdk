@@ -91,9 +91,9 @@ function buildGetYourGuideFilterQuery(toursQuery: ToursGetYourGuideQuery): any {
 		query.tags = toursQuery.tags.join(',');
 	}
 
-	if (toursQuery.durationMin !== null || toursQuery.durationMax !== null) {
-		query.duration = (toursQuery.durationMin ? toursQuery.durationMin : '') + ':'
-		+ (toursQuery.durationMax ? toursQuery.durationMax : '');
+	if (typeof toursQuery.durationMin === 'number' || typeof toursQuery.durationMax === 'number') {
+		query.duration = (typeof toursQuery.durationMin === 'number' ? toursQuery.durationMin : '') + ':'
+		+ (typeof toursQuery.durationMax === 'number' ? toursQuery.durationMax : '');
 	}
 
 	if (toursQuery.startDate !== null) {
