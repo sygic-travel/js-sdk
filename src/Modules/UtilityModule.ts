@@ -1,3 +1,4 @@
+import { getExchangeRates } from '../ExchangeRates';
 import { Location, locationToMapTileKey } from '../Geo';
 
 /**
@@ -7,4 +8,6 @@ export default class UtilityModule {
 	public locationToMapTileKey(location: Location, zoom: number): string {
 		return locationToMapTileKey(location, zoom);
 	}
+
+	public getExchangeRates = getExchangeRates;
 }

@@ -168,6 +168,7 @@ declare class SessionModule {
 
 declare class UtilityModule {
 	public locationToMapTileKey(location: Geo.Location, zoom: number): string;
+	public getExchangeRates(): Promise<Utility.ExchangeRate[]>;
 }
 
 export class StSDK {
@@ -1122,5 +1123,12 @@ export namespace Pdf {
 		generatingId: string;
 		state: 'generating' | 'done' | 'not_found' | 'timeout';
 		url: string | null;
+	}
+}
+
+export namespace Utility {
+	export interface ExchangeRate {
+		code: string;
+		rate: number;
 	}
 }
