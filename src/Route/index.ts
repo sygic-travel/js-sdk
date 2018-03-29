@@ -4,10 +4,14 @@ import { Dao as tripsDao, Day, ItineraryItem, TransportAvoid, Trip } from '../Tr
 import * as Dao from './DataAccess';
 import * as Mapper from './Mapper';
 import * as ModeSelector from './ModeSelector';
-import { Direction, DirectionSource, ModeDirections, Route, RouteRequest, TripDayRoutes, Waypoint } from './Route';
+import {
+	Direction, DirectionSendResponseCode, DirectionSource, ModeDirections, Route,
+	RouteRequest, TripDayRoutes, Waypoint
+} from './Route';
 
 export {
 	Direction,
+	DirectionSendResponseCode,
 	DirectionSource,
 	ModeDirections,
 	ModeSelector,
@@ -17,6 +21,14 @@ export {
 	TripDayRoutes,
 	Waypoint
 };
+
+export async function sendDirections(
+	email: string,
+	destinationLocation: Location,
+	destinationName: string | null = null
+): Promise<DirectionSendResponseCode> {
+	return Dao.sendDirections(email, destinationLocation, destinationName);
+}
 
 export async function getRoutesForTripDay(tripId: string, dayIndex: number): Promise<TripDayRoutes>  {
 	const trip: Trip = await tripsDao.getTripDetailed(tripId);

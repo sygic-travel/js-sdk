@@ -100,6 +100,11 @@ declare class RoutesModule {
 		avoids: Trips.TransportAvoid[]
 	): Promise<Route.Route>;
 	public getRoutesForTripDay(tripId: string, dayIndex: number): Promise<Route.TripDayRoutes>;
+	public sendDirections(
+		email: string,
+		destinationLocation: Location,
+		destinationName: string | null
+	): Promise<Route.DirectionSendResponseCode>;
 }
 
 declare class SearchModule {
@@ -111,7 +116,7 @@ declare class SearchModule {
 declare class ToursModule {
 	public getToursViator(toursQuery: Tours.ToursViatorQuery): Promise<Tours.Tour[]>;
 	public getToursGetYourGuide(toursQuery: Tours.ToursGetYourGuideQuery): Promise<Tours.Tour[]>;
-	public getGetYourGuideTagStats(toursQuery: ToursGetYourGuideQuery): Promise<Tours.ToursTagStats[]>;
+	public getGetYourGuideTagStats(toursQuery: Tours.ToursGetYourGuideQuery): Promise<Tours.ToursTagStats[]>;
 }
 
 declare class TripModule {
@@ -818,6 +823,12 @@ export namespace Route {
 	export interface Waypoint {
 		placeId: string | null;
 		location: Geo.Location;
+	}
+
+	export enum DirectionSendResponseCode {
+		OK = 'OK',
+		ERROR_INVALID_INPUT = 'ERROR_INVALID_INPUT',
+		ERROR = 'ERROR'
 	}
 }
 

@@ -3,7 +3,7 @@ import { TransportAvoid, TransportMode, TransportSettings } from '../Trip';
 
 export interface TripDayRoutes {
 	routes: Route[];
-	userTransportSettings: (TransportSettings|null)[];
+	userTransportSettings: (TransportSettings | null)[];
 }
 
 export interface Route {
@@ -35,7 +35,7 @@ export interface RouteRequest {
 	avoid: TransportAvoid[];
 	chosenMode: TransportMode;
 	waypoints?: Waypoint[];
-	routeId?: string|null;
+	routeId?: string | null;
 }
 
 export type DirectionSource =
@@ -44,6 +44,12 @@ export type DirectionSource =
 	'lbs';
 
 export interface Waypoint {
-	placeId: string|null;
+	placeId: string | null;
 	location: Location;
+}
+
+export enum DirectionSendResponseCode {
+	OK = 'OK',
+	ERROR_INVALID_INPUT = 'ERROR_INVALID_INPUT',
+	ERROR = 'ERROR'
 }
