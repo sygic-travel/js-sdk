@@ -90,6 +90,7 @@ declare class PlacesModule {
 		categoriesCoefficients?: SpreadV2.CategoriesCoefficients | null,
 		useLocalRating?: boolean
 	): SpreadV2.SpreadResult;
+	public getPlaceAutoTranslation(placeId: string): Promise<Places.PlaceAutoTranslation>;
 }
 
 declare class RoutesModule {
@@ -387,6 +388,13 @@ export namespace Places {
 	export interface PlacesStats {
 		categories: SumStatistic[];
 		tags: SumStatistic[];
+	}
+
+	export interface PlaceAutoTranslation {
+		translation: {
+			description: string | null
+		};
+		provider?: string;
 	}
 }
 

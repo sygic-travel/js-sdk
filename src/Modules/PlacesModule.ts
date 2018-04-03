@@ -7,6 +7,7 @@ import {
 	detectParentsByLocation,
 	getDetailedPlace,
 	getDetailedPlaces,
+	getPlaceAutoTranslation,
 	getPlaceGeometry,
 	getPlaceMedia,
 	getPlaceOpeningHours,
@@ -26,6 +27,7 @@ import {
 	PlacesStatsFilterJSON,
 	voteOnReview
 } from '../Places';
+import { PlaceAutoTranslation } from '../Places/PlaceAutoTranslation';
 import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from '../Spread';
 import {
 	CategoriesCoefficients,
@@ -113,5 +115,9 @@ export default class PlacesModule {
 
 	public getPlacesDestinationMap(placeIds: string[], imageSize: string): Promise<Map<string, Place>> {
 		return getPlacesDestinationMap(placeIds, imageSize);
+	}
+
+	public getPlaceAutoTranslation(placeId: string): Promise<PlaceAutoTranslation> {
+		return getPlaceAutoTranslation(placeId);
 	}
 }

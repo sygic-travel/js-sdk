@@ -4,6 +4,7 @@ import { Day, Trip } from '../Trip/';
 import * as Dao from './DataAccess';
 import { PlacesListFilterJSON, PlacesQuery } from './ListFilter';
 import { Category, CustomPlaceFormData, DetailedPlace, hasTag, isStickyByDefault, Level, Place } from './Place';
+import { PlaceAutoTranslation } from './PlaceAutoTranslation';
 import { Description, Detail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
 import { DayOpeningHours, PlaceOpeningHours } from './PlaceOpeningHours';
@@ -189,4 +190,8 @@ export function mergePlacesArrays(places1: Place[], places2: Place[]): Place[] {
 		},
 		places1
 	);
+}
+
+export function getPlaceAutoTranslation(placeId: string): Promise<PlaceAutoTranslation> {
+	return Dao.getPlaceAutoTranslation(placeId);
 }
