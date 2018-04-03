@@ -273,3 +273,13 @@ async function getClientSession(): Promise<Session> {
 	await sessionCache.set(CLIENT_SESSION_KEY, clientSession);
 	return clientSession;
 }
+
+export async function unsubscribeEmail(hash?: string): Promise<StApi.CommonResponseCode> {
+	const response: ApiResponse = await StApi.delete_('email-subscription', hash ? {hash} : null);
+
+	switch (response.statusCode) {
+		case 200: return StApi.CommonResponseCode.OK;
+		case 404: return StApi.CommonResponseCode.NOT_FOUND;
+		default: return StApi.CommonResponseCode.ERROR;
+	}
+}

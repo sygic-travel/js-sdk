@@ -18,6 +18,7 @@ import {
 	mapPlaceReviewsData
 } from './Mapper';
 import { CustomPlaceFormData, DetailedPlace, Place } from './Place';
+import { PlaceAutoTranslation } from './PlaceAutoTranslation';
 import { PlaceGeometry } from './PlaceGeometry';
 import { PlaceOpeningHours } from './PlaceOpeningHours';
 import { PlaceReview } from './PlaceReview';
@@ -277,4 +278,16 @@ async function getPlacesWithMapSpread(filter: PlacesQuery): Promise<ApiResponse>
 		return 1;
 	});
 	return finalResponse;
+}
+
+export async function getPlaceAutoTranslation(placeId: string): Promise<PlaceAutoTranslation> {
+	const apiResponse = await StApi.get(`places/${placeId}/auto-translation`);
+	if (!apiResponse.data.hasOwnProperty('translation') || !apiResponse.data.hasOwnProperty('provider')) {
+		throw new Error('Wrong API response');
+	}
+
+	return {
+		translation: apiResponse.data.translation,
+		provider: apiResponse.data.provider
+	} as PlaceAutoTranslation;
 }

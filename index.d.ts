@@ -90,6 +90,7 @@ declare class PlacesModule {
 		categoriesCoefficients?: SpreadV2.CategoriesCoefficients | null,
 		useLocalRating?: boolean
 	): SpreadV2.SpreadResult;
+	public getPlaceAutoTranslation(placeId: string): Promise<Places.PlaceAutoTranslation>;
 }
 
 declare class RoutesModule {
@@ -164,10 +165,12 @@ declare class SessionModule {
 	): Promise<Sessions.AuthenticationResponseCode>;
 	public getUserInfo(): Promise<Sessions.UserInfo>;
 	public resetPassword(email: string): Promise<Sessions.ResetPasswordResponseCode>;
+	public unsubscribeEmail(hash?: string): Promise<void>;
 }
 
 declare class UtilityModule {
 	public locationToMapTileKey(location: Geo.Location, zoom: number): string;
+	public getExchangeRates(): Promise<Utility.ExchangeRate[]>;
 }
 
 export class StSDK {
@@ -385,6 +388,13 @@ export namespace Places {
 	export interface PlacesStats {
 		categories: SumStatistic[];
 		tags: SumStatistic[];
+	}
+
+	export interface PlaceAutoTranslation {
+		translation: {
+			description: string | null
+		};
+		provider?: string;
 	}
 }
 
@@ -1122,5 +1132,12 @@ export namespace Pdf {
 		generatingId: string;
 		state: 'generating' | 'done' | 'not_found' | 'timeout';
 		url: string | null;
+	}
+}
+
+export namespace Utility {
+	export interface ExchangeRate {
+		code: string;
+		rate: number;
 	}
 }
