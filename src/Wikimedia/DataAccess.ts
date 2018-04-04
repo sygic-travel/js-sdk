@@ -3,6 +3,7 @@ import { stringify } from 'query-string';
 
 import { ApiResponse, StApi } from '../Api';
 import { Location } from '../Geo';
+import { Medium } from '../Media';
 import { WikimediaResult } from './Wikimedia';
 
 const WIKIMEDIA_COMMON_DOMAIN = 'commons.wikimedia.org';
@@ -29,6 +30,19 @@ export async function getByLocation(location: Location): Promise<WikimediaResult
 	apiQuery.domain = WIKIMEDIA_WIKPEDIA_DOMAIN;
 	const wikiResponse: Promise<ApiResponse> = StApi.get('wikimedia/search-by-location/?' + stringify(apiQuery));
 	return processApiResponses(await Promise.all([wikiCommonResponse, wikiResponse]));
+}
+
+export async function acquire(placeId: string, wikimediaId: string, domain: string): Promise<Medium> {
+	const apiData: any = {
+		place_id: placeId,
+		wikimedia_id: wikimediaId,
+		domain
+	};
+	const response: ApiResponse = await StApi.post('wikimedia/acquire', apiData);
+	if (!response.data.hasOwnProperty('medium')) {
+		throw new Error('Wrong API response');
+	}
+	return camelizeKeys(response.data.medium) as Medium;
 }
 
 function processApiResponses(responses: ApiResponse[]): WikimediaResult[] {

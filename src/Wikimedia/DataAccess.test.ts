@@ -4,6 +4,9 @@ import { cloneDeep } from '../Util';
 
 import { WikimediaResult } from '.';
 import { ApiResponse, StApi } from '../Api';
+import { Medium } from '../Media';
+import * as PlacApiData from '../TestData/PlacesApiResponses';
+import * as PlaceResults from '../TestData/PlacesExpectedResults';
 import * as TestApiData from '../TestData/WikimediaApiResponses';
 import * as TestResults from '../TestData/WikimediaExpectedResults';
 import * as Dao from './DataAccess';
@@ -75,6 +78,26 @@ describe('WikimediaDataAccess', () => {
 				.to.equal('wikimedia/search-by-location/?domain=en.wikipedia.org&location=1%2C2');
 			chai.expect(results[0]).to.deep.equal(TestResults.wikimedia);
 			chai.expect(results.length).to.equal(1);
+		});
+	});
+
+	describe('#acquire', () => {
+		it('should correctly call api and map result', async () => {
+			const apiResponse: any = {
+				medium: cloneDeep(PlacApiData.placeDetailMedia.media[0])
+			};
+			const apiStub = sandbox.stub(StApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, cloneDeep(apiResponse)));
+			}));
+
+			const result: Medium = await Dao.acquire('poi:530', 'test.id', 'test.domain');
+			chai.expect(apiStub.getCall(0).args[0])
+				.to.equal('wikimedia/acquire');
+			chai.expect(apiStub.getCall(0).args[1].domain).to.equal('test.domain');
+			chai.expect(apiStub.getCall(0).args[1].place_id).to.equal('poi:530');
+			chai.expect(apiStub.getCall(0).args[1].wikimedia_id).to.equal('test.id');
+			chai.expect(result.id).to.deep.equal(PlaceResults.mappedMedia.square!.id);
+			chai.expect(result.urlTemplate).to.deep.equal(PlaceResults.mappedMedia.square!.urlTemplate);
 		});
 	});
 });

@@ -174,6 +174,7 @@ declare class UtilityModule {
 }
 
 declare class WikimediaModule {
+	public acquire(placeId: string, wikimediaId: string, domain: string): Promise<Media.Medium>;
 	public getByLocation(location: Geo.Location): Promise<Wikimedia.WikimediaResult[]>;
 	public getByQuery(query: string): Promise<Wikimedia.WikimediaResult[]>;
 }
@@ -1156,6 +1157,7 @@ export namespace Wikimedia {
 		original: WikimediaPhoto;
 		thumbnail: WikimediaPhoto;
 		attribution: Media.Attribution;
+		searchDomain: string;
 	}
 
 	export interface WikimediaPhoto {

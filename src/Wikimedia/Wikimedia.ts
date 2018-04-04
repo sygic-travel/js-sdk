@@ -8,6 +8,7 @@ export interface WikimediaResult {
 	original: WikimediaPhoto;
 	thumbnail: WikimediaPhoto;
 	attribution: Attribution;
+	searchDomain: string;
 }
 
 export interface WikimediaPhoto {
