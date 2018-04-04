@@ -17,6 +17,7 @@ import SessionModule from './Modules/SessionModule';
 import ToursModule from './Modules/ToursModule';
 import TripModule from './Modules/TripModule';
 import UtilityModule from './Modules/UtilityModule';
+import WikimediaModule from './Modules/WikimediaModule';
 
 export default class StSDK extends BaseSDK {
 	public changes: ChangesModule = new ChangesModule();
@@ -36,4 +37,5 @@ export default class StSDK extends BaseSDK {
 	public tours: ToursModule = new ToursModule();
 	public trip: TripModule = new TripModule();
 	public utility: UtilityModule = new UtilityModule();
+	public wikimedia: WikimediaModule = new WikimediaModule();
 }
