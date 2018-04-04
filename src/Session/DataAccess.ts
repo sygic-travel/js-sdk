@@ -275,7 +275,7 @@ async function getClientSession(): Promise<Session> {
 }
 
 export async function unsubscribeEmail(hash?: string): Promise<StApi.CommonResponseCode> {
-	const response: ApiResponse = await StApi.delete_('email-subscription', hash ? {hash} : null);
+	const response: ApiResponse = await StApi.delete_('user/email-subscription', hash ? {hash} : null);
 
 	switch (response.statusCode) {
 		case 200: return StApi.CommonResponseCode.OK;
