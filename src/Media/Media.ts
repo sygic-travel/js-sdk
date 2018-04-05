@@ -48,3 +48,9 @@ export interface Original {
 	width: number | null;
 	height: number | null;
 }
+
+export interface UploadMetadata {
+	type: Type;
+	url: string | null;
+	attribution: Attribution;
+}
