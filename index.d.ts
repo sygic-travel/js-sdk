@@ -56,6 +56,15 @@ declare class HotelsModule {
 	public getHotels(filter: Hotels.HotelsFilterJSON): Promise<Hotels.AvailableHotels>;
 }
 
+declare class MediaModule {
+	public uploadMedia(
+		placeId: string,
+		imageData: string,
+		mimeType: string,
+		metadata: Media.UploadMetadata
+	): Promise<Media.Medium>;
+}
+
 declare class PdfModule {
 	public getPdfData(query: Pdf.PdfQuery): Promise<Pdf.PdfData>;
 	public generatePdf(tripId: string): Promise<Pdf.GeneratingState>;
@@ -187,6 +196,7 @@ export class StSDK {
 	public favorites: FavoritesModule;
 	public forecast: HotelsModule;
 	public hotels: HotelsModule;
+	public media: MediaModule;
 	public places: PlacesModule;
 	public routes: RoutesModule;
 	public search: SearchModule;
@@ -509,6 +519,12 @@ export namespace Media {
 		size: number | null;
 		width: number | null;
 		height: number | null;
+	}
+
+	export interface UploadMetadata {
+		type: Type;
+		url: string | null;
+		attribution: Attribution;
 	}
 }
 

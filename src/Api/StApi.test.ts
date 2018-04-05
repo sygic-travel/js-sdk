@@ -4,7 +4,7 @@ import * as moxios from 'moxios';
 import { setSession } from '../Session';
 import { setEnvironment } from '../Settings';
 import { getFreshSession } from '../TestData/UserInfoExpectedResults';
-import { axiosInstance, get, post, put, setInvalidSessionHandler } from './StApi';
+import { axiosInstance, get, post, postMultipartJsonImage, put, setInvalidSessionHandler } from './StApi';
 
 const testSession = getFreshSession();
 const testApiURL = 'https://test.api';
@@ -184,6 +184,29 @@ describe('StApi', () => {
 					done();
 				}, 5);
 			});
+		});
+	});
+
+	describe('#postMultipartJsonImage', () => {
+		it('should set proper content header', (done) => {
+			postMultipartJsonImage('/', {}, 'image/jpeg', 'abc');
+			moxios.wait(() => {
+				const request = moxios.requests.mostRecent();
+				chai.expect(request.config.headers['Content-Type']).to.equal('multipart/form-data; boundary=BOUNDARY');
+				done();
+			}, 5);
+		});
+		it('should send data properly', (done) => {
+			postMultipartJsonImage('/', {type: 'photo'}, 'image/jpeg', 'abc');
+			moxios.wait(() => {
+				const request = moxios.requests.mostRecent();
+				const expectedBody = '--BOUNDARY\nContent-Disposition: form-data; name="data"\n' +
+					'Content-Type: application/json\n\n{"type":"photo"}\n--BOUNDARY\n' +
+					'Content-Disposition: form-data; name="image"; filename="image.jpg"\n' +
+					'Content-Type: image/jpeg\n\nabc\n--BOUNDARY--'
+				chai.expect(request.config.data).to.equal(expectedBody);
+				done();
+			}, 5);
 		});
 	});
 });

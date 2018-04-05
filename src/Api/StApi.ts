@@ -42,6 +42,33 @@ export async function post(url: string, requestData): Promise<ApiResponse> {
 	}
 }
 
+export async function postMultipartJsonImage(
+	url: string,
+	jsonData,
+	imageMimeType: string,
+	imageData: string
+): Promise<ApiResponse> {
+	try {
+		let data: string = '--BOUNDARY\n';
+		data += 'Content-Disposition: form-data; name="data"\n';
+		data += 'Content-Type: application/json\n\n';
+		data += JSON.stringify(jsonData);
+		data += '\n--BOUNDARY\n';
+		data += 'Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\n';
+		data += 'Content-Type: ' + imageMimeType + '\n\n';
+		data += imageData;
+		data += '\n--BOUNDARY--';
+
+		const config: AxiosRequestConfig = await buildRequestConfig(url);
+		config.headers['Content-Type'] = 'multipart/form-data; boundary=BOUNDARY';
+
+		const response = await axiosInstance.post(url, data, config);
+		return buildApiResponse(response);
+	} catch (e) {
+		throw handleError(e);
+	}
+}
+
 export async function delete_(url: string, requestData?): Promise<ApiResponse> {
 	try {
 		const response = await axiosInstance.delete(url, await buildRequestConfig(url, requestData));
