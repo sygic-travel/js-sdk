@@ -173,6 +173,12 @@ declare class UtilityModule {
 	public getExchangeRates(): Promise<Utility.ExchangeRate[]>;
 }
 
+declare class WikimediaModule {
+	public acquire(placeId: string, wikimediaId: string, domain: string): Promise<Media.Medium>;
+	public getByLocation(location: Geo.Location): Promise<Wikimedia.WikimediaResult[]>;
+	public getByQuery(query: string): Promise<Wikimedia.WikimediaResult[]>;
+}
+
 export class StSDK {
 	public changes: ChangesModule;
 	public collaboration: CollaborationModule;
@@ -188,6 +194,7 @@ export class StSDK {
 	public trip: TripModule;
 	public session: SessionModule;
 	public utility: UtilityModule;
+	public wikimedia: WikimediaModule;
 }
 
 export namespace Places {
@@ -1139,5 +1146,24 @@ export namespace Utility {
 	export interface ExchangeRate {
 		code: string;
 		rate: number;
+	}
+}
+
+export namespace Wikimedia {
+	export interface WikimediaResult {
+		id: string;
+		createdAt: string;
+		location: Geo.Location | null;
+		original: WikimediaPhoto;
+		thumbnail: WikimediaPhoto;
+		attribution: Media.Attribution;
+		searchDomain: string;
+	}
+
+	export interface WikimediaPhoto {
+		url: string;
+		width: number;
+		height: number;
+		size: number | null;
 	}
 }
