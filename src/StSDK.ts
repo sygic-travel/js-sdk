@@ -1,4 +1,5 @@
 import { BaseSDK } from './BaseSDK';
+import AlertsModule from './Modules/AlertsModule';
 
 import ChangesModule from './Modules/ChangesModule';
 import CollaborationModule from './Modules/CollaborationModule';
@@ -21,6 +22,7 @@ import UtilityModule from './Modules/UtilityModule';
 import WikimediaModule from './Modules/WikimediaModule';
 
 export default class StSDK extends BaseSDK {
+	public alerts: AlertsModule = new AlertsModule();
 	public changes: ChangesModule = new ChangesModule();
 	public collaboration: CollaborationModule = new CollaborationModule();
 	public collections: CollectionsModule = new CollectionsModule();
