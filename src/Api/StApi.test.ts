@@ -59,6 +59,17 @@ describe('StApi', () => {
 			});
 		});
 
+		it('should not set token for some special endpoints', (done) => {
+			setSession(testSession).then(() => {
+				get('/places');
+				moxios.wait(() => {
+					const request = moxios.requests.mostRecent();
+					chai.expect(request.headers['Authorization']).to.equal(undefined);
+					done();
+				}, 5);
+			});
+		});
+
 		it('should correctly call external session callback for invalid session error', (done) => {
 			let callcount = 0;
 			setInvalidSessionHandler(() => {

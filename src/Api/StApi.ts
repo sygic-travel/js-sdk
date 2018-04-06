@@ -11,6 +11,27 @@ export enum CommonResponseCode {
 	ERROR
 }
 
+const enum HttpMethod {
+	GET,
+	POST,
+	PUT,
+	DELETE,
+}
+
+const authorizationFreeEndpoints: any = {};
+authorizationFreeEndpoints[HttpMethod.GET] = [
+	'places',
+	'directions',
+	'tours',
+	'hotels',
+	'search',
+	'geoip',
+	'reviews',
+	'translations',
+	'exchange-rates',
+	'tags'
+];
+
 axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
 	if (!config.baseURL) {
 		throw new Error('API Url not set');
@@ -26,7 +47,7 @@ export function setInvalidSessionHandler(handler: () => any): void {
 
 export async function get(url: string): Promise<ApiResponse> {
 	try {
-		const response = await axiosInstance.get(url, await buildRequestConfig(url));
+		const response = await axiosInstance.get(url, await buildRequestConfig(url, HttpMethod.GET));
 		return buildApiResponse(response);
 	} catch (e) {
 		throw handleError(e);
@@ -35,7 +56,7 @@ export async function get(url: string): Promise<ApiResponse> {
 
 export async function post(url: string, requestData): Promise<ApiResponse> {
 	try {
-		const response = await axiosInstance.post(url, requestData, await buildRequestConfig(url));
+		const response = await axiosInstance.post(url, requestData, await buildRequestConfig(url,  HttpMethod.POST));
 		return buildApiResponse(response);
 	} catch (e) {
 		throw handleError(e);
@@ -59,7 +80,7 @@ export async function postMultipartJsonImage(
 		data += imageData;
 		data += '\n--BOUNDARY--';
 
-		const config: AxiosRequestConfig = await buildRequestConfig(url);
+		const config: AxiosRequestConfig = await buildRequestConfig(url, HttpMethod.POST);
 		config.headers['Content-Type'] = 'multipart/form-data; boundary=BOUNDARY';
 
 		const response = await axiosInstance.post(url, data, config);
@@ -71,7 +92,7 @@ export async function postMultipartJsonImage(
 
 export async function delete_(url: string, requestData?): Promise<ApiResponse> {
 	try {
-		const response = await axiosInstance.delete(url, await buildRequestConfig(url, requestData));
+		const response = await axiosInstance.delete(url, await buildRequestConfig(url, HttpMethod.DELETE, requestData));
 		return buildApiResponse(response);
 	} catch (e) {
 		throw handleError(e);
@@ -80,23 +101,23 @@ export async function delete_(url: string, requestData?): Promise<ApiResponse> {
 
 export async function put(url: string, requestData): Promise<ApiResponse> {
 	try {
-		const response = await axiosInstance.put(url, requestData, await buildRequestConfig(url));
+		const response = await axiosInstance.put(url, requestData, await buildRequestConfig(url, HttpMethod.PUT));
 		return buildApiResponse(response);
 	} catch (e) {
 		throw handleError(e);
 	}
 }
 
-async function buildRequestConfig(url: string, requestData?: any): Promise<AxiosRequestConfig> {
+async function buildRequestConfig(url: string, method: HttpMethod, requestData?: any): Promise<AxiosRequestConfig> {
 	let baseUrl = getStApiUrl();
 
-	if (url.indexOf('places/list') === -1) {
+	if (url.indexOf('places') === -1 || method !== HttpMethod.GET) {
 		baseUrl = baseUrl.replace('api-cdn', 'api');
 	}
 
 	const requestConfig: AxiosRequestConfig = {
 		baseURL: baseUrl,
-		headers: await buildHeaders()
+		headers: await buildHeaders(url, method)
 	};
 
 	if (requestData) {
@@ -105,8 +126,7 @@ async function buildRequestConfig(url: string, requestData?: any): Promise<Axios
 	return requestConfig;
 }
 
-async function buildHeaders(): Promise<any> {
-	const userSession = await getSession();
+async function buildHeaders(url: string, method: HttpMethod): Promise<any> {
 	const headers = {};
 
 	const clientKey = getIntegratorKey();
@@ -115,6 +135,13 @@ async function buildHeaders(): Promise<any> {
 		headers['x-api-key'] = clientKey;
 	}
 
+	if (authorizationFreeEndpoints[method] &&
+		authorizationFreeEndpoints[method].find((slug: string) => url.includes(slug))
+	) {
+		return headers;
+	}
+
+	const userSession = await getSession();
 	if (userSession) {
 		headers['Authorization'] = 'Bearer ' + userSession.accessToken;
 	}
