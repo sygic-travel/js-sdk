@@ -1,7 +1,6 @@
 import { ChangeNotification } from '../Changes';
 import { DESTINATION_BREAK_LEVELS, getDetailedPlaces, Place } from '../Places';
 import { getUserSettings, UserSettings } from '../Session';
-import { addDaysToDate } from '../Util/index';
 import * as Dao from './DataAccess';
 import * as TripManipulator from './Manipulator';
 import { mapTripCreateRequest, putPlacesToTrip } from './Mapper';
@@ -102,10 +101,10 @@ export function getTripEditor(): TripEditor {
 		setTransport: TripManipulator.setTransport,
 		updatePlaceUserData: TripManipulator.updateItineraryItemUserData,
 		updateDayNote: TripManipulator.updateDayNote,
+		setStartDate: TripManipulator.setStartDate,
 		smartAddPlaceToDay: addPlaceToDay,
 		smartAddSequenceToDay: addSequenceToDay,
-		createTrip,
-		setStartDate
+		createTrip
 	} as TripEditor;
 }
 
@@ -225,10 +224,4 @@ async function populateTripWithPlaces(trip: Trip): Promise<Trip> {
 
 async function createTrip(startDate: string, name: string, daysCount: number, placeId?: string): Promise<Trip> {
 	return Dao.createTrip(mapTripCreateRequest(startDate, name, daysCount, placeId));
-}
-
-function setStartDate(trip: Trip, startsOn: string): Trip {
-	trip.startsOn = startsOn;
-	trip.endsOn = addDaysToDate(startsOn, trip.days ? trip.days.length - 1 : 0);
-	return trip;
 }

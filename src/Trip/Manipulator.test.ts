@@ -655,4 +655,16 @@ describe('TripManipulator', () => {
 			chai.expect(day2.itinerary[0].placeId).to.be.equal('poi:3');
 		});
 	});
+
+	describe('#setStartDate', () => {
+		it('should corectly set date and alter end date and days dates', async () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const resultTrip: Trip = Manipulator.setStartDate(inputTrip, '2018-10-11');
+			chai.expect(resultTrip.startsOn).to.be.equal('2018-10-11');
+			chai.expect(resultTrip.endsOn).to.be.equal('2018-10-13');
+			chai.expect(resultTrip.days[0].date).to.be.equal('2018-10-11');
+			chai.expect(resultTrip.days[1].date).to.be.equal('2018-10-12');
+			chai.expect(resultTrip.days[2].date).to.be.equal('2018-10-13');
+		});
+	});
 });

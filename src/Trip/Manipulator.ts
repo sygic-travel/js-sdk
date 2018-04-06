@@ -358,3 +358,11 @@ export function removePlaceFromDaysByPlaceId(
 	});
 	return resultTrip;
 }
+
+export function setStartDate(trip: Trip, startsOn: string): Trip {
+	const resultTrip: Trip = cloneDeep(trip);
+	resultTrip.startsOn = startsOn;
+	resultTrip.endsOn = addDaysToDate(startsOn, trip.days ? trip.days.length - 1 : 0);
+	resultTrip.days = decorateDaysWithDate(resultTrip.startsOn, resultTrip.days);
+	return resultTrip;
+}
