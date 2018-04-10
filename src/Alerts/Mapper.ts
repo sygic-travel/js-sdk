@@ -7,6 +7,7 @@ export const mapAlertsApiResponseToAlerts = (alerts: any[]): Alert[] => alerts.m
 	severity: alert.severity,
 	affectedArea: alert.affected_area as GeoJSON.GeoJsonObject,
 	perex: alert.perex,
+	name: alert.name,
 	state: alert.state,
 	origin: alert.origin,
 	provider: alert.provider,

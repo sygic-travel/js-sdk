@@ -5,6 +5,7 @@ export interface Alert {
 	type: Type;
 	severity: Severity;
 	affectedArea: GeoJSON.GeoJsonObject;
+	name: string;
 	state: State;
 	validFrom: string;
 	validTo: string;
