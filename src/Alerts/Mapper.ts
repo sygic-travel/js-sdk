@@ -13,5 +13,6 @@ export const mapAlertsApiResponseToAlerts = (alerts: any[]): Alert[] => alerts.m
 	provider: alert.provider,
 	providerUrl: alert.provider_url,
 	validFrom: alert.valid_from,
-	validTo: alert.valid_to
+	validTo: alert.valid_to,
+	updatedAt: alert.updated_at
 } as Alert));

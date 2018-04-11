@@ -226,6 +226,7 @@ export namespace Alerts {
 		origin: string;
 		provider: string;
 		providerUrl: string;
+		updatedAt: string;
 	}
 
 	export enum Type {
