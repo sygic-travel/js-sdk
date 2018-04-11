@@ -12,6 +12,7 @@ export interface Alert {
 	origin: string;
 	provider: string;
 	providerUrl: string;
+	updatedAt: string;
 }
 
 export enum Type {
