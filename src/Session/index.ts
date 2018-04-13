@@ -29,18 +29,7 @@ export {
 };
 
 export async function getSession(): Promise<Session | null> {
-	let session: Session | null = await Dao.getUserSession();
-	const now = new Date();
-	if (session && session.refreshToken &&
-		(now.getTime() > session.suggestedRefreshTimestamp || !session.suggestedRefreshTimestamp)
-	) {
-		const authResponse: AuthResponse = await Dao.getSessionWithRefreshToken(session.refreshToken);
-		if (authResponse.code === AuthenticationResponseCode.OK) {
-			setSession(authResponse.session);
-			session = authResponse.session;
-		}
-	}
-	return session;
+	return Dao.getUserSession();
 }
 
 export async function getUserSettings(): Promise<UserSettings> {

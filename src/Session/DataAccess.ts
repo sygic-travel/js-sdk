@@ -27,7 +27,7 @@ export async function getUserSettings(): Promise<UserSettings> {
 }
 
 export async function getUserSession(): Promise<Session | null> {
-	return sessionCache.get(USER_SESSION_KEY);
+	return getFreshSessionFromCache(USER_SESSION_KEY);
 }
 
 export async function setUserSession(session: Session | null): Promise<void> {
@@ -262,8 +262,8 @@ async function getUserSettingsFromApi(): Promise<object> {
 }
 
 async function getClientSession(): Promise<Session> {
-	let clientSession: Session = await sessionCache.get(CLIENT_SESSION_KEY);
-	if (!clientSession) {
+	let clientSession: Session | null = await getFreshSessionFromCache(CLIENT_SESSION_KEY);
+	if (clientSession === null) {
 		const authResult: AuthResponse = await authOnSso({grant_type: 'client_credentials'});
 		if (!authResult.session) {
 			throw new Error('Unable to login client. Please check ssoClientId in settings.');
@@ -282,4 +282,22 @@ export async function unsubscribeEmail(hash?: string): Promise<StApi.CommonRespo
 		case 404: return StApi.CommonResponseCode.NOT_FOUND;
 		default: return StApi.CommonResponseCode.ERROR;
 	}
+}
+
+async function getFreshSessionFromCache(cacheKey: string): Promise<Session | null> {
+	let session: Session | null = await sessionCache.get(cacheKey);
+	if (session === null) {
+		return null;
+	}
+	const now = new Date();
+	if (session.refreshToken &&
+		(now.getTime() > session.suggestedRefreshTimestamp || !session.suggestedRefreshTimestamp)
+	) {
+		const authResponse: AuthResponse = await getSessionWithRefreshToken(session.refreshToken);
+		if (authResponse.code === AuthenticationResponseCode.OK) {
+			session = authResponse.session;
+			sessionCache.set(cacheKey, session);
+		}
+	}
+	return session;
 }

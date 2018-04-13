@@ -3,13 +3,14 @@ import * as chaiAsPromised from 'chai-as-promised';
 import * as dirtyChai from 'dirty-chai';
 import { assert, sandbox as sinonSandbox, SinonFakeTimers, SinonSandbox, SinonStub } from 'sinon';
 
-import { AuthResponse, RegistrationResponseCode, ResetPasswordResponseCode, UserInfo, UserSettings } from '.';
+import { AuthResponse, RegistrationResponseCode, ResetPasswordResponseCode, Session, UserInfo, UserSettings } from '.';
 import { ApiResponse, SsoApi, StApi } from '../Api';
 import { sessionCache, userCache } from '../Cache';
 import { setEnvironment } from '../Settings';
 import { tokenData } from '../TestData/SsoApiResponses';
 import { userInfo as userInfoApiResponse } from '../TestData/UserInfoApiResponse';
 import { session as testSession, userInfo as userInfoResult } from '../TestData/UserInfoExpectedResults';
+import { cloneDeep } from '../Util';
 import * as Dao from './DataAccess';
 import { ThirdPartyAuthType } from './User';
 
@@ -427,6 +428,48 @@ describe('UserDataAccess', () => {
 			chai.expect(apiStub.getCall(0).args[0]).to.equal('users');
 			chai.expect(apiStub.getCall(0).args[1]['id']).to.equal('xxx');
 			chai.expect(apiStub.getCall(0).args[1]['hash']).to.equal('12345');
+		});
+	});
+
+	describe('#getUserSession', () => {
+		it('should should call refresh token when session is near expiration', async () => {
+			await sessionCache.set('user_session', testSession);
+			const refreshedSession: Session = cloneDeep(testSession);
+			refreshedSession.suggestedRefreshTimestamp = 12500000;
+			refreshedSession.expirationTimestamp = 13000000;
+			const stub: SinonStub = sandbox.stub(SsoApi, 'post').returns(
+				new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(200, {
+						access_token: refreshedSession.accessToken,
+						refresh_token: refreshedSession.refreshToken,
+						expires_in: 1000,
+					}));
+				}));
+			clock.tick(2000000);
+			const session: Session | null = await Dao.getUserSession();
+			chai.expect(session).deep.equal(refreshedSession);
+			chai.expect(stub.callCount).equal(1);
+
+		});
+
+		it('should should not call refresh token when session is fresh', async () => {
+			await sessionCache.set('user_session', testSession);
+			const stub: SinonStub = sandbox.stub(SsoApi, 'post');
+			clock.tick(1000000);
+			const session: Session | null = await Dao.getUserSession();
+			chai.expect(session).deep.equal(testSession);
+			chai.expect(stub.callCount).equal(0);
+		});
+
+		it('should should not call refresh token when session is incomplete', async () => {
+			const incompleteSession = cloneDeep(testSession);
+			incompleteSession.refreshToken = '';
+			await sessionCache.set('user_session', incompleteSession);
+			const stub: SinonStub = sandbox.stub(SsoApi, 'post');
+			clock.tick(3000000);
+			const session: Session | null = await Dao.getUserSession();
+			chai.expect(session).deep.equal(incompleteSession);
+			chai.expect(stub.callCount).equal(0);
 		});
 	});
 });
