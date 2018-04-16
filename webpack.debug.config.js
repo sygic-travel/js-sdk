@@ -2,7 +2,7 @@ var webpack = require('webpack');
 
 var baseConfig = {
 	entry: {
-		sdk: './src/sdk.ts'
+		sdk: './src/StSDK.ts'
 	},
 	target: 'web',
 	output: {
