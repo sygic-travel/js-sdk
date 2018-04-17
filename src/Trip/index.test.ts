@@ -305,4 +305,69 @@ describe('TripController', () => {
 			chai.expect(resultTrip.days && resultTrip.days[2].itinerary[2].placeId).to.equal('poi:100');
 		});
 	});
+
+	describe('#addSequenceToDay', () => {
+		it('should correctly duplicate the both side sticky place and set userData', async () => {
+
+			const stickyPlace: PlaceController.Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			stickyPlace.id = 'poi:1';
+
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			if (!inputTrip.days) {
+				throw new Error('Wrong trip data.');
+			}
+			const stickyItineraryItem1: ItineraryItem = {
+				place: stickyPlace,
+				placeId: stickyPlace.id,
+				startTime: null,
+				duration: null,
+				note: null,
+				isSticky: true,
+				isStickyFirstInDay: false,
+				isStickyLastInDay: true,
+				transportFromPrevious: null
+			};
+
+			const stickyItineraryItem2: ItineraryItem = cloneDeep(stickyItineraryItem1);
+			stickyItineraryItem2.isStickyFirstInDay = true;
+			stickyItineraryItem2.isStickyLastInDay = true;
+
+			const stickyItineraryItem3: ItineraryItem = cloneDeep(stickyItineraryItem1);
+			stickyItineraryItem2.isStickyFirstInDay = true;
+			stickyItineraryItem3.isStickyLastInDay = false;
+
+			// Place in second day is sticky from both sides
+			inputTrip.days[0].itinerary = [cloneDeep(stickyItineraryItem1)];
+			inputTrip.days[1].itinerary = [cloneDeep(stickyItineraryItem2)];
+			inputTrip.days[2].itinerary = [cloneDeep(stickyItineraryItem3)];
+
+			const getPlacesStub = sandbox.stub(PlaceController, 'getDetailedPlaces');
+			getPlacesStub.returns(new Promise<PlaceController.Place[]>((resolve) => {resolve([]); }));
+
+			// Place to add
+			const placeToAdd: PlaceController.Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			placeToAdd.id = 'poi:2';
+			getPlacesStub.withArgs(['poi:2']).returns(
+				new Promise<(PlaceController.Place | null)[]>((resolve) => { resolve([placeToAdd]); })
+			);
+
+			const resultTrip: Trip = await TripController.getTripEditor().smartAddSequenceToDay(
+				inputTrip,
+				1,
+				['poi:2'],
+				[null],
+				[{ note: 'testNote', duration: 2000, startTime: 3000 }]
+			);
+			chai.expect(resultTrip.days && resultTrip.days.length).to.equal(3);
+			chai.expect(resultTrip.days && resultTrip.days[0].itinerary.length).to.equal(1);
+			chai.expect(resultTrip.days && resultTrip.days[1].itinerary.length).to.equal(3);
+			chai.expect(resultTrip.days && resultTrip.days[1].itinerary[0].placeId).to.equal('poi:1');
+			chai.expect(resultTrip.days && resultTrip.days[1].itinerary[1].placeId).to.equal('poi:2');
+			chai.expect(resultTrip.days && resultTrip.days[1].itinerary[1].note).to.equal('testNote');
+			chai.expect(resultTrip.days && resultTrip.days[1].itinerary[1].startTime).to.equal(3000);
+			chai.expect(resultTrip.days && resultTrip.days[1].itinerary[1].duration).to.equal(2000);
+			chai.expect(resultTrip.days && resultTrip.days[1].itinerary[2].placeId).to.equal('poi:1');
+			chai.expect(resultTrip.days && resultTrip.days[2].itinerary.length).to.equal(1);
+		});
+	});
 });
