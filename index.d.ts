@@ -773,7 +773,8 @@ export namespace Trips {
 			trip: Trip,
 			dayIndex: number,
 			placeIds: string[],
-			transports?: (TransportSettings | null)[],
+			transports?: (TransportSettings | null)[] | null,
+			itemsUserData?: (ItineraryItemUserData | null)[] | null,
 			positionInDay?: number // If not passed automatic algorithm is used
 		): Promise<Trip>;
 		createTrip(startDate: string, name: string, daysCount: number, placeId?: string): Promise<Trip>;
@@ -790,7 +791,12 @@ export namespace Trips {
 		isStickyFirstInDay: boolean | null; // https://confluence.sygic.com/display/STV/Sticky+Places+in+Itinerary
 		isStickyLastInDay: boolean | null; // https://confluence.sygic.com/display/STV/Sticky+Places+in+Itinerary
 		transportFromPrevious: TransportSettings | null;
+	}
 
+	export interface ItineraryItemUserData {
+		startTime: number | null;
+		duration: number | null;
+		note: string | null;
 	}
 
 	export interface TransportSettings {

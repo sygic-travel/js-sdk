@@ -128,7 +128,12 @@ export interface ItineraryItem {
 	isStickyFirstInDay: boolean | null;
 	isStickyLastInDay?: boolean | null;
 	transportFromPrevious: TransportSettings | null;
+}
 
+export interface ItineraryItemUserData {
+	startTime: number | null;
+	duration: number | null;
+	note: string | null;
 }
 
 export interface TransportSettings {
@@ -244,7 +249,8 @@ export interface TripEditor {
 		trip: Trip,
 		dayIndex: number,
 		placeIds: string[],
-		transports?: (TransportSettings | null)[],
+		transports?: (TransportSettings | null)[] | null,
+		itemsUserData?: (ItineraryItemUserData | null)[] | null,
 		positionInDay?: number // If not passed automatic algorithm is used
 	): Promise<Trip>;
 	createTrip(startDate: string, name: string, daysCount: number, placeId?: string): Promise<Trip>;

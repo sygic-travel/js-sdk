@@ -11,6 +11,7 @@ import {
 	isTransportAvoid,
 	isTransportMode,
 	ItineraryItem,
+	ItineraryItemUserData,
 	TransportAvoid,
 	TransportMode,
 	TransportSettings,
@@ -31,6 +32,7 @@ export {
 	Day,
 	Dao,
 	ItineraryItem,
+	ItineraryItemUserData,
 	isTransportAvoid,
 	isTransportMode,
 	TransportAvoid,
@@ -117,14 +119,15 @@ export async function addPlaceToDay(
 	dayIndex: number,
 	positionInDay?: number
 ): Promise<Trip> {
-	return addSequenceToDay(trip, dayIndex, [placeId], [null], positionInDay);
+	return addSequenceToDay(trip, dayIndex, [placeId], [null], [null], positionInDay);
 }
 
 export async function addSequenceToDay(
 	trip: Trip,
 	dayIndex: number,
 	placeIds: string[],
-	transports?: (TransportSettings | null)[],
+	transports?: (TransportSettings | null)[] | null,
+	itemsUserData?: (ItineraryItemUserData | null)[] | null,
 	positionInDay?: number
 ): Promise<Trip> {
 	const initialLoadings = await Promise.all([
@@ -166,6 +169,16 @@ export async function addSequenceToDay(
 		);
 		if (transports && transports[sequenceIndex]) {
 			trip = TripManipulator.setTransport(trip, dayIndex, positionInDay + sequenceIndex, transports[sequenceIndex]);
+		}
+		if (itemsUserData && itemsUserData[sequenceIndex] !== null) {
+			trip = TripManipulator.updateItineraryItemUserData(
+				trip,
+				dayIndex,
+				positionInDay + sequenceIndex,
+				itemsUserData[sequenceIndex]!.startTime,
+				itemsUserData[sequenceIndex]!.duration,
+				itemsUserData[sequenceIndex]!.note,
+			);
 		}
 		sequenceIndex++;
 	}
