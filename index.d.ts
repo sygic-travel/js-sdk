@@ -39,6 +39,7 @@ declare class EventsModule {
 	public setSessionExpiredHandler(handler: () => any): void;
 	public setTripUpdateConflictHandler(handler: (conflictInfo: Trips.TripConflictInfo, trip: Trips.Trip) => any): void;
 	public setSynchronizationHandler(handler: (changes: Changes.ChangeNotification[]) => any): void;
+	public trackUserEvent(event: Events.UserEvent): void;
 }
 
 declare class FavoritesModule {
@@ -1250,5 +1251,36 @@ export namespace Wikimedia {
 		width: number;
 		height: number;
 		size: number | null;
+	}
+}
+
+export namespace Events {
+	export interface UserEvent {
+		version: number;
+		type: UserEventType;
+		category: UserEventCategory;
+		action: UserEventAction;
+		platform: string;
+		appVersion: string;
+		sessionId: string;
+		timestamp: number;
+		label: string[];
+		payload: any;
+	}
+
+	export enum UserEventType {
+		Event = 'event'
+	}
+
+	export enum UserEventCategory {
+		SEARCH = 'search',
+		MAP = 'map',
+		LIST = 'list',
+		DETAIL = 'detail'
+	}
+
+	export enum UserEventAction {
+		OPEN = 'open',
+		CLOSE = 'close'
 	}
 }
