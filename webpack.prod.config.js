@@ -5,7 +5,7 @@ var cloneDeep = require('lodash.clonedeep');
 
 var baseConfig = {
 	entry: {
-		sdk: './src/sdk.ts'
+		sdk: './src/StSDK.ts'
 	},
 	output: {
 		path: __dirname + '/dist',

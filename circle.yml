@@ -1,4 +1,7 @@
 version: 2
+dependencies:
+  pre:
+    - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
 jobs:
   build:
     working_directory: ~/js-sdk
@@ -60,10 +63,8 @@ jobs:
               ~/build-bin/aws/bin/aws s3 sync ./doc s3://docs.sygictravelapi.com/js-sdk/${DEPLOY_TARGET} --delete --acl public-read
             fi
 deployment:
-  # https://discuss.circleci.com/t/build-on-tag/9864/31
-  fake_deploy_for_tags:
-    tag: /v[0-9]+(\.[0-9]+)*(\-[a-z0-9]*)*/
+  npm:
+    tag: /v[0-9]+(\.[0-9]+)*/
     commands:
-      - echo "Hacky launching of build on tag push"
-
+      - npm publish
 

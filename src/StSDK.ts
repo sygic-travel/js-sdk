@@ -1,6 +1,6 @@
 import { BaseSDK } from './BaseSDK';
+import { initalize as initializeEventHandling } from './Events';
 import AlertsModule from './Modules/AlertsModule';
-
 import ChangesModule from './Modules/ChangesModule';
 import CollaborationModule from './Modules/CollaborationModule';
 import CollectionsModule from './Modules/CollectionsModule';
@@ -20,8 +20,9 @@ import ToursModule from './Modules/ToursModule';
 import TripModule from './Modules/TripModule';
 import UtilityModule from './Modules/UtilityModule';
 import WikimediaModule from './Modules/WikimediaModule';
+import { Settings } from './Settings';
 
-export default class StSDK extends BaseSDK {
+class StSDK extends BaseSDK {
 	public alerts: AlertsModule = new AlertsModule();
 	public changes: ChangesModule = new ChangesModule();
 	public collaboration: CollaborationModule = new CollaborationModule();
@@ -42,4 +43,9 @@ export default class StSDK extends BaseSDK {
 	public trip: TripModule = new TripModule();
 	public utility: UtilityModule = new UtilityModule();
 	public wikimedia: WikimediaModule = new WikimediaModule();
+}
+
+export function create(settings: Settings): StSDK {
+	initializeEventHandling();
+	return new StSDK(settings);
 }
