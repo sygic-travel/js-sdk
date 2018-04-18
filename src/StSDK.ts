@@ -46,6 +46,7 @@ class StSDK extends BaseSDK {
 }
 
 export function create(settings: Settings): StSDK {
+	const stSDK: StSDK = new StSDK(settings);
 	initializeEventHandling();
-	return new StSDK(settings);
+	return stSDK;
 }
