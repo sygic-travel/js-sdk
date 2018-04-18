@@ -1,5 +1,5 @@
 import { BaseSDK } from './BaseSDK';
-import { initalize as initializeEventHandling } from './Events';
+import { initialize as initializeEventHandling } from './Events';
 import AlertsModule from './Modules/AlertsModule';
 import ChangesModule from './Modules/ChangesModule';
 import CollaborationModule from './Modules/CollaborationModule';
