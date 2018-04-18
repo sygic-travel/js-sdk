@@ -1,10 +1,10 @@
 {
   "name": "sygic-travel-js-sdk",
-  "version": "1.2.0-beta46",
+  "version": "1.2.0-beta47",
   "main": "index.js",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/sygic-travel/js-sdk"
+    "type": "git",
+    "url": "https://github.com/sygic-travel/js-sdk"
   },
   "license": "MIT",
   "scripts": {
