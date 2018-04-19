@@ -28,13 +28,13 @@ import {
 	voteOnReview
 } from '../Places';
 import { PlaceAutoTranslation } from '../Places/PlaceAutoTranslation';
-import { CanvasSize, spread, SpreadResult, SpreadSizeConfig } from '../Spread';
 import {
+	CanvasSize,
 	CategoriesCoefficients,
-	spread as spreadV2,
-	SpreadResult as SpreadResultV2,
-	SpreadSizeConfig as SpreadSizeConfigV2
-} from '../SpreadV2';
+	spread,
+	SpreadResult,
+	SpreadSizeConfig
+} from '../Spread';
 
 export default class PlacesModule {
 	public getPlaces(filter: PlacesListFilterJSON): Promise<Place[]> {
@@ -89,28 +89,19 @@ export default class PlacesModule {
 		return voteOnReview(reviewId, voteValue);
 	}
 
-	public spreadPlacesOnMap(
-		places: Place[],
-		bounds: Bounds,
-		canvas: CanvasSize,
-		sizesConfig?: SpreadSizeConfig[]
-	): SpreadResult {
-		return spread(places, bounds, canvas, sizesConfig);
-	}
-
 	/**
 	 * @experimental
 	 */
-	public spreadPlacesOnMapV2(
+	public spreadPlacesOnMap(
 		places: Place[],
 		vipPlaces: Place[],
 		bounds: Bounds,
 		canvas: CanvasSize,
-		sizesConfig?: SpreadSizeConfigV2[],
+		sizesConfig?: SpreadSizeConfig[],
 		categoriesCoefficients?: CategoriesCoefficients | null,
 		useLocalRating: boolean = false
-	): SpreadResultV2 {
-		return spreadV2(places, vipPlaces, bounds, canvas, sizesConfig, categoriesCoefficients, useLocalRating);
+	): SpreadResult {
+		return spread(places, vipPlaces, bounds, canvas, sizesConfig, categoriesCoefficients, useLocalRating);
 	}
 
 	public getPlacesDestinationMap(placeIds: string[], imageSize: string): Promise<Map<string, Place>> {

@@ -1,21 +1,30 @@
 export { SpreadResult, SpreadedPlace } from './Spreader';
-export { SpreadSizeConfig, getConfig } from './Config';
-export { CanvasSize } from './Canvas';
+export { CategoriesCoefficients, SpreadSizeConfig } from './Config';
 
 import { Bounds } from '../Geo';
 import { Place } from '../Places';
 import { CanvasSize } from './Canvas';
-import {getConfig, SpreadSizeConfig} from './Config';
+import { CategoriesCoefficients, getCategoriesConfig, getSizesConfig,  SpreadSizeConfig } from './Config';
 import * as Spreader from './Spreader';
+
+export {
+	CanvasSize
+};
 
 export function spread(
 	places: Place[],
+	vipPlaces: Place[],
 	bounds: Bounds,
 	canvas: CanvasSize,
-	sizesConfig?: SpreadSizeConfig[]
+	sizesConfig?: SpreadSizeConfig[],
+	categoriesCoefficients?: CategoriesCoefficients | null,
+	useLocalRating: boolean = false
 ): Spreader.SpreadResult {
 	if (!sizesConfig) {
-		sizesConfig = getConfig(bounds, canvas);
+		sizesConfig = getSizesConfig();
 	}
-	return Spreader.spread(places, sizesConfig, bounds, canvas);
+	if (!categoriesCoefficients && categoriesCoefficients !== null) {
+		categoriesCoefficients = getCategoriesConfig();
+	}
+	return Spreader.spread(places, vipPlaces, sizesConfig, bounds, canvas, categoriesCoefficients, useLocalRating);
 }

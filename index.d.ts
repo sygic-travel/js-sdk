@@ -91,19 +91,13 @@ declare class PlacesModule {
 	public voteOnReview(reviewId: number, voteValue: number): Promise<void>;
 	public spreadPlacesOnMap(
 		places: Places.Place[],
-		bounds: Geo.Bounds,
-		canvas: Spread.CanvasSize,
-		sizesConfig?: Spread.SpreadSizeConfig[]
-	): Spread.SpreadResult;
-	public spreadPlacesOnMapV2(
-		places: Places.Place[],
 		vipPlaces: Places.Place[],
 		bounds: Geo.Bounds,
 		canvas: Spread.CanvasSize,
-		sizesConfig?: SpreadV2.SpreadSizeConfig[],
-		categoriesCoefficients?: SpreadV2.CategoriesCoefficients | null,
+		sizesConfig?: Spread.SpreadSizeConfig[],
+		categoriesCoefficients?: Spread.CategoriesCoefficients | null,
 		useLocalRating?: boolean
-	): SpreadV2.SpreadResult;
+	): Spread.SpreadResult;
 	public getPlaceAutoTranslation(placeId: string): Promise<Places.PlaceAutoTranslation>;
 }
 
@@ -593,32 +587,10 @@ export namespace Media {
 }
 
 export namespace Spread {
-	export interface SpreadSizeConfig {
-		radius: number;
-		margin: number;
-		name: string;
-		photoRequired?: boolean;
-		minimalRating?: number;
-	}
-
 	export interface CanvasSize {
 		width: number;
 		height: number;
 	}
-
-	export interface SpreadResult {
-		visible: SpreadedPlace[];
-		hidden: Places.Place[];
-	}
-
-	export interface SpreadedPlace {
-		place: Places.Place;
-		coordinate: Geo.Coordinate;
-		size: SpreadSizeConfig;
-	}
-}
-
-export namespace SpreadV2 {
 	export interface SpreadSizeConfig {
 		radius: number;
 		margin: number;

@@ -1,20 +1,35 @@
-import { Bounds, Coordinate, locationToCanvasCoordinate } from '../Geo';
-import { Place } from '../Places/Place';
-import { CanvasSize } from './Canvas';
-import { SpreadSizeConfig } from './Config';
+import { CanvasSize } from '.';
+import { Bounds, Coordinate, getZoomFromBounds, locationToCanvasCoordinate } from '../Geo';
+import { Place } from '../Places';
+import {
+	CategoriesCoefficients,
+	getRatingCoeficientFromCategories,
+	isDisabledByCategory,
+	SpreadSizeConfig
+} from './Config';
 
 export function spread(
 	places: Place[],
+	vipPlaces: Place[],
 	markerSizes: SpreadSizeConfig[],
 	bounds: Bounds,
-	canvas: CanvasSize
+	canvas: CanvasSize,
+	categoriesCoefficients?: CategoriesCoefficients | null,
+	useLocalRating: boolean = false
 ): SpreadResult {
-	return places.reduce((result: SpreadResult, place: Place): SpreadResult => {
-		return detectRenderSize(result, place, markerSizes, bounds, canvas);
+	const zoom = getZoomFromBounds(bounds, canvas.width);
+	const finalResult = vipPlaces.reduce((result: SpreadResult, place: Place): SpreadResult => {
+		return detectRenderSize(result, place, markerSizes, bounds, canvas, zoom, true, useLocalRating);
 	}, {
 		hidden: [],
 		visible: []
 	});
+	return places.reduce((result: SpreadResult, place: Place): SpreadResult => {
+		return detectRenderSize(
+			result, place, markerSizes, bounds, canvas,
+			zoom, false, useLocalRating, categoriesCoefficients
+		);
+	}, finalResult);
 }
 
 const detectRenderSize = (
@@ -22,8 +37,17 @@ const detectRenderSize = (
 	place: Place,
 	markerSizes: SpreadSizeConfig[],
 	bounds: Bounds,
-	canvas: CanvasSize
+	canvas: CanvasSize,
+	zoom: number,
+	ignoreDisabledCategories: boolean,
+	useLocalRating: boolean,
+	categoriesCoefficients?: CategoriesCoefficients | null
 ): SpreadResult => {
+	let spreadRating = useLocalRating ? place.ratingLocal : place.rating;
+	if (categoriesCoefficients && place.level === 'poi') {
+		spreadRating = spreadRating * getRatingCoeficientFromCategories(categoriesCoefficients, place.categories);
+	}
+
 	if (!place.location) {
 		result.hidden.push(place);
 		return result;
@@ -35,9 +59,21 @@ const detectRenderSize = (
 		if (size.photoRequired && !place.thumbnailUrl) {
 			continue;
 		}
-		if (size.minimalRating && place.rating <= size.minimalRating) {
+
+		const minimalRating = size.zoomLevelLimits[zoom - 1] ?
+			size.zoomLevelLimits[zoom - 1] : size.zoomLevelLimits[size.zoomLevelLimits.length - 1];
+		if (minimalRating && spreadRating < minimalRating) {
 			continue;
 		}
+
+		if (
+			!ignoreDisabledCategories &&
+			place.level === 'poi' &&
+			isDisabledByCategory(size.disabledCategories, place.categories)
+		) {
+			continue;
+		}
+
 		if (!intersects(size, coordinate, result.visible)) {
 			result.visible.push({
 				place,
