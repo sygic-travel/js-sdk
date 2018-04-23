@@ -1,36 +1,39 @@
 import * as chai from 'chai';
-import { getConfig } from './Config';
+import * as dirtyChai from 'dirty-chai';
+import { CategoriesCoefficients, getRatingCoeficientFromCategories, isDisabledByCategory } from './Config';
+
+chai.use(dirtyChai);
 
 describe('Config', () => {
 
-	describe('#getConfig', () => {
-		it('should return spread configuration with correct minimalRating', () => {
-			const bounds = {
-				south: 51.45999681055091,
-				west: -0.2542304992675782,
-				north: 51.554661023239,
-				east: -0.00102996826171
-			};
+	const categoriesCoefficients: CategoriesCoefficients = {
+		noCategory: 0.3,
+		discovering: 0.8,
+		eating: 0.6,
+		goingOut: 0.6,
+		hiking: 0.5,
+		playing: 0.5,
+		relaxing: 0.6,
+		shopping: 0.5,
+		sightseeing: 1,
+		sleeping: 0.2,
+		doingSports: 0.4,
+		traveling: 0.1,
+	};
 
-			const canvas = {
-				width: 100,
-				height: 50,
-			};
+	describe('#getRatingCoeficientFromCategories', () => {
+		it('should select correct coefficient', () => {
+			chai.expect(getRatingCoeficientFromCategories(categoriesCoefficients, [])).to.equal(0.3);
+			chai.expect(getRatingCoeficientFromCategories(categoriesCoefficients, ['eating', 'hiking'])).to.equal(0.6);
+			chai.expect(getRatingCoeficientFromCategories(categoriesCoefficients, ['doing_sports', 'sleeping'])).to.equal(0.4);
+		});
+	});
 
-			let config = getConfig(bounds, canvas);
-			chai.expect(config.length).to.equal(4);
-			chai.expect(config[0].minimalRating).to.equal(0.3);
-			chai.expect(config[1].minimalRating).to.equal(0.001);
-			chai.expect(config[2].minimalRating).to.equal(0.001);
-			chai.expect(config[3].minimalRating).to.equal(0.001);
-
-			canvas.width = 1024;
-			config = getConfig(bounds, canvas);
-			chai.expect(config.length).to.equal(4);
-			chai.expect(config[0].minimalRating).to.equal(0.3);
-			chai.expect(config[1].minimalRating).to.equal(0);
-			chai.expect(config[2].minimalRating).to.equal(0);
-			chai.expect(config[3].minimalRating).to.equal(0);
+	describe('#isDisabledByCategory', () => {
+		it('should detect disabled size', () => {
+			chai.expect(isDisabledByCategory(['no_category'], [])).to.be.true('Expect true');
+			chai.expect(isDisabledByCategory(['no_category'], ['eating'])).to.be.false('Expect false');
+			chai.expect(isDisabledByCategory(['going_out'], ['eating', 'going_out'])).to.be.false('Expect false');
 		});
 	});
 
