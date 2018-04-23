@@ -16,27 +16,32 @@ export interface Alert {
 }
 
 export enum Type {
-	WIND = 'wind',
-	TORNADO = 'tornado',
-	RAIN = 'rain',
-	FOG = 'fog',
-	SNOW = 'snow',
-	BLIZZARD = 'blizzard',
-	FLOOD = 'flood',
+	AIR_POLUTION = 'air_polution',
 	AVALANCHE = 'avalanche',
-	STORM = 'storm',
-	SEVERE_WEATHER = 'severe weather',
+	BLIZZARD = 'blizzard',
+	COASTAL_HAZARDS = 'coastal_hazards',
+	COLD_FRONT = 'cold_front',
 	EARTHQUAKE = 'earthquake',
+	FLOOD = 'flood',
+	FOG = 'fog',
+	FREEZE = 'freeze',
 	ICING = 'icing',
-	COASTAL_HAZARDS = 'coastal hazards',
-	UNKNOWN = 'unknown'
+	RAIN = 'rain',
+	SNOW = 'snow',
+	STORM = 'storm',
+	SEVERE_WEATHER = 'severe_weather',
+	TORNADO = 'tornado',
+	VOLCANO = 'volcano',
+	UNKNOWN = 'unknown',
+	WIND = 'wind',
 }
 
 export enum Severity {
 	MINOR = 'minor',
 	MODERATE = 'moderate',
 	SEVERE = 'severe',
-	EXTREME = 'extreme'
+	EXTREME = 'extreme',
+	UNKNOWN = 'unknown',
 }
 
 enum State {
