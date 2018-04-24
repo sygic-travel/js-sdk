@@ -24,7 +24,6 @@ authorizationFreeEndpoints[HttpMethod.GET] = [
 	'directions',
 	'tours',
 	'hotels',
-	'search',
 	'geoip',
 	'reviews',
 	'translations',
