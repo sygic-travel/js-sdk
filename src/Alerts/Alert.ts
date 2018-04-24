@@ -1,10 +1,9 @@
 export interface Alert {
 	id: number;
-	externalId: string;
 	perex: string;
 	type: Type;
 	severity: Severity;
-	affectedArea: GeoJSON.GeoJsonObject;
+	affectedArea: GeoJSON.DirectGeometryObject;
 	name: string;
 	state: State;
 	validFrom: string;
@@ -39,9 +38,16 @@ export enum Severity {
 	EXTREME = 'extreme'
 }
 
-enum State {
+export enum State {
 	ACTIVE = 'active',
 	INSUFFICIENT_DATA = 'insufficient data',
 	CANCELED = 'canceled',
 	OUTDATED = 'outdated'
+}
+
+export interface DetailedAlert extends Alert {
+	description: string | null;
+	webUrl: string | null;
+	externalId: string;
+	geometry: GeoJSON.DirectGeometryObject | null;
 }

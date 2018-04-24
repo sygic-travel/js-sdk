@@ -1,8 +1,8 @@
 import { stringify } from 'query-string';
 import { ApiResponse, StApi } from '../Api';
-import { Alert } from './Alert';
+import { Alert, DetailedAlert } from './Alert';
 import { AlertsQuery } from './AlertsQuery';
-import { mapAlertsApiResponseToAlerts } from './Mapper';
+import { mapAlertsApiResponseToAlerts, mapDetailedAlertApiResponseToDetailedAlert } from './Mapper';
 
 const DEFAULT_QUERY_LIMIT = 100;
 
@@ -36,4 +36,14 @@ export const getAlerts = async (alertsQuery: AlertsQuery): Promise<Alert[]> => {
 	}
 
 	return mapAlertsApiResponseToAlerts(apiResponse.data.alerts);
+};
+
+export const getDetailedAlerts = async (alertIds: string[]): Promise<DetailedAlert[]> => {
+	return Promise.all(alertIds.map(async (alertId: string) => {
+		const apiResponse: ApiResponse = await StApi.get('alerts/' + alertId);
+		if (!apiResponse.data.hasOwnProperty('alert')) {
+			throw new Error('Wrong API response');
+		}
+		return mapDetailedAlertApiResponseToDetailedAlert(apiResponse.data.alert);
+	}));
 };
