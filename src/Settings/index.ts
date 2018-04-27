@@ -37,6 +37,10 @@ export function getStApiUrl() {
 	return stApiUrl;
 }
 
+export function setStApiUrl(url: string) {
+	stApiUrl = url;
+}
+
 export function getSsoApiUrl() {
 	return ssoApiUrl;
 }

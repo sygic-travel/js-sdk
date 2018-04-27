@@ -179,6 +179,8 @@ declare class SessionModule {
 declare class UtilityModule {
 	public locationToMapTileKey(location: Geo.Location, zoom: number): string;
 	public getExchangeRates(): Promise<Utility.ExchangeRate[]>;
+	public getStApiUrl(): string;
+	public setStApiUrl(url: string): void;
 }
 
 declare class WikimediaModule {
