@@ -226,6 +226,8 @@ export async function ensureTripSyncedToServer(tripId: string): Promise<void> {
 	return Dao.syncChangedTripToServer(tripId);
 }
 
+export const setTripUpdatedNotificationHandler = Dao.setTripUpdatedNotificationHandler;
+
 async function populateTripTemplateWithPlaces(tripTemplateWithoutPlaces: TripTemplate): Promise<TripTemplate> {
 	tripTemplateWithoutPlaces.trip = await populateTripWithPlaces(tripTemplateWithoutPlaces.trip);
 	return tripTemplateWithoutPlaces;

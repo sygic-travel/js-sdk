@@ -2,7 +2,7 @@ import { StApi } from '../Api';
 import { ChangeNotification, setChangesCallback } from '../Changes';
 import { setSession } from '../Session';
 import { getStTrackingApiUrl, setTripConflictHandler } from '../Settings';
-import { Trip, TripConflictClientResolution, TripConflictInfo } from '../Trip';
+import { setTripUpdatedNotificationHandler, Trip, TripConflictClientResolution, TripConflictInfo } from '../Trip';
 import { UserEvent } from './UserEvent';
 import UserEventsTracker from './UserEventsTracker';
 
@@ -26,6 +26,7 @@ export function setSessionExpiredHandler(handler: () => any): void {
 export function initialize(): void {
 	setChangesCallback(handleUserDataChanges);
 	setTripConflictHandler(handleTripConflict);
+	setTripUpdatedNotificationHandler(handleUserDataChanges);
 	StApi.setInvalidSessionHandler(handleInvalidSession);
 
 	if (getStTrackingApiUrl()) {

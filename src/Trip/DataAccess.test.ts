@@ -177,6 +177,28 @@ describe('TripDataAccess', () => {
 			});
 		});
 
+		it('should call notificationHandler after PUT', (done) => {
+			const handlerStub = sandbox.stub();
+			Dao.setTripUpdatedNotificationHandler(handlerStub);
+			const apiResponseTrip = cloneDeep(TripApiTestData.tripDetail.trip);
+			sandbox.stub(StApi, 'put').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, { trip: apiResponseTrip }));
+			}));
+			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
+				clock.tick(3100);
+				clock.restore();
+				// Wait for the trip response to be handled before making further assertions
+				setTimeout(() => {
+					chai.expect(handlerStub.callCount).to.equal(1);
+					chai.expect(handlerStub.getCall(0).args[0][0].change).to.equal('updated');
+					chai.expect(handlerStub.getCall(0).args[0][0].type).to.equal('trip');
+					chai.expect(handlerStub.getCall(0).args[0][0].version).to.equal(TripExpectedResults.tripDetailed.version);
+					chai.expect(handlerStub.getCall(0).args[0][0].id).to.equal(TripExpectedResults.tripDetailed.id);
+					done();
+				}, 100);
+			});
+		});
+
 		it('should call put on api after timeout', () => {
 			const apiResponseTrip = cloneDeep(TripApiTestData.tripDetail.trip);
 			apiResponseTrip.name = 'API TRIP';
