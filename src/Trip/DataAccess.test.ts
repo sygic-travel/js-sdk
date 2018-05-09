@@ -149,7 +149,7 @@ describe('TripDataAccess', () => {
 			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
 				chai.expect(tripsDetailedCache.get(TripExpectedResults.tripDetailed.id))
 					.to.be.eventually.deep.equal(TripApiTestData.tripDetail.trip);
-				clock.tick(3100);
+				clock.tick(Dao.UPDATE_TIMEOUT + 100);
 				chai.expect(apiPut.callCount).to.be.equal(1);
 				clock.restore();
 				// Wait for the trip be stored to cache before making further assertions
@@ -169,7 +169,7 @@ describe('TripDataAccess', () => {
 				resolve(new ApiResponse(200, { trip: apiResponseTrip }));
 			}));
 			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
-				clock.tick(3100);
+				clock.tick(Dao.UPDATE_TIMEOUT + 100);
 				const callDate = new Date(apiPut.getCall(0).args[1].updated_at);
 				chai.expect(callDate > testUpdatedAt).to.be.true('Expect true');
 				testUpdatedAt.setSeconds(testUpdatedAt.getSeconds() + 1);
@@ -185,7 +185,7 @@ describe('TripDataAccess', () => {
 				resolve(new ApiResponse(200, { trip: apiResponseTrip }));
 			}));
 			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
-				clock.tick(3100);
+				clock.tick(Dao.UPDATE_TIMEOUT + 100);
 				clock.restore();
 				// Wait for the trip response to be handled before making further assertions
 				setTimeout(() => {
@@ -208,7 +208,7 @@ describe('TripDataAccess', () => {
 			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
 				chai.expect(tripsDetailedCache.get(TripExpectedResults.tripDetailed.id))
 					.to.be.eventually.deep.equal(TripApiTestData.tripDetail.trip);
-				clock.tick(2000);
+				clock.tick(Dao.UPDATE_TIMEOUT - 1000);
 				chai.expect(apiPut.callCount).to.be.equal(0);
 				clock.tick(1100);
 				chai.expect(apiPut.callCount).to.be.equal(1);
@@ -224,10 +224,10 @@ describe('TripDataAccess', () => {
 			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
 				chai.expect(tripsDetailedCache.get(TripExpectedResults.tripDetailed.id))
 					.to.be.eventually.deep.equal(TripApiTestData.tripDetail.trip);
-				clock.tick(2000);
+				clock.tick(Dao.UPDATE_TIMEOUT - 1000);
 				chai.expect(apiPut.callCount).to.be.equal(0);
 				Dao.updateTrip(TripExpectedResults.tripDetailed).then(() => {
-					clock.tick(2000);
+					clock.tick(Dao.UPDATE_TIMEOUT + - 1000);
 					chai.expect(apiPut.callCount).to.be.equal(0);
 					clock.tick(1010);
 					chai.expect(apiPut.callCount).to.be.equal(1);
@@ -255,7 +255,7 @@ describe('TripDataAccess', () => {
 			}));
 
 			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
-				clock.tick(3010);
+				clock.tick(Dao.UPDATE_TIMEOUT + 10);
 				clock.restore();
 				// Wait for the trip be stored to cache before making further assertions
 				setTimeout(() => {
@@ -288,7 +288,7 @@ describe('TripDataAccess', () => {
 			}));
 
 			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
-				clock.tick(3010);
+				clock.tick(Dao.UPDATE_TIMEOUT + 10);
 				clock.restore();
 				// Wait for the trip response to be handled before making further assertions
 				setTimeout(() => {

@@ -26,7 +26,7 @@ interface ChangedTrip {
 }
 
 const changedTrips: Map<string, ChangedTrip> = new Map();
-const UPDATE_TIMEOUT: number = 3000;
+export const UPDATE_TIMEOUT: number = 10000;
 
 let changeNotificationHandler: ((change: ChangeNotification[]) => any) | null = null;
 
