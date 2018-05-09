@@ -139,6 +139,7 @@ declare class TripModule {
 	public emptyTripsTrash(): Promise<string[]>;
 	public getTripTemplates(placeId: string): Promise<Trips.TripTemplate[]>;
 	public applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trips.Trip>;
+	public getTripIdsWaitingToSync(): string[];
 }
 
 declare class SessionModule {

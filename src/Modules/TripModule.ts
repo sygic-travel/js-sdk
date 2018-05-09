@@ -5,6 +5,7 @@ import {
 	ensureTripSyncedToServer,
 	getTripDetailed,
 	getTripEditor,
+	getTripIdsWaitingToSync,
 	getTrips,
 	getTripsInTrash,
 	getTripTemplates,
@@ -58,4 +59,6 @@ export default class TripModule {
 	public applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trip> {
 		return applyTripTemplate(tripId, templateId, dayIndex);
 	}
+
+	public getTripIdsWaitingToSync = getTripIdsWaitingToSync;
 }
