@@ -34,6 +34,7 @@ describe('TripDataAccess', () => {
 		}));
 		clock = sandbox.useFakeTimers((new Date()).getTime());
 		Cache.reset();
+		tripsDetailedCache.reset();
 	});
 
 	afterEach(() => {
@@ -129,6 +130,14 @@ describe('TripDataAccess', () => {
 				return chai.expect(tripsDetailedCache.get(TripExpectedResults.tripDetailed.id))
 					.to.be.eventually.deep.equal(TripApiTestData.tripDetail.trip);
 			});
+		});
+
+		it('should throw error when trying to save older version', async () => {
+			const trip = cloneDeep(TripExpectedResults.tripDetailed);
+			trip.version = 2;
+			await Dao.updateTrip(trip);
+			trip.version = 1;
+			chai.expect(Dao.updateTrip(trip)).to.be.rejectedWith(Error, 'Trying to overwrite newer version.');
 		});
 
 		it('should call put on api and save response to cache', (done) => {

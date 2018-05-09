@@ -79,6 +79,11 @@ export async function createTrip(tripRequest: TripCreateRequest): Promise<Trip> 
 }
 
 export async function updateTrip(tripToBeUpdated: Trip): Promise<Trip> {
+	const cachedTrip = await tripsDetailedCache.get(tripToBeUpdated.id);
+	if (cachedTrip && tripToBeUpdated.version < cachedTrip.version) {
+		throw new Error('Trying to overwrite newer version.');
+	}
+
 	const tripApiFormatData = mapTripToApiFormat(tripToBeUpdated);
 	await tripsDetailedCache.set(tripToBeUpdated.id, tripApiFormatData);
 	const oldChangedTrip: ChangedTrip | undefined = changedTrips.get(tripToBeUpdated.id);
