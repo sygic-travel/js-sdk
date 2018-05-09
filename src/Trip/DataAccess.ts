@@ -168,6 +168,10 @@ export function setTripUpdatedNotificationHandler(handler: ((change: ChangeNotif
 	changeNotificationHandler = handler;
 }
 
+export function getTripIdsWaitingToSync(): string[] {
+	return Array.from(changedTrips.keys());
+}
+
 async function getTripFromApi(id: string): Promise<object> {
 	const apiResponse = await StApi.get('trips/' + id);
 	if (!apiResponse.data.hasOwnProperty('trip')) {
