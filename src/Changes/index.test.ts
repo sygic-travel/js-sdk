@@ -213,8 +213,7 @@ describe('ChangesController', () => {
 			return chai.expect(spy.calledWithExactly([{
 				type: 'favorite',
 				id: 'poi:530',
-				change: 'updated',
-				version: null
+				change: 'updated'
 			} as ChangeNotification])).to.be.true('Expect true');
 		});
 
@@ -250,8 +249,7 @@ describe('ChangesController', () => {
 			return chai.expect(spy.calledWithExactly([{
 				type: 'favorite',
 				id: 'poi:530',
-				change: 'deleted',
-				version: null
+				change: 'deleted'
 			}])).to.be.true('Expect true');
 		});
 	});

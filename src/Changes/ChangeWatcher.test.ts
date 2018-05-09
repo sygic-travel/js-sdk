@@ -66,12 +66,10 @@ describe('ChangeWatcher', () => {
 					type: 'favorite',
 					id: 'yyy',
 					change: 'deleted',
-					version: null
 				} as ChangeNotification, {
 					type: 'settings',
 					id: null,
 					change: 'updated',
-					version: null
 				} as ChangeNotification]);
 				done();
 			});

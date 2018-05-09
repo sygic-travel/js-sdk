@@ -34,6 +34,7 @@ describe('TripDataAccess', () => {
 		}));
 		clock = sandbox.useFakeTimers((new Date()).getTime());
 		Cache.reset();
+		tripsDetailedCache.reset();
 	});
 
 	afterEach(() => {
@@ -131,6 +132,14 @@ describe('TripDataAccess', () => {
 			});
 		});
 
+		it('should throw error when trying to save older version', async () => {
+			const trip = cloneDeep(TripExpectedResults.tripDetailed);
+			trip.version = 2;
+			await Dao.updateTrip(trip);
+			trip.version = 1;
+			chai.expect(Dao.updateTrip(trip)).to.be.rejectedWith(Error, 'Trying to overwrite newer version.');
+		});
+
 		it('should call put on api and save response to cache', (done) => {
 			const apiResponseTrip = cloneDeep(TripApiTestData.tripDetail.trip);
 			apiResponseTrip.name = 'API TRIP';
@@ -140,7 +149,7 @@ describe('TripDataAccess', () => {
 			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
 				chai.expect(tripsDetailedCache.get(TripExpectedResults.tripDetailed.id))
 					.to.be.eventually.deep.equal(TripApiTestData.tripDetail.trip);
-				clock.tick(3100);
+				clock.tick(Dao.UPDATE_TIMEOUT + 100);
 				chai.expect(apiPut.callCount).to.be.equal(1);
 				clock.restore();
 				// Wait for the trip be stored to cache before making further assertions
@@ -160,11 +169,33 @@ describe('TripDataAccess', () => {
 				resolve(new ApiResponse(200, { trip: apiResponseTrip }));
 			}));
 			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
-				clock.tick(3100);
+				clock.tick(Dao.UPDATE_TIMEOUT + 100);
 				const callDate = new Date(apiPut.getCall(0).args[1].updated_at);
 				chai.expect(callDate > testUpdatedAt).to.be.true('Expect true');
 				testUpdatedAt.setSeconds(testUpdatedAt.getSeconds() + 1);
 				chai.expect(callDate < testUpdatedAt).to.be.true('Expect true');
+			});
+		});
+
+		it('should call notificationHandler after PUT', (done) => {
+			const handlerStub = sandbox.stub();
+			Dao.setTripUpdatedNotificationHandler(handlerStub);
+			const apiResponseTrip = cloneDeep(TripApiTestData.tripDetail.trip);
+			sandbox.stub(StApi, 'put').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, { trip: apiResponseTrip }));
+			}));
+			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
+				clock.tick(Dao.UPDATE_TIMEOUT + 100);
+				clock.restore();
+				// Wait for the trip response to be handled before making further assertions
+				setTimeout(() => {
+					chai.expect(handlerStub.callCount).to.equal(1);
+					chai.expect(handlerStub.getCall(0).args[0][0].change).to.equal('updated');
+					chai.expect(handlerStub.getCall(0).args[0][0].type).to.equal('trip');
+					chai.expect(handlerStub.getCall(0).args[0][0].version).to.equal(TripExpectedResults.tripDetailed.version);
+					chai.expect(handlerStub.getCall(0).args[0][0].id).to.equal(TripExpectedResults.tripDetailed.id);
+					done();
+				}, 100);
 			});
 		});
 
@@ -177,7 +208,7 @@ describe('TripDataAccess', () => {
 			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
 				chai.expect(tripsDetailedCache.get(TripExpectedResults.tripDetailed.id))
 					.to.be.eventually.deep.equal(TripApiTestData.tripDetail.trip);
-				clock.tick(2000);
+				clock.tick(Dao.UPDATE_TIMEOUT - 1000);
 				chai.expect(apiPut.callCount).to.be.equal(0);
 				clock.tick(1100);
 				chai.expect(apiPut.callCount).to.be.equal(1);
@@ -193,10 +224,10 @@ describe('TripDataAccess', () => {
 			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
 				chai.expect(tripsDetailedCache.get(TripExpectedResults.tripDetailed.id))
 					.to.be.eventually.deep.equal(TripApiTestData.tripDetail.trip);
-				clock.tick(2000);
+				clock.tick(Dao.UPDATE_TIMEOUT - 1000);
 				chai.expect(apiPut.callCount).to.be.equal(0);
 				Dao.updateTrip(TripExpectedResults.tripDetailed).then(() => {
-					clock.tick(2000);
+					clock.tick(Dao.UPDATE_TIMEOUT + - 1000);
 					chai.expect(apiPut.callCount).to.be.equal(0);
 					clock.tick(1010);
 					chai.expect(apiPut.callCount).to.be.equal(1);
@@ -224,7 +255,7 @@ describe('TripDataAccess', () => {
 			}));
 
 			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
-				clock.tick(3010);
+				clock.tick(Dao.UPDATE_TIMEOUT + 10);
 				clock.restore();
 				// Wait for the trip be stored to cache before making further assertions
 				setTimeout(() => {
@@ -257,7 +288,7 @@ describe('TripDataAccess', () => {
 			}));
 
 			Dao.updateTrip(TripExpectedResults.tripDetailed).then(async () => {
-				clock.tick(3010);
+				clock.tick(Dao.UPDATE_TIMEOUT + 10);
 				clock.restore();
 				// Wait for the trip response to be handled before making further assertions
 				setTimeout(() => {
@@ -269,7 +300,7 @@ describe('TripDataAccess', () => {
 		});
 	});
 
-	describe('#shouldNotifyOnTripUpdate', () => {
+	describe('#updateOlderCachedTrip', () => {
 		it('should get updated trip from api and set it in cache and return true', async () => {
 			const tripInCache = cloneDeep(trip1FromApi);
 			const tripFromApi = cloneDeep(trip1FromApi);
@@ -280,7 +311,7 @@ describe('TripDataAccess', () => {
 				resolve(new ApiResponse(200, { trip: tripFromApi }));
 			}));
 
-			const result = await Dao.shouldNotifyOnTripUpdate(tripInCache.id, 34);
+			const result = await Dao.updateOlderCachedTrip(tripInCache.id, 34);
 			const tripToBeUpdated = await tripsDetailedCache.get(tripInCache.id);
 			chai.expect(tripToBeUpdated.name).to.equal(tripFromApi.name);
 			chai.expect(result).to.be.true('Expect true');
@@ -291,7 +322,7 @@ describe('TripDataAccess', () => {
 			await tripsDetailedCache.set(tripInCache.id, tripInCache);
 			const apiStub = sandbox.stub(StApi, 'get');
 
-			const result = await Dao.shouldNotifyOnTripUpdate(tripInCache.id, 33);
+			const result = await Dao.updateOlderCachedTrip(tripInCache.id, 32);
 			chai.expect(apiStub.callCount).to.equal(0);
 			chai.expect(result).to.be.false('Expect true');
 		});
@@ -301,7 +332,7 @@ describe('TripDataAccess', () => {
 				resolve(new ApiResponse(200, {}));
 			}));
 
-			const result = await Dao.shouldNotifyOnTripUpdate('unknownId', null);
+			const result = await Dao.updateOlderCachedTrip('unknownId', 1);
 			chai.expect(apiStub.callCount).to.equal(0);
 			chai.expect(result).to.be.true('Expect true');
 		});

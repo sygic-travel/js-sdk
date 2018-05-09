@@ -3,6 +3,7 @@ import { stringify } from 'query-string';
 
 import { ApiResponse, StApi } from '../Api';
 import { tripsDetailedCache as tripsDetailedCache } from '../Cache';
+import { ChangeNotification } from '../Changes';
 import { getUserSettings, UserSettings } from '../Session';
 import { getTripConflictHandler } from '../Settings';
 import { dateToW3CString } from '../Util';
@@ -25,7 +26,9 @@ interface ChangedTrip {
 }
 
 const changedTrips: Map<string, ChangedTrip> = new Map();
-const UPDATE_TIMEOUT: number = 3000;
+export const UPDATE_TIMEOUT: number = 10000;
+
+let changeNotificationHandler: ((change: ChangeNotification[]) => any) | null = null;
 
 export async function getTrips(dateFrom?: string | null, dateTo?: string | null): Promise<Trip[]> {
 	const query: any = {};
@@ -79,6 +82,11 @@ export async function createTrip(tripRequest: TripCreateRequest): Promise<Trip> 
 }
 
 export async function updateTrip(tripToBeUpdated: Trip): Promise<Trip> {
+	const cachedTrip = await tripsDetailedCache.get(tripToBeUpdated.id);
+	if (cachedTrip && tripToBeUpdated.version < cachedTrip.version) {
+		throw new Error('Trying to overwrite newer version.');
+	}
+
 	const tripApiFormatData = mapTripToApiFormat(tripToBeUpdated);
 	await tripsDetailedCache.set(tripToBeUpdated.id, tripApiFormatData);
 	const oldChangedTrip: ChangedTrip | undefined = changedTrips.get(tripToBeUpdated.id);
@@ -111,17 +119,27 @@ export async function syncChangedTripToServer(tripId: string): Promise<void> {
 		return handleIgnoredConflict(conflictInfo, changedTrip.trip, tripResponse);
 	}
 
+	// We have new changes made during PUT api call and they will be synced in a while.
+	// We will ignore this sync result and we will handle the final one
 	const newerChangedTrip: ChangedTrip | undefined = changedTrips.get(tripId);
 	if (newerChangedTrip) {
-		newerChangedTrip.apiData.base_version = tripResponse.data.trip.version;
-	} else {
-		await tripsDetailedCache.set(tripResponse.data.trip.id, tripResponse.data.trip);
+		return;
+	}
+
+	await tripsDetailedCache.set(tripResponse.data.trip.id, tripResponse.data.trip);
+	if (changeNotificationHandler) {
+		changeNotificationHandler([{
+			type: 'trip',
+			id: tripResponse.data.trip.id,
+			change: 'updated',
+			version: tripResponse.data.trip.version
+		} as ChangeNotification]);
 	}
 }
 
-export async function shouldNotifyOnTripUpdate(id: string, version: number | null): Promise<boolean> {
+export async function updateOlderCachedTrip(id: string, version: number): Promise<boolean> {
 	const cachedTrip = await tripsDetailedCache.get(id);
-	if (cachedTrip && cachedTrip.version === version) {
+	if (cachedTrip && cachedTrip.version >= version) {
 		return false;
 	}
 	if (cachedTrip) {
@@ -144,6 +162,10 @@ export async function cloneTrip(id: string): Promise<string> {
 		throw new Error('Wrong API response');
 	}
 	return clone.data.trip_id;
+}
+
+export function setTripUpdatedNotificationHandler(handler: ((change: ChangeNotification[]) => any) | null): void {
+	changeNotificationHandler = handler;
 }
 
 async function getTripFromApi(id: string): Promise<object> {

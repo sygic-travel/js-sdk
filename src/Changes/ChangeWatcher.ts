@@ -51,12 +51,15 @@ export default class ChangeWatcher {
 
 		if (apiResponse.data.changes.length > 0) {
 			apiResponse.data.changes.forEach((item) => {
-				changesNotifications.push({
+				const change: ChangeNotification = {
 					id: item.id,
 					type: item.type,
 					change: item.change,
-					version: item.version ? item.version : null,
-				} as ChangeNotification);
+				};
+				if (item.version) {
+					change.version = item.version;
+				}
+				changesNotifications.push(change);
 			});
 		}
 		return changesNotifications;

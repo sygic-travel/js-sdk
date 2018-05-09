@@ -194,7 +194,8 @@ export async function handleTripChanges(changeNotifications: ChangeNotification[
 		}
 		const tripId = changeNotification.id;
 		if (changeNotification.change === 'updated' &&
-			await Dao.shouldNotifyOnTripUpdate(tripId, changeNotification.version)
+			changeNotification.version &&
+			await Dao.updateOlderCachedTrip(tripId, changeNotification.version)
 		) {
 			relevantChanges.push(changeNotification);
 		}
@@ -224,6 +225,8 @@ export async function applyTripTemplate(tripId: string, templateId: number, dayI
 export async function ensureTripSyncedToServer(tripId: string): Promise<void> {
 	return Dao.syncChangedTripToServer(tripId);
 }
+
+export const setTripUpdatedNotificationHandler = Dao.setTripUpdatedNotificationHandler;
 
 async function populateTripTemplateWithPlaces(tripTemplateWithoutPlaces: TripTemplate): Promise<TripTemplate> {
 	tripTemplateWithoutPlaces.trip = await populateTripWithPlaces(tripTemplateWithoutPlaces.trip);
