@@ -194,7 +194,8 @@ export async function handleTripChanges(changeNotifications: ChangeNotification[
 		}
 		const tripId = changeNotification.id;
 		if (changeNotification.change === 'updated' &&
-			await Dao.shouldNotifyOnTripUpdate(tripId, changeNotification.version)
+			changeNotification.version &&
+			await Dao.updateOlderCachedTrip(tripId, changeNotification.version)
 		) {
 			relevantChanges.push(changeNotification);
 		}

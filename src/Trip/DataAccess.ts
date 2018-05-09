@@ -119,9 +119,9 @@ export async function syncChangedTripToServer(tripId: string): Promise<void> {
 	}
 }
 
-export async function shouldNotifyOnTripUpdate(id: string, version: number | null): Promise<boolean> {
+export async function updateOlderCachedTrip(id: string, version: number): Promise<boolean> {
 	const cachedTrip = await tripsDetailedCache.get(id);
-	if (cachedTrip && cachedTrip.version === version) {
+	if (cachedTrip && cachedTrip.version >= version) {
 		return false;
 	}
 	if (cachedTrip) {
