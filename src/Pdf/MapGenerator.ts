@@ -59,29 +59,15 @@ export async function generateDestinationSecondaryMaps(
 			return place!;
 		});
 
-		let staticMap: StaticMap;
-
-		if (sectorPlaces.length > 50) {
-			staticMap = {
-				url: '',
-				bounds: {
-					south: 0,
-					north: 0,
-					east: 0,
-					west: 0
-				}
-			};
-		} else {
-			staticMap = await getStaticMap(
+		const staticMap: StaticMap = await getStaticMap(
 				query.secondaryMapWidth,
 				query.secondaryMapHeight,
 				sectorPlaces.map((place: Place, index: number) => ({
 					lat: place.location.lat,
 					lng: place.location.lng,
-					image: `http://a.twobits.cz/i/1x/b/${index + 1}.png`
+					image: `http://a.twobits.cz/i/1x/b/${index > 50 ? '0' : index + 1}.png`
 				}))
 			);
-		}
 
 		return {
 			...staticMap,
