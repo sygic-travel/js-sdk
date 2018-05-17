@@ -1,3 +1,4 @@
+import { Bounds } from '../Geo';
 import { Severity, Type } from './Alert';
 
 export interface AlertsQuery {
@@ -7,4 +8,5 @@ export interface AlertsQuery {
 	severities?: Severity[];
 	placeIds?: string[];
 	limit?: number;
+	bounds?: Bounds;
 }

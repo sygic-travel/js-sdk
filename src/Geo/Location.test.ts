@@ -2,7 +2,7 @@ import * as chai from 'chai';
 import * as dirtyChai from 'dirty-chai';
 import { calculateLocationsBounds, isLocationInBounds } from './Bounds';
 import {
-	Location, locationToCanvasCoordinate, locationToTileCoordinate,
+	Location, locationToCanvasCoordinate, locationToTileCoordinate, locationWithOffset,
 	normalizeLng
 } from './Location';
 
@@ -121,6 +121,40 @@ describe('Location', () => {
 				west: 1,
 				north: 4,
 				east: 4
+			});
+		});
+	});
+
+	describe('#locationWithOffset', () => {
+		it('should move location to north', () => {
+			const location: Location = { lat: 48.294100, lng: 16.427511 };
+			chai.expect(locationWithOffset(location, 350000, 0)).to.deep.eq({
+				lat: 51.43820349441831,
+				lng: 16.427511
+			});
+		});
+
+		it('should move location to east', () => {
+			const location: Location = { lat: 48.294100, lng: 16.427511 };
+			chai.expect(locationWithOffset(location, 350000, 90)).to.deep.eq({
+				lat: 48.1974127165569,
+				lng: 21.14734687765043
+			});
+		});
+
+		it('should move location to south', () => {
+			const location: Location = { lat: 48.294100, lng: 16.427511 };
+			chai.expect(locationWithOffset(location, 350000, 180)).to.deep.eq({
+				lat: 45.14999650558167,
+				lng: 16.427511
+			});
+		});
+
+		it('should move location to west', () => {
+			const location: Location = { lat: 48.294100, lng: 16.427511 };
+			chai.expect(locationWithOffset(location, 350000, 270)).to.deep.eq({
+				lat: 48.1974127165569,
+				lng: 11.707675122349569
 			});
 		});
 	});

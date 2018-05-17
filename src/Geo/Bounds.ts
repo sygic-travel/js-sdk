@@ -1,3 +1,4 @@
+import * as geojsonExtent from '@mapbox/geojson-extent';
 import { Location } from '.';
 import { toDegrees } from '../Util';
 import { locationWithOffset } from './Location';
@@ -26,6 +27,20 @@ export function isLocationInBounds(location: Location, bounds: Bounds): boolean 
 		&& location.lat <= bounds.north
 		&& location.lng >= bounds.west
 		&& location.lng <= bounds.east;
+}
+
+export function areBoundsInsideBounds(bounds1: Bounds, bounds2: Bounds): boolean {
+	const southWest: Location = {
+		lat: bounds1.south,
+		lng: bounds1.west
+	};
+
+	const northEast: Location = {
+		lat: bounds1.north,
+		lng: bounds1.east
+	};
+
+	return isLocationInBounds(southWest, bounds2) && isLocationInBounds(northEast, bounds2);
 }
 
 export function calculateLocationsBounds(locations: Location[]): Bounds {
@@ -83,4 +98,37 @@ export function createBoundsFromLocationAndSize(
 		north: ne.lat,
 		east: ne.lng
 	} as Bounds;
+}
+
+export function extendBounds(bounds: Bounds, offset: number): Bounds {
+	let southWest: Location = { lat: bounds.south, lng: bounds.west };
+	let northEast: Location = { lat: bounds.north, lng: bounds.east };
+
+	southWest = locationWithOffset(southWest, offset, 180);
+	southWest = locationWithOffset(southWest, offset, 270);
+
+	northEast = locationWithOffset(northEast, offset, 0);
+	northEast = locationWithOffset(northEast, offset, 90);
+
+	return {
+		south: southWest.lat,
+		west: southWest.lng,
+		north: northEast.lat,
+		east: northEast.lng
+	};
+}
+
+export function getGeoJsonAndBoundsIntersection(geoJson: GeoJSON.DirectGeometryObject, bounds: Bounds): boolean {
+	const geoJsonExtent: number = geojsonExtent(geoJson);
+	const geoJsonBounds: Bounds = {
+		west: geoJsonExtent[0],
+		south: geoJsonExtent[1],
+		east: geoJsonExtent[2],
+		north: geoJsonExtent[3]
+	};
+
+	const latIntersects: boolean = (bounds.north >= geoJsonBounds.south) && (bounds.south <= geoJsonBounds.north);
+	const lngIntersects: boolean = (bounds.east >= geoJsonBounds.west) && (bounds.west <= geoJsonBounds.east);
+
+	return latIntersects && lngIntersects;
 }

@@ -47,6 +47,7 @@
     "webpack-node-externals": "^1.6.0"
   },
   "dependencies": {
+    "@mapbox/geojson-extent": "^0.3.2",
     "@mapbox/polyline": "^0.2.0",
     "@types/geojson": "^1.0.2",
     "axios": "^0.17.1",

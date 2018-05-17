@@ -58,6 +58,14 @@ const clip = (n: number, min: number, max: number): number => {
 };
 
 export function locationWithOffset(location: Location, distance: number, heading: number): Location {
+	/*
+		Heading orientation in degrees
+		        0
+		        |
+		 270 -- + -- 90
+		        |
+		       180
+	 */
 	heading = toRadians(heading);
 	const latRad: number = toRadians(location.lat);
 	const lngRad: number = toRadians(location.lng);
