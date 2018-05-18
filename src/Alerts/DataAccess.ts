@@ -74,11 +74,15 @@ const createGetAlertsQueryStringObject = (alertsQuery: AlertsQuery, bounds?: Bou
 	};
 
 	if (alertsQuery.types && alertsQuery.types.length > 0) {
-		query.type = alertsQuery.types.join('|');
+		query.types = alertsQuery.types.join('|');
 	}
 
 	if (alertsQuery.severities && alertsQuery.severities.length > 0) {
-		query.severity = alertsQuery.severities.join('|');
+		query.severities = alertsQuery.severities.join('|');
+	}
+
+	if (alertsQuery.states && alertsQuery.states.length > 0) {
+		query.states = alertsQuery.states.join('|');
 	}
 
 	if (alertsQuery.placeIds && alertsQuery.placeIds.length > 0) {

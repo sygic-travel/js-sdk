@@ -13,7 +13,7 @@ import {
 	detailedAlert as detailedAlertExpectedResult
 } from '../TestData/AlertsExpectedResults';
 import { cloneDeep } from '../Util';
-import { Alert, DetailedAlert, Severity, Type } from './Alert';
+import { Alert, DetailedAlert, Severity, State, Type } from './Alert';
 import { AlertsQuery } from './AlertsQuery';
 import * as Dao from './DataAccess';
 
@@ -49,11 +49,12 @@ describe('AlertsDataAccess', () => {
 				to: '2018-01-20',
 				limit: 10,
 				types: [Type.FLOOD, Type.SNOW],
+				states: [State.ACTIVE],
 				severities: [Severity.MODERATE, Severity.EXTREME],
 				placeIds: ['country:10', 'country:20']
 			} as AlertsQuery);
 			const queryString: string = `alerts/list?from=2018-01-10&limit=10&\
-place_ids=country%3A10%7Ccountry%3A20&severity=moderate%7Cextreme&to=2018-01-20&type=flood%7Csnow`;
+place_ids=country%3A10%7Ccountry%3A20&severities=moderate%7Cextreme&states=active&to=2018-01-20&types=flood%7Csnow`;
 			chai.expect(stApistub.getCall(1).args[0]).to.deep.equal(queryString);
 			chai.expect(alertsFromDao).to.deep.equal(alertsListExpectedResult);
 			return chai.expect(cacheStub.notCalled).to.be.true;
