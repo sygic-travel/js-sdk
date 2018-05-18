@@ -82,8 +82,9 @@ place_ids=country%3A10%7Ccountry%3A20&severities=moderate%7Cextreme&states=activ
 			chai.expect(cacheStubGet.getCall(0).args[0]).to.be.eq('filterQuery');
 			chai.expect(cacheStubGet.getCall(1).args[0]).to.be.eq('bounds');
 
-			const requestQueryStringWithBounds: string =
-				'alerts/list?bounds=10%2C10%2C20%2C20&from=2018-01-10&limit=100&to=2018-01-20';
+			const requestQueryStringWithBounds: string = 'alerts/list?' +
+				'bounds=5.491454355477252%2C5.487671543664955%2C24.41144198668623%2C24.93358367248101&' +
+				'from=2018-01-10&limit=100&to=2018-01-20';
 			chai.expect(stApistub.getCall(0).args[0]).to.deep.equal(requestQueryStringWithBounds);
 
 			chai.expect(cacheStubSet.getCall(0).args[0]).to.be.eq('filterQuery');
@@ -91,10 +92,10 @@ place_ids=country%3A10%7Ccountry%3A20&severities=moderate%7Cextreme&states=activ
 			chai.expect(cacheStubSet.getCall(0).args[1]).to.be.eq(requestQueryStringWithoutBounds);
 			chai.expect(cacheStubSet.getCall(1).args[0]).to.be.eq('bounds');
 			chai.expect(cacheStubSet.getCall(1).args[1]).to.be.deep.eq({
-				east: 21.934864398722972,
-				north: 21.78536722753607,
-				south: 8.199308940027162,
-				west: 8.18480833851933
+				east: 24.93358367248101,
+				north: 24.41144198668623,
+				south: 5.491454355477252,
+				west: 5.487671543664955
 			});
 			chai.expect(cacheStubSet.getCall(2).args[0]).to.be.eq('alerts');
 			chai.expect(cacheStubSet.getCall(2).args[1]).to.be.deep.eq(cloneDeep(alertsListApiResponse.alerts));
@@ -126,8 +127,10 @@ place_ids=country%3A10%7Ccountry%3A20&severities=moderate%7Cextreme&states=activ
 				}
 			} as AlertsQuery);
 
-			chai.expect(stApistub.getCall(0).args[0])
-				.to.deep.equal('alerts/list?bounds=10%2C30%2C20%2C40&from=2018-01-10&limit=100&to=2018-01-20');
+			chai.expect(stApistub.getCall(0).args[0]).to.deep.equal('alerts/list?' +
+				'bounds=5.491454355477252%2C25.487671543664955%2C24.41144198668623%2C44.93358367248101&' +
+				'from=2018-01-10&limit=100&to=2018-01-20'
+			);
 		});
 
 		it('should call api when calling with bounds and cached filter is not the same as call filter',
@@ -157,7 +160,10 @@ place_ids=country%3A10%7Ccountry%3A20&severities=moderate%7Cextreme&states=activ
 			} as AlertsQuery);
 
 			chai.expect(stApistub.getCall(0).args[0])
-				.to.deep.equal('alerts/list?bounds=11%2C11%2C19%2C19&from=2018-02-10&limit=100&to=2018-02-20');
+				.to.deep.equal('alerts/list?' +
+				'bounds=6.4883492680497055%2C6.479408881676045%2C23.415118232270867%2C23.89559495501655&' +
+				'from=2018-02-10&limit=100&to=2018-02-20'
+			);
 		});
 
 		it('should not call api when bounds are within cached bounds and filter query is the same as cached filter query',
