@@ -8,7 +8,7 @@ import { AlertsQuery } from './AlertsQuery';
 import { mapAlertsApiResponseToAlerts, mapDetailedAlertApiResponseToDetailedAlert } from './Mapper';
 
 const DEFAULT_QUERY_LIMIT: number = 100;
-const DEFAULT_BOUNDS_EXPAND_SIZE: number = 200000;
+const DEFAULT_BOUNDS_EXPAND_SIZE: number = 500000;
 
 
 export const getAlerts = async (alertsQuery: AlertsQuery): Promise<Alert[]> => {
@@ -29,12 +29,13 @@ export const getAlerts = async (alertsQuery: AlertsQuery): Promise<Alert[]> => {
 		return filterVisibleAlerts(alerts, alertsQuery.bounds);
 	}
 
-	const queryStringObjectWithBounds: any = createGetAlertsQueryStringObject(alertsQuery, alertsQuery.bounds);
+	const extendedBounds: Bounds = getExtendedBounds(alertsQuery.bounds);
+	const queryStringObjectWithBounds: any = createGetAlertsQueryStringObject(alertsQuery, extendedBounds);
 	const filterQueryStringWithBounds: string = 'alerts/list?' + stringify(queryStringObjectWithBounds);
 	const apiResponseCalledWithBounds: ApiResponse = await getAlertsApiGetResponse(filterQueryStringWithBounds);
 
 	alertsCache.set('filterQuery', filterQueryString);
-	alertsCache.set('bounds', getExtendedBounds(alertsQuery.bounds));
+	alertsCache.set('bounds', extendedBounds);
 	alertsCache.set('alerts', apiResponseCalledWithBounds.data.alerts);
 
 	return mapAlertsApiResponseToAlerts(apiResponseCalledWithBounds.data.alerts);
