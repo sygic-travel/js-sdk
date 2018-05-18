@@ -1,4 +1,11 @@
-export { calculateLocationsBounds, Bounds, getZoomFromBounds, isLocationInBounds } from './Bounds';
+export {
+	areBoundsInsideBounds,
+	calculateLocationsBounds,
+	createBoundsFromLocationAndSize,
+	Bounds,
+	getZoomFromBounds,
+	isLocationInBounds
+} from './Bounds';
 export { Coordinate } from './Coordinate';
 export {
 	Location,
