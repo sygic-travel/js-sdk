@@ -42,3 +42,17 @@ export enum PrivacyConsentsType {
 	USAGE = 'usage',
 	LOCATION = 'location'
 }
+
+export interface PrivacyConsentPayload {
+	type: PrivacyConsentsType;
+	flow: PrivacyConsentsFlow;
+	consentText: string | null;
+	agreed: boolean;
+}
+
+export enum PrivacyConsentsFlow {
+	DELAYED = 'delayed',
+	SETTINGS = 'settings',
+	SIGN_IN = 'sign_in',
+	UPDATE = 'update'
+}

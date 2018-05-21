@@ -13,6 +13,7 @@ import {
 import { ApiResponse, SsoApi, StApi } from '../Api';
 import { sessionCache, userCache } from '../Cache';
 import { mapUserInfo } from './Mapper';
+import { PrivacyConsentPayload } from './User';
 
 const SETTINGS_KEY = 'settings';
 const CLIENT_SESSION_KEY = 'client_session';
@@ -283,4 +284,8 @@ async function getFreshSessionFromCache(cacheKey: string): Promise<Session | nul
 		}
 	}
 	return session;
+}
+
+export async function setPrivacyConsent(payload: PrivacyConsentPayload): Promise<void> {
+	await StApi.post('users/me/privacy-consents', decamelizeKeys(payload));
 }

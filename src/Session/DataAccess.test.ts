@@ -12,7 +12,7 @@ import { userInfo as userInfoApiResponse } from '../TestData/UserInfoApiResponse
 import { session as testSession, userInfo as userInfoResult } from '../TestData/UserInfoExpectedResults';
 import { cloneDeep } from '../Util';
 import * as Dao from './DataAccess';
-import { ThirdPartyAuthType } from './User';
+import { PrivacyConsentPayload, PrivacyConsentsFlow, PrivacyConsentsType, ThirdPartyAuthType } from './User';
 
 let sandbox: SinonSandbox;
 let clock: SinonFakeTimers;
@@ -470,6 +470,26 @@ describe('UserDataAccess', () => {
 			const session: Session | null = await Dao.getUserSession();
 			chai.expect(session).deep.equal(incompleteSession);
 			chai.expect(stub.callCount).equal(0);
+		});
+	});
+
+	describe('#setPrivacyConsent', () => {
+		it('should call api with correct parameters', async () => {
+			const apiStub: SinonStub = sandbox.stub(StApi, 'post');
+
+			await Dao.setPrivacyConsent({
+				type: PrivacyConsentsType.MARKETING,
+				flow: PrivacyConsentsFlow.SIGN_IN,
+				consentText: 'test',
+				agreed: true
+			} as PrivacyConsentPayload);
+
+			chai.expect(apiStub.getCall(0).args[1]).to.deep.equal({
+				agreed: true,
+				consent_text: 'test',
+				flow: 'sign_in',
+				type: 'marketing'
+			});
 		});
 	});
 });

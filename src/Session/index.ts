@@ -10,6 +10,7 @@ import {
 	Session
 } from './Session';
 import {
+	PrivacyConsentPayload,
 	ThirdPartyAuthType,
 	UserInfo,
 	UserLicense,
@@ -158,4 +159,8 @@ export async function unsubscribeEmail(hash?: string): Promise<CommonResponseCod
 	}
 
 	return Dao.unsubscribeEmail();
+}
+
+export async function setPrivacyConsent(payload: PrivacyConsentPayload): Promise<void> {
+	return Dao.setPrivacyConsent(payload);
 }
