@@ -22,10 +22,23 @@ export interface UserInfo {
 	isRegistered: boolean;
 	photoUrl: string | null;
 	license: UserLicense | null;
+	privacyConsents: PrivacyConsents[];
 }
 
 export interface UserLicense {
 	isActive: boolean;
 	name: string;
 	expirationAt: string | null;
+}
+
+export interface PrivacyConsents {
+	type: PrivacyConsentsType;
+	agreed: boolean;
+	answeredAt: string | null;
+}
+
+export enum PrivacyConsentsType {
+	MARKETING = 'marketing',
+	USAGE = 'usage',
+	LOCATION = 'location'
 }

@@ -982,11 +982,24 @@ export namespace Sessions {
 		isRegistered: boolean;
 		photoUrl: string | null;
 		licence: UserLicence | null;
+		privacyConsents: PrivacyConsents[];
 	}
 	export interface UserLicence {
 		isActive: boolean;
 		name: string;
 		expirationAt: string | null;
+	}
+
+	export interface PrivacyConsents {
+		type: PrivacyConsentsType;
+		agreed: boolean;
+		answeredAt: string | null;
+	}
+
+	export enum PrivacyConsentsType {
+		MARKETING = 'marketing',
+		USAGE = 'usage',
+		LOCATION = 'location'
 	}
 
 	export type AuthenticationResponseCode = 'OK' | 'ERROR_INVALID_CREDENTIALS' | 'ERROR';
