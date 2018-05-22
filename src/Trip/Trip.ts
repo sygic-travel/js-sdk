@@ -61,6 +61,8 @@ export function isTripConflictClientResolution(resolution: string): boolean {
 export interface TripConflictInfo {
 	lastUserName: string;
 	lastUpdatedAt: string;
+	localVersion: number;
+	remoteVersion: number;
 }
 
 export type TripConflictHandler = (conflictInfo: TripConflictInfo, trip: Trip) => Promise<TripConflictClientResolution>;

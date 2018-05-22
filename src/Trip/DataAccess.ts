@@ -1,4 +1,3 @@
-import { camelizeKeys } from 'humps';
 import { stringify } from 'query-string';
 
 import { ApiResponse, StApi } from '../Api';
@@ -115,7 +114,12 @@ export async function syncChangedTripToServer(tripId: string): Promise<void> {
 	const tripResponse: ApiResponse = await putTripToApi(changedTrip.apiData);
 	clearTimeout(changedTrip.timeout);
 	if (tripResponse.data.conflict_resolution === TripConflictResolution.IGNORED) {
-		const conflictInfo = camelizeKeys(tripResponse.data.conflict_info) as TripConflictInfo;
+		const conflictInfo: TripConflictInfo = {
+			lastUserName: tripResponse.data.conflict_info.last_user_name,
+			lastUpdatedAt: tripResponse.data.conflict_info.last_updated_at,
+			localVersion: changedTrip.apiData.base_version,
+			remoteVersion: tripResponse.data.trip.version,
+		};
 		return handleIgnoredConflict(conflictInfo, changedTrip.trip, tripResponse);
 	}
 
