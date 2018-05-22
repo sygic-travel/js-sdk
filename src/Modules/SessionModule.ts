@@ -11,6 +11,7 @@ import {
 	resetPassword,
 	ResetPasswordResponseCode,
 	Session,
+	setPrivacyConsent,
 	setSession,
 	signInWithCredentials,
 	signInWithDeviceId,
@@ -22,6 +23,7 @@ import {
 	UserInfo,
 	UserSettings
 } from '../Session';
+import { PrivacyConsentPayload } from '../Session/User';
 
 export default class SessionModule {
 	/**
@@ -151,5 +153,12 @@ export default class SessionModule {
 	 */
 	public unsubscribeEmail(hash?: string): Promise<CommonResponseCode> {
 		return unsubscribeEmail(hash);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public setPrivacyConsent(payload: PrivacyConsentPayload): Promise<void> {
+		return setPrivacyConsent(payload);
 	}
 }

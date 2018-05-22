@@ -23,6 +23,11 @@ export const userInfo = {
 			"is_active": true,
 			"name": "Sygic Travel Premium",
 			"expiration_at": null
-		}
+		},
+		"privacy_consents": [{
+			"type": "location",
+			"agreed": true,
+			"answered_at": "2018-05-26T12:12:12+02:00"
+		}]
 	}
 };

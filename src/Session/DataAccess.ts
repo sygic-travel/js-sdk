@@ -8,11 +8,12 @@ import {
 	Session,
 	ThirdPartyAuthType,
 	UserInfo,
-	UserLicense,
 	UserSettings
 } from '.';
 import { ApiResponse, SsoApi, StApi } from '../Api';
 import { sessionCache, userCache } from '../Cache';
+import { mapUserInfo } from './Mapper';
+import { PrivacyConsentPayload } from './User';
 
 const SETTINGS_KEY = 'settings';
 const CLIENT_SESSION_KEY = 'client_session';
@@ -178,24 +179,7 @@ export async function getUserInfo(): Promise<UserInfo> {
 	if (!apiResponse.data.hasOwnProperty('user')) {
 		throw new Error('Wrong API response');
 	}
-	const userData = apiResponse.data.user;
-	const license: UserLicense | null = userData.premium ? {
-		name: userData.premium.name,
-		expirationAt: userData.premium.expiration_at,
-		isActive: userData.premium.is_active,
-	} : null;
-
-	return {
-		id: userData.id,
-		name: userData.name,
-		email: userData.email,
-		isEmailSubscribed: userData.is_email_subscribed,
-		isRegistered: userData.is_registered,
-		photoUrl: userData.photo ? userData.photo.url : null,
-		dateCreated: userData.created_date,
-		roles: userData.roles,
-		license
-	} as UserInfo;
+	return mapUserInfo(apiResponse.data.user);
 }
 
 export async function requestCancelAccount(): Promise<void> {
@@ -300,4 +284,8 @@ async function getFreshSessionFromCache(cacheKey: string): Promise<Session | nul
 		}
 	}
 	return session;
+}
+
+export async function setPrivacyConsent(payload: PrivacyConsentPayload): Promise<void> {
+	await StApi.post('users/me/privacy-consents', decamelizeKeys(payload));
 }

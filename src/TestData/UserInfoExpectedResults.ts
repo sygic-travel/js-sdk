@@ -1,4 +1,5 @@
 import { Session, UserInfo, UserLicense} from '../Session';
+import { PrivacyConsentsType } from '../Session/User';
 import { cloneDeep } from '../Util';
 import { tokenData } from './SsoApiResponses';
 
@@ -15,7 +16,12 @@ export const userInfo: UserInfo = {
 		name: 'Sygic Travel Premium',
 		expirationAt: null,
 		isActive: true
-	} as UserLicense
+	} as UserLicense,
+	privacyConsents: [{
+		agreed: true,
+		answeredAt: '2018-05-26T12:12:12+02:00',
+		type: PrivacyConsentsType.LOCATION
+	}]
 };
 
 export const session: Session = {

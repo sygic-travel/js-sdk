@@ -175,6 +175,7 @@ declare class SessionModule {
 	public getUserInfo(): Promise<Sessions.UserInfo>;
 	public resetPassword(email: string): Promise<Sessions.ResetPasswordResponseCode>;
 	public unsubscribeEmail(hash?: string): Promise<void>;
+	public setPrivacyConsent(payload: Sessions.PrivacyConsentPayload): Promise<void>;
 }
 
 declare class UtilityModule {
@@ -982,11 +983,38 @@ export namespace Sessions {
 		isRegistered: boolean;
 		photoUrl: string | null;
 		licence: UserLicence | null;
+		privacyConsents: PrivacyConsents[];
 	}
 	export interface UserLicence {
 		isActive: boolean;
 		name: string;
 		expirationAt: string | null;
+	}
+
+	export interface PrivacyConsents {
+		type: PrivacyConsentsType;
+		agreed: boolean;
+		answeredAt: string | null;
+	}
+
+	export interface PrivacyConsentPayload {
+		type: PrivacyConsentsType;
+		flow: PrivacyConsentsFlow;
+		consentText: string | null;
+		agreed: boolean;
+	}
+
+	export enum PrivacyConsentsType {
+		MARKETING = 'marketing',
+		USAGE = 'usage',
+		LOCATION = 'location'
+	}
+
+	export enum PrivacyConsentsFlow {
+		DELAYED = 'delayed',
+		SETTINGS = 'settings',
+		SIGN_IN = 'sign_in',
+		UPDATE = 'update'
 	}
 
 	export type AuthenticationResponseCode = 'OK' | 'ERROR_INVALID_CREDENTIALS' | 'ERROR';
