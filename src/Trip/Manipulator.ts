@@ -152,7 +152,8 @@ export function addPlaceToDay(
 	placeToBeAdded: Place,
 	dayIndex: number,
 	userSettings: UserSettings | null,
-	positionInDay?: number
+	positionInDay?: number,
+	transportFromPrevious?: TransportSettings | null
 ): Trip {
 	checkDayExists(tripToBeUpdated, dayIndex);
 	if (
@@ -173,7 +174,7 @@ export function addPlaceToDay(
 		isStickyFirstInDay: false,
 		isStickyLastInDay: false,
 		note: null,
-		transportFromPrevious: null
+		transportFromPrevious: transportFromPrevious || null
 	};
 
 	if (typeof positionInDay === 'undefined' || positionInDay === null) {
@@ -261,11 +262,16 @@ export function addOrReplaceOvernightPlace(
 	checkDayExists(trip, dayIndex);
 
 	let resultTrip = cloneDeep(trip);
+	let transportSettings: TransportSettings | null = null;
+
 	// Remove old sticky places
 	if (
 		trip.days[dayIndex].itinerary.length &&
 		trip.days[dayIndex].itinerary[trip.days![dayIndex].itinerary.length - 1].isStickyLastInDay
 	) {
+		transportSettings = cloneDeep(
+			trip.days[dayIndex].itinerary[trip.days![dayIndex].itinerary.length - 1].transportFromPrevious
+		);
 		resultTrip = removePlacesFromDay(
 			resultTrip,
 			dayIndex,
@@ -287,7 +293,14 @@ export function addOrReplaceOvernightPlace(
 		resultTrip.days[dayIndex].itinerary.length === 0 ||
 		resultTrip.days[dayIndex].itinerary[resultTrip.days[dayIndex].itinerary.length - 1].placeId !== place.id
 	) {
-		resultTrip = addPlaceToDay(resultTrip, place, dayIndex, userSettings, resultTrip.days[dayIndex].itinerary.length);
+		resultTrip = addPlaceToDay(
+			resultTrip,
+			place,
+			dayIndex,
+			userSettings,
+			resultTrip.days[dayIndex].itinerary.length,
+			transportSettings
+		);
 	}
 
 	if (

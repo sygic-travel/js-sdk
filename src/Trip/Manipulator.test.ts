@@ -629,6 +629,34 @@ describe('TripManipulator', () => {
 			const trip = Manipulator.addOrReplaceOvernightPlace(inputTrip, inputPlace, 1, null);
 			chai.expect(trip).to.deep.equal(expectedTrip);
 		});
+
+		it('should replace place and keep transport settings', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const inputPlace: Place = cloneDeep(PlaceExpectedResults.placeDetailedEiffelTowerWithoutMedia);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+
+			inputPlace.id = 'poi:89765';
+			const transportSettings: TransportSettings = {
+				mode: TransportMode.PEDESTRIAN,
+				avoid: [],
+				startTime: 1000,
+				duration: 3000,
+				note: 'x',
+				waypoints: [],
+				routeId: 'x'
+			};
+
+			inputTrip.days![0].itinerary[1].transportFromPrevious = cloneDeep(transportSettings) as TransportSettings;
+			expectedTrip.days![0].itinerary[1].transportFromPrevious = cloneDeep(transportSettings) as TransportSettings;
+
+			const trip = Manipulator.addOrReplaceOvernightPlace(inputTrip, inputPlace, 0, null);
+			chai.expect(trip.days![0].itinerary[1].placeId).to.be.eq('poi:89765');
+			chai.expect(
+				trip.days![0].itinerary[1].transportFromPrevious
+			).to.deep.eq(
+				expectedTrip.days[0].itinerary[1].transportFromPrevious
+			);
+		});
 	});
 
 	describe('#removePlaceFromDayByPlaceId', () => {
