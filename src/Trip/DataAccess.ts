@@ -116,8 +116,10 @@ export async function syncChangedTripToServer(tripId: string): Promise<void> {
 	if (tripResponse.data.conflict_resolution === TripConflictResolution.IGNORED) {
 		const conflictInfo: TripConflictInfo = {
 			lastUserName: tripResponse.data.conflict_info.last_user_name,
-			lastUpdatedAt: tripResponse.data.conflict_info.last_updated_at,
-			localVersion: changedTrip.apiData.base_version,
+			localUpdatedAt: changedTrip.trip.updatedAt,
+			localVersion: changedTrip.trip.version,
+			tripName: changedTrip.trip.name,
+			remoteUpdatedAt: tripResponse.data.conflict_info.last_updated_at,
 			remoteVersion: tripResponse.data.trip.version,
 		};
 		return handleIgnoredConflict(conflictInfo, changedTrip.trip, tripResponse);
