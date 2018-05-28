@@ -1,4 +1,4 @@
-import { Location } from '../Geo';
+import { Location, NamedLocation } from '../Geo';
 import { Dao as placesDao, Place } from '../Places';
 import { Dao as tripsDao, Day, ItineraryItem, TransportAvoid, Trip } from '../Trip';
 import * as Dao from './DataAccess';
@@ -24,10 +24,13 @@ export {
 
 export async function sendDirections(
 	email: string,
-	destinationLocation: Location,
-	destinationName: string | null = null
+	destination: NamedLocation,
+	origin?: NamedLocation,
+	waypoints?: Waypoint[],
+	avoid?: TransportAvoid[],
+
 ): Promise<DirectionSendResponseCode> {
-	return Dao.sendDirections(email, destinationLocation, destinationName);
+	return Dao.sendDirections(email, destination, origin, waypoints, avoid);
 }
 
 export async function getRoutesForTripDay(tripId: string, dayIndex: number): Promise<TripDayRoutes>  {

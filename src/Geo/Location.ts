@@ -7,6 +7,11 @@ export interface Location {
 	lng: number;
 }
 
+export interface NamedLocation {
+	name: string | null;
+	location: Location;
+}
+
 export function locationToTileCoordinate(location: Location, zoom: number): Coordinate {
 	const tileSize = 256;
 	const x = (location.lng + 180) / 360;
