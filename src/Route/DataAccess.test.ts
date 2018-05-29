@@ -6,7 +6,7 @@ import { ApiResponse, StApi } from '../Api';
 import { Location } from '../Geo';
 import { setEnvironment } from '../Settings';
 import { route } from '../TestData/DirectionsApiResponses';
-import { TransportMode } from '../Trip';
+import { TransportAvoid, TransportMode } from '../Trip';
 import { cloneDeep } from '../Util';
 import * as dao from './DataAccess';
 import { DirectionSendResponseCode, Route, RouteRequest } from './Route';
@@ -75,25 +75,89 @@ describe('RouteDataAccess', () => {
 	});
 
 	describe('#sendDirections', () => {
-		it('should send correct request based on parameters', async () => {
+		it('should send correct request', async () => {
 			const apiStub: SinonStub = sandbox.stub(StApi, 'post').returns(
-				new Promise((resolve) => resolve(new ApiResponse( 200, null)))
+				new Promise((resolve) => resolve(new ApiResponse(200, null)))
 			);
 
-			const location: Location = {
-				lat: 1,
-				lng: 2
-			};
-
-			const result: DirectionSendResponseCode = await dao.sendDirections('email@example.com', location, 'Some name');
+			const result: DirectionSendResponseCode = await dao.sendDirections('email@example.com', {
+				name: 'Some name',
+				location: {
+					lat: 1,
+					lng: 2
+				}
+			});
 			chai.expect(result).to.equal(DirectionSendResponseCode.OK);
 			chai.expect(apiStub.getCall(0).args[0]).to.equal('directions/send-by-email');
 			chai.expect(apiStub.getCall(0).args[1]).to.deep.equal({
 				user_email: 'email@example.com',
 				destination: {
 					name: 'Some name',
-					location
+					location: {
+						lat: 1,
+						lng: 2
+					}
 				}
+			});
+		});
+
+		it('should send correct request with origin, waypoints and avoids', async () => {
+			const apiStub: SinonStub = sandbox.stub(StApi, 'post').returns(
+				new Promise((resolve) => resolve(new ApiResponse(200, null)))
+			);
+
+			const result: DirectionSendResponseCode = await dao.sendDirections(
+				'email@example.com', {
+				name: 'destination',
+				location: {
+					lat: 1,
+					lng: 2
+				}
+			}, {
+				name: 'origin',
+				location: {
+					lat: 3,
+					lng: 4
+				}
+			}, [{
+				placeId: '12345',
+				location: {
+					lat: 5,
+					lng: 6
+				}
+			}], [
+				TransportAvoid.UNPAVED,
+				TransportAvoid.FERRIES
+			]);
+			chai.expect(result).to.equal(DirectionSendResponseCode.OK);
+			chai.expect(apiStub.getCall(0).args[0]).to.equal('directions/send-by-email');
+			chai.expect(apiStub.getCall(0).args[1]).to.deep.equal({
+				user_email: 'email@example.com',
+				destination: {
+					name: 'destination',
+					location: {
+						lat: 1,
+						lng: 2
+					}
+				},
+				origin: {
+					name: 'origin',
+					location: {
+						lat: 3,
+						lng: 4
+					}
+				},
+				waypoints: [{
+					place_id: '12345',
+					location: {
+						lat: 5,
+						lng: 6
+					}
+				}],
+				avoid: [
+					'unpaved',
+					'ferries'
+				]
 			});
 		});
 	});

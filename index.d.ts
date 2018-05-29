@@ -111,8 +111,10 @@ declare class RoutesModule {
 	public getRoutesForTripDay(tripId: string, dayIndex: number): Promise<Route.TripDayRoutes>;
 	public sendDirections(
 		email: string,
-		destinationLocation: Location,
-		destinationName: string | null
+		destination: Geo.NamedLocation,
+		origin?: Geo.NamedLocation,
+		waypoints?: Route.Waypoint[],
+		avoid?: Trips.TransportAvoid[],
 	): Promise<Route.DirectionSendResponseCode>;
 }
 
@@ -530,6 +532,11 @@ export namespace Geo {
 	export interface Coordinate {
 		x: number;
 		y: number;
+	}
+
+	export interface NamedLocation {
+		name: string | null;
+		location: Location;
 	}
 }
 

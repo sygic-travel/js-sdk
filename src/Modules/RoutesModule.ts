@@ -1,4 +1,4 @@
-import { Location } from '../Geo';
+import { Location, NamedLocation } from '../Geo';
 import {
 	DirectionSendResponseCode, getDirections, getRoutesForTripDay,
 	Route, sendDirections, TripDayRoutes, Waypoint
@@ -21,9 +21,11 @@ export default class RoutesModule {
 
 	public sendDirections(
 		email: string,
-		destinationLocation: Location,
-		destinationName: string | null = null
+		destination: NamedLocation,
+		origin?: NamedLocation,
+		waypoints?: Waypoint[],
+		avoid?: TransportAvoid[],
 	): Promise<DirectionSendResponseCode> {
-		return sendDirections(email, destinationLocation, destinationName);
+		return sendDirections(email, destination, origin, waypoints, avoid);
 	}
 }

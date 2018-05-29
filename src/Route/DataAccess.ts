@@ -1,9 +1,13 @@
+import { decamelizeKeys } from 'humps';
+
 import { DirectionSendResponseCode, Mapper, Route, RouteRequest } from '.';
-import {ApiResponse, StApi} from '../Api';
+import { ApiResponse, StApi } from '../Api';
 import { routesCache as cache } from '../Cache';
-import { Location } from '../Geo';
+import { NamedLocation } from '../Geo';
+import { TransportAvoid } from '../Trip';
 import { flatten, splitArrayToChunks } from '../Util';
 import { estimateModeDirections } from './Estimator';
+import { Waypoint } from './Route';
 
 export async function getRoutes(requests: RouteRequest[]): Promise<Route[]> {
 	const keys: string[] = requests.map(createCacheKey);
@@ -63,19 +67,30 @@ async function getFromApi(requests: RouteRequest[]): Promise<object[]> {
 
 export async function sendDirections(
 	email: string,
-	destinationLocation: Location,
-	destinationName: string | null = null
+	destination: NamedLocation,
+	origin?: NamedLocation,
+	waypoints?: Waypoint[],
+	avoid?: TransportAvoid[],
 ) {
 	const apiRequestData: any = {
 		user_email: email,
-		destination: {
-			name: destinationName,
-			location: destinationLocation
-		}
+		destination
 	};
 
+	if (origin) {
+		apiRequestData.origin = origin;
+	}
+
+	if (waypoints) {
+		apiRequestData.waypoints = waypoints;
+	}
+
+	if (avoid) {
+		apiRequestData.avoid = avoid;
+	}
+
 	try {
-		await StApi.post('directions/send-by-email', apiRequestData);
+		await StApi.post('directions/send-by-email', decamelizeKeys(apiRequestData));
 		return DirectionSendResponseCode.OK;
 	} catch (e) {
 		if (e.response.data.status_code === 422) {
