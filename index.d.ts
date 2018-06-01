@@ -989,10 +989,10 @@ export namespace Sessions {
 		isEmailSubscribed: boolean;
 		isRegistered: boolean;
 		photoUrl: string | null;
-		licence: UserLicence | null;
+		license: UserLicense | null;
 		privacyConsents: PrivacyConsents[];
 	}
-	export interface UserLicence {
+	export interface UserLicense {
 		isActive: boolean;
 		name: string;
 		expirationAt: string | null;
