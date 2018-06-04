@@ -995,6 +995,7 @@ export namespace Sessions {
 	export interface UserLicense {
 		isActive: boolean;
 		name: string;
+		type: string | null;
 		expirationAt: string | null;
 	}
 
