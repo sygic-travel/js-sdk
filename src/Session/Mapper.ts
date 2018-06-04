@@ -4,6 +4,7 @@ import { PrivacyConsents } from './User';
 export const mapUserInfo = (userData: any) => {
 	const license: UserLicense | null = userData.premium ? {
 		name: userData.premium.name,
+		type: userData.premium.type,
 		expirationAt: userData.premium.expiration_at,
 		isActive: userData.premium.is_active,
 	} : null;

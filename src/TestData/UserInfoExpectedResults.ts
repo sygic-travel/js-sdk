@@ -14,6 +14,7 @@ export const userInfo: UserInfo = {
 	photoUrl: 'http://example.com/avatar.png',
 	license: {
 		name: 'Sygic Travel Premium',
+		type: 'purchase',
 		expirationAt: null,
 		isActive: true
 	} as UserLicense,
