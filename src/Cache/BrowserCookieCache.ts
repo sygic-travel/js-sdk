@@ -34,7 +34,7 @@ export class BrowserCookieCache implements ICache {
 	}
 
 	public async remove(key: string): Promise<void> {
-		Cookies.remove(key);
+		Cookies.expire(key);
 	}
 
 	public async reset(): Promise<void> {
