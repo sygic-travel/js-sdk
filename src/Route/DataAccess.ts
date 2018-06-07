@@ -45,6 +45,9 @@ async function getFromApi(requests: RouteRequest[]): Promise<object[]> {
 		destination: request.destination,
 		waypoints: request.waypoints,
 		avoid: request.avoid,
+		depart_at: request.departAt,
+		arrive_at: request.arriveAt,
+		modes: [request.chosenMode]
 	}));
 
 	const CHUNK_SIZE: number = 50;
@@ -62,7 +65,6 @@ async function getFromApi(requests: RouteRequest[]): Promise<object[]> {
 	});
 
 	return flatten(chunkedPaths);
-
 }
 
 export async function sendDirections(
@@ -107,6 +109,9 @@ const createCacheKey = (request: RouteRequest): string => {
 	parts.push(request.destination.lat.toString());
 	parts.push(request.destination.lng.toString());
 	parts.push(request.avoid.join('-'));
+	if (request.departAt) {
+		parts.push(request.departAt);
+	}
 	if (request.waypoints) {
 		parts.push(request.waypoints.map((waypoint) => (
 			waypoint.location.lat.toString() + '-' + waypoint.location.lng.toString()

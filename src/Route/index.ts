@@ -1,6 +1,7 @@
 import { Location, NamedLocation } from '../Geo';
 import { Dao as placesDao, Place } from '../Places';
 import { Dao as tripsDao, Day, ItineraryItem, TransportAvoid, Trip } from '../Trip';
+import { buildDateTimeWithSecondsFromMidnight } from '../Util';
 import * as Dao from './DataAccess';
 import * as Mapper from './Mapper';
 import * as ModeSelector from './ModeSelector';
@@ -73,24 +74,50 @@ const createRequests = (places: Place[], day: Day): RouteRequest[] => {
 				currentPlace.location,
 				previousPlace.location,
 				currentItem.transportFromPrevious.routeId,
+				buildTransportStartTime(day.date, currentItem.transportFromPrevious.startTime),
 				currentItem.transportFromPrevious.waypoints,
 				currentItem.transportFromPrevious.avoid,
-				currentItem.transportFromPrevious.mode
-				));
+				currentItem.transportFromPrevious.mode,
+			));
 		} else {
-			requests.push(Mapper.createRouteRequest(currentPlace.location, previousPlace.location));
+			requests.push(Mapper.createRouteRequest(
+				currentPlace.location,
+				previousPlace.location,
+				null,
+				buildTransportStartTime(day.date, null)
+			));
 		}
 
 		return requests;
 	}, []);
 };
 
+function buildTransportStartTime(date: string | null, transportStartTime: number | null): string | null {
+	if (!date) {
+		return null;
+	}
+
+	if (!transportStartTime) {
+		return buildDateTimeWithSecondsFromMidnight(date, 36000);
+	}
+
+	return buildDateTimeWithSecondsFromMidnight(date, transportStartTime);
+}
+
 export async function getDirections(
 	origin: Location,
 	destination: Location,
 	waypoints: Waypoint[],
-	avoids: TransportAvoid[]
+	avoids: TransportAvoid[],
+	at?: string | null
 ): Promise<Route | null> {
-	const routes: Route[] = await Dao.getRoutes([Mapper.createRouteRequest(destination, origin, null, waypoints, avoids)]);
+	const routes: Route[] = await Dao.getRoutes([Mapper.createRouteRequest(
+		destination,
+		origin,
+		null,
+		at ? at : null,
+		waypoints,
+		avoids,
+	)]);
 	return routes.length > 0 ? routes[0] : null;
 }

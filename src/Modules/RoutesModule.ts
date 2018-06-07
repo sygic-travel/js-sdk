@@ -14,9 +14,10 @@ export default class RoutesModule {
 		origin: Location,
 		destination: Location,
 		waypoints: Waypoint[],
-		avoids: TransportAvoid[]
+		avoids: TransportAvoid[],
+		at?: string | null
 	): Promise<Route | null> {
-		return getDirections(origin, destination, waypoints, avoids);
+		return getDirections(origin, destination, waypoints, avoids, at);
 	}
 
 	public sendDirections(

@@ -43,11 +43,14 @@ describe('RouteMapper', () => {
 						lng: 1
 					}
 				}],
+				departAt: 'test',
+				arriveAt: null
 			};
 			chai.expect(Mapper.createRouteRequest(
 				destination,
 				origin,
 				'30:50',
+				'test',
 				[{
 					placeId: 'abc',
 					location: {
@@ -75,8 +78,10 @@ describe('RouteMapper', () => {
 				avoid: [TransportAvoid.UNPAVED],
 				chosenMode: TransportMode.PEDESTRIAN,
 				waypoints: [],
+				departAt: null,
+				arriveAt: null
 			};
-			chai.expect(Mapper.createRouteRequest(destination, origin))
+			chai.expect(Mapper.createRouteRequest(destination, origin, null, null))
 				.to.deep.equal(expected);
 		});
 	});

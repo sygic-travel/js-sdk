@@ -2,6 +2,8 @@ import { encode } from '@mapbox/polyline';
 import { Direction, ModeDirections } from '.';
 import { EARTH_RADIUS, getDistance, Location } from '../Geo';
 import { TransportMode } from '../Trip';
+import { LocalizedDatetime } from '../Util';
+import { DirectionLeg, DirectionMode } from './Route';
 
 const CAR_SPEED_0_TO_20: number = 27;
 const CAR_SPEED_20_TO_40: number = 54;
@@ -136,10 +138,47 @@ export const estimateDummyDirection = (
 const createDummyDirection = (origin: Location, destination: Location): Direction => ({
 	distance: null,
 	duration: null,
-	polyline: encode([[origin.lat, origin.lng], [destination.lat, destination.lng]]),
 	mode: TransportMode.CAR,
 	avoid: [],
 	source: 'estimator',
-	isoCodes: [],
-	routeId: null
+	routeId: null,
+	attributions: [],
+	legs: [{
+		startTime: createDummyLocalizedDatetime(),
+		endTime: createDummyLocalizedDatetime(),
+		duration: null,
+		distance: null,
+		mode: DirectionMode.CAR,
+		polyline: encode([[origin.lat, origin.lng], [destination.lat, destination.lng]]),
+		origin: {
+			name: null,
+			location: origin,
+			arrivalAt: createDummyLocalizedDatetime(),
+			departureAt: createDummyLocalizedDatetime(),
+			plannedArrivalAt: createDummyLocalizedDatetime(),
+			plannedDepartureAt: createDummyLocalizedDatetime()
+		},
+		destination: {
+			name: null,
+			location: destination,
+			arrivalAt: createDummyLocalizedDatetime(),
+			departureAt: createDummyLocalizedDatetime(),
+			plannedArrivalAt: createDummyLocalizedDatetime(),
+			plannedDepartureAt: createDummyLocalizedDatetime()
+		},
+		intermediateStops: [],
+		displayInfo: {
+			agencyName: null,
+			headsign: null,
+			nameShort: null,
+			nameLong: null,
+			lineColor: null,
+			displayMode: null
+		}
+	} as DirectionLeg]
+});
+
+const createDummyLocalizedDatetime = (): LocalizedDatetime => ({
+	datetime: null,
+	localDatetime: null
 });

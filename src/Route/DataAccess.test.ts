@@ -46,6 +46,8 @@ describe('RouteDataAccess', () => {
 				waypoints: [],
 				avoid: [],
 				chosenMode: TransportMode.CAR,
+				departAt: null,
+				arriveAt: null
 			});
 
 			const requests = routesData.map(buildRequest);

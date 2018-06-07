@@ -16,11 +16,10 @@ describe('Estimator', () => {
 		it('should correctly build dummy direction', () => {
 			const direction: Direction | null = Estimator.estimateDummyDirection(TransportMode.TRAIN, origin, destination);
 			chai.expect(direction.mode).to.equal(TransportMode.TRAIN);
-			chai.expect(direction.polyline).to.equal('_c`|@_c`|@_ibE_ibE');
+			chai.expect(direction.legs![0].polyline).to.equal('_c`|@_c`|@_ibE_ibE');
 			chai.expect(direction.distance).to.be.null('Expect null');
 			chai.expect(direction.duration).to.be.null('Expect null');
 			chai.expect(direction.avoid).to.deep.equal([]);
-			chai.expect(direction.isoCodes).to.deep.equal([]);
 			chai.expect(direction.source).to.equal('estimator');
 			chai.expect(direction.routeId).to.be.null('Expect null');
 		});
@@ -31,11 +30,10 @@ describe('Estimator', () => {
 			const direction: Direction | null = Estimator.estimateCarDirection(1000, origin, destination);
 			chai.expect(direction).to.not.be.null('Should not be null');
 			chai.expect(direction!.mode).to.equal(TransportMode.CAR);
-			chai.expect(direction!.polyline).to.equal('_c`|@_c`|@_ibE_ibE');
+			chai.expect(direction!.legs![0].polyline).to.equal('_c`|@_c`|@_ibE_ibE');
 			chai.expect(direction!.distance).to.equal(1800);
 			chai.expect(direction!.duration).to.equal(133);
 			chai.expect(direction!.avoid).to.deep.equal([]);
-			chai.expect(direction!.isoCodes).to.deep.equal([]);
 			chai.expect(direction!.source).to.equal('estimator');
 			chai.expect(direction!.routeId).to.be.null('Expect null');
 		});
@@ -44,11 +42,10 @@ describe('Estimator', () => {
 			const direction: Direction | null = Estimator.estimateCarDirection(5000, origin, destination);
 			chai.expect(direction).to.not.be.null('Should not be null');
 			chai.expect(direction!.mode).to.equal(TransportMode.CAR);
-			chai.expect(direction!.polyline).to.equal('_c`|@_c`|@_ibE_ibE');
+			chai.expect(direction!.legs![0].polyline).to.equal('_c`|@_c`|@_ibE_ibE');
 			chai.expect(direction!.distance).to.equal(8000);
 			chai.expect(direction!.duration).to.equal(667);
 			chai.expect(direction!.avoid).to.deep.equal([]);
-			chai.expect(direction!.isoCodes).to.deep.equal([]);
 			chai.expect(direction!.source).to.equal('estimator');
 			chai.expect(direction!.routeId).to.be.null('Expect null');
 		});
@@ -57,11 +54,10 @@ describe('Estimator', () => {
 			const direction: Direction | null = Estimator.estimateCarDirection(30000, origin, destination);
 			chai.expect(direction).to.not.be.null('Should not be null');
 			chai.expect(direction!.mode).to.equal(TransportMode.CAR);
-			chai.expect(direction!.polyline).to.equal('_c`|@_c`|@_ibE_ibE');
+			chai.expect(direction!.legs![0].polyline).to.equal('_c`|@_c`|@_ibE_ibE');
 			chai.expect(direction!.distance).to.equal(36000);
 			chai.expect(direction!.duration).to.equal(2000);
 			chai.expect(direction!.avoid).to.deep.equal([]);
-			chai.expect(direction!.isoCodes).to.deep.equal([]);
 			chai.expect(direction!.source).to.equal('estimator');
 			chai.expect(direction!.routeId).to.be.null('Expect null');
 		});
@@ -70,11 +66,10 @@ describe('Estimator', () => {
 			const direction: Direction | null = Estimator.estimateCarDirection(50000, origin, destination);
 			chai.expect(direction).to.not.be.null('Should not be null');
 			chai.expect(direction!.mode).to.equal(TransportMode.CAR);
-			chai.expect(direction!.polyline).to.equal('_c`|@_c`|@_ibE_ibE');
+			chai.expect(direction!.legs![0].polyline).to.equal('_c`|@_c`|@_ibE_ibE');
 			chai.expect(direction!.distance).to.equal(60000);
 			chai.expect(direction!.duration).to.equal(2000);
 			chai.expect(direction!.avoid).to.deep.equal([]);
-			chai.expect(direction!.isoCodes).to.deep.equal([]);
 			chai.expect(direction!.source).to.equal('estimator');
 			chai.expect(direction!.routeId).to.be.null('Expect null');
 		});
@@ -90,11 +85,10 @@ describe('Estimator', () => {
 			const direction: Direction | null = Estimator.estimatePedestrianDirection(1000, origin, destination);
 			chai.expect(direction).to.not.be.null('Should not be null');
 			chai.expect(direction!.mode).to.equal(TransportMode.PEDESTRIAN);
-			chai.expect(direction!.polyline).to.equal('_c`|@_c`|@_ibE_ibE');
+			chai.expect(direction!.legs![0].polyline).to.equal('_c`|@_c`|@_ibE_ibE');
 			chai.expect(direction!.distance).to.equal(1350);
 			chai.expect(direction!.duration).to.equal(750);
 			chai.expect(direction!.avoid).to.deep.equal([]);
-			chai.expect(direction!.isoCodes).to.deep.equal([]);
 			chai.expect(direction!.source).to.equal('estimator');
 			chai.expect(direction!.routeId).to.be.null('Expect null');
 		});
@@ -103,11 +97,10 @@ describe('Estimator', () => {
 			const direction: Direction | null = Estimator.estimatePedestrianDirection(5000, origin, destination);
 			chai.expect(direction).to.not.be.null('Should not be null');
 			chai.expect(direction!.mode).to.equal(TransportMode.PEDESTRIAN);
-			chai.expect(direction!.polyline).to.equal('_c`|@_c`|@_ibE_ibE');
+			chai.expect(direction!.legs![0].polyline).to.equal('_c`|@_c`|@_ibE_ibE');
 			chai.expect(direction!.distance).to.equal(6100);
 			chai.expect(direction!.duration).to.equal(3750);
 			chai.expect(direction!.avoid).to.deep.equal([]);
-			chai.expect(direction!.isoCodes).to.deep.equal([]);
 			chai.expect(direction!.source).to.equal('estimator');
 			chai.expect(direction!.routeId).to.be.null('Expect null');
 		});
@@ -116,11 +109,10 @@ describe('Estimator', () => {
 			const direction: Direction | null = Estimator.estimatePedestrianDirection(7000, origin, destination);
 			chai.expect(direction).to.not.be.null('Should not be null');
 			chai.expect(direction!.mode).to.equal(TransportMode.PEDESTRIAN);
-			chai.expect(direction!.polyline).to.equal('_c`|@_c`|@_ibE_ibE');
+			chai.expect(direction!.legs![0].polyline).to.equal('_c`|@_c`|@_ibE_ibE');
 			chai.expect(direction!.distance).to.equal(7742);
 			chai.expect(direction!.duration).to.equal(5250);
 			chai.expect(direction!.avoid).to.deep.equal([]);
-			chai.expect(direction!.isoCodes).to.deep.equal([]);
 			chai.expect(direction!.source).to.equal('estimator');
 			chai.expect(direction!.routeId).to.be.null('Expect null');
 		});
@@ -135,11 +127,10 @@ describe('Estimator', () => {
 		it('should correctly build plane direction', () => {
 			const direction: Direction | null = Estimator.estimatePlaneDirection(110000, origin, destination);
 			chai.expect(direction).to.not.be.null('Should not be null');
-			chai.expect(direction!.polyline).to.equal('_c`|@_c`|@_ibE_ibE');
+			chai.expect(direction!.legs![0].polyline).to.equal('_c`|@_c`|@_ibE_ibE');
 			chai.expect(direction!.distance).to.equal(110000);
 			chai.expect(direction!.duration).to.equal(2840);
 			chai.expect(direction!.avoid).to.deep.equal([]);
-			chai.expect(direction!.isoCodes).to.deep.equal([]);
 			chai.expect(direction!.source).to.equal('estimator');
 			chai.expect(direction!.routeId).to.be.null('Expect null');
 		});
@@ -157,12 +148,11 @@ describe('Estimator', () => {
 				directions: [{
 					distance: null,
 					duration: null,
-					polyline: '',
 					mode: TransportMode.CAR,
 					avoid: [],
 					source: 'estimator',
-					isoCodes: [],
-					routeId: null
+					routeId: null,
+					attributions: []
 				}]
 			}];
 			const modeDirections: ModeDirections[] = Estimator.estimateModeDirections(

@@ -1,6 +1,13 @@
 import { Location } from '../Geo';
 import { Direction, Route } from '../Route';
+import { DirectionMode } from '../Route/Route';
 import { TransportMode } from '../Trip';
+import { LocalizedDatetime } from '../Util';
+
+const emptyLocalDateTime = {
+	datetime: null,
+	localDatetime: null
+} as LocalizedDatetime;
 
 export const route = {
 	origin: {
@@ -15,11 +22,50 @@ export const route = {
 		distance: 800,
 		duration: 30,
 		routeId: '30:800',
-		polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
 		mode: TransportMode.CAR,
 		avoid: [],
 		source: 'lbs',
-		isoCodes: [ 'CZ', 'SK' ]
+		attributions: [],
+		transferCount: 0,
+		legs: [{
+			startTime: emptyLocalDateTime,
+			endTime: emptyLocalDateTime,
+			distance: 800,
+			duration: 30,
+			mode: DirectionMode.CAR,
+			polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
+			origin: {
+				name: null,
+				location: {
+					lat: 49.2080811,
+					lng: 16.582698
+				},
+				arrivalAt: emptyLocalDateTime,
+				departureAt: emptyLocalDateTime,
+				plannedArrivalAt: emptyLocalDateTime,
+				plannedDepartureAt: emptyLocalDateTime
+			},
+			destination: {
+				name: null,
+				location: {
+					lat: 49.2080844,
+					lng: 16.582545
+				},
+				arrivalAt: emptyLocalDateTime,
+				departureAt: emptyLocalDateTime,
+				plannedArrivalAt: emptyLocalDateTime,
+				plannedDepartureAt: emptyLocalDateTime
+			},
+			intermediateStops: [],
+			displayInfo: {
+				agencyName: null,
+				nameShort: null,
+				nameLong: null,
+				headsign: null,
+				lineColor: null,
+				displayMode: null
+			}
+		}]
 	} as Direction,
 	modeDirections: [
 		{
@@ -29,11 +75,50 @@ export const route = {
 					distance: 530,
 					duration: 300,
 					routeId: null,
-					polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvA',
 					mode: TransportMode.PEDESTRIAN,
 					source: 'osrm',
 					avoid: [],
-					isoCodes: [ 'CZ', 'SK' ]
+					attributions: [],
+					transferCount: 0,
+					legs: [{
+						startTime: emptyLocalDateTime,
+						endTime: emptyLocalDateTime,
+						distance: 530,
+						duration: 300,
+						mode: DirectionMode.PEDESTRIAN,
+						polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvA',
+						origin: {
+							name: null,
+							location: {
+								lat: 49.2080811,
+								lng: 16.582698
+							},
+							arrivalAt: emptyLocalDateTime,
+							departureAt: emptyLocalDateTime,
+							plannedArrivalAt: emptyLocalDateTime,
+							plannedDepartureAt: emptyLocalDateTime
+						},
+						destination: {
+							name: null,
+							location: {
+								lat: 49.2080844,
+								lng: 16.582545
+							},
+							arrivalAt: emptyLocalDateTime,
+							departureAt: emptyLocalDateTime,
+							plannedArrivalAt: emptyLocalDateTime,
+							plannedDepartureAt: emptyLocalDateTime
+						},
+						intermediateStops: [],
+						displayInfo: {
+							agencyName: null,
+							nameShort: null,
+							nameLong: null,
+							headsign: null,
+							lineColor: null,
+							displayMode: null
+						}
+					}]
 				} as Direction
 			]
 		},
@@ -44,21 +129,99 @@ export const route = {
 					distance: 800,
 					duration: 30,
 					routeId: '30:800',
-					polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
 					mode: TransportMode.CAR,
 					source: 'lbs',
 					avoid: [],
-					isoCodes: [ 'CZ', 'SK' ]
+					attributions: [],
+					transferCount: 0,
+					legs: [{
+						startTime: emptyLocalDateTime,
+						endTime: emptyLocalDateTime,
+						distance: 800,
+						duration: 30,
+						mode: DirectionMode.CAR,
+						polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
+						origin: {
+							name: null,
+							location: {
+								lat: 49.2080811,
+								lng: 16.582698
+							},
+							arrivalAt: emptyLocalDateTime,
+							departureAt: emptyLocalDateTime,
+							plannedArrivalAt: emptyLocalDateTime,
+							plannedDepartureAt: emptyLocalDateTime
+						},
+						destination: {
+							name: null,
+							location: {
+								lat: 49.2080844,
+								lng: 16.582545
+							},
+							arrivalAt: emptyLocalDateTime,
+							departureAt: emptyLocalDateTime,
+							plannedArrivalAt: emptyLocalDateTime,
+							plannedDepartureAt: emptyLocalDateTime
+						},
+						intermediateStops: [],
+						displayInfo: {
+							agencyName: null,
+							nameShort: null,
+							nameLong: null,
+							headsign: null,
+							lineColor: null,
+							displayMode: null
+						}
+					}]
 				} as Direction,
 				{
 					distance: 700,
 					duration: 30,
 					routeId: '30:700',
-					polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
 					mode: TransportMode.CAR,
 					source: 'lbs',
 					avoid: [],
-					isoCodes: [ 'CZ', 'SK' ]
+					attributions: [],
+					transferCount: 0,
+					legs: [{
+						startTime: emptyLocalDateTime,
+						endTime: emptyLocalDateTime,
+						distance: 700,
+						duration: 30,
+						mode: DirectionMode.CAR,
+						polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
+						origin: {
+							name: null,
+							location: {
+								lat: 49.2080811,
+								lng: 16.582698
+							},
+							arrivalAt: emptyLocalDateTime,
+							departureAt: emptyLocalDateTime,
+							plannedArrivalAt: emptyLocalDateTime,
+							plannedDepartureAt: emptyLocalDateTime
+						},
+						destination: {
+							name: null,
+							location: {
+								lat: 49.2080844,
+								lng: 16.582545
+							},
+							arrivalAt: emptyLocalDateTime,
+							departureAt: emptyLocalDateTime,
+							plannedArrivalAt: emptyLocalDateTime,
+							plannedDepartureAt: emptyLocalDateTime
+						},
+						intermediateStops: [],
+						displayInfo: {
+							agencyName: null,
+							nameShort: null,
+							nameLong: null,
+							headsign: null,
+							lineColor: null,
+							displayMode: null
+						}
+					}]
 				} as Direction
 			]
 		},
