@@ -4,11 +4,15 @@ import { EARTH_RADIUS, getDistance, Location } from '../Geo';
 import { TransportMode } from '../Trip';
 
 const CAR_SPEED_0_TO_20: number = 27;
-const CAR_SPEED_20_TO_40: number = 53;
+const CAR_SPEED_20_TO_40: number = 54;
 const CAR_SPEED_60_AND_MORE: number = 90;
 
 const PEDESTRIAN_SPEED: number = 4.8;
 const PLANE_SPEED: number = 900;
+
+const CAR_MAX_DISTANCE: number = 2000000;
+const PEDESTRIAN_MAX_DISTANCE: number = 20000;
+const PLANE_MIN_DISTANCE: number = 100000;
 
 export const estimateModeDirections = (
 	modeDirections: ModeDirections[],
@@ -58,7 +62,10 @@ export const estimateCarDirection = (
 	airDistance: number,
 	origin: Location,
 	destination: Location
-): Direction => {
+): Direction | null => {
+	if (airDistance > CAR_MAX_DISTANCE) {
+		return null;
+	}
 	const direction: Direction = createDummyDirection(origin, destination);
 	if (airDistance <= 2000) {
 		direction.distance = Math.round(airDistance * 1.8);
@@ -84,7 +91,10 @@ export const estimatePedestrianDirection = (
 	airDistance: number,
 	origin: Location,
 	destination: Location
-): Direction => {
+): Direction | null => {
+	if (airDistance > PEDESTRIAN_MAX_DISTANCE) {
+		return null;
+	}
 	const direction: Direction = createDummyDirection(origin, destination);
 	if (airDistance <= 2000) {
 		direction.distance = Math.round(airDistance * 1.35);
@@ -102,7 +112,10 @@ export const estimatePlaneDirection = (
 	airDistance: number,
 	origin: Location,
 	destination: Location
-): Direction => {
+): Direction | null => {
+	if (airDistance < PLANE_MIN_DISTANCE) {
+		return null;
+	}
 	const direction: Direction = createDummyDirection(origin, destination);
 	direction.distance = airDistance;
 	direction.duration = Math.round((airDistance / PLANE_SPEED) * 3.6 + 40 * 60);
