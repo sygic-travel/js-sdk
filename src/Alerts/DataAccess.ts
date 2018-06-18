@@ -10,7 +10,6 @@ import { mapAlertsApiResponseToAlerts, mapDetailedAlertApiResponseToDetailedAler
 const DEFAULT_QUERY_LIMIT: number = 100;
 const DEFAULT_BOUNDS_EXPAND_SIZE: number = 500000;
 
-
 export const getAlerts = async (alertsQuery: AlertsQuery): Promise<Alert[]> => {
 	const queryStringObject: any = createGetAlertsQueryStringObject(alertsQuery);
 	const filterQueryString: string = 'alerts/list?' + stringify(queryStringObject);
@@ -38,7 +37,10 @@ export const getAlerts = async (alertsQuery: AlertsQuery): Promise<Alert[]> => {
 	alertsCache.set('bounds', extendedBounds);
 	alertsCache.set('alerts', apiResponseCalledWithBounds.data.alerts);
 
-	return mapAlertsApiResponseToAlerts(apiResponseCalledWithBounds.data.alerts);
+	return filterVisibleAlerts(
+		mapAlertsApiResponseToAlerts(apiResponseCalledWithBounds.data.alerts),
+		alertsQuery.bounds
+	);
 };
 
 const getAlertsApiGetResponse = async (filterQueryString: string): Promise<ApiResponse> => {
