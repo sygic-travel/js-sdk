@@ -142,6 +142,7 @@ declare class TripModule {
 	public getTripTemplates(placeId: string): Promise<Trips.TripTemplate[]>;
 	public applyTripTemplate(tripId: string, templateId: number, dayIndex: number): Promise<Trips.Trip>;
 	public getTripIdsWaitingToSync(): string[];
+	public getNearestPossiblePlace(location: Geo.Location, tripId: string, dayIndex: number): Places.Place;
 }
 
 declare class SessionModule {

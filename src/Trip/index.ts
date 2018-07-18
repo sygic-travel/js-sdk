@@ -1,10 +1,11 @@
 import { ChangeNotification } from '../Changes';
+import { Location } from '../Geo';
 import { DESTINATION_BREAK_LEVELS, getDetailedPlaces, Place } from '../Places';
 import { getUserSettings, UserSettings } from '../Session';
 import * as Dao from './DataAccess';
 import * as TripManipulator from './Manipulator';
 import { mapTripCreateRequest, putPlacesToTrip } from './Mapper';
-import { AddToTripInstructions, getAddToTripInstructions } from './PositionFinder';
+import { AddToTripInstructions, getAddToTripInstructions, getNearestPossiblePlaceToLocation } from './PositionFinder';
 
 import {
 	Day,
@@ -241,4 +242,12 @@ async function populateTripWithPlaces(trip: Trip): Promise<Trip> {
 
 async function createTrip(startDate: string, name: string, daysCount: number, placeId?: string): Promise<Trip> {
 	return Dao.createTrip(mapTripCreateRequest(startDate, name, daysCount, placeId));
+}
+
+export async function getNearestPossiblePlace(
+	location: Location,
+	tripId: string,
+	dayIndex: number
+): Promise<Place | null> {
+	return getNearestPossiblePlaceToLocation(location, await getTripDetailed(tripId), dayIndex);
 }
