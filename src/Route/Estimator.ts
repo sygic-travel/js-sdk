@@ -1,6 +1,6 @@
 import { encode } from '@mapbox/polyline';
 import { Direction, ModeDirections } from '.';
-import { EARTH_RADIUS, getDistance, Location } from '../Geo';
+import { Location } from '../Geo';
 import { TransportMode } from '../Trip';
 import { LocalizedDatetime } from '../Util';
 import { DirectionLeg, DirectionMode } from './Route';
@@ -21,35 +21,13 @@ export const estimateModeDirections = (
 	origin: Location,
 	destination: Location
 ): ModeDirections[] => {
-	const airDistance: number = getDistance(origin, destination, EARTH_RADIUS);
 	return Object.keys(TransportMode).reduce((acc: ModeDirections[], transportMode: string) => {
 		const transportModeInDirections: ModeDirections | undefined = modeDirections.find((modeDirection: ModeDirections) => (
 			modeDirection.mode === TransportMode[transportMode]
 		));
 
 		if (transportModeInDirections === undefined) {
-			let newDirection: Direction | null;
-			switch (TransportMode[transportMode]) {
-				case TransportMode.BIKE:
-				case TransportMode.BOAT:
-				case TransportMode.BUS:
-				case TransportMode.TRAIN:
-				case TransportMode.PUBLIC_TRANSIT:
-					newDirection = estimateDummyDirection(TransportMode[transportMode], origin, destination);
-					break;
-				case TransportMode.CAR:
-					newDirection = estimateCarDirection(airDistance, origin, destination);
-					break;
-				case TransportMode.PEDESTRIAN:
-					newDirection = estimatePedestrianDirection(airDistance, origin, destination);
-					break;
-				case TransportMode.PLANE:
-					newDirection = estimatePlaneDirection(airDistance, origin, destination);
-					break;
-				default:
-					newDirection = null;
-					break;
-			}
+			const newDirection: Direction = estimateDummyDirection(TransportMode[transportMode], origin, destination);
 			acc.push({
 				directions: newDirection ? [newDirection!] : [],
 				mode: TransportMode[transportMode]
