@@ -4,7 +4,7 @@ import { DirectionSendResponseCode, Mapper, Route, RouteRequest } from '.';
 import { ApiResponse, StApi } from '../Api';
 import { routesCache as cache } from '../Cache';
 import { NamedLocation } from '../Geo';
-import { TransportAvoid, TransportMode } from '../Trip';
+import { TransportAvoid } from '../Trip';
 import { flatten, splitArrayToChunks } from '../Util';
 import { estimateModeDirections } from './Estimator';
 import { Waypoint } from './Route';
@@ -105,6 +105,9 @@ const createCacheKey = (request: RouteRequest): string => {
 	parts.push(request.destination.lat.toString());
 	parts.push(request.destination.lng.toString());
 	parts.push(request.avoid.join('-'));
+	if (request.chosenMode) {
+		parts.push(request.chosenMode);
+	}
 	if (request.departAt) {
 		parts.push(request.departAt);
 	}

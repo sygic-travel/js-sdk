@@ -52,10 +52,10 @@ describe('RouteDataAccess', () => {
 
 			const requests = routesData.map(buildRequest);
 			const cacheMap = new Map<string, any>();
-			cacheMap.set('1-1-49.2080844-16.582545--', routesData[0]);
-			cacheMap.set('2-2-49.2080844-16.582545--', null);
-			cacheMap.set('3-3-49.2080844-16.582545--', routesData[2]);
-			cacheMap.set('4-4-49.2080844-16.582545--', null);
+			cacheMap.set('1-1-49.2080844-16.582545--car-', routesData[0]);
+			cacheMap.set('2-2-49.2080844-16.582545--car-', null);
+			cacheMap.set('3-3-49.2080844-16.582545--car-', routesData[2]);
+			cacheMap.set('4-4-49.2080844-16.582545--car-', null);
 
 			sandbox.stub(routesCache, 'getBatchMap').returns(new Promise((resolve) => (resolve(cacheMap))));
 
