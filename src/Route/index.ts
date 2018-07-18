@@ -1,10 +1,9 @@
 import { Location, NamedLocation } from '../Geo';
 import { Dao as placesDao, Place } from '../Places';
-import { Dao as tripsDao, Day, ItineraryItem, TransportAvoid, Trip } from '../Trip';
+import { Dao as tripsDao, Day, ItineraryItem, TransportAvoid, TransportMode, TransportSettings, Trip } from '../Trip';
 import { buildDateTimeWithSecondsFromMidnight } from '../Util';
 import * as Dao from './DataAccess';
 import * as Mapper from './Mapper';
-import * as ModeSelector from './ModeSelector';
 import {
 	Direction, DirectionSendResponseCode, DirectionSource, ModeDirections, Route,
 	RouteRequest, TripDayRoutes, Waypoint
@@ -15,7 +14,6 @@ export {
 	DirectionSendResponseCode,
 	DirectionSource,
 	ModeDirections,
-	ModeSelector,
 	Route,
 	RouteRequest,
 	Mapper,
@@ -48,12 +46,29 @@ export async function getRoutesForTripDay(tripId: string, dayIndex: number): Pro
 	}
 
 	const places: Place[] = await placesDao.getPlacesFromTripDay(day, '100x100');
-	const routes: Route[] = await Dao.getRoutes(createRequests(places, day));
+	const userTransportSettings: (TransportSettings | null)[] = day.itinerary.slice(1)
+		.map((item: ItineraryItem) => item.transportFromPrevious);
+	let routes: Route[] = await Dao.getRoutes(createRequests(places, day));
+	routes = routes.map((route: Route, index: number): Route => {
+		if (!userTransportSettings[index]) {
+			return route;
+		}
+
+		const chosenModeDirection: ModeDirections = route.modeDirections.find((modeDirection: ModeDirections) => (
+			modeDirection.mode === userTransportSettings[index]!.mode
+		))!;
+
+		const chosenDirection: Direction | undefined = chosenModeDirection.directions.find((direction: Direction) => (
+			direction.routeId === userTransportSettings[index]!.routeId
+		));
+
+		route.chosenDirection = chosenDirection ? chosenDirection : chosenModeDirection.directions[0];
+
+		return route;
+	});
 	return {
 		routes,
-		userTransportSettings: day.itinerary.slice(1).map(
-			(item: ItineraryItem) => (item.transportFromPrevious)
-		)
+		userTransportSettings
 	} as TripDayRoutes;
 }
 
@@ -77,7 +92,6 @@ const createRequests = (places: Place[], day: Day): RouteRequest[] => {
 				buildTransportStartTime(day.date, currentItem.transportFromPrevious.startTime),
 				currentItem.transportFromPrevious.waypoints,
 				currentItem.transportFromPrevious.avoid,
-				currentItem.transportFromPrevious.mode,
 			));
 		} else {
 			requests.push(Mapper.createRouteRequest(

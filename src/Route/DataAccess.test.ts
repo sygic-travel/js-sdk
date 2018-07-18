@@ -162,5 +162,32 @@ describe('RouteDataAccess', () => {
 				]
 			});
 		});
+
+		it('should return correctly map chosen route', async () => {
+			sandbox.stub(StApi, 'post').returns(
+				new Promise((resolve) => resolve(new ApiResponse(200, {
+					path: [route]
+				})))
+			);
+			const routes: Route[] = await dao.getRoutes([{
+				origin: {
+					lat: 1,
+					lng: 2
+				},
+				destination: {
+					lat: 3,
+					lng: 4
+				},
+				avoid: [],
+				chosenMode: null,
+				departAt: null,
+				arriveAt: null
+			}]);
+
+			chai.expect(routes[0].chosenDirection.distance).to.eq(530);
+			chai.expect(routes[0].chosenDirection.duration).to.eq(300);
+			chai.expect(routes[0].chosenDirection.routeId).to.eq(null);
+			chai.expect(routes[0].chosenDirection.mode).to.eq('pedestrian');
+		});
 	});
 });

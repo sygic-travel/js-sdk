@@ -5,6 +5,7 @@ import { Location } from '../Geo';
 import { route as apiRoute } from '../TestData/DirectionsApiResponses';
 import { route as routeEntity } from '../TestData/DirectionsEntities';
 import { TransportAvoid, TransportMode } from '../Trip';
+import { cloneDeep } from '../Util';
 
 import * as Mapper from './Mapper';
 
@@ -13,8 +14,10 @@ describe('RouteMapper', () => {
 	describe('#mapRouteFromApiResponse', () => {
 
 		it('should correctly map api response to response', () => {
-			chai.expect(Mapper.mapRouteFromApiResponse(apiRoute, [], TransportMode.CAR))
-				.to.deep.equal(routeEntity);
+			const result = cloneDeep(routeEntity);
+			delete result.chosenDirection;
+			chai.expect(Mapper.mapRouteFromApiResponse(apiRoute, []))
+				.to.deep.equal(result);
 		});
 
 	});
@@ -76,7 +79,7 @@ describe('RouteMapper', () => {
 				destination,
 				routeId: null,
 				avoid: [TransportAvoid.UNPAVED],
-				chosenMode: TransportMode.PEDESTRIAN,
+				chosenMode: null,
 				waypoints: [],
 				departAt: null,
 				arriveAt: null

@@ -4,7 +4,7 @@ import { DirectionSendResponseCode, Mapper, Route, RouteRequest } from '.';
 import { ApiResponse, StApi } from '../Api';
 import { routesCache as cache } from '../Cache';
 import { NamedLocation } from '../Geo';
-import { TransportAvoid } from '../Trip';
+import { TransportAvoid, TransportMode } from '../Trip';
 import { flatten, splitArrayToChunks } from '../Util';
 import { estimateModeDirections } from './Estimator';
 import { Waypoint } from './Route';
@@ -22,19 +22,15 @@ export async function getRoutes(requests: RouteRequest[]): Promise<Route[]> {
 	}).map((routeData, index) => {
 		const route: Route = Mapper.mapRouteFromApiResponse(
 			routeData,
-			requests[index].avoid,
-			requests[index].chosenMode
+			requests[index].avoid
 		);
 
 		route.modeDirections = route.modeDirections.concat(
 			estimateModeDirections(route.modeDirections, route.origin, route.destination)
 		);
 
-		route.chosenDirection = Mapper.chooseDirection(
-			route.modeDirections,
-			requests[index].chosenMode,
-			requests[index].routeId
-		);
+		route.chosenDirection = route.modeDirections[0].directions[0];
+
 		return route;
 	});
 }
@@ -47,7 +43,7 @@ async function getFromApi(requests: RouteRequest[]): Promise<object[]> {
 		avoid: request.avoid,
 		depart_at: request.departAt,
 		arrive_at: request.arriveAt,
-		modes: [request.chosenMode]
+		modes: request.chosenMode ? [request.chosenMode] : null
 	}));
 
 	const CHUNK_SIZE: number = 50;

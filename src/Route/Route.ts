@@ -87,7 +87,7 @@ export interface RouteRequest {
 	origin: Location;
 	destination: Location;
 	avoid: TransportAvoid[];
-	chosenMode: TransportMode;
+	chosenMode: TransportMode | null;
 	waypoints?: Waypoint[];
 	routeId?: string | null;
 	departAt: string | null;

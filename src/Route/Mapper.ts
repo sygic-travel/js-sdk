@@ -1,5 +1,5 @@
 import { camelizeKeys } from 'humps';
-import { Direction, ModeDirections, ModeSelector, Route, RouteRequest } from '.';
+import { Direction, ModeDirections, Route, RouteRequest } from '.';
 import { Location } from '../Geo';
 import { TransportAvoid, TransportMode } from '../Trip';
 import { LocalizedDatetime } from '../Util';
@@ -19,7 +19,6 @@ const MODES_ORDER: TransportMode[] = [
 export const mapRouteFromApiResponse = (
 	data,
 	transportAvoid: TransportAvoid[],
-	transportMode: TransportMode
 ): Route => {
 	const routeBuild: any = camelizeKeys(data);
 	routeBuild.directions = routeBuild.directions.map((direction): Direction => {
@@ -52,9 +51,7 @@ export const mapRouteFromApiResponse = (
 		return 0;
 	});
 	delete routeBuild.directions;
-	const route = routeBuild as Route;
-	route.chosenDirection = chooseDirection(route.modeDirections, transportMode);
-	return route as Route;
+	return routeBuild as Route;
 };
 
 export const createRouteRequest = (
@@ -71,7 +68,7 @@ export const createRouteRequest = (
 		destination,
 		waypoints: waypoints ? waypoints : [],
 		avoid: avoid ? avoid : [TransportAvoid.UNPAVED],
-		chosenMode: mode ? mode : ModeSelector.selectOptimalMode(origin, destination),
+		chosenMode: mode || null,
 		routeId,
 		departAt: departAt ? departAt : null,
 		arriveAt: null

@@ -19,21 +19,21 @@ export const route = {
 		lng: 16.582545
 	} as Location,
 	chosenDirection: {
-		distance: 800,
-		duration: 30,
-		routeId: '30:800',
-		mode: TransportMode.CAR,
+		distance: 530,
+		duration: 300,
+		routeId: null,
+		mode: TransportMode.PEDESTRIAN,
 		avoid: [],
-		source: 'lbs',
+		source: 'osrm',
 		attributions: [],
 		transferCount: 0,
 		legs: [{
 			startTime: emptyLocalDateTime,
 			endTime: emptyLocalDateTime,
-			distance: 800,
-			duration: 30,
-			mode: DirectionMode.CAR,
-			polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvAemjkHgjfdBZoHkEoDkDwCe',
+			distance: 530,
+			duration: 300,
+			mode: DirectionMode.PEDESTRIAN,
+			polyline: 'emjkHgjfdBZoHkEoDkDwCe@sBi@_Di@dCZbCzCvA',
 			origin: {
 				name: null,
 				location: {
