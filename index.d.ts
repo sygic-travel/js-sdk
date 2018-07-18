@@ -115,6 +115,7 @@ declare class RoutesModule {
 		origin?: Geo.NamedLocation,
 		waypoints?: Route.Waypoint[],
 		avoid?: Trips.TransportAvoid[],
+		mode?: Trips.TransportMode
 	): Promise<Route.DirectionSendResponseCode>;
 }
 

@@ -123,7 +123,8 @@ export async function getDirections(
 	destination: Location,
 	waypoints: Waypoint[],
 	avoids: TransportAvoid[],
-	at?: string | null
+	at?: string | null,
+	mode?: TransportMode
 ): Promise<Route | null> {
 	const routes: Route[] = await Dao.getRoutes([Mapper.createRouteRequest(
 		destination,
@@ -132,6 +133,7 @@ export async function getDirections(
 		at ? at : null,
 		waypoints,
 		avoids,
+		mode
 	)]);
 	return routes.length > 0 ? routes[0] : null;
 }
