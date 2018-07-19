@@ -3,11 +3,11 @@ import * as dirtyChai from 'dirty-chai';
 import { cloneDeep } from '../Util';
 
 import { Category, Place } from '../Places';
+import { UserSettings } from '../Session';
 import { placeDetailedEiffelTowerWithoutMedia as place } from '../TestData/PlacesExpectedResults';
 import { itineratyItem as itineratyItemTemplate, tripDetailed } from '../TestData/TripExpectedResults';
-import { UserSettings } from '../Session';
-import { AddToTripInstructions, getAddToTripInstructions } from './PositionFinder';
-import { ItineraryItem, TransportMode, TransportSettings } from './Trip';
+import { AddToTripInstructions, getAddToTripInstructions, getNearestPossiblePlaceToLocation } from './PositionFinder';
+import { ItineraryItem, TransportMode, TransportSettings, Trip } from './Trip';
 
 const tripTemplate = cloneDeep(tripDetailed);
 tripTemplate.days = [];
@@ -373,6 +373,27 @@ describe('PositionFinder', () => {
 			const result2: AddToTripInstructions = getAddToTripInstructions(placeIn, trip, 1, ['city:1'], userSettings);
 			chai.expect(result2.position).to.equal(0);
 			chai.expect(result2.shouldDuplicate).to.be.false('Expect false');
+		});
+	});
+
+	describe('#getNearestPossiblePlace', () => {
+		it('should find nearest place', () => {
+			const trip: Trip = cloneDeep(tripDetailed);
+
+			trip.days[0]!.itinerary[0].place!.id = 'poi:1';
+			trip.days[0]!.itinerary[0].place!.location = {
+				lat: 10,
+				lng: 10
+			};
+
+			trip.days[0]!.itinerary[1].place!.id = 'poi:2';
+			trip.days[0]!.itinerary[1].place!.location = {
+				lat: 11,
+				lng: 11
+			};
+
+			chai.expect(getNearestPossiblePlaceToLocation({ lat: 9, lng: 9 }, trip, 0)!.id).to.eq('poi:1');
+			chai.expect(getNearestPossiblePlaceToLocation({ lat: 12, lng: 12 }, trip, 0)!.id).to.eq('poi:2');
 		});
 	});
 });

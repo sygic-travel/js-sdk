@@ -36,4 +36,11 @@ describe('UtilController', () => {
 			chai.expect(Util.subtractDaysFromDate('2018-10-29', 2)).to.equal('2018-10-27');
 		});
 	});
+
+	describe('#Util.buildDateTimeWithSecondsFromMidnight', () => {
+		it('should put date, time and timezone into one string', () => {
+			chai.expect(Util.buildDateTimeWithSecondsFromMidnight('2018-01-01', 36000)).to.eq('2018-01-01T10:00:00');
+			chai.expect(Util.buildDateTimeWithSecondsFromMidnight('2018-01-01', 7200)).to.eq('2018-01-01T02:00:00');
+		});
+	});
 });

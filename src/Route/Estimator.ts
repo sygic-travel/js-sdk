@@ -1,7 +1,9 @@
 import { encode } from '@mapbox/polyline';
 import { Direction, ModeDirections } from '.';
-import { EARTH_RADIUS, getDistance, Location } from '../Geo';
+import { Location } from '../Geo';
 import { TransportMode } from '../Trip';
+import { LocalizedDatetime } from '../Util';
+import { DirectionLeg, DirectionMode } from './Route';
 
 const CAR_SPEED_0_TO_20: number = 27;
 const CAR_SPEED_20_TO_40: number = 54;
@@ -19,35 +21,13 @@ export const estimateModeDirections = (
 	origin: Location,
 	destination: Location
 ): ModeDirections[] => {
-	const airDistance: number = getDistance(origin, destination, EARTH_RADIUS);
 	return Object.keys(TransportMode).reduce((acc: ModeDirections[], transportMode: string) => {
 		const transportModeInDirections: ModeDirections | undefined = modeDirections.find((modeDirection: ModeDirections) => (
 			modeDirection.mode === TransportMode[transportMode]
 		));
 
 		if (transportModeInDirections === undefined) {
-			let newDirection: Direction | null;
-			switch (TransportMode[transportMode]) {
-				case TransportMode.BIKE:
-				case TransportMode.BOAT:
-				case TransportMode.BUS:
-				case TransportMode.TRAIN:
-				case TransportMode.PUBLIC_TRANSIT:
-					newDirection = estimateDummyDirection(TransportMode[transportMode], origin, destination);
-					break;
-				case TransportMode.CAR:
-					newDirection = estimateCarDirection(airDistance, origin, destination);
-					break;
-				case TransportMode.PEDESTRIAN:
-					newDirection = estimatePedestrianDirection(airDistance, origin, destination);
-					break;
-				case TransportMode.PLANE:
-					newDirection = estimatePlaneDirection(airDistance, origin, destination);
-					break;
-				default:
-					newDirection = null;
-					break;
-			}
+			const newDirection: Direction = estimateDummyDirection(TransportMode[transportMode], origin, destination);
 			acc.push({
 				directions: newDirection ? [newDirection!] : [],
 				mode: TransportMode[transportMode]
@@ -136,10 +116,47 @@ export const estimateDummyDirection = (
 const createDummyDirection = (origin: Location, destination: Location): Direction => ({
 	distance: null,
 	duration: null,
-	polyline: encode([[origin.lat, origin.lng], [destination.lat, destination.lng]]),
 	mode: TransportMode.CAR,
 	avoid: [],
 	source: 'estimator',
-	isoCodes: [],
-	routeId: null
+	routeId: null,
+	attributions: [],
+	legs: [{
+		startTime: createDummyLocalizedDatetime(),
+		endTime: createDummyLocalizedDatetime(),
+		duration: null,
+		distance: null,
+		mode: DirectionMode.CAR,
+		polyline: encode([[origin.lat, origin.lng], [destination.lat, destination.lng]]),
+		origin: {
+			name: null,
+			location: origin,
+			arrivalAt: createDummyLocalizedDatetime(),
+			departureAt: createDummyLocalizedDatetime(),
+			plannedArrivalAt: createDummyLocalizedDatetime(),
+			plannedDepartureAt: createDummyLocalizedDatetime()
+		},
+		destination: {
+			name: null,
+			location: destination,
+			arrivalAt: createDummyLocalizedDatetime(),
+			departureAt: createDummyLocalizedDatetime(),
+			plannedArrivalAt: createDummyLocalizedDatetime(),
+			plannedDepartureAt: createDummyLocalizedDatetime()
+		},
+		intermediateStops: [],
+		displayInfo: {
+			agencyName: null,
+			headsign: null,
+			nameShort: null,
+			nameLong: null,
+			lineColor: null,
+			displayMode: null
+		}
+	} as DirectionLeg]
+});
+
+const createDummyLocalizedDatetime = (): LocalizedDatetime => ({
+	datetime: null,
+	localDatetime: null
 });

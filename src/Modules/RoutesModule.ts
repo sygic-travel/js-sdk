@@ -3,7 +3,7 @@ import {
 	DirectionSendResponseCode, getDirections, getRoutesForTripDay,
 	Route, sendDirections, TripDayRoutes, Waypoint
 } from '../Route';
-import { TransportAvoid } from '../Trip';
+import { TransportAvoid, TransportMode } from '../Trip';
 
 export default class RoutesModule {
 	public getRoutesForTripDay(tripId: string, dayIndex: number): Promise<TripDayRoutes> {
@@ -14,9 +14,11 @@ export default class RoutesModule {
 		origin: Location,
 		destination: Location,
 		waypoints: Waypoint[],
-		avoids: TransportAvoid[]
+		avoids: TransportAvoid[],
+		at?: string | null,
+		mode?: TransportMode
 	): Promise<Route | null> {
-		return getDirections(origin, destination, waypoints, avoids);
+		return getDirections(origin, destination, waypoints, avoids, at, mode);
 	}
 
 	public sendDirections(
@@ -24,7 +26,7 @@ export default class RoutesModule {
 		destination: NamedLocation,
 		origin?: NamedLocation,
 		waypoints?: Waypoint[],
-		avoid?: TransportAvoid[],
+		avoid?: TransportAvoid[]
 	): Promise<DirectionSendResponseCode> {
 		return sendDirections(email, destination, origin, waypoints, avoid);
 	}

@@ -22,19 +22,15 @@ export async function getRoutes(requests: RouteRequest[]): Promise<Route[]> {
 	}).map((routeData, index) => {
 		const route: Route = Mapper.mapRouteFromApiResponse(
 			routeData,
-			requests[index].avoid,
-			requests[index].chosenMode
+			requests[index].avoid
 		);
 
 		route.modeDirections = route.modeDirections.concat(
 			estimateModeDirections(route.modeDirections, route.origin, route.destination)
 		);
 
-		route.chosenDirection = Mapper.chooseDirection(
-			route.modeDirections,
-			requests[index].chosenMode,
-			requests[index].routeId
-		);
+		route.chosenDirection = route.modeDirections[0].directions[0];
+
 		return route;
 	});
 }
@@ -45,6 +41,9 @@ async function getFromApi(requests: RouteRequest[]): Promise<object[]> {
 		destination: request.destination,
 		waypoints: request.waypoints,
 		avoid: request.avoid,
+		depart_at: request.departAt,
+		arrive_at: request.arriveAt,
+		modes: request.chosenMode ? [request.chosenMode] : null
 	}));
 
 	const CHUNK_SIZE: number = 50;
@@ -62,7 +61,6 @@ async function getFromApi(requests: RouteRequest[]): Promise<object[]> {
 	});
 
 	return flatten(chunkedPaths);
-
 }
 
 export async function sendDirections(
@@ -107,6 +105,12 @@ const createCacheKey = (request: RouteRequest): string => {
 	parts.push(request.destination.lat.toString());
 	parts.push(request.destination.lng.toString());
 	parts.push(request.avoid.join('-'));
+	if (request.chosenMode) {
+		parts.push(request.chosenMode);
+	}
+	if (request.departAt) {
+		parts.push(request.departAt);
+	}
 	if (request.waypoints) {
 		parts.push(request.waypoints.map((waypoint) => (
 			waypoint.location.lat.toString() + '-' + waypoint.location.lng.toString()

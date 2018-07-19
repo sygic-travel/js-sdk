@@ -162,3 +162,15 @@ export function getAddToTripInstructions(
 function hasUnbreakableRoute(item: ItineraryItem): boolean {
 	return !!item.transportFromPrevious;
 }
+
+export function getNearestPossiblePlaceToLocation(location: Location, trip: Trip, dayIndex: number): Place | null {
+	let minimumDistance: number = 6378138;
+	return trip.days[dayIndex]!.itinerary.reduce((acc: Place | null, itineraryItem) => {
+		const distance = getDistance(location, itineraryItem.place!.location, EARTH_RADIUS);
+		if (minimumDistance > distance) {
+			minimumDistance = distance;
+			acc = itineraryItem.place;
+		}
+		return acc;
+	}, null);
+}

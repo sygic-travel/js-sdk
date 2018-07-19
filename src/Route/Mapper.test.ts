@@ -5,6 +5,7 @@ import { Location } from '../Geo';
 import { route as apiRoute } from '../TestData/DirectionsApiResponses';
 import { route as routeEntity } from '../TestData/DirectionsEntities';
 import { TransportAvoid, TransportMode } from '../Trip';
+import { cloneDeep } from '../Util';
 
 import * as Mapper from './Mapper';
 
@@ -13,8 +14,10 @@ describe('RouteMapper', () => {
 	describe('#mapRouteFromApiResponse', () => {
 
 		it('should correctly map api response to response', () => {
-			chai.expect(Mapper.mapRouteFromApiResponse(apiRoute, [], TransportMode.CAR))
-				.to.deep.equal(routeEntity);
+			const result = cloneDeep(routeEntity);
+			delete result.chosenDirection;
+			chai.expect(Mapper.mapRouteFromApiResponse(apiRoute, []))
+				.to.deep.equal(result);
 		});
 
 	});
@@ -43,11 +46,14 @@ describe('RouteMapper', () => {
 						lng: 1
 					}
 				}],
+				departAt: 'test',
+				arriveAt: null
 			};
 			chai.expect(Mapper.createRouteRequest(
 				destination,
 				origin,
 				'30:50',
+				'test',
 				[{
 					placeId: 'abc',
 					location: {
@@ -73,10 +79,12 @@ describe('RouteMapper', () => {
 				destination,
 				routeId: null,
 				avoid: [TransportAvoid.UNPAVED],
-				chosenMode: TransportMode.PEDESTRIAN,
+				chosenMode: null,
 				waypoints: [],
+				departAt: null,
+				arriveAt: null
 			};
-			chai.expect(Mapper.createRouteRequest(destination, origin))
+			chai.expect(Mapper.createRouteRequest(destination, origin, null, null))
 				.to.deep.equal(expected);
 		});
 	});

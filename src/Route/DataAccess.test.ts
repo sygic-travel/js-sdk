@@ -46,14 +46,16 @@ describe('RouteDataAccess', () => {
 				waypoints: [],
 				avoid: [],
 				chosenMode: TransportMode.CAR,
+				departAt: null,
+				arriveAt: null
 			});
 
 			const requests = routesData.map(buildRequest);
 			const cacheMap = new Map<string, any>();
-			cacheMap.set('1-1-49.2080844-16.582545--', routesData[0]);
-			cacheMap.set('2-2-49.2080844-16.582545--', null);
-			cacheMap.set('3-3-49.2080844-16.582545--', routesData[2]);
-			cacheMap.set('4-4-49.2080844-16.582545--', null);
+			cacheMap.set('1-1-49.2080844-16.582545--car-', routesData[0]);
+			cacheMap.set('2-2-49.2080844-16.582545--car-', null);
+			cacheMap.set('3-3-49.2080844-16.582545--car-', routesData[2]);
+			cacheMap.set('4-4-49.2080844-16.582545--car-', null);
 
 			sandbox.stub(routesCache, 'getBatchMap').returns(new Promise((resolve) => (resolve(cacheMap))));
 
@@ -159,6 +161,33 @@ describe('RouteDataAccess', () => {
 					'ferries'
 				]
 			});
+		});
+
+		it('should return correctly map chosen route', async () => {
+			sandbox.stub(StApi, 'post').returns(
+				new Promise((resolve) => resolve(new ApiResponse(200, {
+					path: [route]
+				})))
+			);
+			const routes: Route[] = await dao.getRoutes([{
+				origin: {
+					lat: 1,
+					lng: 2
+				},
+				destination: {
+					lat: 3,
+					lng: 4
+				},
+				avoid: [],
+				chosenMode: null,
+				departAt: null,
+				arriveAt: null
+			}]);
+
+			chai.expect(routes[0].chosenDirection.distance).to.eq(530);
+			chai.expect(routes[0].chosenDirection.duration).to.eq(300);
+			chai.expect(routes[0].chosenDirection.routeId).to.eq(null);
+			chai.expect(routes[0].chosenDirection.mode).to.eq('pedestrian');
 		});
 	});
 });

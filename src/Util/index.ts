@@ -1,3 +1,5 @@
+export * from './Util';
+
 export function addDaysToDate(date: string, count: number): string {
 	const d = new Date(date);
 	const dTimezone = new Date(date);
@@ -96,4 +98,16 @@ export function flatten<T>(arrayOfArrays: T[][]): T[] {
 
 export function cloneDeep<T>(obj: T): T {
 	return JSON.parse(JSON.stringify(obj));
+}
+
+export function buildDateTimeWithSecondsFromMidnight(date: string, secondsFromMidnight: number) {
+	const hours: number = Math.floor(secondsFromMidnight / 3600);
+	secondsFromMidnight %= 3600;
+	const minutes: number = Math.floor(secondsFromMidnight / 60);
+	const seconds: number = secondsFromMidnight % 60;
+	const hoursString: string | number = hours < 9 ? '0' + hours : hours;
+	const minutesString: string | number = minutes < 9 ? '0' + minutes : minutes;
+	const secondsString: string | number = seconds < 9 ? '0' + seconds : seconds;
+
+	return `${date}T${hoursString}:${minutesString}:${secondsString}`;
 }

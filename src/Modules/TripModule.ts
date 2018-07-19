@@ -3,6 +3,7 @@ import {
 	cloneTrip,
 	emptyTripsTrash,
 	ensureTripSyncedToServer,
+	getNearestPossiblePlace,
 	getTripDetailed,
 	getTripEditor,
 	getTripIdsWaitingToSync,
@@ -61,4 +62,5 @@ export default class TripModule {
 	}
 
 	public getTripIdsWaitingToSync = getTripIdsWaitingToSync;
+	public getNearestPossiblePlace = getNearestPossiblePlace;
 }
