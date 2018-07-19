@@ -4,7 +4,7 @@ import { DirectionSendResponseCode, Mapper, Route, RouteRequest } from '.';
 import { ApiResponse, StApi } from '../Api';
 import { routesCache as cache } from '../Cache';
 import { NamedLocation } from '../Geo';
-import { TransportAvoid } from '../Trip';
+import { TransportAvoid, TransportMode } from '../Trip';
 import { flatten, splitArrayToChunks } from '../Util';
 import { estimateModeDirections } from './Estimator';
 import { Waypoint } from './Route';
@@ -54,8 +54,11 @@ async function getFromApi(requests: RouteRequest[]): Promise<object[]> {
 	const apiResponses: ApiResponse[] = await Promise.all(apiRequests);
 
 	const chunkedPaths: any[][] = apiResponses.map((apiResponse: ApiResponse) => {
-		apiResponse.data.path.map((routeData, index) => {
-			cache.set(createCacheKey(requests[index]), routeData);
+		apiResponse.data.path.forEach((routeData, index) => {
+			const request: RouteRequest = requests[index];
+			if (!(request.chosenMode === TransportMode.PUBLIC_TRANSIT && !request.departAt && !request.arriveAt)) {
+				cache.set(createCacheKey(request), routeData);
+			}
 		});
 		return apiResponse.data.path;
 	});
