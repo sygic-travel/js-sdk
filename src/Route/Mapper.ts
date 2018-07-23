@@ -10,12 +10,6 @@ const toTransportModesMapping = {
 	walking: TransportMode.PEDESTRIAN,
 };
 
-const MODES_ORDER: TransportMode[] = [
-	TransportMode.PLANE,
-	TransportMode.CAR,
-	TransportMode.PEDESTRIAN
-];
-
 export const mapRouteFromApiResponse = (
 	data,
 	transportAvoid: TransportAvoid[],
@@ -40,16 +34,7 @@ export const mapRouteFromApiResponse = (
 			modeDirections.directions.push(direction);
 			return mDirectionsSet;
 
-	}, []).sort((a: ModeDirections, b: ModeDirections): number => {
-		const aIndex: number = MODES_ORDER.indexOf(a.mode);
-		const bIndex: number = MODES_ORDER.indexOf(b.mode);
-		if (aIndex < bIndex) {
-			return 1;
-		} else if (aIndex > bIndex) {
-			return -1;
-		}
-		return 0;
-	});
+	}, []);
 	delete routeBuild.directions;
 	return routeBuild as Route;
 };
