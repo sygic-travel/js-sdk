@@ -9,7 +9,7 @@ import { getUserSettings, UserSettings } from '../Session';
 import { Day, getTripDetailed, Trip } from '../Trip';
 import { sleep } from '../Util';
 import * as Dao from './DataAccess';
-import { generateDestinationMainMap, generateDestinationSecondaryMaps } from './MapGenerator';
+import { generateDestinationMainMap, generateDestinationSecondaryMaps, generateTripMap } from './MapGenerator';
 import {
 	GeneratingState,
 	PdfData,
@@ -56,10 +56,6 @@ export async function generatePdf(tripId: string): Promise<GeneratingState> {
 
 export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 	const trip: Trip = await getTripDetailed(query.tripId);
-	const pdfData: PdfData = {
-		destinations: [],
-		routes: []
-	};
 
 	if (!trip.days) {
 		throw new Error('Can\'t generate PDF data for trip without days');
@@ -89,10 +85,14 @@ export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 		)
 	)));
 
-	const [routes, destinations] = await Promise.all([routesPromise, destinationsPromise]);
-	pdfData.routes = routes;
-	pdfData.destinations = destinations;
-	return pdfData;
+	const tripMapUrlsPromise = await generateTripMap(trip, query.mainMapWidth, query.mainMapHeight);
+
+	const [
+		routes,
+		destinations,
+		tripStaticMapUrl
+	] = await Promise.all([routesPromise, destinationsPromise, tripMapUrlsPromise]);
+	return { routes, destinations, tripStaticMapUrl };
 }
 
 export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<string, Place>): Promise<{
@@ -151,9 +151,9 @@ export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<
 	});
 
 	return {
-			...await filterUnnecessaryDestinations(destinationIdsWithDestinations, destinationIdsWithPlaces),
-			placeIdsWithPlaceType
-		};
+		...await filterUnnecessaryDestinations(destinationIdsWithDestinations, destinationIdsWithPlaces),
+		placeIdsWithPlaceType
+	};
 }
 
 async function createDestinationData(
@@ -255,18 +255,6 @@ async function filterUnnecessaryDestinations(
 		destinationIdsWithDestinations.delete(homeDestinationId);
 		destinationIdsWithPlaces.delete(homeDestinationId);
 	}
-
-	const destinationIdsToBeDeleted: string[] = [];
-	destinationIdsWithPlaces.forEach((places: Place[], destinationId) => {
-		if (places.length === 1) {
-			destinationIdsToBeDeleted.push(destinationId);
-		}
-	});
-
-	destinationIdsToBeDeleted.forEach((destinationIdToBeDeleted: string) => {
-		destinationIdsWithDestinations.delete(destinationIdToBeDeleted);
-		destinationIdsWithPlaces.delete(destinationIdToBeDeleted);
-	});
 
 	return { destinationIdsWithDestinations, destinationIdsWithPlaces };
 }

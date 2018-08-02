@@ -1,7 +1,8 @@
 import { Bounds, isLocationInBounds, Location } from '../Geo';
 import { Place } from '../Places';
+import { Day, ItineraryItem, Trip } from '../Trip';
 import { getStaticMap } from './DataAccess';
-import { PdfQuery, PdfStaticMap, PdfStaticMapSector, PlaceSource, StaticMap } from './PdfData';
+import { PdfQuery, PdfStaticMap, PdfStaticMapSector, PlaceSource, StaticMap, StaticMapPoint } from './PdfData';
 
 export async function generateDestinationMainMap(
 	destinationPlaces: Place[],
@@ -121,3 +122,18 @@ export function calculateMapGrid(generatedMapsBounds: Bounds, columnsCount, rows
 
 	return mapGrid;
 }
+
+export const generateTripMap = async (trip: Trip, width: number, height: number): Promise<string> => {
+	const staticMap: StaticMap = await getStaticMap(
+		width,
+		height,
+		trip.days.reduce((acc: StaticMapPoint[], day: Day) => {
+			acc = acc.concat(day.itinerary!.map((itineraryItem: ItineraryItem) => ({
+				lat: itineraryItem.place!.location.lat,
+				lng: itineraryItem.place!.location.lng
+			})));
+			return acc;
+		}, [])
+	);
+	return staticMap.url;
+};
