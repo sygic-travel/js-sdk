@@ -127,12 +127,12 @@ export const generateTripMap = async (trip: Trip, width: number, height: number)
 	const staticMap: StaticMap = await getStaticMap(
 		width,
 		height,
-		trip.days.reduce((acc: StaticMapPoint[], day: Day) => {
-			acc = acc.concat(day.itinerary!.map((itineraryItem: ItineraryItem) => ({
+		trip.days.reduce((placeLocations: StaticMapPoint[], day: Day) => {
+			placeLocations = placeLocations.concat(day.itinerary!.map((itineraryItem: ItineraryItem) => ({
 				lat: itineraryItem.place!.location.lat,
 				lng: itineraryItem.place!.location.lng
 			})));
-			return acc;
+			return placeLocations;
 		}, [])
 	);
 	return staticMap.url;
