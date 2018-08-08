@@ -146,13 +146,13 @@ const createDummyDirection = (origin: Location, destination: Location): Directio
 		},
 		intermediateStops: [],
 		displayInfo: {
-			agencyName: null,
 			headsign: null,
 			nameShort: null,
 			nameLong: null,
 			lineColor: null,
 			displayMode: null
-		}
+		},
+		attribution: null
 	} as DirectionLeg]
 });
 

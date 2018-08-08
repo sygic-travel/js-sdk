@@ -58,13 +58,13 @@ export const route = {
 			},
 			intermediateStops: [],
 			displayInfo: {
-				agencyName: null,
 				nameShort: null,
 				nameLong: null,
 				headsign: null,
 				lineColor: null,
 				displayMode: null
-			}
+			},
+			attribution: null
 		}]
 	} as Direction,
 	modeDirections: [
@@ -111,13 +111,13 @@ export const route = {
 						},
 						intermediateStops: [],
 						displayInfo: {
-							agencyName: null,
 							nameShort: null,
 							nameLong: null,
 							headsign: null,
 							lineColor: null,
 							displayMode: null
-						}
+						},
+						attribution: null
 					}]
 				} as Direction
 			]
@@ -165,13 +165,13 @@ export const route = {
 						},
 						intermediateStops: [],
 						displayInfo: {
-							agencyName: null,
 							nameShort: null,
 							nameLong: null,
 							headsign: null,
 							lineColor: null,
 							displayMode: null
-						}
+						},
+						attribution: null
 					}]
 				} as Direction,
 				{
@@ -214,13 +214,13 @@ export const route = {
 						},
 						intermediateStops: [],
 						displayInfo: {
-							agencyName: null,
 							nameShort: null,
 							nameLong: null,
 							headsign: null,
 							lineColor: null,
 							displayMode: null
-						}
+						},
+						attribution: null
 					}]
 				} as Direction
 			]
