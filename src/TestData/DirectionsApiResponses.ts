@@ -78,13 +78,13 @@ export const route = {
 				},
 				"intermediate_stops": [],
 				"display_info": {
-					"agency_name": null,
 					"name_short": null,
 					"name_long": null,
 					"headsign": null,
 					"line_color": null,
 					"display_mode": null
-				}
+				},
+				"attribution": null
 			}]
 		},
 		{
@@ -156,13 +156,13 @@ export const route = {
 				},
 				"intermediate_stops": [],
 				"display_info": {
-					"agency_name": null,
 					"name_short": null,
 					"name_long": null,
 					"headsign": null,
 					"line_color": null,
 					"display_mode": null
-				}
+				},
+				"attribution": null
 			}]
 		},
 		{
@@ -234,13 +234,13 @@ export const route = {
 				},
 				"intermediate_stops": [],
 				"display_info": {
-					"agency_name": null,
 					"name_short": null,
 					"name_long": null,
 					"headsign": null,
 					"line_color": null,
 					"display_mode": null
-				}
+				},
+				"attribution": null
 			}]
 		}
 	]

@@ -90,7 +90,8 @@ const mapDirectionLegFromApiResponse = (directionLegFromApi: any): DirectionLeg 
 		origin: mapDirectionLegTransferStation(directionLegFromApi.origin),
 		destination: mapDirectionLegTransferStation(directionLegFromApi.destination),
 		intermediateStops: directionLegFromApi.intermediateStops.map(mapDirectionLegTransferStation),
-		displayInfo: directionLegFromApi.displayInfo
+		displayInfo: directionLegFromApi.displayInfo,
+		attribution: directionLegFromApi.attribution
 });
 
 const mapDirectionLegTransferStation = (directionLegTransferStationFromApi: any): DirectionLegTransferStation => ({

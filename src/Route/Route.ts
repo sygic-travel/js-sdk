@@ -37,6 +37,7 @@ export interface DirectionLeg {
 	destination: DirectionLegTransferStation;
 	intermediateStops: DirectionLegTransferStation[];
 	displayInfo: DirectionLegDisplayInfo;
+	attribution: DirectionAttribution | null;
 }
 
 export interface DirectionLegTransferStation {
@@ -64,7 +65,6 @@ export enum DirectionMode {
 }
 
 export interface DirectionLegDisplayInfo {
-	agencyName: string | null;
 	headsign: string | null;
 	nameShort: string | null;
 	nameLong: string | null;
