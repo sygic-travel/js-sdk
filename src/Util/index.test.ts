@@ -41,6 +41,9 @@ describe('UtilController', () => {
 		it('should put date, time and timezone into one string', () => {
 			chai.expect(Util.buildDateTimeWithSecondsFromMidnight('2018-01-01', 36000)).to.eq('2018-01-01T10:00:00');
 			chai.expect(Util.buildDateTimeWithSecondsFromMidnight('2018-01-01', 7200)).to.eq('2018-01-01T02:00:00');
+			chai.expect(Util.buildDateTimeWithSecondsFromMidnight('2018-01-01', 9)).to.eq('2018-01-01T00:00:09');
+			chai.expect(Util.buildDateTimeWithSecondsFromMidnight('2018-01-01', 540)).to.eq('2018-01-01T00:09:00');
+			chai.expect(Util.buildDateTimeWithSecondsFromMidnight('2018-01-01', 32400)).to.eq('2018-01-01T09:00:00');
 		});
 	});
 });
