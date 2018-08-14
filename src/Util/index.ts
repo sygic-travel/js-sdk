@@ -105,9 +105,9 @@ export function buildDateTimeWithSecondsFromMidnight(date: string, secondsFromMi
 	secondsFromMidnight %= 3600;
 	const minutes: number = Math.floor(secondsFromMidnight / 60);
 	const seconds: number = secondsFromMidnight % 60;
-	const hoursString: string | number = hours < 9 ? '0' + hours : hours;
-	const minutesString: string | number = minutes < 9 ? '0' + minutes : minutes;
-	const secondsString: string | number = seconds < 9 ? '0' + seconds : seconds;
+	const hoursString: string | number = hours < 10 ? '0' + hours : hours;
+	const minutesString: string | number = minutes < 10 ? '0' + minutes : minutes;
+	const secondsString: string | number = seconds < 10 ? '0' + seconds : seconds;
 
 	return `${date}T${hoursString}:${minutesString}:${secondsString}`;
 }
