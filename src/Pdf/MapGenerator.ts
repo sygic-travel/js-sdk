@@ -17,8 +17,7 @@ export async function generateDestinationMainMap(
 			if (placeSource !== PlaceSource.FROM_COLLECTION) {
 				return {
 					...place.location,
-					image: placeSource === PlaceSource.FROM_TRIP ?
-						'http://a.twobits.cz/i/1x/g/dot.png' : 'http://a.twobits.cz/i/1x/r/dot.png'
+					image: 'http://a.twobits.cz/i/1x/b/dot.png'
 				};
 			}
 			return place.location;
