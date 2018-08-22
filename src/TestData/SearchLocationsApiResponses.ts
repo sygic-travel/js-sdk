@@ -94,7 +94,8 @@ export const searchLocations = {
 				origin_custom_poi: null,
 				main_media: null,
 				references: [],
-				media_count: 1
+				media_count: 1,
+				satellite: null
 			}
 		}
 	]

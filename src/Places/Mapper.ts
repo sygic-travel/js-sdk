@@ -70,6 +70,10 @@ const mapPlaceDetail = (place, photoSize): Detail => {
 		mediaCount: place.media_count,
 		phone: place.phone,
 		mainMedia: mapMainMediaToMedia(camelizeKeys(place.main_media), photoSize),
+		satellite: place.satellite ? {
+			imageUrl: place.satellite.image_url,
+			boundingBox: place.satellite.bounding_box as Bounds
+		} : null,
 		references
 	} as Detail;
 

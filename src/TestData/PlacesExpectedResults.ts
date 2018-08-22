@@ -64,6 +64,7 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 			portrait: null,
 			landscape: null,
 		} as Media.MainMedia,
+		satellite: null,
 		references: [{
 			id: 1470551,
 			title: 'Wikipedia',
@@ -311,6 +312,7 @@ export const customPlace = {
 				square: null,
 				videoPreview: null
 			},
+			satellite: null,
 			references: [],
 			ownerId: '4d945cecbe65e',
 			description: null

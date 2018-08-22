@@ -63,6 +63,7 @@ export const placeDetailedEiffelTowerWithoutMedia = {
 			"is_translated": true
 		},
 		"main_media": null,
+		"satellite": null,
 		"references": [
 			{
 				"id": 1470551,
@@ -363,7 +364,8 @@ export const customPlaceData = {
 		"perex": "",
 		"description": null,
 		"thumbnail_url": null,
-		"media_count": 0
+		"media_count": 0,
+		"satellite": null
 	}
 };
 /* tslint:enable */

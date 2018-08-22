@@ -1,3 +1,4 @@
+import { Bounds } from '../Geo';
 import { MainMedia } from '../Media/Media';
 
 export interface Detail {
@@ -17,6 +18,7 @@ export interface Detail {
 	 */
 	ownerId?: string;
 	mediaCount: number;
+	satellite: SatelliteImage | null;
 }
 
 export interface Reference {
@@ -52,4 +54,9 @@ export enum DescriptionProvider {
 
 export enum TranslationProvider {
 	GOOGLE,
+}
+
+export interface SatelliteImage {
+	imageUrl: string;
+	boundingBox: Bounds;
 }
