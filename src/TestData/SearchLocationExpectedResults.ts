@@ -89,7 +89,8 @@ export const searchLocations = [{
 				landscape: null
 			} as MainMedia,
 			references: [],
-			mediaCount: 1
+			mediaCount: 1,
+			satellite: null
 		} as Detail
 	} as Place
 } as SearchResult];

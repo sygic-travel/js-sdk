@@ -390,6 +390,7 @@ export namespace Places {
 		 */
 		ownerId?: string;
 		mediaCount: number;
+		satellite: SatelliteImage | null;
 	}
 
 	export interface Reference {
@@ -424,6 +425,11 @@ export namespace Places {
 
 	export enum TranslationProvider {
 		GOOGLE,
+	}
+
+	export interface SatelliteImage {
+		imageUrl: string;
+		boundingBox: Geo.Bounds;
 	}
 
 	export interface PlaceGeometry {
