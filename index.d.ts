@@ -125,6 +125,11 @@ declare class SearchModule {
 	public searchTags(query: string): Promise<Search.SearchTagsResult[]>;
 }
 
+declare class StaticMapsModule {
+	public getTripStaticMapUrl(tripId: string, width: number, height: number): Promise<string>;
+	public getTripDayStaticMapUrl(tripId: string, dayIndex: number, width: number, height: number): Promise<string>;
+}
+
 declare class ToursModule {
 	public getToursViator(toursQuery: Tours.ToursViatorQuery): Promise<Tours.Tour[]>;
 	public getToursGetYourGuide(toursQuery: Tours.ToursGetYourGuideQuery): Promise<Tours.Tour[]>;
@@ -207,6 +212,7 @@ export class StSDK {
 	public places: PlacesModule;
 	public routes: RoutesModule;
 	public search: SearchModule;
+	public staticMaps: StaticMapsModule;
 	public tours: ToursModule;
 	public trip: TripModule;
 	public session: SessionModule;
