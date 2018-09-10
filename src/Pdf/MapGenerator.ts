@@ -14,11 +14,11 @@ export async function generateDestinationMainMap(
 		query.mainMapHeight,
 		destinationPlaces.map((place: Place) => {
 			const placeSource: PlaceSource | undefined = placeIdsWithPlaceType.get(place.id);
-			let markerUrl = 'http://a.twobits.cz/i/1x/o/dot.png'; // marker for place from collection
+			let markerUrl = 'http://a.twobits.cz/i/dot/other.png'; // marker for place from collection
 			if (placeSource === PlaceSource.FROM_TRIP) {
-				markerUrl = 'http://a.twobits.cz/i/1x/b/dot.png'; // marker for place from trip
+				markerUrl = 'http://a.twobits.cz/i/dot/trip.png'; // marker for place from trip
 			} else if (placeSource === PlaceSource.FROM_FAVORITES) {
-				markerUrl = 'http://a.twobits.cz/i/1x/r/dot.png'; // // marker for place from favorites
+				markerUrl = 'http://a.twobits.cz/i/dot/fav.png'; // // marker for place from favorites
 			}
 
 			return {
