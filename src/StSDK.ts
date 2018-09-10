@@ -16,6 +16,7 @@ import PlacesModule from './Modules/PlacesModule';
 import RoutesModule from './Modules/RoutesModule';
 import SearchModule from './Modules/SearchModule';
 import SessionModule from './Modules/SessionModule';
+import StaticMapsModule from './Modules/StaticMapsModule';
 import ToursModule from './Modules/ToursModule';
 import TripModule from './Modules/TripModule';
 import UtilityModule from './Modules/UtilityModule';
@@ -39,6 +40,7 @@ class StSDK extends BaseSDK {
 	public routes: RoutesModule = new RoutesModule();
 	public search: SearchModule = new SearchModule();
 	public session: SessionModule = new SessionModule();
+	public staticMaps: StaticMapsModule = new StaticMapsModule();
 	public tours: ToursModule = new ToursModule();
 	public trip: TripModule = new TripModule();
 	public utility: UtilityModule = new UtilityModule();
