@@ -25,10 +25,19 @@ authorizationFreeEndpoints[HttpMethod.GET] = [
 	'tours',
 	'hotels',
 	'geoip',
-	'reviews',
 	'translations',
 	'exchange-rates',
 	'tags'
+];
+
+const authorizationRequiredEndpoints: any = {};
+authorizationRequiredEndpoints[HttpMethod.GET] = [
+	'reviews'
+];
+
+const noCdnRequiredEndpoints: any = {};
+noCdnRequiredEndpoints[HttpMethod.GET] = [
+	'reviews'
 ];
 
 axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
@@ -110,7 +119,11 @@ export async function put(url: string, requestData): Promise<ApiResponse> {
 async function buildRequestConfig(url: string, method: HttpMethod, requestData?: any): Promise<AxiosRequestConfig> {
 	let baseUrl = getStApiUrl();
 
-	if (url.indexOf('places') === -1 || method !== HttpMethod.GET) {
+	if (
+		url.indexOf('places') === -1 ||
+		method !== HttpMethod.GET ||
+		noCdnRequiredEndpoints[method] && noCdnRequiredEndpoints[method].find((slug: string) => url.includes(slug))
+	) {
 		baseUrl = baseUrl.replace('api-cdn', 'api');
 	}
 
@@ -135,7 +148,8 @@ async function buildHeaders(url: string, method: HttpMethod): Promise<any> {
 	}
 
 	if (authorizationFreeEndpoints[method] &&
-		authorizationFreeEndpoints[method].find((slug: string) => url.includes(slug))
+		authorizationFreeEndpoints[method].find((slug: string) => url.includes(slug)) &&
+		!authorizationRequiredEndpoints[method].find((slug: string) => url.includes(slug))
 	) {
 		return headers;
 	}
