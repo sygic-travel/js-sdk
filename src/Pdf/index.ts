@@ -140,7 +140,9 @@ export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<
 
 	favoritesIdsWithDestinations.forEach((destination: Place, favoriteId: string) => {
 		if (destination && destinationIdsWithPlaces.has(destination.id)) {
-			placeIdsWithPlaceType.set(favoriteId, PlaceSource.FROM_FAVORITES);
+			if (!placeIdsWithPlaceType.has(favoriteId)) {
+				placeIdsWithPlaceType.set(favoriteId, PlaceSource.FROM_FAVORITES);
+			}
 			const favorite: Place | undefined = userFavoritesMap.get(favoriteId);
 			const placesToBeMerged: Place[] | undefined = destinationIdsWithPlaces.get(destination.id);
 			destinationIdsWithPlaces.set(destination.id, mergePlacesArrays(
