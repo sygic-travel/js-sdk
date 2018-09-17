@@ -226,7 +226,8 @@ async function generateDestinationMaps(
 	const secondaryMaps: PdfStaticMap[] = await generateDestinationSecondaryMaps(
 		destinationPlaces,
 		query,
-		sectorsForSecondaryMaps
+		sectorsForSecondaryMaps,
+		placeIdsWithPlaceType
 	);
 	return { mainMap, secondaryMaps };
 }

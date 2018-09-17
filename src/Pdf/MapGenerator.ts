@@ -4,6 +4,8 @@ import { Day, ItineraryItem, Trip } from '../Trip';
 import { getStaticMap } from './DataAccess';
 import { PdfQuery, PdfStaticMap, PdfStaticMapSector, PlaceSource, StaticMap, StaticMapPoint } from './PdfData';
 
+const markersUrlBase: string = 'https://s3-eu-west-1.amazonaws.com/tripomatic-assets/persistent/print/markers';
+
 export async function generateDestinationMainMap(
 	destinationPlaces: Place[],
 	placeIdsWithPlaceType: Map<string, PlaceSource>,
@@ -14,11 +16,11 @@ export async function generateDestinationMainMap(
 		query.mainMapHeight,
 		destinationPlaces.map((place: Place) => {
 			const placeSource: PlaceSource | undefined = placeIdsWithPlaceType.get(place.id);
-			let markerUrl = 'http://a.twobits.cz/i/dot/other.png'; // marker for place from collection
+			let markerUrl = markersUrlBase + '/guide.png';       // marker for place from collection
 			if (placeSource === PlaceSource.FROM_TRIP) {
-				markerUrl = 'http://a.twobits.cz/i/dot/trip.png'; // marker for place from trip
+				markerUrl = markersUrlBase + '/trip.png';        // marker for place from trip
 			} else if (placeSource === PlaceSource.FROM_FAVORITES) {
-				markerUrl = 'http://a.twobits.cz/i/dot/fav.png'; // // marker for place from favorites
+				markerUrl = markersUrlBase + '/favorites.png';   // marker for place from favorites
 			}
 
 			return {
@@ -56,6 +58,7 @@ export async function generateDestinationSecondaryMaps(
 	destinationPlaces: Place[],
 	query: PdfQuery,
 	sectorsForSecondaryMaps: PdfStaticMapSector[],
+	placeIdsWithPlaceType: Map<string, PlaceSource>
 ): Promise<PdfStaticMap[]> {
 	return Promise.all(sectorsForSecondaryMaps.map(async (sector: PdfStaticMapSector) => {
 		const sectorPlaces: Place[] = sector!.places.map((sectorPlace: Place) => {
@@ -79,11 +82,20 @@ export async function generateDestinationSecondaryMaps(
 			staticMap = await getStaticMap(
 				query.secondaryMapWidth,
 				query.secondaryMapHeight,
-				sectorPlaces.map((place: Place, index: number) => ({
-					lat: place.location.lat,
-					lng: place.location.lng,
-					image: `http://a.twobits.cz/i/1x/b/${index + 1}.png`
-				}))
+				sectorPlaces.map((place: Place, index: number) => {
+					const placeSource: PlaceSource | undefined = placeIdsWithPlaceType.get(place.id);
+					let color = 'purple';
+					if (placeSource === PlaceSource.FROM_TRIP) {
+						color = 'blue';
+					} else if (placeSource === PlaceSource.FROM_FAVORITES) {
+						color = 'red';
+					}
+
+					return {
+						...place.location,
+						image: `${markersUrlBase}/${color}/${index + 1}.png`
+					};
+				})
 			);
 		}
 
