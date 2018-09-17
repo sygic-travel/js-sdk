@@ -221,12 +221,13 @@ async function generateDestinationMaps(
 }> {
 	const mainMap: PdfStaticMap = await generateDestinationMainMap(destinationPlaces, placeIdsWithPlaceType, query);
 	const sectorsForSecondaryMaps: PdfStaticMapSector[] = mainMap.sectors.filter((sector: PdfStaticMapSector) => {
-		return sector.places.length > 5;
+		return sector.places.length > 3;
 	});
 	const secondaryMaps: PdfStaticMap[] = await generateDestinationSecondaryMaps(
 		destinationPlaces,
 		query,
-		sectorsForSecondaryMaps
+		sectorsForSecondaryMaps,
+		placeIdsWithPlaceType
 	);
 	return { mainMap, secondaryMaps };
 }

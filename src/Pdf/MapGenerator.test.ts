@@ -208,7 +208,8 @@ describe('MapGeneratorController', () => {
 			const secondaryMaps: PdfStaticMap[] = await generateDestinationSecondaryMaps(
 				destinationPlaces,
 				query,
-				mainMapSectors
+				mainMapSectors,
+				new Map<string, PlaceSource>()
 			);
 
 			chai.expect(secondaryMaps.length).to.be.eq(4);
