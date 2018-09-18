@@ -56,6 +56,7 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 		email: null,
 		duration: 3600,
 		openingHours: 'Open daily:\nMid-June - early Sep: 9 a.m. - 12:45 a.m. \nLast lift at midnight (11 p.m. to the top).\nStairs: 9 a.m. - 12:45 a.m. \n(Last admission at midnight.)\n\nRest of the year: 9:30 a.m. - 11:45 p.m. \nLast lift at 11 p.m. (10:30 p.m. to the top).\nStairs: 9:30 a.m. - 6:30 p.m. \n(Last admission at 6 p.m.)',
+		openingHoursRaw: null,
 		phone: '+33 892 70 12 39',
 		mediaCount: 0,
 		mainMedia: {
@@ -304,6 +305,7 @@ export const customPlace = {
 			duration: 3600,
 			email: null,
 			openingHours: null,
+			openingHoursRaw: null,
 			phone: null,
 			mediaCount: 0,
 			mainMedia: {

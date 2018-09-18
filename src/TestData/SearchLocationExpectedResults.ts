@@ -81,6 +81,7 @@ export const searchLocations = [{
 			description: null,
 			email: null,
 			openingHours: null,
+			openingHoursRaw: null,
 			phone: null,
 			mainMedia: {
 				square: null,

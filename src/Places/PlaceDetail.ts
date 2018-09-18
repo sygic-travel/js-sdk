@@ -10,6 +10,7 @@ export interface Detail {
 	description: Description | null;
 	email: string | null;
 	openingHours: string | null;
+	openingHoursRaw: string | null;
 	phone: string | null;
 	mainMedia: MainMedia;
 	references: Reference[];
