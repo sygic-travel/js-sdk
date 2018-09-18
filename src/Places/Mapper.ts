@@ -67,6 +67,7 @@ const mapPlaceDetail = (place, photoSize): Detail => {
 		email: place.email,
 		duration: place.duration,
 		openingHours: place.opening_hours,
+		openingHoursRaw: place.opening_hours_raw,
 		mediaCount: place.media_count,
 		phone: place.phone,
 		mainMedia: mapMainMediaToMedia(camelizeKeys(place.main_media), photoSize),
