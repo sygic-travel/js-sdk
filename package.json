@@ -17,7 +17,9 @@
   "devDependencies": {
     "@types/chai": "^4.0.10",
     "@types/chai-as-promised": "^7.1.0",
+    "@types/geojson": "^1.0.2",
     "@types/humps": "^1.1.2",
+    "@types/is-url-superb": "^2.0.0",
     "@types/lodash.clonedeep": "^4.5.3",
     "@types/mocha": "^2.2.40",
     "@types/moxios": "^0.4.8",
@@ -49,10 +51,10 @@
   "dependencies": {
     "@mapbox/geojson-extent": "^0.3.2",
     "@mapbox/polyline": "^0.2.0",
-    "@types/geojson": "^1.0.2",
     "axios": "^0.17.1",
     "cookies-js": "^1.2.3",
     "humps": "^2.0.1",
+    "is-url-superb": "^2.0.0",
     "query-string": "^5.0.1"
   }
 }

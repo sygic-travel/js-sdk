@@ -4,6 +4,7 @@ import AlertsModule from './Modules/AlertsModule';
 import ChangesModule from './Modules/ChangesModule';
 import CollaborationModule from './Modules/CollaborationModule';
 import CollectionsModule from './Modules/CollectionsModule';
+import CrowdsourcingModule from './Modules/CrowdsourcingModule';
 import CustomPlacesModule from './Modules/CustomPlacesModule';
 import EventsModule from './Modules/EventsModule';
 import FavoritesModule from './Modules/FavoritesModule';
@@ -28,6 +29,7 @@ class StSDK extends BaseSDK {
 	public changes: ChangesModule = new ChangesModule();
 	public collaboration: CollaborationModule = new CollaborationModule();
 	public collections: CollectionsModule = new CollectionsModule();
+	public crowdsourcing: CrowdsourcingModule = new CrowdsourcingModule();
 	public customPlaces: CustomPlacesModule = new CustomPlacesModule();
 	public events: EventsModule = new EventsModule();
 	public favorites: FavoritesModule = new FavoritesModule();
