@@ -14,6 +14,11 @@ export enum Suitability {
 	VIDEO_PREVIEW = 'video_preview'
 }
 
+export enum License {
+	CC_BY_SA_3 = 'cc_by_sa_3',
+	CC_BY_SA_4 = 'cc_by_sa_4'
+}
+
 export interface MainMedia {
 	square: Medium | null;
 	videoPreview: Medium | null;

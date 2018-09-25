@@ -61,3 +61,4 @@ export interface SatelliteImage {
 	imageUrl: string;
 	boundingBox: Bounds;
 }
+
