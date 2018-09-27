@@ -18,27 +18,31 @@ const enum HttpMethod {
 	DELETE,
 }
 
-const authorizationFreeEndpoints: any = {};
-authorizationFreeEndpoints[HttpMethod.GET] = [
-	'places',
-	'directions',
-	'tours',
-	'hotels',
-	'geoip',
-	'translations',
-	'exchange-rates',
-	'tags'
-];
-
-const authorizationRequiredEndpoints: any = {};
-authorizationRequiredEndpoints[HttpMethod.GET] = [
-	'reviews'
-];
-
-const noCdnRequiredEndpoints: any = {};
-noCdnRequiredEndpoints[HttpMethod.GET] = [
-	'reviews'
-];
+const getEndpointsConfig: any = {
+	authorizationFree: [
+		'places',
+		'directions',
+		'tours',
+		'hotels',
+		'geoip',
+		'translations',
+		'exchange-rates',
+		'tags'
+	],
+	authorizationRequired: [
+		'reviews'
+	],
+	cdnFree: [
+		'reviews'
+	],
+	cdnRequired: [
+		'hotels/list',
+		'places/detect-parents',
+		'places/list',
+		'places/stats',
+		'tours'
+	]
+};
 
 axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
 	if (!config.baseURL) {
@@ -122,9 +126,17 @@ async function buildRequestConfig(url: string, method: HttpMethod, requestData?:
 	if (
 		url.indexOf('places') === -1 ||
 		method !== HttpMethod.GET ||
-		noCdnRequiredEndpoints[method] && noCdnRequiredEndpoints[method].find((slug: string) => url.includes(slug))
+		getEndpointsConfig.cdnFree.find((slug: string) => url.includes(slug)) &&
+		!getEndpointsConfig.cdnRequired.find((slug: string) => url.includes(slug))
 	) {
-		baseUrl = baseUrl.replace('api-cdn', 'api');
+		baseUrl = baseUrl.replace('api-cdn.', 'api.');
+	}
+
+	if (
+		method === HttpMethod.GET &&
+		getEndpointsConfig.cdnRequired.find((slug: string) => url.includes(slug))
+	) {
+		baseUrl = baseUrl.replace('api.', 'api-cdn.');
 	}
 
 	const requestConfig: AxiosRequestConfig = {
@@ -147,9 +159,9 @@ async function buildHeaders(url: string, method: HttpMethod): Promise<any> {
 		headers['x-api-key'] = clientKey;
 	}
 
-	if (authorizationFreeEndpoints[method] &&
-		authorizationFreeEndpoints[method].find((slug: string) => url.includes(slug)) &&
-		!authorizationRequiredEndpoints[method].find((slug: string) => url.includes(slug))
+	if (
+		getEndpointsConfig.authorizationFree.find((slug: string) => url.includes(slug)) &&
+		!getEndpointsConfig.authorizationRequired.find((slug: string) => url.includes(slug))
 	) {
 		return headers;
 	}
