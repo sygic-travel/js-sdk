@@ -30,7 +30,8 @@ const getEndpointsConfig: any = {
 		'tags'
 	],
 	authorizationRequired: [
-		'reviews'
+		'reviews',
+		'directions/send-by-email'
 	],
 	cdnFree: [
 		'reviews'
