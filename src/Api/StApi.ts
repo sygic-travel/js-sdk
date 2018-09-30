@@ -30,8 +30,7 @@ const getEndpointsConfig: any = {
 		'tags'
 	],
 	authorizationRequired: [
-		'reviews',
-		'directions/send-by-email'
+		'reviews'
 	],
 	cdnFree: [
 		'reviews'
@@ -161,6 +160,7 @@ async function buildHeaders(url: string, method: HttpMethod): Promise<any> {
 	}
 
 	if (
+		method === HttpMethod.GET &&
 		getEndpointsConfig.authorizationFree.find((slug: string) => url.includes(slug)) &&
 		!getEndpointsConfig.authorizationRequired.find((slug: string) => url.includes(slug))
 	) {
