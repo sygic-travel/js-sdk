@@ -1,18 +1,18 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-import { cloneDeep } from '../Util';
 import { sandbox as sinonSandbox, SinonSandbox, SinonStub } from 'sinon';
+
+import { buildDestinationsAndPlaces, findAndSetMissingAddresses, generatePdf, GeneratingState } from '.';
 import { ApiResponse, StApi } from '../Api';
 import * as FavoritesController from '../Favorites';
 import * as PlacesController from '../Places';
-
-import { buildDestinationsAndPlaces, generatePdf, GeneratingState } from '.';
-
+import * as SearchController from '../Search';
 import * as User from '../Session';
 import { setEnvironment } from '../Settings/';
 import * as pdfApiResponses from '../TestData/PdfApiResponses';
 import * as pdfResults from '../TestData/PdfExpectedResults';
 import { placeDetailedEiffelTowerWithoutMedia as placeMock } from '../TestData/PlacesExpectedResults';
+import { cloneDeep } from '../Util';
 
 let sandbox: SinonSandbox;
 chai.use(chaiAsPromised);
@@ -126,6 +126,62 @@ describe('PdfController', () => {
 			chai.expect(apiPostStub.callCount).to.equal(1);
 			chai.expect(apiGetStub.callCount).to.equal(0);
 			chai.expect(state).to.deep.equal(pdfResults.pdfNotFoundResult);
+		});
+	});
+
+	describe('#findAndSetMissingAddresses', () => {
+		it('should not fail if searchReverse fails', async () => {
+			sandbox.stub(
+				SearchController,
+				'searchReverse'
+			).returns(new Promise<ApiResponse>((resolve, reject) => {
+				reject();
+			}));
+
+			const place1: PlacesController.Place = cloneDeep(placeMock);
+			const place2: PlacesController.Place = cloneDeep(placeMock);
+			place2.detail!.address = null;
+
+			const places: PlacesController.Place[] = await findAndSetMissingAddresses([place1, place2]);
+			chai.expect(places[0].detail!.address).to.not.be.null;
+			chai.expect(places[1].detail!.address).to.be.null;
+		});
+
+		it('should fill places addresses if they are empty ', async () => {
+			sandbox.stub(
+				SearchController,
+				'searchReverse'
+			).returns(new Promise<SearchController.SearchResult[]>((resolve) => {
+				const searchResults: SearchController.SearchResult[] = [{
+					address: {
+						short: 'test address',
+						full: 'test address',
+						fields: {
+							name: null,
+							houseNumber: null,
+							street: null,
+							city: null,
+							state: null,
+							postalCode: null,
+							country: null
+						}
+					},
+					location: { lat: 0, lng: 0},
+					type: null,
+					distance: null,
+					place: null
+				}];
+				resolve(searchResults);
+			}));
+
+			const place1: PlacesController.Place = cloneDeep(placeMock);
+			const place2: PlacesController.Place = cloneDeep(placeMock);
+			place1.detail!.address = null;
+			place2.detail!.address = null;
+
+			const places: PlacesController.Place[] = await findAndSetMissingAddresses([place1, place2]);
+			chai.expect(places[0].detail!.address).to.eq('test address');
+			chai.expect(places[1].detail!.address).to.eq('test address');
 		});
 	});
 });
