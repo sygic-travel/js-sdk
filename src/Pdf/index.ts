@@ -280,12 +280,17 @@ async function addMissingAddressesToDestinationsPlaces(
 	return destinationIdsWithPlaces;
 }
 
-async function findAndSetMissingAddresses(places: Place[]): Promise<Place[]> {
+export async function findAndSetMissingAddresses(places: Place[]): Promise<Place[]> {
 	return Promise.all(places.map(async (place: Place) => {
 		if (place.level === Level.POI && place.detail && !place.detail.address) {
-			const searchResult: SearchResult[] = await searchReverse(place.location);
-			if (searchResult.length > 0 && searchResult[0].address) {
-				place.detail.address = searchResult[0].address!.short;
+			let searchResult: SearchResult[] = [];
+			try {
+				searchResult = await searchReverse(place.location);
+				if (searchResult.length > 0 && searchResult[0].address) {
+					place.detail.address = searchResult[0].address!.short;
+				}
+			} catch (e) {
+				place.detail.address = null;
 			}
 		}
 		return place;
