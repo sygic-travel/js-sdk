@@ -1,10 +1,11 @@
 import { Collection, getCollectionsForDestinationId } from '../Collections';
 import { getFavoritesIds } from '../Favorites';
 import {
-	getDetailedPlacesMap, getPlacesDestinationMap, getPlacesMapFromTrip, mergePlacesArrays,
+	getDetailedPlacesMap, getPlacesDestinationMap, getPlacesMapFromTrip, Level, mergePlacesArrays,
 	Place
 } from '../Places';
 import { getRoutesForTripDay, TripDayRoutes } from '../Route';
+import { SearchResult, searchReverse } from '../Search';
 import { getUserSettings, UserSettings } from '../Session';
 import { Day, getTripDetailed, Trip } from '../Trip';
 import { sleep } from '../Util';
@@ -75,10 +76,10 @@ export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 	const destinationIds: string[] = Array.from(destinationIdsWithPlaces.keys());
 
 	const destinationsPromise: Promise<PdfDestination[]> = Promise.all(destinationIds.map(
-		(destinationId: string) => (
+		async (destinationId: string) => (
 		createDestinationData(
 			destinationId,
-			destinationIdsWithPlaces,
+			await addMissingAddressesToDestinationsPlaces(destinationIdsWithPlaces),
 			destinationIdsWithDestinations,
 			placeIdsWithPlaceType,
 			query
@@ -264,4 +265,34 @@ async function filterUnnecessaryDestinations(
 	}
 
 	return { destinationIdsWithDestinations, destinationIdsWithPlaces };
+}
+
+async function addMissingAddressesToDestinationsPlaces(
+	destinationIdsWithPlaces: Map<string, Place[]>
+): Promise<Map<string, Place[]>> {
+	const destinationIds: string[] = Array.from(destinationIdsWithPlaces.keys());
+	await Promise.all(destinationIds.map(async (destinationId) => {
+		const destinationPlaces: Place[] | undefined = destinationIdsWithPlaces.get(destinationId);
+		if (destinationPlaces) {
+			destinationIdsWithPlaces.set(destinationId, await findAndSetMissingAddresses(destinationPlaces));
+		}
+	}));
+	return destinationIdsWithPlaces;
+}
+
+export async function findAndSetMissingAddresses(places: Place[]): Promise<Place[]> {
+	return Promise.all(places.map(async (place: Place) => {
+		if (place.level === Level.POI && place.detail && !place.detail.address) {
+			let searchResult: SearchResult[] = [];
+			try {
+				searchResult = await searchReverse(place.location);
+				if (searchResult.length > 0 && searchResult[0].address) {
+					place.detail.address = searchResult[0].address!.short;
+				}
+			} catch (e) {
+				place.detail.address = null;
+			}
+		}
+		return place;
+	}));
 }
