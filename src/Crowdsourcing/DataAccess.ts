@@ -2,6 +2,7 @@ import { ApiResponse } from '../Api';
 import * as StApi from '../Api/StApi';
 import { Location } from '../Geo';
 import { License } from '../Media';
+import { EventType } from './CrowdSourcingEvent';
 
 export enum UpdatableReferenceType {
 	'article:blog', 'link:facebook', 'link:google_plus', 'link:info', 'link:instagram', 'link:official', 'link:program',
@@ -9,7 +10,7 @@ export enum UpdatableReferenceType {
 }
 
 export const createPlace = (location: Location, note: string | null): Promise<string> => callCrowdsourcingApiEndpoint({
-	type: 'place:create',
+	type: EventType.CREATE_PLACE,
 	suggested: {
 		location: {
 			lat: location.lat,
@@ -25,7 +26,7 @@ export const updatePlaceAddress = (
 	suggested: string,
 	note: string | null
 ): Promise<string> => callCrowdsourcingApiEndpoint({
-	type: 'place:update:address',
+	type: EventType.UPDATE_PLACE_ADDRESS,
 	place_id: placeId,
 	original,
 	suggested,
@@ -38,7 +39,7 @@ export const updatePlaceAdmission = (
 	suggested: string,
 	note: string | null
 ): Promise<string> => callCrowdsourcingApiEndpoint({
-	type: 'place:update:admission',
+	type: EventType.UPDATE_PLACE_ADMISSION,
 	place_id: placeId,
 	original,
 	suggested,
@@ -51,7 +52,7 @@ export const updatePlaceEmail = (
 	suggested: string,
 	note: string | null
 ): Promise<string> => callCrowdsourcingApiEndpoint({
-	type: 'place:update:email',
+	type: EventType.UPDATE_PLACE_EMAIL,
 	place_id: placeId,
 	original,
 	suggested,
@@ -64,7 +65,7 @@ export const updatePlaceLocation = (
 	suggested: Location,
 	note: string | null
 ): Promise<string> => callCrowdsourcingApiEndpoint({
-	type: 'place:update:location',
+	type: EventType.UPDATE_PLACE_LOCATION,
 	place_id: placeId,
 	original: {
 		lat: original.lat,
@@ -84,7 +85,7 @@ export const updatePlaceName = (
 	suggested: string,
 	note: string | null
 ): Promise<string> => callCrowdsourcingApiEndpoint({
-	type: 'place:update:name',
+	type: EventType.UPDATE_PLACE_NAME,
 	place_id: placeId,
 	language_id: languageId,
 	original,
@@ -98,7 +99,7 @@ export const updatePlaceOpeningHours = (
 	suggested: string,
 	note: string | null
 ): Promise<string> => callCrowdsourcingApiEndpoint({
-	type: 'place:update:opening_hours',
+	type: EventType.UPDATE_PLACE_OPENING_HOURS,
 	place_id: placeId,
 	original,
 	suggested,
@@ -111,7 +112,7 @@ export const updatePlaceOpeningHoursNote = (
 	suggested: string,
 	note: string | null
 ): Promise<string> => callCrowdsourcingApiEndpoint({
-	type: 'place:update:opening_hours_note',
+	type: EventType.UPDATE_PLACE_OPENING_HOURS_NOTE,
 	place_id: placeId,
 	original,
 	suggested,
@@ -124,7 +125,7 @@ export const updatePlacePhone = (
 	suggested: string,
 	note: string | null
 ): Promise<string> => callCrowdsourcingApiEndpoint({
-	type: 'place:update:phone',
+	type: EventType.UPDATE_PLACE_PHONE,
 	place_id: placeId,
 	original,
 	suggested,
@@ -138,7 +139,7 @@ export const createPlaceReference = (
 	suggestedUrl: string,
 	note: string | null
 ) => callCrowdsourcingApiEndpoint({
-	type: 'place:update:references',
+	type: EventType.UPDATE_PLACE_REFERENCES,
 	place_id: placeId,
 	language_id: languageId,
 	original: {
@@ -159,7 +160,7 @@ export const updatePlaceReference = (
 	suggestedUrl: string,
 	note: string | null
 ): Promise<string> => callCrowdsourcingApiEndpoint({
-	type: 'place:update:references',
+	type: EventType.UPDATE_PLACE_REFERENCES,
 	place_id: placeId,
 	language_id: languageId,
 	original: {
@@ -177,7 +178,7 @@ export const createPlaceTag = (
 	key: string,
 	note: string | null
 ): Promise<string> => callCrowdsourcingApiEndpoint({
-	type: 'place.tag:create',
+	type: EventType.CREATE_PLACE_TAG,
 	place_id: placeId,
 	suggested: {
 		key
@@ -190,7 +191,7 @@ export const deletePlaceTag = (
 	key: string,
 	note: string | null
 ): Promise<string> => callCrowdsourcingApiEndpoint({
-	type: 'place.tag:delete',
+	type: EventType.DELETE_PLACE_TAG,
 	place_id: placeId,
 	suggested: {
 		key
@@ -216,7 +217,7 @@ export const createPlaceMedia = async (
 	const apiResponse: ApiResponse = await StApi.postMultipartJsonImage(
 		`crowdsourcing/media`,
 		{
-			type: 'place.media:create',
+			type: EventType.CREATE_PLACE_MEDIA,
 			place_id: placeId,
 			original: null,
 			suggested: {
