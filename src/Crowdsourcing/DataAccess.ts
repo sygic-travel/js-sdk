@@ -1,13 +1,12 @@
+import { decamelizeKeys } from 'humps';
+import { stringify } from 'query-string';
+
 import { ApiResponse } from '../Api';
 import * as StApi from '../Api/StApi';
 import { Location } from '../Geo';
 import { License } from '../Media';
-import { EventType } from './CrowdSourcingEvent';
-
-export enum UpdatableReferenceType {
-	'article:blog', 'link:facebook', 'link:google_plus', 'link:info', 'link:instagram', 'link:official', 'link:program',
-	'link:timetable', 'link:twitter', 'link:webcam', 'link:youtube', 'map:subway', 'map:visitor', 'wiki'
-}
+import { Event, EventsQuery, EventType } from './Event';
+import { mapEventApiResponseToEvent } from './Mapper';
 
 export const createPlace = (location: Location, note: string | null): Promise<string> => callCrowdsourcingApiEndpoint({
 	type: EventType.CREATE_PLACE,
@@ -233,4 +232,13 @@ export const createPlaceMedia = async (
 		throw new Error('Wrong API response');
 	}
 	return apiResponse.data.place_id as string;
+};
+
+export const getEvents = async (filter?: EventsQuery): Promise<Event[]> => {
+	const queryString: string = filter ? 'crowdsourcing?' + stringify(decamelizeKeys(filter)) : 'crowdsourcing';
+	const apiResponse: ApiResponse = await StApi.get(queryString);
+	if (!apiResponse.data.hasOwnProperty('events')) {
+		throw new Error('Wrong API response');
+	}
+	return apiResponse.data.events.map((event: any) => mapEventApiResponseToEvent(event));
 };

@@ -18,4 +18,5 @@ export default class CrowdsourcingModule {
 	public createPlaceMedia = Crowdsourcing.createPlaceMedia;
 	public createPlaceReference = Crowdsourcing.createPlaceReference;
 	public updatePlaceReference = Crowdsourcing.updatePlaceReference;
+	public getEvents = Crowdsourcing.getEvents;
 }

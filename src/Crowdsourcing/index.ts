@@ -4,6 +4,7 @@ import { Location } from '../Geo';
 import { getDetailedPlace, Reference } from '../Places';
 import { DetailedPlace } from '../Places/Place';
 import * as Dao from './DataAccess';
+import { UpdatableReferenceType } from './Event';
 
 const imageSize = '100x100';
 
@@ -95,7 +96,7 @@ export const createPlaceReference = async (
 	suggestedUrl: string,
 	note: string | null
 ): Promise<string> => {
-	if (!Object.keys(Dao.UpdatableReferenceType).includes(suggestedType)) {
+	if (!Object.keys(UpdatableReferenceType).includes(suggestedType)) {
 		throw new Error('Can\'t update this reference type');
 	}
 
@@ -122,7 +123,7 @@ export const updatePlaceReference = async (
 		throw new Error('Reference not found');
 	}
 
-	if (!Object.keys(Dao.UpdatableReferenceType).includes(referenceToBeUpdated.type)) {
+	if (!Object.keys(UpdatableReferenceType).includes(referenceToBeUpdated.type)) {
 		throw new Error('Can\'t update suggested reference type');
 	}
 
@@ -143,3 +144,4 @@ export const updatePlaceReference = async (
 export const createPlaceTag = Dao.createPlaceTag;
 export const deletePlaceTag = Dao.deletePlaceTag;
 export const createPlaceMedia = Dao.createPlaceMedia;
+export const getEvents = Dao.getEvents;
