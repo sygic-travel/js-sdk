@@ -13,9 +13,8 @@ export interface PdfQuery {
 }
 
 export interface PdfData {
-	destinations: PdfDestination[];
+	destinations?: PdfDestination[];
 	routes: TripDayRoutes[];
-	tripStaticMapUrl: string;
 }
 
 export interface PdfDestination {

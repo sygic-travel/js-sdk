@@ -10,7 +10,7 @@ import { getUserSettings, UserSettings } from '../Session';
 import { Day, getTripDetailed, Trip } from '../Trip';
 import { sleep } from '../Util';
 import * as Dao from './DataAccess';
-import { generateDestinationMainMap, generateDestinationSecondaryMaps, generateTripMap } from './MapGenerator';
+import { generateDestinationMainMap, generateDestinationSecondaryMaps } from './MapGenerator';
 import {
 	GeneratingState,
 	PdfData,
@@ -55,45 +55,52 @@ export async function generatePdf(tripId: string): Promise<GeneratingState> {
 	} as GeneratingState;
 }
 
-export async function getPdfData(query: PdfQuery): Promise<PdfData> {
+export async function getShortPdfData(tripId: string): Promise<PdfData> {
+	const trip: Trip = await getTripDetailed(tripId);
+
+	if (!trip.days) {
+		return { routes: [] };
+	}
+
+	return { routes: await getTripDayRoutes(trip) };
+}
+
+export async function getLongPdfData(query: PdfQuery): Promise<PdfData> {
 	const trip: Trip = await getTripDetailed(query.tripId);
 
 	if (!trip.days) {
-		throw new Error('Can\'t generate PDF data for trip without days');
+		return { routes: [], destinations: [] };
 	}
 
-	const routesPromise: Promise<TripDayRoutes[]> = Promise.all(trip.days.map((day: Day, dayIndex: number) => (
-		getRoutesForTripDay(trip.id, dayIndex)
-	)));
-
+	const routesPromise: Promise<TripDayRoutes[]> = getTripDayRoutes(trip);
 	const placesMapFromTrip: Map<string, Place> = await getPlacesMapFromTrip(trip, imageSize);
 	const {
 		destinationIdsWithDestinations,
 		destinationIdsWithPlaces,
 		placeIdsWithPlaceType
 	} = await buildDestinationsAndPlaces(placesMapFromTrip);
-
 	const destinationIds: string[] = Array.from(destinationIdsWithPlaces.keys());
 
 	const destinationsPromise: Promise<PdfDestination[]> = Promise.all(destinationIds.map(
 		async (destinationId: string) => (
-		createDestinationData(
-			destinationId,
-			await addMissingAddressesToDestinationsPlaces(destinationIdsWithPlaces),
-			destinationIdsWithDestinations,
-			placeIdsWithPlaceType,
-			query
+			createDestinationData(
+				destinationId,
+				await addMissingAddressesToDestinationsPlaces(destinationIdsWithPlaces),
+				destinationIdsWithDestinations,
+				placeIdsWithPlaceType,
+				query
+			)
 		)
+	));
+
+	const [routes, destinations] = await Promise.all([routesPromise, destinationsPromise]);
+	return { routes, destinations };
+}
+
+async function getTripDayRoutes(trip: Trip): Promise<TripDayRoutes[]> {
+	return Promise.all(trip.days.map((day: Day, dayIndex: number) => (
+		getRoutesForTripDay(trip.id, dayIndex)
 	)));
-
-	const tripMapUrlsPromise = await generateTripMap(trip, query.mainMapWidth, query.mainMapHeight);
-
-	const [
-		routes,
-		destinations,
-		tripStaticMapUrl
-	] = await Promise.all([routesPromise, destinationsPromise, tripMapUrlsPromise]);
-	return { routes, destinations, tripStaticMapUrl };
 }
 
 export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<string, Place>): Promise<{
