@@ -7,6 +7,7 @@ import { License } from '../Media';
 import { setEnvironment } from '../Settings';
 
 import * as Dao from './DataAccess';
+import { EventState } from './Event';
 
 let sandbox: SinonSandbox;
 let apiStub: SinonStub;
@@ -289,6 +290,42 @@ describe('CrowdsourcingDataAccess', () => {
 			});
 			chai.expect(apiStub.getCall(0).args[2]).to.deep.equal('png');
 			chai.expect(apiStub.getCall(0).args[3]).to.deep.equal('some data');
+		});
+	});
+
+	describe('#getEvents', () => {
+		it('should call stApi with empty querystring', async () => {
+			apiStub = sandbox.stub(StApi, 'get').returns(
+				new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(200, {
+						events: []
+					}));
+				}));
+
+			await Dao.getEvents();
+			chai.expect(apiStub.getCall(0).args[0]).to.deep.equal('crowdsourcing');
+		});
+
+		it('should call stApi with correct querystring', async () => {
+			apiStub = sandbox.stub(StApi, 'get').returns(
+				new Promise<ApiResponse>((resolve) => {
+					resolve(new ApiResponse(200, {
+						events: []
+					}));
+				}));
+
+			await Dao.getEvents({
+				integratorId: 109,
+				state: EventState.ACCEPTED,
+				placeId: 'poi:530',
+				userId: '12345',
+				languageId: 'en',
+				limit: 200,
+				offset: 512
+			});
+			const expectedQueryString: string = 'crowdsourcing?integrator_id=109&language_id=en&limit=200&offset=512&' +
+				'place_id=poi%3A530&state=accepted&user_id=12345';
+			chai.expect(apiStub.getCall(0).args[0]).to.deep.equal(expectedQueryString);
 		});
 	});
 });
