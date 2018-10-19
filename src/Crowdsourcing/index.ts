@@ -145,3 +145,5 @@ export const createPlaceTag = Dao.createPlaceTag;
 export const deletePlaceTag = Dao.deletePlaceTag;
 export const createPlaceMedia = Dao.createPlaceMedia;
 export const getEvents = Dao.getEvents;
+export const moderateEvents = Dao.moderateEvents;
+export const assignNextEvent = Dao.assignNextEvent;
