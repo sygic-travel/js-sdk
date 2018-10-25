@@ -1,5 +1,8 @@
 export interface PlaceOpeningHours {
-	[dayDate: string]: DayOpeningHours[];
+	openingHours: {
+		[dayDate: string]: DayOpeningHours[];
+	};
+	isValid: boolean;
 }
 
 export interface DayOpeningHours {

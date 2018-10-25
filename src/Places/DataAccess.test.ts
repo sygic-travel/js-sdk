@@ -236,21 +236,25 @@ describe('PlacesDataAccess', () => {
 							closing: '00:00:00',
 							note: null
 						}]
-					}
+					},
+					is_valid: true
 				}));
 			}));
 			return chai.expect(Dao.getPlaceOpeningHours('poi:42133', '', ''))
 				.to.eventually.deep.equal({
-					'2017-09-01': [{
-						opening: '09:00:00',
-						closing: '00:00:00',
-						note: null
-					} as DayOpeningHours],
-					'2017-09-02': [{
-						opening: '09:00:00',
-						closing: '00:00:00',
-						note: null
-					} as DayOpeningHours]
+					openingHours: {
+						'2017-09-01': [{
+							opening: '09:00:00',
+							closing: '00:00:00',
+							note: null
+						} as DayOpeningHours],
+						'2017-09-02': [{
+							opening: '09:00:00',
+							closing: '00:00:00',
+							note: null
+						} as DayOpeningHours]
+					},
+					isValid: true
 				} as PlaceOpeningHours);
 		});
 	});

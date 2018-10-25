@@ -171,7 +171,7 @@ export async function getPlaceOpeningHours(id: string, from: string, to: string)
 		throw new Error('Wrong API response');
 	}
 
-	return mapPlaceOpeningHours(apiResponse.data.opening_hours);
+	return mapPlaceOpeningHours(apiResponse.data);
 }
 
 export async function addPlaceReview(placeId: string, rating: number, message: string): Promise<PlaceReview> {

@@ -123,9 +123,11 @@ export const mapPlaceGeometryApiResponseToPlaceGeometry = (placeGeometry: any): 
 	} as PlaceGeometry
 );
 
-export const mapPlaceOpeningHours = (placeOpeningHours: any): PlaceOpeningHours => {
-	return placeOpeningHours as PlaceOpeningHours;
-};
+export const mapPlaceOpeningHours = (placeOpeningHours: any): PlaceOpeningHours => ({
+		openingHours: placeOpeningHours.opening_hours,
+		isValid: placeOpeningHours.is_valid
+	} as PlaceOpeningHours
+);
 
 export const mapPlaceReview = (placeReview: any): PlaceReview => {
 	return camelizeKeys(placeReview) as PlaceReview;
