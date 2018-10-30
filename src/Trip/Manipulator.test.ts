@@ -170,9 +170,11 @@ describe('TripManipulator', () => {
 				expectedTrip.days[0].itinerary[0].isSticky = false;
 				expectedTrip.days[0].itinerary[0].isStickyFirstInDay = false;
 				expectedTrip.days[0].itinerary[0].isStickyLastInDay = false;
+				expectedTrip.days[0].date = '2017-04-08';
 				expectedTrip.days[1].itinerary[1].isSticky = false;
 				expectedTrip.days[1].itinerary[1].isStickyFirstInDay = false;
 				expectedTrip.days[1].itinerary[1].isStickyLastInDay = false;
+				expectedTrip.days[1].date = '2017-04-09';
 			}
 
 			return chai.expect(Manipulator.swapDaysInTrip(inputTrip, 0, 1, null)).to.deep.equal(expectedTrip);
