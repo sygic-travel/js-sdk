@@ -105,6 +105,7 @@ export function swapDaysInTrip(
 	const secondDay: Day = resultTrip.days[secondDayIndex];
 	resultTrip.days[firstDayIndex] = secondDay;
 	resultTrip.days[secondDayIndex] = firstDay;
+	resultTrip.days = decorateDaysWithDate(resultTrip.startsOn, resultTrip.days);
 	return resolveStickiness(resultTrip, userSettings);
 }
 
