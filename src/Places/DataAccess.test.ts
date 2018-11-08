@@ -279,6 +279,16 @@ describe('PlacesDataAccess', () => {
 		});
 	});
 
+	describe('#getPlaceReviewsFromYelp', () => {
+		it('should correctly get and map item reviews with additional data', () => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, TestData.placeReviewsFromYelpData));
+			}));
+			return chai.expect(Dao.getPlaceReviewsFromYelp('poi:530'))
+				.to.eventually.deep.equal(ExpectedResults.placeReviewsFromYelpData);
+		});
+	});
+
 	describe('#getPlacesStats', () => {
 		it('should correctly get and map stats data for places', () => {
 			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {

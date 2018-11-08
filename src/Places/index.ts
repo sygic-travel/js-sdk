@@ -8,8 +8,13 @@ import { PlaceAutoTranslation } from './PlaceAutoTranslation';
 import { Description, Detail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
 import { DayOpeningHours, PlaceOpeningHours } from './PlaceOpeningHours';
-import { PlaceReview } from './PlaceReview';
-import { PlaceReviewsData } from './PlaceReviewsData';
+import {
+	PlaceReview,
+	PlaceReviewFromYelp,
+	PlaceReviewFromYelpUser,
+	PlaceReviewsData,
+	PlaceReviewsFromYelpData
+} from './PlaceReview';
 import { PlacesStats } from './Stats';
 import { PlacesStatsFilter, PlacesStatsFilterJSON } from './StatsFilter';
 
@@ -30,6 +35,9 @@ export {
 	PlaceOpeningHours,
 	PlaceReview,
 	PlaceReviewsData,
+	PlaceReviewFromYelp,
+	PlaceReviewFromYelpUser,
+	PlaceReviewsFromYelpData,
 	PlacesStats,
 	Reference,
 	Tag,
@@ -98,6 +106,10 @@ export async function deletePlaceReview(reviewId: number): Promise<void> {
 
 export async function getPlaceReviews(placeId: string, limit: number, page: number): Promise<PlaceReviewsData> {
 	return Dao.getPlaceReviews(placeId, limit, page);
+}
+
+export async function getPlaceReviewsFromYelp(placeId: string): Promise<PlaceReviewsFromYelpData> {
+	return Dao.getPlaceReviewsFromYelp(placeId);
 }
 
 export async function voteOnReview(reviewId: number, voteValue: number): Promise<void> {

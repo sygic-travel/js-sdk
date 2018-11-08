@@ -297,6 +297,50 @@ export const placeReviewsData = {
 	}]
 };
 
+export const placeReviewsFromYelpData = {
+	rating: 4.5,
+	total_count: 1757,
+	reviews: [{
+		id: "FfVeoayE4GEIWJt5A",
+		url: "https://www.yelp.com/",
+		text: "Simply gorgeous! What can I say about this place that hasn't been said? My friends and I were going to make a reservation at the restaurant up top, but they...",
+		rating: 5,
+		created_at: "2018-11-07T07:24:21-08:00",
+		user: {
+			id: "LRlX1OauoWqfW6aaGzQ",
+			profile_url: "https://www.yelp.com/user/LRlX1OauoWqfW6aaGzQ",
+			image_url: "https://www.yelp.com/user/LRlX1OauoWqfW6aaGzQ.jpg",
+			name: "Tester"
+		}
+	},
+	{
+		id: "rkxnO9p4I0HAyEKrvw",
+		url: "https://www.yelp.com/",
+		text: "So it's a little bittersweet to not be giving this a five star review since it was a dream come true for myself coming to Paris as one of my first travel...",
+		rating: 3,
+		created_at: "2018-11-01T15:22:37-08:00",
+		user: {
+			id: "qnm8V8dAaTphlYCg",
+			profile_url: "https://www.yelp.com/user/qnm8V8dAaTphlYCg",
+			image_url: "https://www.yelp.com/user/qnm8V8dAaTphlYCg.jpg",
+			name: "Julie E."
+		}
+	},
+	{
+		id: "eWlO6TAC8h5RiQ",
+		url: "https://www.yelp.com/",
+		text: "La Tour Eiffel. The Eiffel Tower to most Americans. It is a sight to behold. I usually don't do a lot of...",
+		rating: 5,
+		created_at: "2018-10-30T18:45:01-08:00",
+		user: {
+			id: "OVvMzuVCPEJYfOkhg",
+			profile_url: "https://www.yelp.com/user/OVvMzuVCPEJYfOkhg",
+			image_url: "https://www.yelp.com/user/OVvMzuVCPEJYfOkhg.jpg",
+			name: "Nikki E."
+		}
+	}]
+};
+
 export const placesStatsData = {
 	stats: {
 		categories: [
