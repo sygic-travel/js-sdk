@@ -88,6 +88,7 @@ declare class PlacesModule {
 	public addPlaceReview(placeId: string, rating: number, message: string): Promise<Places.PlaceReview>;
 	public deletePlaceReview(reviewId: number): Promise<void>;
 	public getPlaceReviews(placeId: string, limit: number, page: number): Promise<Places.PlaceReviewsData>;
+	public getPlaceReviewsFromYelp(placeId: string): Promise<Places.PlaceReviewsFromYelpData>;
 	public voteOnReview(reviewId: number, voteValue: number): Promise<void>;
 	public spreadPlacesOnMap(
 		places: Places.Place[],
@@ -475,6 +476,28 @@ export namespace Places {
 		rating: number;
 		currentUserHasReview: boolean;
 		reviews: PlaceReview[];
+	}
+
+	export interface PlaceReviewFromYelp {
+		id: string;
+		url: string;
+		text: string;
+		rating: number;
+		createdAt: string;
+		user: PlaceReviewFromYelpUser;
+	}
+
+	export interface PlaceReviewFromYelpUser {
+		id: string;
+		profileUrl: string;
+		imageUrl: string;
+		name: string;
+	}
+
+	export interface PlaceReviewsFromYelpData {
+		rating: number;
+		totalCount: number;
+		reviews: PlaceReviewFromYelp[];
 	}
 
 	export interface SumStatistic {

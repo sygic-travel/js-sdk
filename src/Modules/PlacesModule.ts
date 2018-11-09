@@ -12,6 +12,7 @@ import {
 	getPlaceMedia,
 	getPlaceOpeningHours,
 	getPlaceReviews,
+	getPlaceReviewsFromYelp,
 	getPlaces,
 	getPlacesDestinationMap,
 	getPlacesStats,
@@ -20,6 +21,7 @@ import {
 	PlaceOpeningHours,
 	PlaceReview,
 	PlaceReviewsData,
+	PlaceReviewsFromYelpData,
 	PlacesListFilterJSON,
 	PlacesQuery,
 	PlacesStats,
@@ -83,6 +85,10 @@ export default class PlacesModule {
 
 	public getPlaceReviews(placeId: string, limit: number, page: number): Promise<PlaceReviewsData> {
 		return getPlaceReviews(placeId, limit, page);
+	}
+
+	public getPlaceReviewsFromYelp(placeId: string): Promise<PlaceReviewsFromYelpData> {
+		return getPlaceReviewsFromYelp(placeId);
 	}
 
 	public voteOnReview(reviewId: number, voteValue: number): Promise<void> {

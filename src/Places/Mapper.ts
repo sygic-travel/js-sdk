@@ -6,8 +6,12 @@ import { DetailedPlace, Place } from './Place';
 import { Detail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
 import { PlaceOpeningHours } from './PlaceOpeningHours';
-import { PlaceReview } from './PlaceReview';
-import { PlaceReviewsData } from './PlaceReviewsData';
+import {
+	PlaceReview,
+	PlaceReviewFromYelp,
+	PlaceReviewsData,
+	PlaceReviewsFromYelpData
+} from './PlaceReview';
 
 export const mapPlaceApiResponseToPlaces = (places: any): Place[] => {
 	return places.map((place) => {
@@ -139,4 +143,18 @@ export const mapPlaceReviewsData = (placeReviewsData: any): PlaceReviewsData => 
 		currentUserHasReview: placeReviewsData.current_user_has_review,
 		reviews: placeReviewsData.reviews.map((placeReview: any) => mapPlaceReview(placeReview))
 	} as PlaceReviewsData;
+};
+
+export const mapPlaceReviewFromYelp = (placeReview: any): PlaceReviewFromYelp => {
+	return camelizeKeys(placeReview) as PlaceReviewFromYelp;
+};
+
+export const mapPlaceReviewsFromYelpData = (placeReviewsData: any): PlaceReviewsFromYelpData => {
+	return {
+		rating: placeReviewsData ? placeReviewsData.rating : 0,
+		totalCount: placeReviewsData ? placeReviewsData.total_count : 0,
+		reviews: placeReviewsData ? placeReviewsData.reviews.map(
+			(placeReview: any) => mapPlaceReviewFromYelp(placeReview)
+		) : []
+	} as PlaceReviewsFromYelpData;
 };

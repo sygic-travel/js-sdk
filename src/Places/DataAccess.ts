@@ -15,14 +15,14 @@ import {
 	mapPlaceGeometryApiResponseToPlaceGeometry,
 	mapPlaceOpeningHours,
 	mapPlaceReview,
-	mapPlaceReviewsData
+	mapPlaceReviewsData,
+	mapPlaceReviewsFromYelpData
 } from './Mapper';
 import { CustomPlaceFormData, DetailedPlace, Place } from './Place';
 import { PlaceAutoTranslation } from './PlaceAutoTranslation';
 import { PlaceGeometry } from './PlaceGeometry';
 import { PlaceOpeningHours } from './PlaceOpeningHours';
-import { PlaceReview } from './PlaceReview';
-import { PlaceReviewsData } from './PlaceReviewsData';
+import { PlaceReview, PlaceReviewsData, PlaceReviewsFromYelpData } from './PlaceReview';
 import { PlacesStats } from './Stats';
 import { PlacesStatsFilter } from './StatsFilter';
 
@@ -202,6 +202,11 @@ export async function getPlaceReviews(placeId: string, limit: number, page: numb
 		throw new Error('Wrong API response');
 	}
 	return mapPlaceReviewsData(apiResponse.data);
+}
+
+export async function getPlaceReviewsFromYelp(placeId: string): Promise<PlaceReviewsFromYelpData> {
+	const apiResponse = await StApi.get(`places/${placeId}/reviews/yelp`);
+	return mapPlaceReviewsFromYelpData(apiResponse.data);
 }
 
 export async function voteOnReview(reviewId: number, voteValue: number): Promise<void> {
