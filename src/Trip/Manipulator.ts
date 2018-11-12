@@ -62,7 +62,8 @@ export function prependDayToTrip(tripToBeUpdated: Trip, userSettings: UserSettin
 }
 
 export function addDaysToTrip(
-	trip: Trip, appendCount: number,
+	trip: Trip,
+	appendCount: number,
 	prependCount: number,
 	userSettings: UserSettings | null
 ): Trip {
