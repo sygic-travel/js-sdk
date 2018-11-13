@@ -89,6 +89,48 @@ describe('TripManipulator', () => {
 		});
 	});
 
+	describe('#addDayToTrip', () => {
+		it('should add empty day to the beginning of trip', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			expectedTrip.endsOn =  '2017-04-11';
+
+			if (expectedTrip.days) {
+				expectedTrip.days.unshift({
+					itinerary: [],
+					note: null,
+					date: '2017-04-08'
+				} as Day);
+				expectedTrip.days[1].date = '2017-04-09';
+				expectedTrip.days[2].date = '2017-04-10';
+				expectedTrip.days[3].date = '2017-04-11';
+			}
+
+			return chai.expect(Manipulator.addDayToTrip(inputTrip, 0, null)).to.deep.equal(expectedTrip);
+		});
+
+		it('should add day to trip and copy sticky places', () => {
+			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
+			expectedTrip.endsOn =  '2017-04-11';
+
+			if (expectedTrip.days) {
+				expectedTrip.days.splice(1, 0, {
+					itinerary: [],
+					note: null,
+					date: '2017-04-09'
+				} as Day);
+				const item: ItineraryItem = cloneDeep(expectedTrip.days[0].itinerary[1]);
+				item.isStickyFirstInDay = true;
+				expectedTrip.days[1].itinerary.push(item);
+				expectedTrip.days[2].date = '2017-04-10';
+				expectedTrip.days[3].date = '2017-04-11';
+			}
+
+			return chai.expect(Manipulator.addDayToTrip(inputTrip, 1, null)).to.deep.equal(expectedTrip);
+		});
+	});
+
 	describe('#removeDayFromTrip', () => {
 		it('should throw an error when invalid index is passed', () => {
 			const indexToBeRemoved = 999;

@@ -721,6 +721,11 @@ export namespace Trips {
 			prependCount: number,
 			userSettings: Sessions.UserSettings | null
 		): Trip;
+		addDayToTrip(
+			trip: Trip,
+			dayIndex: number,
+			userSettings: Sessions.UserSettings | null
+		): Trip;
 		removeDay(trip: Trip, dayIndex: number, userSettings: Sessions.UserSettings | null): Trip;
 		swapDaysInTrip(
 			trip: Trip,
