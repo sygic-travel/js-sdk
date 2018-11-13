@@ -114,15 +114,17 @@ describe('TripManipulator', () => {
 			return chai.expect(Manipulator.removeDayFromTrip(inputTrip, indexToBeRemoved, null)).to.deep.equal(expectedTrip);
 		});
 
-		it('should remove day from beginning of days array and should change start date', () => {
+		it('should remove day from beginning of days array and should change end date', () => {
 			const indexToBeRemoved = 0;
 
 			const inputTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
 			const expectedTrip: Trip = cloneDeep(TripExpectedResults.tripDetailed);
-			expectedTrip.startsOn = '2017-04-09';
+			expectedTrip.endsOn = '2017-04-09';
 
 			if (expectedTrip.days) {
 				expectedTrip.days.splice(indexToBeRemoved, 1);
+				expectedTrip.days[0].date = '2017-04-08';
+				expectedTrip.days[1].date = '2017-04-09';
 				expectedTrip.days[0].itinerary[0].isSticky = false;
 				expectedTrip.days[0].itinerary[0].isStickyFirstInDay = false;
 				expectedTrip.days[0].itinerary[0].isStickyLastInDay = false;

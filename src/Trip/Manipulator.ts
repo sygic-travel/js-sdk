@@ -81,9 +81,7 @@ export function removeDayFromTrip(tripToBeUpdated: Trip, dayIndex: number, userS
 
 	const resultTrip = cloneDeep(tripToBeUpdated);
 
-	if (dayIndex === 0 && resultTrip.startsOn) {
-		resultTrip.startsOn = addDaysToDate(resultTrip.startsOn, 1);
-	} else if (resultTrip.endsOn) {
+	if (resultTrip.endsOn) {
 		resultTrip.endsOn = subtractDaysFromDate(resultTrip.endsOn, 1);
 	}
 
