@@ -8,17 +8,18 @@ import { decorateDaysWithDate } from './Utility';
 
 // Day methods
 export function appendDay(tripToBeUpdated: Trip, userSettings: UserSettings | null): Trip {
-	if (!tripToBeUpdated.endsOn) {
-		throw new Error('endsOn property in Trip cannot be null');
+	let resultTrip = cloneDeep(tripToBeUpdated);
+
+	if (!resultTrip.days) {
+		throw new Error('days property in Trip cannot be null');
 	}
 
-	let resultTrip = cloneDeep(tripToBeUpdated);
 	resultTrip.days.push({
 		itinerary: [],
 		note: null,
 		date: null
 	} as Day);
-	resultTrip.endsOn = resultTrip.endsOn ? addDaysToDate(resultTrip.endsOn, 1) : resultTrip.endsOn;
+	resultTrip.endsOn = resultTrip.endsOn ? addDaysToDate(resultTrip.endsOn, 1) : null;
 	resultTrip.days = decorateDaysWithDate(resultTrip.startsOn, resultTrip.days);
 
 	if (resultTrip.days[resultTrip.days.length - 2].itinerary.length > 0) {
@@ -39,17 +40,13 @@ export function prependDayToTrip(tripToBeUpdated: Trip, userSettings: UserSettin
 		throw new Error('days property in Trip cannot be null');
 	}
 
-	if (!resultTrip.startsOn) {
-		throw new Error('startsOn property in Trip cannot be null');
-	}
-
 	resultTrip.days.unshift({
 		itinerary: [],
 		note: null,
 		date: null
 	} as Day);
 
-	resultTrip.startsOn = subtractDaysFromDate(resultTrip.startsOn, 1);
+	resultTrip.startsOn = resultTrip.startsOn ? subtractDaysFromDate(resultTrip.startsOn, 1) : null;
 	resultTrip.days = decorateDaysWithDate(resultTrip.startsOn, resultTrip.days);
 
 	if (resultTrip.days[1].itinerary.length > 0) {
@@ -62,7 +59,8 @@ export function prependDayToTrip(tripToBeUpdated: Trip, userSettings: UserSettin
 }
 
 export function addDaysToTrip(
-	trip: Trip, appendCount: number,
+	trip: Trip,
+	appendCount: number,
 	prependCount: number,
 	userSettings: UserSettings | null
 ): Trip {
@@ -75,14 +73,47 @@ export function addDaysToTrip(
 	return resolveStickiness(trip, userSettings);
 }
 
+export function addDayToTrip(
+	trip: Trip,
+	dayIndex: number,
+	userSettings: UserSettings | null
+): Trip {
+	checkDayExists(trip, dayIndex);
+
+	let resultTrip = cloneDeep(trip);
+	resultTrip.days.splice(dayIndex, 0, {
+		itinerary: [],
+		note: null,
+		date: null
+	} as Day);
+	resultTrip.endsOn = resultTrip.endsOn ? addDaysToDate(resultTrip.endsOn, 1) : null;
+	resultTrip.days = decorateDaysWithDate(resultTrip.startsOn, resultTrip.days);
+
+	if (dayIndex > 0 && resultTrip.days[dayIndex - 1].itinerary.length > 0) {
+		const previousDayLastPlaceIndex = resultTrip.days[dayIndex - 1].itinerary.length - 1;
+		const previousDayLastPlace = resultTrip.days[dayIndex - 1].itinerary[previousDayLastPlaceIndex];
+		if (previousDayLastPlace.place && previousDayLastPlace.isStickyLastInDay) {
+			resultTrip = addPlaceToDay(resultTrip, previousDayLastPlace.place, dayIndex, userSettings);
+		}
+	}
+	if (dayIndex !== 0 && resultTrip.days[dayIndex + 1].itinerary.length > 0) {
+		const nextDayFirstPlace = resultTrip.days[dayIndex + 1].itinerary[0];
+		const placeFromPreviousDay = resultTrip.days[dayIndex].itinerary[0];
+		if (!placeFromPreviousDay || placeFromPreviousDay && placeFromPreviousDay.placeId !== nextDayFirstPlace.placeId) {
+			if (nextDayFirstPlace.place && nextDayFirstPlace.isStickyFirstInDay) {
+				resultTrip = addPlaceToDay(resultTrip, nextDayFirstPlace.place, dayIndex, userSettings);
+			}
+		}
+	}
+	return resolveStickiness(resultTrip, userSettings);
+}
+
 export function removeDayFromTrip(tripToBeUpdated: Trip, dayIndex: number, userSettings: UserSettings | null): Trip {
 	checkDayExists(tripToBeUpdated, dayIndex);
 
 	const resultTrip = cloneDeep(tripToBeUpdated);
 
-	if (dayIndex === 0 && resultTrip.startsOn) {
-		resultTrip.startsOn = addDaysToDate(resultTrip.startsOn, 1);
-	} else if (resultTrip.endsOn) {
+	if (resultTrip.endsOn) {
 		resultTrip.endsOn = subtractDaysFromDate(resultTrip.endsOn, 1);
 	}
 

@@ -92,6 +92,7 @@ export async function saveTrip(trip: Trip): Promise<Trip> {
 export function getTripEditor(): TripEditor {
 	return {
 		addDaysToTrip: TripManipulator.addDaysToTrip,
+		addDayToTrip: TripManipulator.addDayToTrip,
 		removeDay: TripManipulator.removeDayFromTrip,
 		swapDaysInTrip: TripManipulator.swapDaysInTrip,
 		addPlaceToDay: TripManipulator.addPlaceToDay,

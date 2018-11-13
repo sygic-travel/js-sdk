@@ -177,6 +177,11 @@ export interface TripEditor {
 		prependCount: number,
 		userSettings: UserSettings | null
 	): Trip;
+	addDayToTrip(
+		trip: Trip,
+		dayIndex: number,
+		userSettings: UserSettings | null
+	): Trip;
 	removeDay(trip: Trip, dayIndex: number, userSettings: UserSettings | null): Trip;
 	swapDaysInTrip(
 		trip: Trip,
