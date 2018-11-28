@@ -20,5 +20,5 @@ export default class CrowdsourcingModule {
 	public updatePlaceReference = Crowdsourcing.updatePlaceReference;
 	public getEvents = Crowdsourcing.getEvents;
 	public moderateEvents = Crowdsourcing.moderateEvents;
-	public assignNextEvent = Crowdsourcing.assignNextEvent;
+	public assignNextEvents = Crowdsourcing.assignNextEvents;
 }

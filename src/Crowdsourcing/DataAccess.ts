@@ -5,9 +5,8 @@ import { ApiResponse } from '../Api';
 import * as StApi from '../Api/StApi';
 import { Location } from '../Geo';
 import { License } from '../Media';
-import { Place } from '../Places';
 import { mapPlaceDetailedApiResponseToPlace } from '../Places/Mapper';
-import { Event, EventsQuery, EventType } from './Event';
+import { Event, EventsQuery, EventType, PlaceEvents } from './Event';
 import { mapEventApiResponseToEvent } from './Mapper';
 
 export const createPlace = (location: Location, note: string | null): Promise<string> => callCrowdsourcingApiEndpoint({
@@ -257,16 +256,16 @@ export const moderateEvents = async (eventIds: number[], state: ModerationState)
 	})));
 };
 
-export const assignNextEvent = async (): Promise<{
-	events: Event[],
-	place: Place
-}> => {
-	const apiResponse: ApiResponse = await StApi.get('crowdsourcing/assign-next');
-	if (!apiResponse.data.hasOwnProperty('events') || !apiResponse.data.hasOwnProperty('place')) {
+export const assignNextEvents = async (limit: number): Promise<PlaceEvents[]> => {
+	const queryString: string = limit ? `crowdsourcing/assign-next?limit=${limit}` : `crowdsourcing/assign-next`;
+	const apiResponse: ApiResponse = await StApi.get(queryString);
+	if (!Array.isArray(apiResponse.data)) {
 		throw new Error('Wrong API response');
 	}
-	return {
-		events: apiResponse.data.events.map((event: any) => mapEventApiResponseToEvent(event)),
-		place: mapPlaceDetailedApiResponseToPlace(apiResponse.data.place, '100x100')
-	};
+	return apiResponse.data.map((placeEvents: any) => {
+		return {
+			events: placeEvents.events.map((event: any) => mapEventApiResponseToEvent(event)),
+			place: mapPlaceDetailedApiResponseToPlace(placeEvents.place, '100x100')
+		}
+	});
 };

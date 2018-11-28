@@ -1,5 +1,6 @@
 import { Location } from '../Geo';
 import { License } from '../Media';
+import { Place } from '../Places';
 
 export enum UpdatableReferenceType {
 	'article:blog', 'link:facebook', 'link:google_plus', 'link:info', 'link:instagram', 'link:official', 'link:program',
@@ -20,6 +21,11 @@ export enum EventType {
 	CREATE_PLACE_TAG = 'place.tag:create',
 	DELETE_PLACE_TAG = 'place.tag:delete',
 	CREATE_PLACE_MEDIA = 'place.media:create'
+}
+
+export interface PlaceEvents {
+	events: Event[],
+	place: Place
 }
 
 export interface Event {
