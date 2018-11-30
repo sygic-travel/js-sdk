@@ -12,6 +12,7 @@ import * as Dao from './DataAccess';
 import { PlacesListFilterJSON, PlacesQuery } from './ListFilter';
 import { Category, CustomPlaceFormData, Place } from './Place';
 import { PlaceGeometry } from './PlaceGeometry';
+import { PlaceAttributes } from './PlaceAttributes';
 import { DayOpeningHours, PlaceOpeningHours } from './PlaceOpeningHours';
 import { PlacesStatsFilter } from './StatsFilter';
 
@@ -355,6 +356,39 @@ describe('PlacesDataAccess', () => {
 			assert.calledOnce(apiStub);
 			assert.calledWith(apiStub, 'places/detect-parents?location=49.123%2C15.321');
 			chai.expect(result).to.deep.equal(ExpectedResults.places);
+		});
+	});
+
+	describe('#getPlaceAttributes', () => {
+		it('should recall api and return attributes', () => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, {
+					attributes: {
+						'transport:taxi': 'South Terminal',
+						'transport:terminal': 'Terminal shuttle',
+						'internet_access:password': 'No password'
+					}
+				}));
+			}));
+			return chai.expect(Dao.getPlaceAttributes('poi:42133'))
+				.to.eventually.deep.equal({
+					attributes: {
+						'transport:taxi': 'South Terminal',
+						'transport:terminal': 'Terminal shuttle',
+						'internet_access:password': 'No password'
+					}
+				} as PlaceAttributes);
+		});
+		it('should recall api and return null if there are no attributes', () => {
+			sandbox.stub(StApi, 'get').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, {
+					attributes: null
+				}));
+			}));
+			return chai.expect(Dao.getPlaceAttributes('poi:42133'))
+				.to.eventually.deep.equal({
+					attributes: null
+				} as PlaceAttributes);
 		});
 	});
 });

@@ -4,6 +4,7 @@ import { Day, Trip } from '../Trip/';
 import * as Dao from './DataAccess';
 import { PlacesListFilterJSON, PlacesQuery } from './ListFilter';
 import { Category, CustomPlaceFormData, DetailedPlace, hasTag, isStickyByDefault, Level, Place } from './Place';
+import { PlaceAttributes } from './PlaceAttributes';
 import { PlaceAutoTranslation } from './PlaceAutoTranslation';
 import { Description, Detail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
@@ -21,28 +22,30 @@ import { PlacesStatsFilter, PlacesStatsFilterJSON } from './StatsFilter';
 export {
 	Category,
 	CustomPlaceFormData,
+	Dao,
+	DayOpeningHours,
+	Description,
+	Detail,
 	hasTag,
 	isStickyByDefault,
-	DayOpeningHours,
 	Level,
-	PlacesQuery,
-	PlacesStatsFilter,
 	Place,
-	PlacesListFilterJSON,
-	PlacesStatsFilterJSON,
+	PlaceAttributes,
+	PlaceAutoTranslation,
 	PlaceGeometry,
-	Detail,
 	PlaceOpeningHours,
 	PlaceReview,
-	PlaceReviewsData,
 	PlaceReviewFromYelp,
 	PlaceReviewFromYelpUser,
+	PlaceReviewsData,
 	PlaceReviewsFromYelpData,
+	PlacesListFilterJSON,
+	PlacesQuery,
 	PlacesStats,
+	PlacesStatsFilter,
+	PlacesStatsFilterJSON,
 	Reference,
 	Tag,
-	Description,
-	Dao,
 };
 
 export const DESTINATION_BREAK_LEVELS = [Level.CITY, Level.TOWN, Level.VILLAGE, Level.ISLAND];
@@ -202,6 +205,10 @@ export function mergePlacesArrays(places1: Place[], places2: Place[]): Place[] {
 		},
 		places1
 	);
+}
+
+export function getPlaceAttributes(placeId: string): Promise<PlaceAttributes> {
+	return Dao.getPlaceAttributes(placeId);
 }
 
 export function getPlaceAutoTranslation(placeId: string): Promise<PlaceAutoTranslation> {
