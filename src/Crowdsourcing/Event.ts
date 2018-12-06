@@ -11,6 +11,7 @@ export enum EventType {
 	CREATE_PLACE = 'place:create',
 	UPDATE_PLACE_ADDRESS = 'place:update:address',
 	UPDATE_PLACE_ADMISSION = 'place:update:admission',
+	UPDATE_PLACE_ATTRIBUTE = 'place:update:attributes',
 	UPDATE_PLACE_EMAIL = 'place:update:email',
 	UPDATE_PLACE_LOCATION = 'place:update:location',
 	UPDATE_PLACE_NAME = 'place:update:name',
