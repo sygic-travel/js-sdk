@@ -173,6 +173,47 @@ export const updatePlaceReference = (
 	note
 });
 
+export const createPlaceAttribute = (
+	placeId: string,
+	languageId: string | null,
+	suggestedKey: string,
+	suggestedValue: string,
+	note: string | null
+) => callCrowdsourcingApiEndpoint({
+	type: EventType.UPDATE_PLACE_ATTRIBUTE,
+	place_id: placeId,
+	language_id: languageId,
+	original: {
+		value: null
+	},
+	suggested: {
+		key: suggestedKey,
+		value: suggestedValue
+	},
+	note
+});
+
+export const updatePlaceAttribute = (
+	placeId: string,
+	languageId: string | null,
+	originalValue: string ,
+	originalKey: string,
+	suggestedValue: string,
+	note: string | null
+): Promise<string> => callCrowdsourcingApiEndpoint({
+	type: EventType.UPDATE_PLACE_ATTRIBUTE,
+	place_id: placeId,
+	language_id: languageId,
+	original: {
+		value: originalValue
+	},
+	suggested: {
+		key: originalKey,
+		value: suggestedValue
+	},
+	note
+});
+
 export const createPlaceTag = (
 	placeId: string,
 	key: string,

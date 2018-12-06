@@ -230,6 +230,59 @@ describe('CrowdsourcingDataAccess', () => {
 		});
 	});
 
+	describe('#createPlaceAttribute', () => {
+		it('should call stApi with correct args', async () => {
+			await Dao.createPlaceAttribute(
+				'poi:530',
+				'en',
+				'info:architect',
+				'Gaudi',
+				'test'
+			);
+			chai.expect(apiStub.getCall(0).args[0]).to.deep.equal('crowdsourcing');
+			chai.expect(apiStub.getCall(0).args[1]).to.deep.equal({
+				type: 'place:update:attributes',
+				place_id: 'poi:530',
+				language_id: 'en',
+				original: {
+					value: null
+				},
+				suggested: {
+					key: 'info:architect',
+					value: 'Gaudi'
+				},
+				note: 'test'
+			});
+		});
+	});
+
+	describe('#updatePlaceAttribute', () => {
+		it('should call stApi with correct args', async () => {
+			await Dao.updatePlaceAttribute(
+				'poi:530',
+				'en',
+				'Gaudi',
+				'info:architect',
+				'Gehry',
+				'test'
+			);
+			chai.expect(apiStub.getCall(0).args[0]).to.deep.equal('crowdsourcing');
+			chai.expect(apiStub.getCall(0).args[1]).to.deep.equal({
+				type: 'place:update:attributes',
+				place_id: 'poi:530',
+				language_id: 'en',
+				original: {
+					value: 'Gaudi'
+				},
+				suggested: {
+					key: 'info:architect',
+					value: 'Gehry'
+				},
+				note: 'test'
+			});
+		});
+	});
+
 	describe('#createPlaceTag', () => {
 		it('should call stApi with correct args', async () => {
 			await Dao.createPlaceTag('poi:530', 'test tag key', 'test');

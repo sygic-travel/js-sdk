@@ -1,7 +1,7 @@
 import isUrl from 'is-url-superb';
 
 import { Location } from '../Geo';
-import { getDetailedPlace, Reference } from '../Places';
+import { getDetailedPlace, getPlaceAttributes, PlaceAttributes, Reference } from '../Places';
 import { DetailedPlace } from '../Places/Place';
 import * as Dao from './DataAccess';
 import { UpdatableReferenceType } from './Event';
@@ -137,6 +137,40 @@ export const updatePlaceReference = async (
 		referenceToBeUpdated.url,
 		referenceToBeUpdated.type,
 		suggestedUrl,
+		note
+	);
+};
+
+export const createPlaceAttribute = async (
+	placeId: string,
+	languageId: string | null,
+	suggestedKey: string,
+	suggestedValue: string,
+	note: string | null
+): Promise<string> => {
+	return Dao.createPlaceAttribute(placeId, languageId, suggestedKey, suggestedValue, note);
+};
+
+export const updatePlaceAttribute = async (
+	placeId: string,
+	languageId: string | null,
+	originalValue: string,
+	suggestedKey: string,
+	suggestedValue: string,
+	note: string | null
+): Promise<string> => {
+	const placeAttributes: PlaceAttributes = await getPlaceAttributes(placeId);
+
+	if (!placeAttributes.attributes || !placeAttributes.attributes[suggestedKey]) {
+		throw new Error('Attribute not found');
+	}
+
+	return Dao.updatePlaceAttribute(
+		placeId,
+		languageId,
+		originalValue,
+		suggestedKey,
+		suggestedValue,
 		note
 	);
 };
