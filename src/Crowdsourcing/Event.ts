@@ -81,7 +81,10 @@ export interface EventDataReferences {
 	original: {
 		url: string | null
 	};
-	suggested: UpdatableReferenceType;
+	suggested: {
+		type: UpdatableReferenceType;
+		url: string;
+	};
 	note: string | null;
 }
 
