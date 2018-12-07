@@ -307,6 +307,40 @@ describe('CrowdsourcingDataAccess', () => {
 			} as Event);
 		});
 
+		it('should correctly map "place:update:attributes" event type', async () => {
+			chai.expect(mapEventApiResponseToEvent({
+				...apiResponseEventBody,
+				data: {
+					type: 'place:update:attributes',
+					place_id: 'poi:530',
+					language_id: 'en',
+					original: {
+						value: 'Gaudi'
+					},
+					suggested: {
+						key: 'info:architect',
+						value: 'Gehry'
+					},
+					note: 'test'
+				}
+			})).to.deep.equal({
+				...resultEventBody,
+				data: {
+					type: EventType.UPDATE_PLACE_ATTRIBUTES,
+					placeId: 'poi:530',
+					languageId: 'en',
+					original: {
+						value: 'Gaudi'
+					},
+					suggested: {
+						key: 'info:architect',
+						value: 'Gehry'
+					},
+					note: 'test'
+				}
+			} as Event);
+		});
+
 		it('should correctly map "place.tag:create" event type', async () => {
 			chai.expect(mapEventApiResponseToEvent({
 				...apiResponseEventBody,
