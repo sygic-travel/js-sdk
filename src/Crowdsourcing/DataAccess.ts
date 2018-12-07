@@ -33,6 +33,17 @@ export const updatePlaceAddress = (
 	note
 });
 
+export const deletePlaceAddress = (
+	placeId: string,
+	original: string,
+	note: string | null
+): Promise<string> => callCrowdsourcingApiEndpoint({
+	type: EventType.DELETE_PLACE_ADDRESS,
+	place_id: placeId,
+	original,
+	note
+});
+
 export const updatePlaceAdmission = (
 	placeId: string,
 	original: string | null,
@@ -46,6 +57,17 @@ export const updatePlaceAdmission = (
 	note
 });
 
+export const deletePlaceAdmission = (
+	placeId: string,
+	original: string,
+	note: string | null
+): Promise<string> => callCrowdsourcingApiEndpoint({
+	type: EventType.DELETE_PLACE_ADMISSION,
+	place_id: placeId,
+	original,
+	note
+});
+
 export const updatePlaceEmail = (
 	placeId: string,
 	original: string | null,
@@ -56,6 +78,17 @@ export const updatePlaceEmail = (
 	place_id: placeId,
 	original,
 	suggested,
+	note
+});
+
+export const deletePlaceEmail = (
+	placeId: string,
+	original: string,
+	note: string | null
+): Promise<string> => callCrowdsourcingApiEndpoint({
+	type: EventType.DELETE_PLACE_EMAIL,
+	place_id: placeId,
+	original,
 	note
 });
 
@@ -93,6 +126,19 @@ export const updatePlaceName = (
 	note
 });
 
+export const deletePlaceName = (
+	placeId: string,
+	languageId: string | null,
+	original: string,
+	note: string | null
+): Promise<string> => callCrowdsourcingApiEndpoint({
+	type: EventType.DELETE_PLACE_NAME,
+	place_id: placeId,
+	language_id: languageId,
+	original,
+	note
+});
+
 export const updatePlaceOpeningHours = (
 	placeId: string,
 	original: string | null,
@@ -103,6 +149,17 @@ export const updatePlaceOpeningHours = (
 	place_id: placeId,
 	original,
 	suggested,
+	note
+});
+
+export const deletePlaceOpeningHours = (
+	placeId: string,
+	original: string,
+	note: string | null
+): Promise<string> => callCrowdsourcingApiEndpoint({
+	type: EventType.DELETE_PLACE_OPENING_HOURS,
+	place_id: placeId,
+	original,
 	note
 });
 
@@ -119,6 +176,17 @@ export const updatePlaceOpeningHoursNote = (
 	note
 });
 
+export const deletePlaceOpeningHoursNote = (
+	placeId: string,
+	original: string,
+	note: string | null
+): Promise<string> => callCrowdsourcingApiEndpoint({
+	type: EventType.DELETE_PLACE_OPENING_HOURS_NOTE,
+	place_id: placeId,
+	original,
+	note
+});
+
 export const updatePlacePhone = (
 	placeId: string,
 	original: string | null,
@@ -129,6 +197,17 @@ export const updatePlacePhone = (
 	place_id: placeId,
 	original,
 	suggested,
+	note
+});
+
+export const deletePlacePhone = (
+	placeId: string,
+	original: string,
+	note: string | null
+): Promise<string> => callCrowdsourcingApiEndpoint({
+	type: EventType.DELETE_PLACE_PHONE,
+	place_id: placeId,
+	original,
 	note
 });
 
@@ -155,7 +234,7 @@ export const createPlaceReference = (
 export const updatePlaceReference = (
 	placeId: string,
 	languageId: string | null,
-	originalUrl: string ,
+	originalUrl: string,
 	originalType: string,
 	suggestedUrl: string,
 	note: string | null
@@ -169,6 +248,23 @@ export const updatePlaceReference = (
 	suggested: {
 		type: originalType,
 		url: suggestedUrl
+	},
+	note
+});
+
+export const deletePlaceReference = (
+	placeId: string,
+	languageId: string | null,
+	originalUrl: string,
+	originalType: string,
+	note: string | null
+): Promise<string> => callCrowdsourcingApiEndpoint({
+	type: EventType.DELETE_PLACE_REFERENCES,
+	place_id: placeId,
+	language_id: languageId,
+	original: {
+		url: originalUrl,
+		type: originalType
 	},
 	note
 });
@@ -196,7 +292,7 @@ export const createPlaceAttribute = (
 export const updatePlaceAttribute = (
 	placeId: string,
 	languageId: string | null,
-	originalValue: string ,
+	originalValue: string,
 	originalKey: string,
 	suggestedValue: string,
 	note: string | null
@@ -210,6 +306,23 @@ export const updatePlaceAttribute = (
 	suggested: {
 		key: originalKey,
 		value: suggestedValue
+	},
+	note
+});
+
+export const deletePlaceAttribute = (
+	placeId: string,
+	languageId: string | null,
+	originalValue: string,
+	originalKey: string,
+	note: string | null
+): Promise<string> => callCrowdsourcingApiEndpoint({
+	type: EventType.UPDATE_PLACE_ATTRIBUTES,
+	place_id: placeId,
+	language_id: languageId,
+	original: {
+		key: originalKey,
+		value: originalValue
 	},
 	note
 });

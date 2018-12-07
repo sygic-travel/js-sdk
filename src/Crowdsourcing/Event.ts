@@ -66,6 +66,7 @@ export interface EventDataGeneric {
 	type: EventType.UPDATE_PLACE_ADDRESS |
 		EventType.UPDATE_PLACE_ADMISSION |
 		EventType.UPDATE_PLACE_EMAIL |
+		EventType.UPDATE_PLACE_NAME |
 		EventType.UPDATE_PLACE_OPENING_HOURS |
 		EventType.UPDATE_PLACE_OPENING_HOURS_NOTE |
 		EventType.UPDATE_PLACE_PHONE;
@@ -79,6 +80,7 @@ export interface EventDataGenericDelete {
 	type: EventType.DELETE_PLACE_ADDRESS |
 		EventType.DELETE_PLACE_ADMISSION |
 		EventType.DELETE_PLACE_EMAIL |
+		EventType.DELETE_PLACE_NAME |
 		EventType.DELETE_PLACE_OPENING_HOURS |
 		EventType.DELETE_PLACE_OPENING_HOURS_NOTE |
 		EventType.DELETE_PLACE_PHONE;
