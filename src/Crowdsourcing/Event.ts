@@ -14,7 +14,7 @@ export enum EventType {
 	DELETE_PLACE_TAG = 'place.tag:delete',
 	DELETE_PLACE_ADDRESS = 'place:delete:address',
 	DELETE_PLACE_ADMISSION = 'place:delete:admission',
-	DELETE_PLACE_ATTRIBUTE = 'place:delete:attributes',
+	DELETE_PLACE_ATTRIBUTES = 'place:delete:attributes',
 	DELETE_PLACE_EMAIL = 'place:delete:email',
 	DELETE_PLACE_NAME = 'place:delete:name',
 	DELETE_PLACE_OPENING_HOURS = 'place:delete:opening_hours',
@@ -23,7 +23,7 @@ export enum EventType {
 	DELETE_PLACE_REFERENCES = 'place:delete:references',
 	UPDATE_PLACE_ADDRESS = 'place:update:address',
 	UPDATE_PLACE_ADMISSION = 'place:update:admission',
-	UPDATE_PLACE_ATTRIBUTE = 'place:update:attributes',
+	UPDATE_PLACE_ATTRIBUTES = 'place:update:attributes',
 	UPDATE_PLACE_EMAIL = 'place:update:email',
 	UPDATE_PLACE_LOCATION = 'place:update:location',
 	UPDATE_PLACE_NAME = 'place:update:name',
@@ -138,7 +138,7 @@ export interface EventDataReferencesDelete {
 }
 
 export interface EventDataAttributes {
-	type: EventType.UPDATE_PLACE_ATTRIBUTE;
+	type: EventType.UPDATE_PLACE_ATTRIBUTES;
 	placeId: string;
 	languageId: string;
 	original: {
@@ -152,7 +152,7 @@ export interface EventDataAttributes {
 }
 
 export interface EventDataAttributesDelete {
-	type: EventType.DELETE_PLACE_ATTRIBUTE;
+	type: EventType.DELETE_PLACE_ATTRIBUTES;
 	placeId: string;
 	languageId: string;
 	original: {

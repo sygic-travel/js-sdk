@@ -180,7 +180,7 @@ export const createPlaceAttribute = (
 	suggestedValue: string,
 	note: string | null
 ) => callCrowdsourcingApiEndpoint({
-	type: EventType.UPDATE_PLACE_ATTRIBUTE,
+	type: EventType.UPDATE_PLACE_ATTRIBUTES,
 	place_id: placeId,
 	language_id: languageId,
 	original: {
@@ -201,7 +201,7 @@ export const updatePlaceAttribute = (
 	suggestedValue: string,
 	note: string | null
 ): Promise<string> => callCrowdsourcingApiEndpoint({
-	type: EventType.UPDATE_PLACE_ATTRIBUTE,
+	type: EventType.UPDATE_PLACE_ATTRIBUTES,
 	place_id: placeId,
 	language_id: languageId,
 	original: {
