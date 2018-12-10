@@ -267,7 +267,6 @@ describe('CrowdsourcingDataAccess', () => {
 			} as Event);
 		});
 
-
 		it('should correctly map "place:delete:name" event type', async () => {
 			chai.expect(mapEventApiResponseToEvent({
 				...apiResponseEventBody,
