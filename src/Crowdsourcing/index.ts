@@ -19,6 +19,17 @@ export const updatePlaceAddress = async (
 	return Dao.updatePlaceAddress(placeId, place.detail.address, suggested, note);
 };
 
+export const deletePlaceAddress = async (
+	placeId: string,
+	note: string | null
+): Promise<string> => {
+	const place: DetailedPlace = await getDetailedPlace(placeId, imageSize);
+	if (!place.detail.address) {
+		throw new Error('Place doesn\'t have address');
+	}
+	return Dao.deletePlaceAddress(placeId, place.detail.address, note);
+};
+
 export const updatePlaceAdmission = async (
 	placeId: string,
 	suggested: string,
@@ -28,6 +39,17 @@ export const updatePlaceAdmission = async (
 	return Dao.updatePlaceAdmission(placeId, place.detail.admission, suggested, note);
 };
 
+export const deletePlaceAdmission = async (
+	placeId: string,
+	note: string | null
+): Promise<string> => {
+	const place: DetailedPlace = await getDetailedPlace(placeId, imageSize);
+	if (!place.detail.admission) {
+		throw new Error('Place doesn\'t have admission');
+	}
+	return Dao.deletePlaceAdmission(placeId, place.detail.admission, note);
+};
+
 export const updatePlaceEmail = async (
 	placeId: string,
 	suggested: string,
@@ -35,6 +57,17 @@ export const updatePlaceEmail = async (
 ): Promise<string> => {
 	const place: DetailedPlace = await getDetailedPlace(placeId, imageSize);
 	return Dao.updatePlaceEmail(placeId, place.detail.email, suggested, note);
+};
+
+export const deletePlaceEmail = async (
+	placeId: string,
+	note: string | null
+): Promise<string> => {
+	const place: DetailedPlace = await getDetailedPlace(placeId, imageSize);
+	if (!place.detail.email) {
+		throw new Error('Place doesn\'t have email');
+	}
+	return Dao.deletePlaceEmail(placeId, place.detail.email, note);
 };
 
 export const updatePlaceLocation = async (
@@ -62,6 +95,32 @@ export const updatePlaceName = async (
 	);
 };
 
+export const deletePlaceName = async (
+	placeId: string,
+	languageId: string | null,
+	note: string | null
+): Promise<string> => {
+	const place: DetailedPlace = await getDetailedPlace(placeId, imageSize);
+	let name: string = '';
+	if (languageId) {
+		if (!place.name) {
+			throw new Error('Place doesn\'t have name');
+		}
+		name = place.name;
+	} else {
+		if (!place.originalName) {
+			throw new Error('Place doesn\'t have name');
+		}
+		name = place.originalName;
+	}
+	return Dao.deletePlaceName(
+		placeId,
+		languageId,
+		name,
+		note
+	);
+};
+
 export const updatePlaceOpeningHours = async (
 	placeId: string,
 	suggested: string,
@@ -69,6 +128,17 @@ export const updatePlaceOpeningHours = async (
 ): Promise<string> => {
 	const place: DetailedPlace = await getDetailedPlace(placeId, imageSize);
 	return Dao.updatePlaceOpeningHours(placeId,  place.detail.openingHoursRaw, suggested, note);
+};
+
+export const deletePlaceOpeningHours = async (
+	placeId: string,
+	note: string | null
+): Promise<string> => {
+	const place: DetailedPlace = await getDetailedPlace(placeId, imageSize);
+	if (!place.detail.openingHoursRaw) {
+		throw new Error('Place doesn\'t have opening hours');
+	}
+	return Dao.deletePlaceOpeningHours(placeId,  place.detail.openingHoursRaw, note);
 };
 
 export const updatePlaceOpeningHoursNote = async (
@@ -80,6 +150,17 @@ export const updatePlaceOpeningHoursNote = async (
 	return Dao.updatePlaceOpeningHoursNote(placeId,  place.detail.openingHours, suggested, note);
 };
 
+export const deletePlaceOpeningHoursNote = async (
+	placeId: string,
+	note: string | null
+): Promise<string> => {
+	const place: DetailedPlace = await getDetailedPlace(placeId, imageSize);
+	if (!place.detail.openingHours) {
+		throw new Error('Place doesn\'t have opening hours');
+	}
+	return Dao.deletePlaceOpeningHoursNote(placeId,  place.detail.openingHours, note);
+};
+
 export const updatePlacePhone = async (
 	placeId: string,
 	suggested: string,
@@ -87,6 +168,17 @@ export const updatePlacePhone = async (
 ): Promise<string> => {
 	const place: DetailedPlace = await getDetailedPlace(placeId, imageSize);
 	return Dao.updatePlacePhone(placeId,  place.detail.phone, suggested, note);
+};
+
+export const deletePlacePhone = async (
+	placeId: string,
+	note: string | null
+): Promise<string> => {
+	const place: DetailedPlace = await getDetailedPlace(placeId, imageSize);
+	if (!place.detail.phone) {
+		throw new Error('Place doesn\'t have phone');
+	}
+	return Dao.deletePlacePhone(placeId,  place.detail.phone, note);
 };
 
 export const createPlaceReference = async (
@@ -141,6 +233,34 @@ export const updatePlaceReference = async (
 	);
 };
 
+export const deletePlaceReference = async (
+	placeId: string,
+	languageId: string | null,
+	referenceId: number,
+	note: string | null
+): Promise<string> => {
+	const place: DetailedPlace = await getDetailedPlace(placeId, imageSize);
+	const referenceToBeDeleted: Reference | undefined = place.detail.references.find((reference: Reference) => (
+		reference.id === referenceId
+	));
+
+	if (!referenceToBeDeleted) {
+		throw new Error('Reference not found');
+	}
+
+	if (!Object.keys(UpdatableReferenceType).includes(referenceToBeDeleted.type)) {
+		throw new Error('Can\'t delete suggested reference type');
+	}
+
+	return Dao.deletePlaceReference(
+		placeId,
+		languageId,
+		referenceToBeDeleted.url,
+		referenceToBeDeleted.type,
+		note
+	);
+};
+
 export const createPlaceAttribute = async (
 	placeId: string,
 	languageId: string | null,
@@ -171,6 +291,27 @@ export const updatePlaceAttribute = async (
 		originalValue,
 		suggestedKey,
 		suggestedValue,
+		note
+	);
+};
+
+export const deletePlaceAttribute = async (
+	placeId: string,
+	languageId: string | null,
+	attributeKey: string,
+	note: string | null
+): Promise<string> => {
+	const placeAttributes: PlaceAttributes = await getPlaceAttributes(placeId);
+
+	if (!placeAttributes.attributes || !placeAttributes.attributes[attributeKey]) {
+		throw new Error('Attribute not found');
+	}
+
+	return Dao.deletePlaceAttribute(
+		placeId,
+		languageId,
+		attributeKey,
+		placeAttributes[attributeKey],
 		note
 	);
 };

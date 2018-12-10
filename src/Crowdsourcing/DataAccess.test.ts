@@ -66,6 +66,19 @@ describe('CrowdsourcingDataAccess', () => {
 		});
 	});
 
+	describe('#deletePlaceAddress', () => {
+		it('should call stApi with correct args', async () => {
+			await Dao.deletePlaceAddress('poi:530', 'address 1', 'test');
+			chai.expect(apiStub.getCall(0).args[0]).to.deep.equal('crowdsourcing');
+			chai.expect(apiStub.getCall(0).args[1]).to.deep.equal({
+				type: 'place:delete:address',
+				place_id: 'poi:530',
+				original: 'address 1',
+				note: 'test'
+			});
+		});
+	});
+
 	describe('#updatePlaceAdmission', () => {
 		it('should call stApi with correct args', async () => {
 			await Dao.updatePlaceAdmission('poi:530', 'admission 1', 'admission 2', 'test');
@@ -80,6 +93,19 @@ describe('CrowdsourcingDataAccess', () => {
 		});
 	});
 
+	describe('#deletePlaceAdmission', () => {
+		it('should call stApi with correct args', async () => {
+			await Dao.deletePlaceAdmission('poi:530', 'admission 1', 'test');
+			chai.expect(apiStub.getCall(0).args[0]).to.deep.equal('crowdsourcing');
+			chai.expect(apiStub.getCall(0).args[1]).to.deep.equal({
+				type: 'place:delete:admission',
+				place_id: 'poi:530',
+				original: 'admission 1',
+				note: 'test'
+			});
+		});
+	});
+
 	describe('#updatePlaceEmail', () => {
 		it('should call stApi with correct args', async () => {
 			await Dao.updatePlaceEmail('poi:530', 'email1@test.com', 'email2@test.com', 'test');
@@ -89,6 +115,19 @@ describe('CrowdsourcingDataAccess', () => {
 				place_id: 'poi:530',
 				original: 'email1@test.com',
 				suggested: 'email2@test.com',
+				note: 'test'
+			});
+		});
+	});
+
+	describe('#deletePlaceEmail', () => {
+		it('should call stApi with correct args', async () => {
+			await Dao.deletePlaceEmail('poi:530', 'email1@test.com', 'test');
+			chai.expect(apiStub.getCall(0).args[0]).to.deep.equal('crowdsourcing');
+			chai.expect(apiStub.getCall(0).args[1]).to.deep.equal({
+				type: 'place:delete:email',
+				place_id: 'poi:530',
+				original: 'email1@test.com',
 				note: 'test'
 			});
 		});
@@ -135,15 +174,42 @@ describe('CrowdsourcingDataAccess', () => {
 		});
 	});
 
+	describe('#deletePlaceName', () => {
+		it('should call stApi with correct args', async () => {
+			await Dao.deletePlaceName('poi:530', 'en', 'name 1', 'test');
+			chai.expect(apiStub.getCall(0).args[0]).to.deep.equal('crowdsourcing');
+			chai.expect(apiStub.getCall(0).args[1]).to.deep.equal({
+				type: 'place:delete:name',
+				language_id: 'en',
+				place_id: 'poi:530',
+				original: 'name 1',
+				note: 'test'
+			});
+		});
+	});
+
 	describe('#updatePlaceOpeningHours', () => {
 		it('should call stApi with correct args', async () => {
-			await Dao.updatePlaceOpeningHours('poi:530', 'opening hours 1', 'opening hours 1', 'test');
+			await Dao.updatePlaceOpeningHours('poi:530', 'opening hours 1', 'opening hours 2', 'test');
 			chai.expect(apiStub.getCall(0).args[0]).to.deep.equal('crowdsourcing');
 			chai.expect(apiStub.getCall(0).args[1]).to.deep.equal({
 				type: 'place:update:opening_hours',
 				place_id: 'poi:530',
 				original: 'opening hours 1',
-				suggested: 'opening hours 1',
+				suggested: 'opening hours 2',
+				note: 'test'
+			});
+		});
+	});
+
+	describe('#deletePlaceOpeningHours', () => {
+		it('should call stApi with correct args', async () => {
+			await Dao.deletePlaceOpeningHours('poi:530', 'opening hours 1', 'test');
+			chai.expect(apiStub.getCall(0).args[0]).to.deep.equal('crowdsourcing');
+			chai.expect(apiStub.getCall(0).args[1]).to.deep.equal({
+				type: 'place:delete:opening_hours',
+				place_id: 'poi:530',
+				original: 'opening hours 1',
 				note: 'test'
 			});
 		});
@@ -163,6 +229,19 @@ describe('CrowdsourcingDataAccess', () => {
 		});
 	});
 
+	describe('#deletePlaceOpeningHoursNote', () => {
+		it('should call stApi with correct args', async () => {
+			await Dao.deletePlaceOpeningHoursNote('poi:530', 'opening hours note 1', 'test');
+			chai.expect(apiStub.getCall(0).args[0]).to.deep.equal('crowdsourcing');
+			chai.expect(apiStub.getCall(0).args[1]).to.deep.equal({
+				type: 'place:delete:opening_hours_note',
+				place_id: 'poi:530',
+				original: 'opening hours note 1',
+				note: 'test'
+			});
+		});
+	});
+
 	describe('#updatePlacePhone', () => {
 		it('should call stApi with correct args', async () => {
 			await Dao.updatePlacePhone('poi:530', 'phone 1', 'phone 2', 'test');
@@ -172,6 +251,19 @@ describe('CrowdsourcingDataAccess', () => {
 				place_id: 'poi:530',
 				original: 'phone 1',
 				suggested: 'phone 2',
+				note: 'test'
+			});
+		});
+	});
+
+	describe('#deletePlacePhone', () => {
+		it('should call stApi with correct args', async () => {
+			await Dao.deletePlacePhone('poi:530', 'phone 1', 'test');
+			chai.expect(apiStub.getCall(0).args[0]).to.deep.equal('crowdsourcing');
+			chai.expect(apiStub.getCall(0).args[1]).to.deep.equal({
+				type: 'place:delete:phone',
+				place_id: 'poi:530',
+				original: 'phone 1',
 				note: 'test'
 			});
 		});
@@ -230,6 +322,29 @@ describe('CrowdsourcingDataAccess', () => {
 		});
 	});
 
+	describe('#deletePlaceReference', () => {
+		it('should call stApi with correct args', async () => {
+			await Dao.deletePlaceReference(
+				'poi:530',
+				'en',
+				'facebook.com',
+				'link:facebook',
+				'test'
+			);
+			chai.expect(apiStub.getCall(0).args[0]).to.deep.equal('crowdsourcing');
+			chai.expect(apiStub.getCall(0).args[1]).to.deep.equal({
+				type: 'place:delete:references',
+				place_id: 'poi:530',
+				language_id: 'en',
+				original: {
+					type: 'link:facebook',
+					url: 'facebook.com'
+				},
+				note: 'test'
+			});
+		});
+	});
+
 	describe('#createPlaceAttribute', () => {
 		it('should call stApi with correct args', async () => {
 			await Dao.createPlaceAttribute(
@@ -277,6 +392,29 @@ describe('CrowdsourcingDataAccess', () => {
 				suggested: {
 					key: 'info:architect',
 					value: 'Gehry'
+				},
+				note: 'test'
+			});
+		});
+	});
+
+	describe('#deletePlaceAttribute', () => {
+		it('should call stApi with correct args', async () => {
+			await Dao.deletePlaceAttribute(
+				'poi:530',
+				'en',
+				'Gaudi',
+				'info:architect',
+				'test'
+			);
+			chai.expect(apiStub.getCall(0).args[0]).to.deep.equal('crowdsourcing');
+			chai.expect(apiStub.getCall(0).args[1]).to.deep.equal({
+				type: 'place:update:attributes',
+				place_id: 'poi:530',
+				language_id: 'en',
+				original: {
+					key: 'info:architect',
+					value: 'Gaudi'
 				},
 				note: 'test'
 			});

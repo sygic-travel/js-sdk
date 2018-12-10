@@ -9,9 +9,21 @@ export enum UpdatableReferenceType {
 
 export enum EventType {
 	CREATE_PLACE = 'place:create',
+	CREATE_PLACE_MEDIA = 'place.media:create',
+	CREATE_PLACE_TAG = 'place.tag:create',
+	DELETE_PLACE_TAG = 'place.tag:delete',
+	DELETE_PLACE_ADDRESS = 'place:delete:address',
+	DELETE_PLACE_ADMISSION = 'place:delete:admission',
+	DELETE_PLACE_ATTRIBUTES = 'place:delete:attributes',
+	DELETE_PLACE_EMAIL = 'place:delete:email',
+	DELETE_PLACE_NAME = 'place:delete:name',
+	DELETE_PLACE_OPENING_HOURS = 'place:delete:opening_hours',
+	DELETE_PLACE_OPENING_HOURS_NOTE = 'place:delete:opening_hours_note',
+	DELETE_PLACE_PHONE = 'place:delete:phone',
+	DELETE_PLACE_REFERENCES = 'place:delete:references',
 	UPDATE_PLACE_ADDRESS = 'place:update:address',
 	UPDATE_PLACE_ADMISSION = 'place:update:admission',
-	UPDATE_PLACE_ATTRIBUTE = 'place:update:attributes',
+	UPDATE_PLACE_ATTRIBUTES = 'place:update:attributes',
 	UPDATE_PLACE_EMAIL = 'place:update:email',
 	UPDATE_PLACE_LOCATION = 'place:update:location',
 	UPDATE_PLACE_NAME = 'place:update:name',
@@ -19,9 +31,6 @@ export enum EventType {
 	UPDATE_PLACE_OPENING_HOURS_NOTE = 'place:update:opening_hours_note',
 	UPDATE_PLACE_PHONE = 'place:update:phone',
 	UPDATE_PLACE_REFERENCES = 'place:update:references',
-	CREATE_PLACE_TAG = 'place.tag:create',
-	DELETE_PLACE_TAG = 'place.tag:delete',
-	CREATE_PLACE_MEDIA = 'place.media:create'
 }
 
 export interface PlaceEvents {
@@ -42,8 +51,13 @@ export interface Event {
 }
 
 export type EventData = EventDataGeneric |
-	EventDataWithLanguageId |
+	EventDataGenericDelete |
+	EventDataName |
+	EventDataNameDelete |
+	EventDataAttributes |
+	EventDataAttributesDelete |
 	EventDataReferences |
+	EventDataReferencesDelete |
 	EventDataPlaceMedia |
 	EventDataLocation |
 	EventDataTag;
@@ -62,8 +76,34 @@ export interface EventDataGeneric {
 	note: string | null;
 }
 
-export interface EventDataWithLanguageId extends EventDataGeneric {
+export interface EventDataGenericDelete {
+	type: EventType.DELETE_PLACE_ADDRESS |
+		EventType.DELETE_PLACE_ADMISSION |
+		EventType.DELETE_PLACE_EMAIL |
+		EventType.DELETE_PLACE_NAME |
+		EventType.DELETE_PLACE_OPENING_HOURS |
+		EventType.DELETE_PLACE_OPENING_HOURS_NOTE |
+		EventType.DELETE_PLACE_PHONE;
+	placeId: string;
+	original: string;
+	note: string | null;
+}
+
+export interface EventDataName {
+	type: EventType.UPDATE_PLACE_NAME;
+	placeId: string;
 	languageId: string | null;
+	original: string | null;
+	suggested: string;
+	note: string | null;
+}
+
+export interface EventDataNameDelete {
+	type: EventType.DELETE_PLACE_NAME;
+	placeId: string;
+	languageId: string | null;
+	original: string;
+	note: string | null;
 }
 
 export interface EventDataLocation {
@@ -81,7 +121,46 @@ export interface EventDataReferences {
 	original: {
 		url: string | null
 	};
-	suggested: UpdatableReferenceType;
+	suggested: {
+		type: UpdatableReferenceType;
+		url: string;
+	};
+	note: string | null;
+}
+
+export interface EventDataReferencesDelete {
+	type: EventType.DELETE_PLACE_REFERENCES;
+	placeId: string;
+	languageId: string;
+	original: {
+		url: string;
+		type: UpdatableReferenceType;
+	};
+	note: string | null;
+}
+
+export interface EventDataAttributes {
+	type: EventType.UPDATE_PLACE_ATTRIBUTES;
+	placeId: string;
+	languageId: string;
+	original: {
+		value: string | null
+	};
+	suggested: {
+		key: string;
+		value: string;
+	};
+	note: string | null;
+}
+
+export interface EventDataAttributesDelete {
+	type: EventType.DELETE_PLACE_ATTRIBUTES;
+	placeId: string;
+	languageId: string;
+	original: {
+		key: string;
+		value: string;
+	};
 	note: string | null;
 }
 
