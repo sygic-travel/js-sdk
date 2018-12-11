@@ -317,7 +317,7 @@ export const deletePlaceAttribute = (
 	originalKey: string,
 	note: string | null
 ): Promise<string> => callCrowdsourcingApiEndpoint({
-	type: EventType.UPDATE_PLACE_ATTRIBUTES,
+	type: EventType.DELETE_PLACE_ATTRIBUTES,
 	place_id: placeId,
 	language_id: languageId,
 	original: {

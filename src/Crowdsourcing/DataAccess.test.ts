@@ -409,7 +409,7 @@ describe('CrowdsourcingDataAccess', () => {
 			);
 			chai.expect(apiStub.getCall(0).args[0]).to.deep.equal('crowdsourcing');
 			chai.expect(apiStub.getCall(0).args[1]).to.deep.equal({
-				type: 'place:update:attributes',
+				type: 'place:delete:attributes',
 				place_id: 'poi:530',
 				language_id: 'en',
 				original: {
