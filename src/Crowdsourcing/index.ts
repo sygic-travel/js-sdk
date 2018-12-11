@@ -310,8 +310,8 @@ export const deletePlaceAttribute = async (
 	return Dao.deletePlaceAttribute(
 		placeId,
 		languageId,
+		placeAttributes.attributes[attributeKey],
 		attributeKey,
-		placeAttributes[attributeKey],
 		note
 	);
 };
