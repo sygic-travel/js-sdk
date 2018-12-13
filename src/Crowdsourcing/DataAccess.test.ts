@@ -52,6 +52,18 @@ describe('CrowdsourcingDataAccess', () => {
 		});
 	});
 
+	describe('#deletePlace', () => {
+		it('should call stApi with correct args', async () => {
+			await Dao.deletePlace('poi:530', 'test');
+			chai.expect(apiStub.getCall(0).args[0]).to.deep.equal('crowdsourcing');
+			chai.expect(apiStub.getCall(0).args[1]).to.deep.equal({
+				type: 'place:delete',
+				place_id: 'poi:530',
+				note: 'test'
+			});
+		});
+	});
+
 	describe('#updatePlaceAddress', () => {
 		it('should call stApi with correct args', async () => {
 			await Dao.updatePlaceAddress('poi:530', 'address 1', 'address 2', 'test');

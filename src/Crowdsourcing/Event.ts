@@ -11,6 +11,7 @@ export enum EventType {
 	CREATE_PLACE = 'place:create',
 	CREATE_PLACE_MEDIA = 'place.media:create',
 	CREATE_PLACE_TAG = 'place.tag:create',
+	DELETE_PLACE = 'place:delete',
 	DELETE_PLACE_TAG = 'place.tag:delete',
 	DELETE_PLACE_ADDRESS = 'place:delete:address',
 	DELETE_PLACE_ADMISSION = 'place:delete:admission',

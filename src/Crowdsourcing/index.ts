@@ -9,6 +9,7 @@ import { UpdatableReferenceType } from './Event';
 const imageSize = '100x100';
 
 export const createPlace = Dao.createPlace;
+export const deletePlace = Dao.deletePlace;
 
 export const updatePlaceAddress = async (
 	placeId: string,

@@ -20,6 +20,12 @@ export const createPlace = (location: Location, note: string | null): Promise<st
 	note
 });
 
+export const deletePlace = (placeId: string, note: string | null): Promise<string> => callCrowdsourcingApiEndpoint({
+	type: EventType.DELETE_PLACE,
+	place_id: placeId,
+	note
+});
+
 export const updatePlaceAddress = (
 	placeId: string,
 	original: string | null,
