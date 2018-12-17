@@ -26,7 +26,7 @@ export function appendDay(tripToBeUpdated: Trip, userSettings: UserSettings | nu
 		const lastItem = resultTrip.days[resultTrip.days.length - 2].itinerary[
 			resultTrip.days[resultTrip.days.length - 2].itinerary.length - 1
 		];
-		if (lastItem.place && isStickyByDefault(lastItem.place)) {
+		if (lastItem.place && isStickyByDefault(lastItem.place) && lastItem.isStickyLastInDay) {
 			resultTrip = addPlaceToDay(resultTrip, lastItem.place, resultTrip.days.length - 1, userSettings, 0);
 		}
 	}
@@ -51,7 +51,7 @@ export function prependDayToTrip(tripToBeUpdated: Trip, userSettings: UserSettin
 
 	if (resultTrip.days[1].itinerary.length > 0) {
 		const firstItem = resultTrip.days[1].itinerary[0];
-		if (firstItem.place && isStickyByDefault(firstItem.place)) {
+		if (firstItem.place && isStickyByDefault(firstItem.place) && firstItem.isStickyFirstInDay) {
 			resultTrip = addPlaceToDay(resultTrip, firstItem.place, 0, userSettings, 0);
 		}
 	}
