@@ -30,22 +30,25 @@ export async function generateDestinationMainMap(
 		})
 	);
 
-	let sectors: PdfStaticMapSector[] = calculateMapGrid(
-		staticMap.bounds,
-		query.gridColumnsCount,
-		query.gridRowsCount
-	);
+	let sectors: PdfStaticMapSector[] = [];
+	if (staticMap.url) {
+		sectors = calculateMapGrid(
+			staticMap.bounds,
+			query.gridColumnsCount,
+			query.gridRowsCount
+		);
 
-	sectors.forEach((sector: PdfStaticMapSector) => {
-		sector.places = destinationPlaces.filter((place: Place) => (
-			isLocationInBounds(place.location, sector.bounds)
-		));
-	});
+		sectors.forEach((sector: PdfStaticMapSector) => {
+			sector.places = destinationPlaces.filter((place: Place) => (
+				isLocationInBounds(place.location, sector.bounds)
+			));
+		});
 
-	// delete sectors without places
-	sectors = sectors.filter((sector: PdfStaticMapSector) => {
-		return sector.places.length > 0;
-	});
+		// delete sectors without places
+		sectors = sectors.filter((sector: PdfStaticMapSector) => {
+			return sector.places.length > 0;
+		});
+	}
 
 	return {
 		...staticMap,
