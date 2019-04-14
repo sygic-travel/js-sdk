@@ -5,6 +5,7 @@ export const mapUserInfo = (userData: any) => {
 	const license: UserLicense | null = userData.premium ? {
 		name: userData.premium.name,
 		type: userData.premium.type,
+		productId: userData.premium.product_id,
 		expirationAt: userData.premium.expiration_at,
 		isActive: userData.premium.is_active,
 	} : null;

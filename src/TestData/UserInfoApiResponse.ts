@@ -23,7 +23,8 @@ export const userInfo = {
 			"is_active": true,
 			"name": "Sygic Travel Premium",
 			"type": "purchase",
-			"expiration_at": null
+			"expiration_at": null,
+			"product_id": null
 		},
 		"privacy_consents": [{
 			"type": "location",

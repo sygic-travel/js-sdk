@@ -16,6 +16,7 @@ export const userInfo: UserInfo = {
 		name: 'Sygic Travel Premium',
 		type: 'purchase',
 		expirationAt: null,
+		productId: null,
 		isActive: true
 	} as UserLicense,
 	privacyConsents: [{

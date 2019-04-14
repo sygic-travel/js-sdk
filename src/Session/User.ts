@@ -30,6 +30,7 @@ export interface UserLicense {
 	name: string;
 	type: string | null;
 	expirationAt: string | null;
+	productId: string | null;
 }
 
 export interface PrivacyConsents {
