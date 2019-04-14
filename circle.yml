@@ -12,6 +12,11 @@ jobs:
       - restore_cache:
           key: build-bin-cache
       - run:
+          name: Temp fix for jessie-updates
+          command: |
+            sudo sed -i '/jessie-backports/d' /etc/apt/sources.list
+            sudo sed -i '/jessie-updates/d' /etc/apt/sources.list
+      - run:
           name: Install runtime
           working_directory: ~/build-bin
           command: |
