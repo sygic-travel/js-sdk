@@ -6,7 +6,6 @@ export { Settings } from './Settings';
 let stApiUrl: string;
 let ssoApiUrl: string;
 let ssoClientId: string;
-let stTrackingApiUrl: string;
 let integratorApiKey: string;
 let kiwiPartnerId: string = 'sygictravel';
 
@@ -18,9 +17,6 @@ export function setEnvironment(settings: Settings): void {
 	}
 	if (settings.ssoApiUrl) {
 		ssoApiUrl = settings.ssoApiUrl;
-	}
-	if (settings.stTrackingApiUrl) {
-		stTrackingApiUrl = settings.stTrackingApiUrl;
 	}
 	if (settings.ssoClientId) {
 		ssoClientId = settings.ssoClientId;
@@ -43,10 +39,6 @@ export function setStApiUrl(url: string) {
 
 export function getSsoApiUrl() {
 	return ssoApiUrl;
-}
-
-export function getStTrackingApiUrl() {
-	return stTrackingApiUrl;
 }
 
 export function getSsoClientId() {
