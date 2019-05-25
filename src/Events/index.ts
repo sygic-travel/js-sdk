@@ -1,15 +1,12 @@
 import { StApi } from '../Api';
 import { ChangeNotification, setChangesCallback } from '../Changes';
 import { setSession } from '../Session';
-import { getStTrackingApiUrl, setTripConflictHandler } from '../Settings';
+import { setTripConflictHandler } from '../Settings';
 import { setTripUpdatedNotificationHandler, Trip, TripConflictClientResolution, TripConflictInfo } from '../Trip';
-import { UserEvent } from './UserEvent';
-import UserEventsTracker from './UserEventsTracker';
 
 let synchronizationHandler: (changes: ChangeNotification[]) => any;
 let tripUpdateConflictHandler: (conflictInfo: TripConflictInfo, trip: Trip) => any;
 let sessionExpiredHandler: () => any;
-let userEventsTracker: UserEventsTracker | null = null;
 
 export function setSynchronizationHandler(handler: (changes: ChangeNotification[]) => any): void {
 	synchronizationHandler = handler;
@@ -28,11 +25,6 @@ export function initialize(): void {
 	setTripConflictHandler(handleTripConflict);
 	setTripUpdatedNotificationHandler(handleUserDataChanges);
 	StApi.setInvalidSessionHandler(handleInvalidSession);
-
-	if (getStTrackingApiUrl()) {
-		userEventsTracker = new UserEventsTracker();
-		userEventsTracker.startTracking();
-	}
 }
 
 function handleUserDataChanges(changes: ChangeNotification[]): void {
@@ -61,11 +53,4 @@ async function handleInvalidSession(): Promise<void> {
 	if (sessionExpiredHandler) {
 		sessionExpiredHandler();
 	}
-}
-
-export function trackUserEvent(event: UserEvent): void {
-	if (!userEventsTracker) {
-		throw new Error('Events tracking not initialized');
-	}
-	userEventsTracker.trackEvent(event);
 }

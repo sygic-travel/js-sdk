@@ -2,10 +2,8 @@ import { ChangeNotification } from '../Changes';
 import {
 	setSessionExpiredHandler,
 	setSynchronizationHandler,
-	setTripUpdateConflictHandler,
-	trackUserEvent
+	setTripUpdateConflictHandler
 } from '../Events';
-import { UserEvent } from '../Events/UserEvent';
 import { Trip, TripConflictInfo } from '../Trip';
 
 /**
@@ -22,9 +20,5 @@ export default class EventsModule {
 
 	public setSynchronizationHandler(handler: (changes: ChangeNotification[]) => any): void {
 		setSynchronizationHandler(handler);
-	}
-
-	public trackUserEvent(userEvent: UserEvent): void {
-		trackUserEvent(userEvent);
 	}
 }
