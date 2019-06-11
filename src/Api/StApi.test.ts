@@ -1,15 +1,19 @@
+import { AxiosRequestConfig } from 'axios';
 import * as chai from 'chai';
-import * as moxios from 'moxios';
+import { assert, sandbox as sinonSandbox, SinonSandbox } from 'sinon';
 
 import { setSession } from '../Session';
 import { setEnvironment } from '../Settings';
 import { getFreshSession } from '../TestData/UserInfoExpectedResults';
-import { axiosInstance, get, post, postMultipartJsonImage, put, setInvalidSessionHandler } from './StApi';
+import { StApi } from './index';
+import { get, post, postMultipartJsonImage, put, setInvalidSessionHandler } from './StApi';
 
 const testSession = getFreshSession();
 const testApiURL = 'https://test.api';
 const testClientKey = '987654321';
 const accessToken = testSession.accessToken;
+
+let sandbox: SinonSandbox;
 
 describe('StApi', () => {
 	before((done) => {
@@ -21,52 +25,74 @@ describe('StApi', () => {
 	});
 
 	beforeEach(() => {
-		moxios.install(axiosInstance);
+		sandbox = sinonSandbox.create();
 	});
 
 	afterEach((done) => {
-		moxios.uninstall(axiosInstance);
+		sandbox.restore();
 		setSession(null).then(() => { done(); });
 	});
 
 	describe('#get', () => {
-		it('should be called with correct base Url', (done) => {
-			get('/');
-			moxios.wait(() => {
-				const request = moxios.requests.mostRecent();
-				chai.expect(request.config.baseURL).to.equal(testApiURL);
-				done();
-			}, 5);
-		});
+		it('should be called with correct base Url and client key', (done) => {
+			const stubResponse = { data: { test: 1234 } };
+			const requestConfig: AxiosRequestConfig = {
+				baseURL: testApiURL,
+				headers: {
+					'x-api-key': testClientKey
+				}
+			};
 
-		it('should be called with correct client key', (done) => {
-			get('/');
-			moxios.wait(() => {
-				const request = moxios.requests.mostRecent();
-				chai.expect(request.headers['x-api-key']).to.equal(testClientKey);
-				done();
-			}, 5);
+			const apiStub = sandbox.stub(StApi.axiosInstance, 'get')
+				.returns(stubResponse);
+
+			get('/')
+				.then(() => {
+					assert.calledOnce(apiStub);
+					assert.calledWith(apiStub, '/', requestConfig);
+				}).then(done, done);
 		});
 
 		it('should correctly set access token and call api with it', (done) => {
+			const stubResponse = { data: { test: 1234 } };
+			const requestConfig: AxiosRequestConfig = {
+				baseURL: testApiURL,
+				headers: {
+					'x-api-key': testClientKey,
+					'Authorization': `Bearer ${accessToken}`
+				}
+			};
+
+			const apiStub = sandbox.stub(StApi.axiosInstance, 'get')
+				.returns(stubResponse);
+
 			setSession(testSession).then(() => {
-				get('/');
-				moxios.wait(() => {
-					const request = moxios.requests.mostRecent();
-					chai.expect(request.headers['Authorization']).to.equal('Bearer ' + accessToken);
-					done();
-				}, 5);
+				get('/')
+					.then(() => {
+						assert.calledOnce(apiStub);
+						assert.calledWith(apiStub, '/', requestConfig);
+					}).then(done, done);
 			});
 		});
 
 		it('should not set token for some special endpoints', (done) => {
+			const stubResponse = { data: { test: 1234 } };
+			const requestConfig: AxiosRequestConfig = {
+				baseURL: testApiURL,
+				headers: {
+					'x-api-key': testClientKey
+				}
+			};
+
+			const apiStub = sandbox.stub(StApi.axiosInstance, 'get')
+				.returns(stubResponse);
+
 			setSession(testSession).then(() => {
-				get('/places');
-				moxios.wait(() => {
-					const request = moxios.requests.mostRecent();
-					chai.expect(request.headers['Authorization']).to.equal(undefined);
-					done();
-				}, 5);
+				get('/places')
+					.then(() => {
+						assert.calledOnce(apiStub);
+						assert.calledWith(apiStub, '/places', requestConfig);
+					}).then(done, done);
 			});
 		});
 
@@ -76,23 +102,16 @@ describe('StApi', () => {
 				callcount++;
 			});
 
-			get('/').catch((e) => {
-				chai.expect(callcount).to.equal(1);
-				chai.expect(e.message).to.equal('Invalid session');
-			});
+			const stubError = { response: { data: { error: { id: 'apikey.invalid' }}} };
+			const apiStub = sandbox.stub(StApi.axiosInstance, 'get')
+				.throws(stubError);
 
-			moxios.wait(() => {
-				const request = moxios.requests.mostRecent();
-				request.respondWith({
-					status: 401,
-					response: {
-						error: {
-							id: 'apikey.invalid'
-						}
-					}
-				});
-				done();
-			}, 5);
+			get('/')
+				.catch((error) => {
+					assert.calledOnce(apiStub);
+					chai.expect(callcount).to.equal(1);
+					chai.expect(error.message).to.equal('Invalid session');
+				}).then(done, done);
 		});
 
 		it('should correctly call external session callback for other error', (done) => {
@@ -101,123 +120,139 @@ describe('StApi', () => {
 				callcount++;
 			});
 
-			get('/').catch((e) => {
-				chai.expect(callcount).to.equal(0);
-				chai.expect(e.message).to.equal('Request failed with status code 403');
-			});
+			const stubError = { status: 403, response: {} };
+			const apiStub = sandbox.stub(StApi.axiosInstance, 'get')
+				.throws(stubError);
 
-			moxios.wait(() => {
-				const request = moxios.requests.mostRecent();
-				request.respondWith({
-					status: 403,
-					response: {}
-				});
-				done();
-			}, 5);
+			get('/')
+				.catch(() => {
+					assert.calledOnce(apiStub);
+					chai.expect(callcount).to.equal(0);
+				}).then(done, done);
 		});
 
 		it('should not fail on session error without session callback', (done) => {
-			get('/').catch((e) => {
-				chai.expect(e.message).to.equal('Invalid session');
-			});
+			const stubError = { response: { data: { error: { id: 'apikey.invalid' }}} };
+			const apiStub = sandbox.stub(StApi.axiosInstance, 'get')
+				.throws(stubError);
 
-			moxios.wait(() => {
-				const request = moxios.requests.mostRecent();
-				request.respondWith({
-					status: 401,
-					response: {
-						error: {
-							id: 'apikey.invalid'
-						}
-					}
-				});
-				done();
-			}, 5);
+			get('/')
+				.catch((e) => {
+					assert.calledOnce(apiStub);
+					chai.expect(e.message).to.equal('Invalid session');
+				}).then(done, done);
 		});
 	});
 
 	describe('#post', () => {
 		it('should be called with correct base Url', (done) => {
-			post('/', null);
-			moxios.wait(() => {
-				const request = moxios.requests.mostRecent();
-				chai.expect(request.config.baseURL).to.equal(testApiURL);
-				done();
-			}, 5);
-		});
+			const stubResponse = { data: { test: 1234 } };
+			const requestConfig: AxiosRequestConfig = {
+				baseURL: testApiURL,
+				headers: {
+					'x-api-key': testClientKey
+				}
+			};
 
-		it('should be called with correct client key', (done) => {
-			post('/', null);
-			moxios.wait(() => {
-				const request = moxios.requests.mostRecent();
-				chai.expect(request.headers['x-api-key']).to.equal(testClientKey);
-				done();
-			}, 5);
+			const apiStub = sandbox.stub(StApi.axiosInstance, 'post')
+				.returns(stubResponse);
+
+			post('/', null)
+				.then(() => {
+					assert.calledOnce(apiStub);
+					assert.calledWith(apiStub, '/', null, requestConfig);
+				}).then(done, done);
 		});
 
 		it('should correctly set access token and call api with it', (done) => {
+			const stubResponse = { data: { test: 1234 } };
+			const requestConfig: AxiosRequestConfig = {
+				baseURL: testApiURL,
+				headers: {
+					'x-api-key': testClientKey,
+					'Authorization': `Bearer ${accessToken}`
+				}
+			};
+
+			const apiStub = sandbox.stub(StApi.axiosInstance, 'post')
+				.returns(stubResponse);
+
 			setSession(testSession).then(() => {
-				post('/', null);
-				moxios.wait(() => {
-					const request = moxios.requests.mostRecent();
-					chai.expect(request.headers['Authorization']).to.equal('Bearer ' + accessToken);
-					done();
-				}, 5);
+				post('/', null)
+					.then(() => {
+						assert.calledOnce(apiStub);
+						assert.calledWith(apiStub, '/', null, requestConfig);
+					}).then(done, done);
 			});
 		});
 	});
 
 	describe('#put', () => {
 		it('should be called with correct base Url', (done) => {
-			put('/', null);
-			moxios.wait(() => {
-				const request = moxios.requests.mostRecent();
-				chai.expect(request.config.baseURL).to.equal(testApiURL);
-				done();
-			}, 5);
-		});
+			const stubResponse = { data: { test: 1234 } };
+			const requestConfig: AxiosRequestConfig = {
+				baseURL: testApiURL,
+				headers: {
+					'x-api-key': testClientKey,
+				}
+			};
 
-		it('should be called with correct client key', (done) => {
-			put('/', null);
-			moxios.wait(() => {
-				const request = moxios.requests.mostRecent();
-				chai.expect(request.headers['x-api-key']).to.equal(testClientKey);
-				done();
-			}, 5);
+			const apiStub = sandbox.stub(StApi.axiosInstance, 'put')
+				.returns(stubResponse);
+
+			put('/', null)
+				.then(() => {
+					assert.calledOnce(apiStub);
+					assert.calledWith(apiStub, '/', null, requestConfig);
+				}).then(done, done);
 		});
 
 		it('should correctly set access token and call api with it', (done) => {
+			const stubResponse = { data: { test: 1234 } };
+			const requestConfig: AxiosRequestConfig = {
+				baseURL: testApiURL,
+				headers: {
+					'x-api-key': testClientKey,
+					'Authorization': `Bearer ${accessToken}`
+				}
+			};
+
+			const apiStub = sandbox.stub(StApi.axiosInstance, 'put')
+				.returns(stubResponse);
+
 			setSession(testSession).then(() => {
-				put('/', null);
-				moxios.wait(() => {
-					const request = moxios.requests.mostRecent();
-					chai.expect(request.headers['Authorization']).to.equal('Bearer ' + accessToken);
-					done();
-				}, 5);
+				put('/', null)
+					.then(() => {
+						assert.calledOnce(apiStub);
+						assert.calledWith(apiStub, '/', null, requestConfig);
+					}).then(done, done);
 			});
 		});
 	});
 
 	describe('#postMultipartJsonImage', () => {
-		it('should set proper content header', (done) => {
-			postMultipartJsonImage('/', {}, 'image/jpeg', 'abc');
-			moxios.wait(() => {
-				const request = moxios.requests.mostRecent();
-				chai.expect(request.config.headers['Content-Type']).to.equal('multipart/form-data; boundary=BOUNDARY');
-				done();
-			}, 5);
-		});
 		it('should send data properly', (done) => {
-			postMultipartJsonImage('/', {type: 'photo'}, 'image/jpeg', 'abc');
-			moxios.wait(() => {
-				const request = moxios.requests.mostRecent();
-				const expectedBody = '--BOUNDARY\nContent-Disposition: form-data; name="data"\n' +
-					'Content-Type: application/json\n\n{"type":"photo"}\n--BOUNDARY\n' +
-					'Content-Disposition: form-data; name="image"; filename="image.jpg"\n' +
-					'Content-Type: image/jpeg\n\nabc\n--BOUNDARY--'
-				chai.expect(request.config.data).to.equal(expectedBody);
-				done();
-			}, 5);
+			const requestBody = '--BOUNDARY\nContent-Disposition: form-data; name="data"\n' +
+				'Content-Type: application/json\n\n{"type":"photo"}\n--BOUNDARY\n' +
+				'Content-Disposition: form-data; name="image"; filename="image.jpg"\n' +
+				'Content-Type: image/jpeg\n\nabc\n--BOUNDARY--';
+			const requestConfig: AxiosRequestConfig = {
+				baseURL: testApiURL,
+				headers: {
+					'x-api-key': testClientKey,
+					'Content-Type': 'multipart/form-data; boundary=BOUNDARY'
+				}
+			};
+			const stubResponse = { data: { test: 1234 } };
+
+			const apiStub = sandbox.stub(StApi.axiosInstance, 'post')
+				.returns(stubResponse);
+
+			postMultipartJsonImage('/', {type: 'photo'}, 'image/jpeg', 'abc')
+				.then(() => {
+					assert.calledOnce(apiStub);
+					assert.calledWith(apiStub, '/', requestBody, requestConfig);
+				}).then(done, done);
 		});
 	});
 });
