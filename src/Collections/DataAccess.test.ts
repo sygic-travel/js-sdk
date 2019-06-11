@@ -1,6 +1,5 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-import * as Moxios from 'moxios';
 import { assert, sandbox as sinonSandbox, SinonSandbox } from 'sinon';
 
 import { ApiResponse, StApi } from '../Api';
@@ -25,12 +24,10 @@ describe('CollectionsDataAccess', () => {
 
 	beforeEach(() => {
 		sandbox = sinonSandbox.create();
-		Moxios.install(StApi.axiosInstance);
 	});
 
 	afterEach(() => {
 		sandbox.restore();
-		Moxios.uninstall(StApi.axiosInstance);
 	});
 
 	describe('#getCollection', () => {
