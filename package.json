@@ -32,7 +32,6 @@
     "dirty-chai": "^2.0.1",
     "lodash.clonedeep": "^4.5.0",
     "mocha": "^4.1.0",
-    "moxios": "^0.4.0",
     "optimize-js-plugin": "^0.0.4",
     "sinon": "^2.1.0",
     "source-map-loader": "^0.2.0",
