@@ -27,17 +27,17 @@ export async function addTripCollaboration(tripId: string, userEmail: string, ac
 }
 
 export async function removeTripCollaboration(collaborationId: string): Promise<void> {
-	await StApi.delete_(`/trip-collaborations/${collaborationId}`, null);
+	await StApi.delete_(`trip-collaborations/${collaborationId}`, null);
 }
 
 export async function updateTripCollaboration(collaborationId: string, accessLevel: string): Promise<void> {
-	await StApi.put(`/trip-collaborations/${collaborationId}`, {
+	await StApi.put(`trip-collaborations/${collaborationId}`, {
 		access_level: accessLevel
 	});
 }
 
 export async function acceptTripCollaboration(collaborationId: string, hash: string): Promise<string> {
-	const apiResponse: ApiResponse = await StApi.put(`/trip-collaborations/${collaborationId}/accept`, { hash });
+	const apiResponse: ApiResponse = await StApi.put(`trip-collaborations/${collaborationId}/accept`, { hash });
 
 	if (!apiResponse.data.hasOwnProperty('collaboration')) {
 		throw new Error('Wrong API response');
@@ -47,5 +47,5 @@ export async function acceptTripCollaboration(collaborationId: string, hash: str
 }
 
 export async function resendInvitation(collaborationId: string): Promise<void> {
-	await StApi.post(`/trip-collaborations/${collaborationId}/resend-email`, null);
+	await StApi.post(`trip-collaborations/${collaborationId}/resend-email`, null);
 }

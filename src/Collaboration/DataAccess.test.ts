@@ -1,15 +1,14 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as dirtyChai from 'dirty-chai';
-import * as Moxios from 'moxios';
-import { sandbox as sinonSandbox, SinonSandbox } from 'sinon';
+import { assert, sandbox as sinonSandbox, SinonSandbox } from 'sinon';
 
 import { ApiResponse, StApi } from '../Api';
+import { setSession } from '../Session';
 import { setEnvironment } from '../Settings';
 import * as TestApiResponses from '../TestData/CollaborationsApiResponses';
 import * as TestExpectedResults from '../TestData/CollaborationsExpectedResults';
 import { getFreshSession } from '../TestData/UserInfoExpectedResults';
-import { setSession } from '../Session';
 
 import * as Dao from './DataAccess';
 
@@ -24,39 +23,41 @@ describe('CollaborationDataAccess', () => {
 
 	beforeEach((done) => {
 		sandbox = sinonSandbox.create();
-		Moxios.install(StApi.axiosInstance);
 		setSession(getFreshSession()).then(() => { done(); });
 	});
 
 	afterEach((done) => {
 		sandbox.restore();
-		Moxios.uninstall(StApi.axiosInstance);
 		setSession(null).then(() => { done(); });
 	});
 
 	describe('#followTrip', () => {
 		it('should call api with correct tripId', (done) => {
 			const tripId = '12345';
-			Dao.followTrip(tripId);
-			Moxios.wait(() => {
-				const request = Moxios.requests.mostRecent();
-				chai.expect(request.config.method).to.equal('post');
-				chai.expect(request.config.url).to.equal(`api/trips/${tripId}/subscription`);
-				done();
-			}, 50);
+			const apiStub = sandbox.stub(StApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, null));
+			}));
+
+			Dao.followTrip(tripId)
+				.then(() => {
+					assert.calledOnce(apiStub);
+					assert.calledWith(apiStub, `trips/${tripId}/subscription`);
+				}).then(done, done);
 		});
 	});
 
 	describe('#unfollowTrip', () => {
 		it('should call api with correct tripId', (done) => {
 			const tripId = '12345';
-			Dao.unfollowTrip(tripId);
-			Moxios.wait(() => {
-				const request = Moxios.requests.mostRecent();
-				chai.expect(request.config.method).to.equal('delete');
-				chai.expect(request.config.url).to.equal(`api/trips/${tripId}/subscription`);
-				done();
-			}, 50);
+			const apiStub = sandbox.stub(StApi, 'delete_').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, null));
+			}));
+
+			Dao.unfollowTrip(tripId)
+				.then(() => {
+					assert.calledOnce(apiStub);
+					assert.calledWith(apiStub, `trips/${tripId}/subscription`);
+				}).then(done, done);
 		});
 	});
 
@@ -82,30 +83,35 @@ describe('CollaborationDataAccess', () => {
 			const tripId = '12345';
 			const userEmail = 'test@test.com';
 			const accessLevel = 'xyz';
+			const expectedRequest = {
+				trip_id: tripId,
+				user_email: userEmail,
+				access_level: accessLevel
+			};
+			const apiStub = sandbox.stub(StApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, null));
+			}));
 
-			Dao.addTripCollaboration(tripId, userEmail, accessLevel);
-			Moxios.wait(() => {
-				const request = Moxios.requests.mostRecent();
-				chai.expect(request.config.method).to.equal('post');
-				const data = JSON.parse(request.config.data);
-				chai.expect(data.trip_id).to.equal(tripId);
-				chai.expect(data.user_email).to.equal(userEmail);
-				chai.expect(data.access_level).to.equal(accessLevel);
-				done();
-			}, 50);
+			Dao.addTripCollaboration(tripId, userEmail, accessLevel)
+				.then(() => {
+					assert.calledOnce(apiStub);
+					assert.calledWith(apiStub, 'trip-collaborations', expectedRequest);
+				}).then(done, done);
 		});
 	});
 
 	describe('#removeTripCollaboration', () => {
 		it('should call api with correct collaborationId', (done) => {
 			const collaborationId = '12345';
-			Dao.removeTripCollaboration(collaborationId);
-			Moxios.wait(() => {
-				const request = Moxios.requests.mostRecent();
-				chai.expect(request.config.method).to.equal('delete');
-				chai.expect(request.config.url).to.equal(`api/trip-collaborations/${collaborationId}`);
-				done();
-			}, 50);
+			const apiStub = sandbox.stub(StApi, 'delete_').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, null));
+			}));
+
+			Dao.removeTripCollaboration(collaborationId)
+				.then(() => {
+					assert.calledOnce(apiStub);
+					assert.calledWith(apiStub, `trip-collaborations/${collaborationId}`);
+				}).then(done, done);
 		});
 	});
 
@@ -113,15 +119,18 @@ describe('CollaborationDataAccess', () => {
 		it('should call api with correct parameters', (done) => {
 			const collaborationId = '12345';
 			const accessLevel = 'xyz';
-			Dao.updateTripCollaboration(collaborationId, accessLevel);
-			Moxios.wait(() => {
-				const request = Moxios.requests.mostRecent();
-				chai.expect(request.config.method).to.equal('put');
-				chai.expect(request.config.url).to.equal(`api/trip-collaborations/${collaborationId}`);
-				const data = JSON.parse(request.config.data);
-				chai.expect(data.access_level).to.equal(accessLevel);
-				done();
-			}, 50);
+			const expectedRequest = {
+				access_level: accessLevel
+			};
+			const apiStub = sandbox.stub(StApi, 'put').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, null));
+			}));
+
+			Dao.updateTripCollaboration(collaborationId, accessLevel)
+				.then(() => {
+					assert.calledOnce(apiStub);
+					assert.calledWith(apiStub, `trip-collaborations/${collaborationId}`, expectedRequest);
+				}).then(done, done);
 		});
 	});
 
@@ -129,15 +138,18 @@ describe('CollaborationDataAccess', () => {
 		it('should call api with correct parameters', (done) => {
 			const collaborationId = '12345';
 			const hash = '12314212341234';
-			Dao.acceptTripCollaboration(collaborationId, hash);
-			Moxios.wait(() => {
-				const request = Moxios.requests.mostRecent();
-				chai.expect(request.config.method).to.equal('put');
-				chai.expect(request.config.url).to.equal(`api/trip-collaborations/${collaborationId}/accept`);
-				const data = JSON.parse(request.config.data);
-				chai.expect(data.hash).to.equal(hash);
-				done();
-			}, 50);
+			const expectedRequest = { hash };
+			const apiStub = sandbox.stub(StApi, 'put').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, {
+					collaboration: TestApiResponses.collaborations.collaborations[0]
+				}));
+			}));
+
+			Dao.acceptTripCollaboration(collaborationId, hash)
+				.then(() => {
+					assert.calledOnce(apiStub);
+					assert.calledWith(apiStub, `trip-collaborations/${collaborationId}/accept`, expectedRequest);
+				}).then(done, done);
 		});
 
 		it('should return tripId', () => {
@@ -158,13 +170,15 @@ describe('CollaborationDataAccess', () => {
 	describe('#resendInvitation', () => {
 		it('should call api with correct parameters', (done) => {
 			const collaborationId = '12345';
-			Dao.resendInvitation(collaborationId);
-			Moxios.wait(() => {
-				const request = Moxios.requests.mostRecent();
-				chai.expect(request.config.method).to.equal('post');
-				chai.expect(request.config.url).to.equal(`api/trip-collaborations/${collaborationId}/resend-email`);
-				done();
-			}, 50);
+			const apiStub = sandbox.stub(StApi, 'post').returns(new Promise<ApiResponse>((resolve) => {
+				resolve(new ApiResponse(200, null));
+			}));
+
+			Dao.resendInvitation(collaborationId)
+				.then(() => {
+					assert.calledOnce(apiStub);
+					assert.calledWith(apiStub, `trip-collaborations/${collaborationId}/resend-email`);
+				}).then(done, done);
 		});
 	});
 });
