@@ -35,8 +35,8 @@ export enum EventType {
 }
 
 export interface PlaceEvents {
-	events: Event[],
-	place: Place
+	events: Event[];
+	place: Place;
 }
 
 export interface Event {
