@@ -1,9 +1,10 @@
 var webpack = require('webpack');
 var OptimizeJsPlugin = require('optimize-js-plugin');
-var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+var TerserPlugin = require('terser-webpack-plugin');
 var cloneDeep = require('lodash.clonedeep');
 
 var baseConfig = {
+	mode: 'production',
 	entry: {
 		sdk: './src/StSDK.ts'
 	},
@@ -39,13 +40,14 @@ var baseConfig = {
 var browserConfig = cloneDeep(baseConfig);
 browserConfig.output.filename = 'SygicTravelSDK.js';
 browserConfig.target = 'web';
-browserConfig.plugins.push(
-	new UglifyJSPlugin({
-		uglifyOptions: {
-			ecma: 5
-		}
-	})
-);
+browserConfig.optimization = {
+	minimizer: [new TerserPlugin({
+		terserOptions: {
+			ecma: 5,
+			extractComments: true,
+		},
+	})],
+};
 
 var nodeConfig = cloneDeep(baseConfig);
 nodeConfig.output.filename = 'SygicTravelSDK.node.js';
@@ -54,12 +56,13 @@ nodeConfig.node = { process: false };
 nodeConfig.plugins.push(new webpack.DefinePlugin({
 	'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
 }));
-nodeConfig.plugins.push(
-	new UglifyJSPlugin({
-		uglifyOptions: {
-			ecma: 6
-		}
-	})
-);
+nodeConfig.optimization = {
+	minimizer: [new TerserPlugin({
+		terserOptions: {
+			ecma: 6,
+			extractComments: true,
+		},
+	})],
+};
 
 module.exports = [browserConfig, nodeConfig];
