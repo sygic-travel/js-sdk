@@ -1,17 +1,21 @@
-import { Collection, getCollectionsForDestinationId } from '../Collections';
-import { getFavoritesIds } from '../Favorites';
+import {Collection, getCollectionsForDestinationId} from '../Collections';
+import {getFavoritesIds} from '../Favorites';
 import {
 	Category,
-	getDetailedPlacesMap, getPlacesDestinationMap, getPlacesMapFromTrip, Level, mergePlacesArrays,
+	getDetailedPlacesMap,
+	getPlacesDestinationMap,
+	getPlacesMapFromTrip,
+	Level,
+	mergePlacesArrays,
 	Place
 } from '../Places';
-import { getRoutesForTripDay, TripDayRoutes } from '../Route';
-import { SearchResult, searchReverse } from '../Search';
-import { getUserSettings, UserSettings } from '../Session';
-import { Day, getTripDetailed, Trip } from '../Trip';
-import { sleep } from '../Util';
+import {getRoutesForTripDay, TripDayRoutes} from '../Route';
+import {SearchResult, searchReverse} from '../Search';
+import {getUserSettings, UserSettings} from '../Session';
+import {Day, getTripDetailed, Trip} from '../Trip';
+import {sleep} from '../Util';
 import * as Dao from './DataAccess';
-import { generateDestinationMainMap, generateDestinationSecondaryMaps, generateTripMap } from './MapGenerator';
+import {generateDestinationMainMap, generateDestinationSecondaryMaps, generateTripMap} from './MapGenerator';
 import {
 	GeneratingState,
 	PdfData,
@@ -113,6 +117,10 @@ export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<
 		placeIdsWithPlaceType.set(placeId, PlaceSource.FROM_TRIP);
 
 		if (!destination) {
+			return;
+		}
+
+		if (destination.level === Level.COUNTRY) {
 			return;
 		}
 
