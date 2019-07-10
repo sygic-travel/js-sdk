@@ -426,6 +426,6 @@ export const assignNextEvents = async (limit: number): Promise<PlaceEvents[]> =>
 		return {
 			events: placeEvents.events.map((event: any) => mapEventApiResponseToEvent(event)),
 			place: mapPlaceDetailedApiResponseToPlace(placeEvents.place, '100x100')
-		}
+		};
 	});
 };

@@ -1,6 +1,7 @@
 var webpack = require('webpack');
 
 module.exports = {
+	mode: 'production',
 	entry: [
 		'webpack-dev-server/client?http://localhost:8080',
 		'webpack/hot/dev-server',

@@ -1,16 +1,21 @@
-import { Collection, getCollectionsForDestinationId } from '../Collections';
-import { getFavoritesIds } from '../Favorites';
+import {Collection, getCollectionsForDestinationId} from '../Collections';
+import {getFavoritesIds} from '../Favorites';
 import {
-	getDetailedPlacesMap, getPlacesDestinationMap, getPlacesMapFromTrip, Level, mergePlacesArrays,
+	Category,
+	getDetailedPlacesMap,
+	getPlacesDestinationMap,
+	getPlacesMapFromTrip,
+	Level,
+	mergePlacesArrays,
 	Place
 } from '../Places';
-import { getRoutesForTripDay, TripDayRoutes } from '../Route';
-import { SearchResult, searchReverse } from '../Search';
-import { getUserSettings, UserSettings } from '../Session';
-import { Day, getTripDetailed, Trip } from '../Trip';
-import { sleep } from '../Util';
+import {getRoutesForTripDay, TripDayRoutes} from '../Route';
+import {SearchResult, searchReverse} from '../Search';
+import {getUserSettings, UserSettings} from '../Session';
+import {Day, getTripDetailed, Trip} from '../Trip';
+import {sleep} from '../Util';
 import * as Dao from './DataAccess';
-import { generateDestinationMainMap, generateDestinationSecondaryMaps, generateTripMap } from './MapGenerator';
+import {generateDestinationMainMap, generateDestinationSecondaryMaps, generateTripMap} from './MapGenerator';
 import {
 	GeneratingState,
 	PdfData,
@@ -73,8 +78,7 @@ export async function getPdfData(query: PdfQuery): Promise<PdfData> {
 		placeIdsWithPlaceType
 	} = await buildDestinationsAndPlaces(placesMapFromTrip);
 
-	const destinationIds: string[] = Array.from(destinationIdsWithPlaces.keys());
-
+	const destinationIds: string[] = await getAndFilterDestinationIds(destinationIdsWithPlaces);
 	const destinationsPromise: Promise<PdfDestination[]> = Promise.all(destinationIds.map(
 		async (destinationId: string) => (
 		createDestinationData(
@@ -113,6 +117,10 @@ export async function buildDestinationsAndPlaces(placeIdsAndPlacesFromTrip: Map<
 		placeIdsWithPlaceType.set(placeId, PlaceSource.FROM_TRIP);
 
 		if (!destination) {
+			return;
+		}
+
+		if (destination.level === Level.COUNTRY) {
 			return;
 		}
 
@@ -278,6 +286,17 @@ async function addMissingAddressesToDestinationsPlaces(
 		}
 	}));
 	return destinationIdsWithPlaces;
+}
+
+async function getAndFilterDestinationIds(destinationIdsWithPlaces: Map<string, Place[]>): Promise<string[]> {
+	const destinationIds: string[] = [];
+	destinationIdsWithPlaces.forEach((places: Place[], destinationId: string) => {
+		if (places.length === 1 && places[0].categories.indexOf(Category.TRAVELING) !== -1) {
+			return;
+		}
+		destinationIds.push(destinationId);
+	});
+	return destinationIds;
 }
 
 export async function findAndSetMissingAddresses(places: Place[]): Promise<Place[]> {

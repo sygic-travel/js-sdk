@@ -1,6 +1,7 @@
 var webpack = require('webpack');
 
 var baseConfig = {
+	mode: 'development',
 	entry: {
 		sdk: './src/StSDK.ts'
 	},
