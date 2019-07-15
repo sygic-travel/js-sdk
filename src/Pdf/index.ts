@@ -291,8 +291,8 @@ async function addMissingAddressesToDestinationsPlaces(
 async function getAndFilterDestinationIds(destinationIdsWithPlaces: Map<string, Place[]>): Promise<string[]> {
 	const destinationIds: string[] = [];
 	destinationIdsWithPlaces.forEach((places: Place[], destinationId: string) => {
-		const travelingPlaces = places.filter(place => place.categories.indexOf(Category.TRAVELING) !== -1);
-		if (places.length === travelingPlaces.length) {
+		const areAllPlacesTraveling = places.every(place => place.categories.indexOf(Category.TRAVELING) !== -1);
+		if (areAllPlacesTraveling) {
 			return;
 		}
 		destinationIds.push(destinationId);
