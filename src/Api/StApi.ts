@@ -35,13 +35,7 @@ const getEndpointsConfig: any = {
 	cdnFree: [
 		'reviews'
 	],
-	cdnRequired: [
-		'hotels/list',
-		'places/detect-parents',
-		'places/list',
-		'places/stats',
-		'tours'
-	]
+	cdnRequired: []
 };
 
 axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
