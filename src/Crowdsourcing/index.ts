@@ -80,6 +80,21 @@ export const updatePlaceLocation = async (
 	return Dao.updatePlaceLocation(placeId, place.location, suggested, note);
 };
 
+export const createPlaceName = async (
+	placeId: string,
+	languageId: string | null,
+	suggested: string,
+	note: string | null
+): Promise<string> => {
+	return Dao.updatePlaceName(
+		placeId,
+		languageId,
+		null,
+		suggested,
+		note
+	);
+};
+
 export const updatePlaceName = async (
 	placeId: string,
 	languageId: string | null,

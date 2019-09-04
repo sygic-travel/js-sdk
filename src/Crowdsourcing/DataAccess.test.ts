@@ -171,6 +171,21 @@ describe('CrowdsourcingDataAccess', () => {
 		});
 	});
 
+	describe('#createPlaceName', () => {
+		it('should call stApi with correct args', async () => {
+			await Dao.updatePlaceName('poi:530', 'en', null, 'name 2', 'test');
+			chai.expect(apiStub.getCall(0).args[0]).to.deep.equal('crowdsourcing');
+			chai.expect(apiStub.getCall(0).args[1]).to.deep.equal({
+				type: 'place:update:name',
+				language_id: 'en',
+				place_id: 'poi:530',
+				original: null,
+				suggested: 'name 2',
+				note: 'test'
+			});
+		});
+	});
+
 	describe('#updatePlaceName', () => {
 		it('should call stApi with correct args', async () => {
 			await Dao.updatePlaceName('poi:530', 'en', 'name 1', 'name 2', 'test');
