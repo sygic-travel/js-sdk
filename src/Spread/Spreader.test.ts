@@ -33,8 +33,8 @@ const place: Place = {
 	parentIds: [],
 	perex: '',
 	thumbnailUrl: 'http://example.com',
-	starRating: null,
-	starRatingUnofficial: null,
+	hotelStarRating: null,
+	hotelStarRatingUnofficial: null,
 	customerRating: null,
 	detail: null
 };

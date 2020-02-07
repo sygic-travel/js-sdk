@@ -46,8 +46,8 @@ export const mapPlace = (place, detail: Detail | null) => {
 		marker: place.marker,
 		categories: place.categories,
 		parentIds: place.parent_ids,
-		starRating: place.star_rating,
-		starRatingUnofficial: place.star_rating_unofficial,
+		hotelStarRating: place.hotel_star_rating,
+		hotelStarRatingUnofficial: place.hotel_star_rating_unofficial,
 		customerRating: place.customer_rating,
 		detail
 	} as DetailedPlace;

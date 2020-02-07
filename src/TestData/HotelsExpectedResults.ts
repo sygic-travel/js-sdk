@@ -16,8 +16,8 @@ export const hotels = [{
 			name: 'Charles Bridge',
 			nameSuffix: 'Prague, Czech Republic',
 			originalName: null,
-			starRating: 4,
-			starRatingUnofficial: null,
+			hotelStarRating: 4,
+			hotelStarRatingUnofficial: null,
 			customerRating: 8.6,
 			boundingBox: null,
 			perex: 'This 14-century bridge connects the Old Town with Lesser Town and the Prague Castle.' +

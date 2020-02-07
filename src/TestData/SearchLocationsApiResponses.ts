@@ -67,8 +67,8 @@ export const searchLocations = {
 				parent_ids: [],
 				perex: null,
 				customer_rating: null,
-				star_rating: null,
-				star_rating_unofficial: null,
+				hotel_star_rating: null,
+				hotel_star_rating_unofficial: null,
 				thumbnail_url: null,
 				meta: {
 					tier: 3,

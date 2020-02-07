@@ -18,8 +18,8 @@ export const placeDetailedEiffelTowerWithoutMedia = {
 		"url": "https://travel.sygic.com/go/poi:530",
 		"owner_id": "12345",
 		"marker": "sightseeing:tower:lookout:observation",
-		"star_rating": 4,
-		"star_rating_unofficial": null,
+		"hotel_star_rating": 4,
+		"hotel_star_rating_unofficial": null,
 		"customer_rating": 8.6,
 		"categories": [
 			"sightseeing"
@@ -236,8 +236,8 @@ export const places = {
 			"original_name": "Charles Bridge",
 			"url": "https://alpha.travel.sygic.com/go/poi:345430",
 			"marker": "sightseeing:art:artwork",
-			"star_rating" : 4,
-			"star_rating_unofficial": null,
+			"hotel_star_rating" : 4,
+			"hotel_star_rating_unofficial": null,
 			"customer_rating": 8.6,
 			"categories": [
 				"sightseeing"
@@ -394,8 +394,8 @@ export const customPlaceData = {
 		"url": null,
 		"categories": [],
 		"customer_rating": null,
-		"star_rating": null,
-		"star_rating_unofficial": null,
+		"hotel_star_rating": null,
+		"hotel_star_rating_unofficial": null,
 		"tags": [],
 		"address": null,
 		"admission": null,

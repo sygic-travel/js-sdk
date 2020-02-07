@@ -18,8 +18,8 @@ export interface Place {
 	thumbnailUrl: string | null;
 	marker: string;
 	parentIds: string[];
-	starRating: number | null;
-	starRatingUnofficial: number | null;
+	hotelStarRating: number | null;
+	hotelStarRatingUnofficial: number | null;
 	customerRating: number | null;
 	detail: Detail | null;
 }
