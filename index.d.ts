@@ -358,6 +358,7 @@ export namespace Places {
 		limit?: number;
 		bounds?: Geo.Bounds;
 		zoom?: number;
+		preferredLocation?: Geo.Location;
 	}
 
 	export interface PlacesStatsFilterJSON {
