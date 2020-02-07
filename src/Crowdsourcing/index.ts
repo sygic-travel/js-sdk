@@ -163,7 +163,7 @@ export const updatePlaceOpeningHoursNote = async (
 	note: string | null
 ): Promise<string> => {
 	const place: DetailedPlace = await getDetailedPlace(placeId, imageSize);
-	return Dao.updatePlaceOpeningHoursNote(placeId,  place.detail.openingHours, suggested, note);
+	return Dao.updatePlaceOpeningHoursNote(placeId,  place.detail.openingHoursNote, suggested, note);
 };
 
 export const deletePlaceOpeningHoursNote = async (
@@ -171,10 +171,10 @@ export const deletePlaceOpeningHoursNote = async (
 	note: string | null
 ): Promise<string> => {
 	const place: DetailedPlace = await getDetailedPlace(placeId, imageSize);
-	if (!place.detail.openingHours) {
+	if (!place.detail.openingHoursNote) {
 		throw new Error('Place doesn\'t have opening hours');
 	}
-	return Dao.deletePlaceOpeningHoursNote(placeId,  place.detail.openingHours, note);
+	return Dao.deletePlaceOpeningHoursNote(placeId,  place.detail.openingHoursNote, note);
 };
 
 export const updatePlacePhone = async (

@@ -341,7 +341,7 @@ export namespace Places {
 		description?: string;
 		phone?: string;
 		email?: string;
-		opening_hours?: string;
+		opening_hours_note?: string;
 		admission?: string;
 	}
 
@@ -388,7 +388,7 @@ export namespace Places {
 		duration: number | null;
 		description: Description | null;
 		email: string | null;
-		openingHours: string | null;
+		openingHoursNote: string | null;
 		phone: string | null;
 		media: Media.MainMedia;
 		references: Reference[];
@@ -447,8 +447,7 @@ export namespace Places {
 	export interface PlaceOpeningHours {
 		openingHours: {
 			[dayDate: string]: DayOpeningHours[];
-		};
-		isValid: boolean;
+		} | null;
 	}
 
 	export interface DayOpeningHours {

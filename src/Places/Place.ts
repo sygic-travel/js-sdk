@@ -35,7 +35,7 @@ export interface CustomPlaceFormData {
 	description?: string;
 	phone?: string;
 	email?: string;
-	opening_hours?: string;
+	opening_hours_note?: string;
 	admission?: string;
 }
 

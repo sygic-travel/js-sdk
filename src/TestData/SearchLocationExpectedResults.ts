@@ -80,7 +80,7 @@ export const searchLocations = [{
 			duration: 3600,
 			description: null,
 			email: null,
-			openingHours: null,
+			openingHoursNote: null,
 			openingHoursRaw: null,
 			phone: null,
 			mainMedia: {

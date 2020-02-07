@@ -237,8 +237,7 @@ describe('PlacesDataAccess', () => {
 							closing: '00:00:00',
 							note: null
 						}]
-					},
-					is_valid: true
+					}
 				}));
 			}));
 			return chai.expect(Dao.getPlaceOpeningHours('poi:42133', '', ''))
@@ -254,8 +253,7 @@ describe('PlacesDataAccess', () => {
 							closing: '00:00:00',
 							note: null
 						} as DayOpeningHours]
-					},
-					isValid: true
+					}
 				} as PlaceOpeningHours);
 		});
 	});

@@ -9,7 +9,7 @@ export interface Detail {
 	duration: number | null;
 	description: Description | null;
 	email: string | null;
-	openingHours: string | null;
+	openingHoursNote: string | null;
 	openingHoursRaw: string | null;
 	phone: string | null;
 	mainMedia: MainMedia;

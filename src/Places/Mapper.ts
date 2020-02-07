@@ -70,7 +70,7 @@ const mapPlaceDetail = (place, photoSize): Detail => {
 		} : null,
 		email: place.email,
 		duration: place.duration,
-		openingHours: place.opening_hours,
+		openingHoursNote: place.opening_hours_note,
 		openingHoursRaw: place.opening_hours_raw,
 		mediaCount: place.media_count,
 		phone: place.phone,
@@ -128,8 +128,7 @@ export const mapPlaceGeometryApiResponseToPlaceGeometry = (placeGeometry: any): 
 );
 
 export const mapPlaceOpeningHours = (placeOpeningHours: any): PlaceOpeningHours => ({
-		openingHours: placeOpeningHours.opening_hours,
-		isValid: placeOpeningHours.is_valid
+		openingHours: placeOpeningHours.opening_hours ? placeOpeningHours.opening_hours : null
 	} as PlaceOpeningHours
 );
 
