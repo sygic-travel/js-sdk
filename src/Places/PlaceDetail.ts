@@ -20,6 +20,9 @@ export interface Detail {
 	ownerId?: string;
 	mediaCount: number;
 	satellite: SatelliteImage | null;
+	attributes: {
+		[attribute: string]: string;
+	} | null;
 }
 
 export interface Reference {

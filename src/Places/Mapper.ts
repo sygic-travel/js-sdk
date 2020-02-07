@@ -79,7 +79,8 @@ const mapPlaceDetail = (place, photoSize): Detail => {
 			imageUrl: place.satellite.image_url,
 			boundingBox: place.satellite.bounding_box as Bounds
 		} : null,
-		references
+		references,
+		attributes: place.attributes
 	} as Detail;
 
 	if (place.owner_id) {

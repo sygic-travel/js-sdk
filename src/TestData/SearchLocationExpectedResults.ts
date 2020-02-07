@@ -91,7 +91,8 @@ export const searchLocations = [{
 			} as MainMedia,
 			references: [],
 			mediaCount: 1,
-			satellite: null
+			satellite: null,
+			attributes: null
 		} as Detail
 	} as Place
 } as SearchResult];

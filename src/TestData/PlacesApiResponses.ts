@@ -94,7 +94,15 @@ export const placeDetailedEiffelTowerWithoutMedia = {
 				"price": 182.88,
 				"flags": []
 			}
-		]
+		],
+		"attributes": {
+			"info:architect": "Stephen Sauvestre;Gustave Eiffel;Maurice Koechlin;Émile Nouguier",
+			"info:dimensions:height": "324",
+			"info:image": "http://upload.iorg/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg",
+			"info:start_date": "C19",
+			"name:operator": "Société d’Exploitation de la Tour Eiffel",
+			"usage:fee": "10-25€"
+		}
 	}
 };
 
@@ -411,7 +419,8 @@ export const customPlaceData = {
 		"description": null,
 		"thumbnail_url": null,
 		"media_count": 0,
-		"satellite": null
+		"satellite": null,
+		"attributes": null
 	}
 };
 /* tslint:enable */

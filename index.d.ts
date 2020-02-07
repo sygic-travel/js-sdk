@@ -98,7 +98,6 @@ declare class PlacesModule {
 		categoriesCoefficients?: Spread.CategoriesCoefficients | null,
 		useLocalRating?: boolean
 	): Spread.SpreadResult;
-	public getPlaceAttributes(placeId: string): Promise<Places.PlaceAttributes>;
 	public getPlaceAutoTranslation(placeId: string): Promise<Places.PlaceAutoTranslation>;
 }
 
@@ -515,12 +514,6 @@ export namespace Places {
 			description: string | null
 		};
 		provider?: string;
-	}
-
-	export interface PlaceAttributes {
-		attributes: {
-			[attribute: string]: string;
-		} | null;
 	}
 }
 

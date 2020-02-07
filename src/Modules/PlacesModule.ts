@@ -7,7 +7,6 @@ import {
 	detectParentsByLocation,
 	getDetailedPlace,
 	getDetailedPlaces,
-	getPlaceAttributes,
 	getPlaceAutoTranslation,
 	getPlaceGeometry,
 	getPlaceMedia,
@@ -18,7 +17,6 @@ import {
 	getPlacesDestinationMap,
 	getPlacesStats,
 	Place,
-	PlaceAttributes,
 	PlaceAutoTranslation,
 	PlaceGeometry,
 	PlaceOpeningHours,
@@ -114,10 +112,6 @@ export default class PlacesModule {
 
 	public getPlacesDestinationMap(placeIds: string[], imageSize: string): Promise<Map<string, Place>> {
 		return getPlacesDestinationMap(placeIds, imageSize);
-	}
-
-	public getPlaceAttributes(placeId: string): Promise<PlaceAttributes> {
-		return getPlaceAttributes(placeId);
 	}
 
 	public getPlaceAutoTranslation(placeId: string): Promise<PlaceAutoTranslation> {

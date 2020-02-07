@@ -96,7 +96,8 @@ export const searchLocations = {
 				main_media: null,
 				references: [],
 				media_count: 1,
-				satellite: null
+				satellite: null,
+				attributes: null
 			}
 		}
 	]
