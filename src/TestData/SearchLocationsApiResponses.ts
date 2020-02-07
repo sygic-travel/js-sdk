@@ -60,7 +60,6 @@ export const searchLocations = {
 				original_name: "eiffel optic",
 				url: "https://travel.sygic.com/go/poi:203997",
 				gateway_url: null,
-				price: null,
 				marker: "shopping:optician",
 				categories: [
 					"shopping"
