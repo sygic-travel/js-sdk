@@ -30,7 +30,7 @@ const place: Place = {
 	url: '',
 	marker: 'resataurant',
 	categories: [],
-	parentIds: [],
+	parents: [],
 	perex: '',
 	thumbnailUrl: 'http://example.com',
 	hotelStarRating: null,

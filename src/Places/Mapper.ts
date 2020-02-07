@@ -2,7 +2,7 @@ import { camelizeKeys } from 'humps';
 
 import { Bounds, Location } from '../Geo';
 import { MainMedia, Medium } from '../Media';
-import { DetailedPlace, Place } from './Place';
+import { DetailedPlace, Place, Parent } from './Place';
 import { Detail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
 import { PlaceOpeningHours } from './PlaceOpeningHours';
@@ -45,7 +45,7 @@ export const mapPlace = (place, detail: Detail | null) => {
 		thumbnailUrl: place.thumbnail_url,
 		marker: place.marker,
 		categories: place.categories,
-		parentIds: place.parent_ids,
+		parents: place.parents as Parent[],
 		hotelStarRating: place.hotel_star_rating,
 		hotelStarRatingUnofficial: place.hotel_star_rating_unofficial,
 		customerRating: place.customer_rating,

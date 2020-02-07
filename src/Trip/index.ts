@@ -1,6 +1,6 @@
 import { ChangeNotification } from '../Changes';
 import { Location } from '../Geo';
-import { DESTINATION_BREAK_LEVELS, getDetailedPlaces, Place } from '../Places';
+import { DESTINATION_BREAK_LEVELS, getDetailedPlaces, Place, Parent } from '../Places';
 import { getUserSettings, UserSettings } from '../Session';
 import * as Dao from './DataAccess';
 import * as TripManipulator from './Manipulator';
@@ -144,7 +144,7 @@ export async function addSequenceToDay(
 	}
 
 	if (typeof positionInDay === 'undefined' || positionInDay === null) {
-		const destinations = await getDetailedPlaces(places[0].parentIds, '300x300');
+		const destinations = await getDetailedPlaces(places[0].parents.map((parent: Parent): string => parent.id), '300x300');
 		const suitableDestinations = destinations.filter((place) => DESTINATION_BREAK_LEVELS.includes(place.level));
 		const addToTripInstructions: AddToTripInstructions = getAddToTripInstructions(
 			places[0],

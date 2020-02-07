@@ -295,7 +295,7 @@ export namespace Places {
 		url: string | null;
 		thumbnailUrl: string | null;
 		marker: string;
-		parentIds: string[];
+		parents: Places.Parent[];
 		hotelStarRating: number | null;
 		hotelStarRatingUnofficial: number | null;
 		customerRating: number | null;

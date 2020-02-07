@@ -24,12 +24,37 @@ export const hotels = {
 				"categories": [
 					"sightseeing"
 				],
-				"parent_ids": [
-					"city:5",
-					"region:26009",
-					"region:26011",
-					"country:5",
-					"continent:1"
+				"parents": [
+					{
+						"id": "poi:1294",
+						"name": "Champ de Mars",
+						"level": null
+					},
+					{
+						"id": "poi:28009821",
+						"name": "7th arrondissement of Paris",
+						"level": "neighbourhood"
+					},
+					{
+						"id": "city:14",
+						"name": "Paris",
+						"level": "city"
+					},
+					{
+						"id": "region:303",
+						"name": "Île-de-France",
+						"level": "state"
+					},
+					{
+						"id": "country:14",
+						"name": "France",
+						"level": "country"
+					},
+					{
+						"id": "continent:1",
+						"name": "Europe",
+						"level": "continent"
+					}
 				],
 				"perex": "This 14-century bridge connects the Old Town with Lesser Town and the Prague Castle. With its length of 621 meters, solid Gothic stone…",
 				"thumbnail_url": "https://alpha-media-cdn.sygictraveldata.com/media/poi:345430"

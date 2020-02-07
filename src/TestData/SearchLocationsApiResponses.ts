@@ -64,7 +64,7 @@ export const searchLocations = {
 				categories: [
 					"shopping"
 				],
-				parent_ids: [],
+				parents: [],
 				perex: null,
 				customer_rating: null,
 				hotel_star_rating: null,

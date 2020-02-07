@@ -68,7 +68,7 @@ export const searchLocations = [{
 		hotelStarRating: null,
 		hotelStarRatingUnofficial: null,
 		customerRating: null,
-		parentIds: [],
+		parents: [],
 		detail: {
 			tags: [{
 				key: 'Optician',

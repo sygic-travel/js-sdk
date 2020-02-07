@@ -40,7 +40,38 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 	url: 'https://travel.sygic.com/go/poi:530',
 	thumbnailUrl: 'https://media-cdn.sygictraveldata.com/media/poi:530',
 	categories: [Category.SIGHTSEEING],
-	parentIds: ['city:14', 'region:303', 'country:14', 'continent:1'],
+	parents: [
+		{
+			"id": "poi:1294",
+			"name": "Champ de Mars",
+			"level": null
+		},
+		{
+			"id": "poi:28009821",
+			"name": "7th arrondissement of Paris",
+			"level": "neighbourhood"
+		},
+		{
+			"id": "city:14",
+			"name": "Paris",
+			"level": "city"
+		},
+		{
+			"id": "region:303",
+			"name": "Île-de-France",
+			"level": "state"
+		},
+		{
+			"id": "country:14",
+			"name": "France",
+			"level": "country"
+		},
+		{
+			"id": "continent:1",
+			"name": "Europe",
+			"level": "continent"
+		}
+	],
 	detail: {
 		tags: [
 			{
@@ -140,7 +171,38 @@ export const places = [{
 	hotelStarRatingUnofficial: null,
 	customerRating: 8.6,
 	categories: ['sightseeing'],
-	parentIds: ['city:5', 'region:26009', 'region:26011', 'country:5', 'continent:1'],
+	parents: [
+		{
+			"id": "poi:1294",
+			"name": "Champ de Mars",
+			"level": null
+		},
+		{
+			"id": "poi:28009821",
+			"name": "7th arrondissement of Paris",
+			"level": "neighbourhood"
+		},
+		{
+			"id": "city:14",
+			"name": "Paris",
+			"level": "city"
+		},
+		{
+			"id": "region:303",
+			"name": "Île-de-France",
+			"level": "state"
+		},
+		{
+			"id": "country:14",
+			"name": "France",
+			"level": "country"
+		},
+		{
+			"id": "continent:1",
+			"name": "Europe",
+			"level": "continent"
+		}
+	],
 	detail: null
 } as Place];
 
@@ -359,7 +421,7 @@ export const customPlace = {
 		hotelStarRating: null,
 		hotelStarRatingUnofficial: null,
 		customerRating: null,
-		parentIds: [],
+		parents: [],
 		perex: '',
 		thumbnailUrl: null,
 		detail: {

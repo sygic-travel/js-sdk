@@ -2,7 +2,7 @@ import * as chai from 'chai';
 import * as dirtyChai from 'dirty-chai';
 import { cloneDeep } from '../Util';
 
-import { Category, Place } from '../Places';
+import { Category, Place, Parent } from '../Places';
 import { UserSettings } from '../Session';
 import { placeDetailedEiffelTowerWithoutMedia as place } from '../TestData/PlacesExpectedResults';
 import { itineratyItem as itineratyItemTemplate, tripDetailed } from '../TestData/TripExpectedResults';
@@ -427,15 +427,19 @@ const buildItem = (
 	return itineratyItem;
 };
 
-const buildPlace = (lat: number, lng: number, id: string, parents?: string[]): Place => {
+const buildPlace = (lat: number, lng: number, id: string, parent_ids?: string[]): Place => {
 	const newPlace = cloneDeep(place);
 	newPlace.location.lat = lat;
 	newPlace.location.lng = lng;
 	if (id) {
 		newPlace.id = id;
 	}
-	if (parents) {
-		newPlace.parentIds = parents;
+	if (parent_ids) {
+		newPlace.parents = parent_ids.map((id: string): Parent => ({
+			id,
+			name: null,
+			level: null
+		} as Parent));
 	}
 	return newPlace;
 };

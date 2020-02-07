@@ -17,7 +17,7 @@ export interface Place {
 	url: string | null;
 	thumbnailUrl: string | null;
 	marker: string;
-	parentIds: string[];
+	parents: Parent[];
 	hotelStarRating: number | null;
 	hotelStarRatingUnofficial: number | null;
 	customerRating: number | null;
@@ -37,6 +37,12 @@ export interface CustomPlaceFormData {
 	email?: string;
 	opening_hours_note?: string;
 	admission?: string;
+}
+
+export interface Parent {
+	id: string;
+	name: string | null;
+	level: string | null;
 }
 
 export function isStickyByDefault(place: Place): boolean {

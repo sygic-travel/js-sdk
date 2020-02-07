@@ -3,7 +3,7 @@ import { Medium } from '../Media/Media';
 import { Day, Trip } from '../Trip/';
 import * as Dao from './DataAccess';
 import { PlacesListFilterJSON, PlacesQuery } from './ListFilter';
-import { Category, CustomPlaceFormData, DetailedPlace, hasTag, isStickyByDefault, Level, Place } from './Place';
+import { Category, CustomPlaceFormData, DetailedPlace, hasTag, isStickyByDefault, Level, Place, Parent } from './Place';
 import { PlaceAutoTranslation } from './PlaceAutoTranslation';
 import { Description, Detail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
@@ -28,6 +28,7 @@ export {
 	hasTag,
 	isStickyByDefault,
 	Level,
+	Parent,
 	Place,
 	PlaceAutoTranslation,
 	PlaceGeometry,
@@ -149,7 +150,7 @@ export async function getPlacesDestinationMap(placesIds: string[], imageSize: st
 
 	const placesParentIds: Set<string> = new Set<string>();
 	places.forEach((place: Place) => {
-		place.parentIds.forEach((parentId: string) => placesParentIds.add(parentId));
+		place.parents.forEach((parent: Parent) => placesParentIds.add(parent.id));
 	});
 
 	const parentPlaces: Place[] = await Dao.getDetailedPlaces(Array.from(placesParentIds), imageSize);
@@ -172,20 +173,20 @@ export function getPlaceDestination(place: Place, parentPlacesMap: Map<string, P
 		return place;
 	}
 
-	const reversedPlaceParentIds = place.parentIds.slice().reverse();
+	const reversedPlaceParents = place.parents.slice().reverse();
 
-	for (const parentId of reversedPlaceParentIds) {
-		const parentPlace: Place | undefined = parentPlacesMap.get(parentId);
+	for (const parent of reversedPlaceParents) {
+		const parentPlace: Place | undefined = parentPlacesMap.get(parent.id);
 		if (parentPlace && isPlaceDestination(parentPlace)) {
 			return parentPlace;
 		}
 	}
 
-	const countryParent: Place | undefined = reversedPlaceParentIds.map((parentPlaceId: string): Place =>
-		parentPlacesMap.get(parentPlaceId)!
+	const countryParent: Place | undefined = reversedPlaceParents.map((parentPlace: Parent): Place =>
+		parentPlacesMap.get(parentPlace.id)!
 	).find((parentPlace: Place) => parentPlace.level === 'country');
 
-	return countryParent ? countryParent : parentPlacesMap.get(reversedPlaceParentIds[0])!;
+	return countryParent ? countryParent : parentPlacesMap.get(reversedPlaceParents[0].id)!;
 }
 
 export function isPlaceDestination(place: Place): boolean {
