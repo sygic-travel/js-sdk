@@ -405,6 +405,7 @@ export namespace Places {
 		timezone: string | null;
 		hasShapeGeometry: boolean;
 		collectionCount: number;
+		addressDetails: AddressDetails;
 	}
 
 	export interface Reference {

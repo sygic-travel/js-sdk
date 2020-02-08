@@ -15,7 +15,7 @@ import {
 	PlaceClass,
 } from './Place';
 import { PlaceAutoTranslation } from './PlaceAutoTranslation';
-import { Description, Detail, Reference, Tag } from './PlaceDetail';
+import { AddressDetails, Description, Detail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
 import { DayOpeningHours, PlaceOpeningHours } from './PlaceOpeningHours';
 import {
@@ -29,6 +29,7 @@ import { PlacesStats } from './Stats';
 import { PlacesStatsFilter, PlacesStatsFilterJSON } from './StatsFilter';
 
 export {
+	AddressDetails,
 	Category,
 	CustomPlaceFormData,
 	Dao,

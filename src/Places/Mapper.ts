@@ -3,7 +3,7 @@ import { camelizeKeys } from 'humps';
 import { Bounds, Location } from '../Geo';
 import { MainMedia, Medium } from '../Media';
 import { DetailedPlace, Place, Parent, PlaceClass } from './Place';
-import { Detail, Reference, Tag } from './PlaceDetail';
+import { AddressDetails, Detail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
 import { PlaceOpeningHours } from './PlaceOpeningHours';
 import {
@@ -87,8 +87,8 @@ const mapPlaceDetail = (place, photoSize): Detail => {
 		attributes: place.attributes,
 		timezone: place.timezone,
 		hasShapeGeometry: place.has_shape_geometry,
-		collectionCount: place.collection_count
-
+		collectionCount: place.collection_count,
+		addressDetails: place.address_details as AddressDetails
 	} as Detail;
 
 	if (place.owner_id) {

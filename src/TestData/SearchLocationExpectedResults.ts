@@ -104,7 +104,18 @@ export const searchLocations = [{
 			attributes: null,
 			timezone: null,
 			hasShapeGeometry: false,
-			collectionCount: 0
+			collectionCount: 0,
+			addressDetails: {
+				country: "Czechia",
+				state: null,
+				province: null,
+				city: null,
+				postcode: null,
+				district: null,
+				street: null,
+				place: null,
+				number: null
+			}
 		} as Detail
 	} as Place
 } as SearchResult];

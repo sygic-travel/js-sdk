@@ -26,6 +26,7 @@ export interface Detail {
 	timezone: string | null;
 	hasShapeGeometry: boolean;
 	collectionCount: number;
+	addressDetails: AddressDetails;
 }
 
 export interface Reference {
@@ -68,3 +69,14 @@ export interface SatelliteImage {
 	boundingBox: Bounds;
 }
 
+export interface AddressDetails {
+	country: string | null;
+	state: string | null;
+	province: string | null;
+	city: string | null;
+	postcode: string | null;
+	district: string | null;
+	street: string | null;
+	place: string | null;
+	number: string | null;
+}

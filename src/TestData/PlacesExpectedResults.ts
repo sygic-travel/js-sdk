@@ -165,6 +165,17 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 		timezone: 'Europe/Paris',
 		hasShapeGeometry: false,
 		collectionCount: 0,
+		addressDetails: {
+			country: 'Francie',
+			state: 'Île-de-France',
+			province: null,
+			city: 'Paris',
+			postcode: '75007',
+			district: '7th arrondissement of Paris',
+			street: 'Avenue Anatole France',
+			place: null,
+			number: '5'
+		},
 		ownerId: '12345'
 	} as Detail
 };
@@ -492,7 +503,18 @@ export const customPlace = {
 			attributes: null,
 			timezone: null,
 			hasShapeGeometry: false,
-			collectionCount: 0
+			collectionCount: 0,
+			addressDetails: {
+				country: null,
+				state: null,
+				province: null,
+				city: null,
+				postcode: null,
+				district: null,
+				street: null,
+				place: null,
+				number: null
+			}
 		}
 } as Place;
 /* tslint:enable */

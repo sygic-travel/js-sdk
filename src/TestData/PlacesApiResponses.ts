@@ -147,7 +147,18 @@ export const placeDetailedEiffelTowerWithoutMedia = {
 		},
 		"timezone": "Europe/Paris",
 		"has_shape_geometry": false,
-		"collection_count": 0
+		"collection_count": 0,
+		"address_details": {
+			"country": "Francie",
+			"state": "Île-de-France",
+			"province": null,
+			"city": "Paris",
+			"postcode": "75007",
+			"district": "7th arrondissement of Paris",
+			"street": "Avenue Anatole France",
+			"place": null,
+			"number": "5"
+		}
 	}
 };
 
@@ -516,7 +527,18 @@ export const customPlaceData = {
 		"attributes": null,
 		"timezone": null,
 		"has_shape_geometry": false,
-		"collection_count": 0
+		"collection_count": 0,
+		"address_details": {
+			"country": null,
+			"state": null,
+			"province": null,
+			"city": null,
+			"postcode": null,
+			"district": null,
+			"street": null,
+			"place": null,
+			"number": null
+		}
 	}
 };
 /* tslint:enable */
