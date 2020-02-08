@@ -62,6 +62,12 @@ export const hotels = {
 						"level": "continent"
 					}
 				],
+				"tag_keys": [
+					"Family Rooms",
+					"Hotel Charging Station",
+					"Hotel Tennis Court",
+					"Hotel"
+				],
 				"perex": "This 14-century bridge connects the Old Town with Lesser Town and the Prague Castle. With its length of 621 meters, solid Gothic stone…",
 				"thumbnail_url": "https://alpha-media-cdn.sygictraveldata.com/media/poi:345430"
 			},

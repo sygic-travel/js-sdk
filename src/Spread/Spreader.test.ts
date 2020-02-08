@@ -42,6 +42,7 @@ const place: Place = {
 	hotelStarRating: null,
 	hotelStarRatingUnofficial: null,
 	customerRating: null,
+	tagKeys: [],
 	detail: null
 };
 const sizeConfigs: SpreadSizeConfig[] = [

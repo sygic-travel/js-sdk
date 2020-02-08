@@ -78,6 +78,17 @@ export const placeDetailedEiffelTowerWithoutMedia = {
 				"name": "Historical"
 			}
 		],
+		"tag_keys": [
+			"360° Content",
+			"Observation Tower",
+			"World's Fair Architecture",
+			"Scenic Lookout",
+			"Wheelchair Accessible",
+			"View Point",
+			"Regional Heritage",
+			"Heritage",
+			"Tower"
+		],
 		"address": "Champ de Mars, 5 Avenue Anatole France, 75007 Paris, France",
 		"admission": "Lift entrance ticket* / to the top / by stairs*\nAdults: €11 / €17 / €7 \nYouth (12 - 24): €8.50 / €14.50 / €5\nChildren (4 - 11), disabled: €4 / €8 / €3\n*valid to 2nd floor\n\nThe access waiting time to the monument is likely to be over 2 hours unless you book online.\n\nAn extra ticket for the top floor may be purchased on the 2nd floor, depending on weather conditions.",
 		"duration_estimate": 3600,
@@ -315,6 +326,17 @@ export const places = {
 					"level": "continent"
 				}
 			],
+			"tag_keys": [
+				"360° Content",
+				"Observation Tower",
+				"World's Fair Architecture",
+				"Scenic Lookout",
+				"Wheelchair Accessible",
+				"View Point",
+				"Regional Heritage",
+				"Heritage",
+				"Tower"
+			],
 			"perex": "This 14-century bridge connects the Old Town with Lesser Town and the Prague Castle. With its length of 621 meters, solid Gothic stone…",
 			"thumbnail_url": "https://alpha-media-cdn.sygictraveldata.com/media/poi:345430"
 		}
@@ -465,6 +487,7 @@ export const customPlaceData = {
 		"hotel_star_rating": null,
 		"hotel_star_rating_unofficial": null,
 		"tags": [],
+		"tag_keys": [],
 		"address": null,
 		"admission": null,
 		"duration_estimate": 3600,

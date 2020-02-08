@@ -87,6 +87,9 @@ export const searchLocations = {
 						name: "Optician"
 					}
 				],
+				tag_keys: [
+					"Optician"
+				],
 				address: null,
 				admission: null,
 				area: null,

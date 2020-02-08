@@ -24,6 +24,7 @@ export interface Place {
 	hotelStarRating: number | null;
 	hotelStarRatingUnofficial: number | null;
 	customerRating: number | null;
+	tagKeys: string[];
 	detail: Detail | null;
 }
 

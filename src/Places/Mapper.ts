@@ -52,6 +52,7 @@ export const mapPlace = (place, detail: Detail | null) => {
 		hotelStarRating: place.hotel_star_rating,
 		hotelStarRatingUnofficial: place.hotel_star_rating_unofficial,
 		customerRating: place.customer_rating,
+		tagKeys: place.tag_keys,
 		detail
 	} as DetailedPlace;
 };

@@ -64,6 +64,12 @@ export const hotels = [{
 					"level": "continent"
 				}
 			],
+			tagKeys: [
+				'Family Rooms',
+				'Hotel Charging Station',
+				'Hotel Tennis Court',
+				'Hotel'
+			],
 			detail: null
 		} as Place,
 		bookingCom: {

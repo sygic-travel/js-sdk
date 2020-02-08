@@ -78,6 +78,17 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 			"level": "continent"
 		}
 	],
+	tagKeys: [
+		"360° Content",
+		"Observation Tower",
+		"World's Fair Architecture",
+		"Scenic Lookout",
+		"Wheelchair Accessible",
+		"View Point",
+		"Regional Heritage",
+		"Heritage",
+		"Tower"
+	],
 	detail: {
 		tags: [
 			{
@@ -217,6 +228,17 @@ export const places = [{
 			"name": "Europe",
 			"level": "continent"
 		}
+	],
+	tagKeys: [
+		"360° Content",
+		"Observation Tower",
+		"World's Fair Architecture",
+		"Scenic Lookout",
+		"Wheelchair Accessible",
+		"View Point",
+		"Regional Heritage",
+		"Heritage",
+		"Tower"
 	],
 	detail: null
 } as Place];
@@ -445,6 +467,7 @@ export const customPlace = {
 		parents: [],
 		perex: '',
 		thumbnailUrl: null,
+		tagKeys: [],
 		detail: {
 			tags: [],
 			address: null,
