@@ -15,21 +15,58 @@ export const hotels = {
 				"bounding_box": null,
 				"name": "Charles Bridge",
 				"name_suffix": "Prague, Czech Republic",
-				"original_name": null,
+				"name_local": null,
+				"name_translated": null,
+				"name_en": null,
 				"url": "https://alpha.travel.sygic.com/go/poi:345430",
-				"marker": "sightseeing:art:artwork",
-				"star_rating": 4,
-				"star_rating_unofficial": null,
+				"marker": "sleeping-hotel",
+				"class": {
+					"slug": "sleeping:hotel:countryside",
+					"name": "Countryside Hotel"
+				},
+				"hotel_star_rating": 4,
+				"hotel_star_rating_unofficial": null,
 				"customer_rating": 8.6,
 				"categories": [
 					"sightseeing"
 				],
-				"parent_ids": [
-					"city:5",
-					"region:26009",
-					"region:26011",
-					"country:5",
-					"continent:1"
+				"parents": [
+					{
+						"id": "poi:1294",
+						"name": "Champ de Mars",
+						"level": null
+					},
+					{
+						"id": "poi:28009821",
+						"name": "7th arrondissement of Paris",
+						"level": "neighbourhood"
+					},
+					{
+						"id": "city:14",
+						"name": "Paris",
+						"level": "city"
+					},
+					{
+						"id": "region:303",
+						"name": "Île-de-France",
+						"level": "state"
+					},
+					{
+						"id": "country:14",
+						"name": "France",
+						"level": "country"
+					},
+					{
+						"id": "continent:1",
+						"name": "Europe",
+						"level": "continent"
+					}
+				],
+				"tag_keys": [
+					"Family Rooms",
+					"Hotel Charging Station",
+					"Hotel Tennis Court",
+					"Hotel"
 				],
 				"perex": "This 14-century bridge connects the Old Town with Lesser Town and the Prague Castle. With its length of 621 meters, solid Gothic stone…",
 				"thumbnail_url": "https://alpha-media-cdn.sygictraveldata.com/media/poi:345430"

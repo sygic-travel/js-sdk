@@ -1,8 +1,7 @@
 export interface PlaceOpeningHours {
 	openingHours: {
 		[dayDate: string]: DayOpeningHours[];
-	};
-	isValid: boolean;
+	} | null;
 }
 
 export interface DayOpeningHours {

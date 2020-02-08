@@ -6,10 +6,10 @@ export interface Detail {
 	address: string | null;
 	admission: string | null;
 	area: number | null;
-	duration: number | null;
+	durationEstimate: number | null;
 	description: Description | null;
 	email: string | null;
-	openingHours: string | null;
+	openingHoursNote: string | null;
 	openingHoursRaw: string | null;
 	phone: string | null;
 	mainMedia: MainMedia;
@@ -20,6 +20,13 @@ export interface Detail {
 	ownerId?: string;
 	mediaCount: number;
 	satellite: SatelliteImage | null;
+	attributes: {
+		[attribute: string]: string;
+	} | null;
+	timezone: string | null;
+	hasShapeGeometry: boolean;
+	collectionCount: number;
+	addressDetails: AddressDetails;
 }
 
 export interface Reference {
@@ -45,7 +52,7 @@ export interface Description {
 	provider: DescriptionProvider | null;
 	translationProvider: TranslationProvider | null;
 	url: string | null;
-	isTranslated: boolean;
+	languageId: string | null;
 }
 
 export enum DescriptionProvider {
@@ -62,3 +69,14 @@ export interface SatelliteImage {
 	boundingBox: Bounds;
 }
 
+export interface AddressDetails {
+	country: string | null;
+	state: string | null;
+	province: string | null;
+	city: string | null;
+	postcode: string | null;
+	district: string | null;
+	street: string | null;
+	place: string | null;
+	number: string | null;
+}

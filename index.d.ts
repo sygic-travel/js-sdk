@@ -98,7 +98,6 @@ declare class PlacesModule {
 		categoriesCoefficients?: Spread.CategoriesCoefficients | null,
 		useLocalRating?: boolean
 	): Spread.SpreadResult;
-	public getPlaceAttributes(placeId: string): Promise<Places.PlaceAttributes>;
 	public getPlaceAutoTranslation(placeId: string): Promise<Places.PlaceAutoTranslation>;
 }
 
@@ -291,15 +290,19 @@ export namespace Places {
 		boundingBox: Geo.Bounds | null;
 		name: string;
 		nameSuffix: string | null;
-		originalName: string | null;
+		nameLocal: string | null;
+		nameTranslated: string | null;
+		nameEn: string | null;
 		perex: string | null;
 		url: string | null;
 		thumbnailUrl: string | null;
 		marker: string;
-		parentIds: string[];
-		starRating: number | null;
-		starRatingUnofficial: number | null;
+		class: Places.PlaceClass;
+		parents: Places.Parent[];
+		hotelStarRating: number | null;
+		hotelStarRatingUnofficial: number | null;
 		customerRating: number | null;
+		tagKeys: string[];
 		detail: Detail | null;
 	}
 
@@ -341,7 +344,7 @@ export namespace Places {
 		description?: string;
 		phone?: string;
 		email?: string;
-		opening_hours?: string;
+		opening_hours_note?: string;
 		admission?: string;
 	}
 
@@ -359,6 +362,7 @@ export namespace Places {
 		limit?: number;
 		bounds?: Geo.Bounds;
 		zoom?: number;
+		preferredLocation?: Geo.Location;
 	}
 
 	export interface PlacesStatsFilterJSON {
@@ -385,10 +389,10 @@ export namespace Places {
 		tags: Tag[];
 		address: string | null;
 		admission: string | null;
-		duration: number | null;
+		durationEstimate: number | null;
 		description: Description | null;
 		email: string | null;
-		openingHours: string | null;
+		openingHoursNote: string | null;
 		phone: string | null;
 		media: Media.MainMedia;
 		references: Reference[];
@@ -398,6 +402,10 @@ export namespace Places {
 		ownerId?: string;
 		mediaCount: number;
 		satellite: SatelliteImage | null;
+		timezone: string | null;
+		hasShapeGeometry: boolean;
+		collectionCount: number;
+		addressDetails: AddressDetails;
 	}
 
 	export interface Reference {
@@ -447,8 +455,7 @@ export namespace Places {
 	export interface PlaceOpeningHours {
 		openingHours: {
 			[dayDate: string]: DayOpeningHours[];
-		};
-		isValid: boolean;
+		} | null;
 	}
 
 	export interface DayOpeningHours {
@@ -516,12 +523,6 @@ export namespace Places {
 			description: string | null
 		};
 		provider?: string;
-	}
-
-	export interface PlaceAttributes {
-		attributes: {
-			[attribute: string]: string;
-		} | null;
 	}
 }
 

@@ -21,9 +21,13 @@ import { PlacesStats, SumStatistic } from '../Places/Stats';
 export const placeDetailedEiffelTowerWithoutMedia: Place = {
 	id: 'poi:530',
 	level: Level.POI,
-	marker: 'sightseeing:tower:lookout:observation',
-	starRating: 4,
-	starRatingUnofficial: null,
+	marker: 'sightseeing-tower-lookout-observation',
+	class: {
+		slug: 'sightseeing:tower:lookout:observation',
+		name: 'Lookout Observation'
+	},
+	hotelStarRating: 4,
+	hotelStarRatingUnofficial: null,
 	customerRating: 8.6,
 	rating: 7.9110977331847,
 	ratingLocal: 8.9110977331847,
@@ -34,13 +38,57 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 	quadkey: '120220011012000332',
 	name: 'Eiffel Tower',
 	nameSuffix: 'Paris, France',
-	originalName: 'Eiffel Tower',
+	nameLocal: 'Eiffel Tower',
+	nameTranslated: null,
+	nameEn: 'Eiffel Tower',
 	boundingBox: null,
 	perex: 'Built by Gustave Eiffel for the 1889 World’s Fair, Eiffel Tower became the world\'s tallest man-made structure until the Chrysler Building…',
 	url: 'https://travel.sygic.com/go/poi:530',
 	thumbnailUrl: 'https://media-cdn.sygictraveldata.com/media/poi:530',
 	categories: [Category.SIGHTSEEING],
-	parentIds: ['city:14', 'region:303', 'country:14', 'continent:1'],
+	parents: [
+		{
+			"id": "poi:1294",
+			"name": "Champ de Mars",
+			"level": null
+		},
+		{
+			"id": "poi:28009821",
+			"name": "7th arrondissement of Paris",
+			"level": "neighbourhood"
+		},
+		{
+			"id": "city:14",
+			"name": "Paris",
+			"level": "city"
+		},
+		{
+			"id": "region:303",
+			"name": "Île-de-France",
+			"level": "state"
+		},
+		{
+			"id": "country:14",
+			"name": "France",
+			"level": "country"
+		},
+		{
+			"id": "continent:1",
+			"name": "Europe",
+			"level": "continent"
+		}
+	],
+	tagKeys: [
+		"360° Content",
+		"Observation Tower",
+		"World's Fair Architecture",
+		"Scenic Lookout",
+		"Wheelchair Accessible",
+		"View Point",
+		"Regional Heritage",
+		"Heritage",
+		"Tower"
+	],
 	detail: {
 		tags: [
 			{
@@ -64,11 +112,11 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 			provider: null,
 			translationProvider: null,
 			url: 'www.travel.sygic.com',
-			isTranslated: true
+			languageId: 'en'
 		} as Description,
 		email: null,
-		duration: 3600,
-		openingHours: 'Open daily:\nMid-June - early Sep: 9 a.m. - 12:45 a.m. \nLast lift at midnight (11 p.m. to the top).\nStairs: 9 a.m. - 12:45 a.m. \n(Last admission at midnight.)\n\nRest of the year: 9:30 a.m. - 11:45 p.m. \nLast lift at 11 p.m. (10:30 p.m. to the top).\nStairs: 9:30 a.m. - 6:30 p.m. \n(Last admission at 6 p.m.)',
+		durationEstimate: 3600,
+		openingHoursNote: 'Open daily:\nMid-June - early Sep: 9 a.m. - 12:45 a.m. \nLast lift at midnight (11 p.m. to the top).\nStairs: 9 a.m. - 12:45 a.m. \n(Last admission at midnight.)\n\nRest of the year: 9:30 a.m. - 11:45 p.m. \nLast lift at 11 p.m. (10:30 p.m. to the top).\nStairs: 9:30 a.m. - 6:30 p.m. \n(Last admission at 6 p.m.)',
 		openingHoursRaw: null,
 		phone: '+33 892 70 12 39',
 		mediaCount: 0,
@@ -106,6 +154,28 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 			price: 182.88,
 			flags: []
 		} as Reference],
+		attributes: {
+			'info:architect': 'Stephen Sauvestre;Gustave Eiffel;Maurice Koechlin;Émile Nouguier',
+			'info:dimensions:height': '324',
+			'info:image': 'http://upload.iorg/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg',
+			'info:start_date': 'C19',
+			'name:operator': 'Société d’Exploitation de la Tour Eiffel',
+			'usage:fee': '10-25€'
+		},
+		timezone: 'Europe/Paris',
+		hasShapeGeometry: false,
+		collectionCount: 0,
+		addressDetails: {
+			country: 'Francie',
+			state: 'Île-de-France',
+			province: null,
+			city: 'Paris',
+			postcode: '75007',
+			district: '7th arrondissement of Paris',
+			street: 'Avenue Anatole France',
+			place: null,
+			number: '5'
+		},
 		ownerId: '12345'
 	} as Detail
 };
@@ -122,17 +192,65 @@ export const places = [{
 	quadkey: '120212302033311321',
 	name: 'Charles Bridge',
 	nameSuffix: 'Prague, Czech Republic',
-	originalName: 'Charles Bridge',
+	nameLocal: 'Karlův most',
+	nameTranslated: null,
+	nameEn: 'Charles Bridge',
 	boundingBox: null,
 	perex: 'This 14-century bridge connects the Old Town with Lesser Town and the Prague Castle. With its length of 621 meters, solid Gothic stone…',
 	url: 'https://alpha.travel.sygic.com/go/poi:345430',
 	thumbnailUrl: 'https://alpha-media-cdn.sygictraveldata.com/media/poi:345430',
-	marker: 'sightseeing:art:artwork',
-	starRating: 4,
-	starRatingUnofficial: null,
+	marker: 'sightseeing-art-artwork',
+	class: {
+		slug: 'sightseeing:art:artwork',
+		name: 'Artwork'
+	},
+	hotelStarRating: 4,
+	hotelStarRatingUnofficial: null,
 	customerRating: 8.6,
 	categories: ['sightseeing'],
-	parentIds: ['city:5', 'region:26009', 'region:26011', 'country:5', 'continent:1'],
+	parents: [
+		{
+			"id": "poi:1294",
+			"name": "Champ de Mars",
+			"level": null
+		},
+		{
+			"id": "poi:28009821",
+			"name": "7th arrondissement of Paris",
+			"level": "neighbourhood"
+		},
+		{
+			"id": "city:14",
+			"name": "Paris",
+			"level": "city"
+		},
+		{
+			"id": "region:303",
+			"name": "Île-de-France",
+			"level": "state"
+		},
+		{
+			"id": "country:14",
+			"name": "France",
+			"level": "country"
+		},
+		{
+			"id": "continent:1",
+			"name": "Europe",
+			"level": "continent"
+		}
+	],
+	tagKeys: [
+		"360° Content",
+		"Observation Tower",
+		"World's Fair Architecture",
+		"Scenic Lookout",
+		"Wheelchair Accessible",
+		"View Point",
+		"Regional Heritage",
+		"Heritage",
+		"Tower"
+	],
 	detail: null
 } as Place];
 
@@ -344,24 +462,31 @@ export const customPlace = {
 		boundingBox: null,
 		name: 'Antananarivo',
 		nameSuffix: null,
-		originalName: null,
+		nameLocal: null,
+		nameTranslated: null,
+		nameEn: null,
 		url: null,
 		categories: [],
 		marker: 'default',
-		starRating: null,
-		starRatingUnofficial: null,
+		class: {
+			slug: 'default',
+			name: null
+		},
+		hotelStarRating: null,
+		hotelStarRatingUnofficial: null,
 		customerRating: null,
-		parentIds: [],
+		parents: [],
 		perex: '',
 		thumbnailUrl: null,
+		tagKeys: [],
 		detail: {
 			tags: [],
 			address: null,
 			area: null,
 			admission: null,
-			duration: 3600,
+			durationEstimate: 3600,
 			email: null,
-			openingHours: null,
+			openingHoursNote: null,
 			openingHoursRaw: null,
 			phone: null,
 			mediaCount: 0,
@@ -374,7 +499,22 @@ export const customPlace = {
 			satellite: null,
 			references: [],
 			ownerId: '4d945cecbe65e',
-			description: null
+			description: null,
+			attributes: null,
+			timezone: null,
+			hasShapeGeometry: false,
+			collectionCount: 0,
+			addressDetails: {
+				country: null,
+				state: null,
+				province: null,
+				city: null,
+				postcode: null,
+				district: null,
+				street: null,
+				place: null,
+				number: null
+			}
 		}
 } as Place;
 /* tslint:enable */

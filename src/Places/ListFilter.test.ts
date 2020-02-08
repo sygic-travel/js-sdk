@@ -16,7 +16,7 @@ describe('PlacesQuery', () => {
 				parents: ['city:1'],
 				query: '&ahoj=test?foo$bar',
 				tags: [],
-				location: {
+				preferredLocation: {
 					lat: 10.5,
 					lng: 20.4
 				}
@@ -24,7 +24,7 @@ describe('PlacesQuery', () => {
 
 			const placesFilter = new PlacesQuery(placesFilterJSON);
 			const expectedQuerystring = 'query=%26ahoj%3Dtest%3Ffoo%24bar&categories=eating&' +
-				'parents=city%3A1&limit=20&location=10.5%2C20.4';
+				'parents=city%3A1&limit=20&preferred_location=10.5%2C20.4';
 
 			chai.expect(placesFilter.toQueryString()).to.equal(expectedQuerystring);
 		});

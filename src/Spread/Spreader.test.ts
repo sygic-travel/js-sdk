@@ -26,16 +26,23 @@ const place: Place = {
 	boundingBox: null,
 	name: 'Poi1',
 	nameSuffix: '',
-	originalName: null,
+	nameLocal: null,
+	nameTranslated: null,
+	nameEn: null,
 	url: '',
-	marker: 'resataurant',
+	marker: 'restaurant',
+	class: {
+		slug: 'restaurant',
+		name: 'Restaurant'
+	},
 	categories: [],
-	parentIds: [],
+	parents: [],
 	perex: '',
 	thumbnailUrl: 'http://example.com',
-	starRating: null,
-	starRatingUnofficial: null,
+	hotelStarRating: null,
+	hotelStarRatingUnofficial: null,
 	customerRating: null,
+	tagKeys: [],
 	detail: null
 };
 const sizeConfigs: SpreadSizeConfig[] = [

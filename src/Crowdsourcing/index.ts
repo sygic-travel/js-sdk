@@ -1,7 +1,7 @@
 import isUrl from 'is-url-superb';
 
 import { Location } from '../Geo';
-import { getDetailedPlace, getPlaceAttributes, PlaceAttributes, Reference } from '../Places';
+import { getDetailedPlace, Reference } from '../Places';
 import { DetailedPlace } from '../Places/Place';
 import * as Dao from './DataAccess';
 import { UpdatableReferenceType } from './Event';
@@ -105,7 +105,7 @@ export const updatePlaceName = async (
 	return Dao.updatePlaceName(
 		placeId,
 		languageId,
-		languageId ? place.name : place.originalName,
+		languageId ? place.name : place.nameLocal,
 		suggested,
 		note
 	);
@@ -124,10 +124,10 @@ export const deletePlaceName = async (
 		}
 		name = place.name;
 	} else {
-		if (!place.originalName) {
+		if (!place.nameLocal) {
 			throw new Error('Place doesn\'t have name');
 		}
-		name = place.originalName;
+		name = place.nameLocal;
 	}
 	return Dao.deletePlaceName(
 		placeId,
@@ -163,7 +163,7 @@ export const updatePlaceOpeningHoursNote = async (
 	note: string | null
 ): Promise<string> => {
 	const place: DetailedPlace = await getDetailedPlace(placeId, imageSize);
-	return Dao.updatePlaceOpeningHoursNote(placeId,  place.detail.openingHours, suggested, note);
+	return Dao.updatePlaceOpeningHoursNote(placeId,  place.detail.openingHoursNote, suggested, note);
 };
 
 export const deletePlaceOpeningHoursNote = async (
@@ -171,10 +171,10 @@ export const deletePlaceOpeningHoursNote = async (
 	note: string | null
 ): Promise<string> => {
 	const place: DetailedPlace = await getDetailedPlace(placeId, imageSize);
-	if (!place.detail.openingHours) {
+	if (!place.detail.openingHoursNote) {
 		throw new Error('Place doesn\'t have opening hours');
 	}
-	return Dao.deletePlaceOpeningHoursNote(placeId,  place.detail.openingHours, note);
+	return Dao.deletePlaceOpeningHoursNote(placeId,  place.detail.openingHoursNote, note);
 };
 
 export const updatePlacePhone = async (
@@ -295,9 +295,9 @@ export const updatePlaceAttribute = async (
 	suggestedValue: string,
 	note: string | null
 ): Promise<string> => {
-	const placeAttributes: PlaceAttributes = await getPlaceAttributes(placeId);
+	const place: DetailedPlace = await getDetailedPlace(placeId, imageSize);
 
-	if (!placeAttributes.attributes || !placeAttributes.attributes[suggestedKey]) {
+	if (!place.detail.attributes || !place.detail.attributes[suggestedKey]) {
 		throw new Error('Attribute not found');
 	}
 
@@ -317,16 +317,16 @@ export const deletePlaceAttribute = async (
 	attributeKey: string,
 	note: string | null
 ): Promise<string> => {
-	const placeAttributes: PlaceAttributes = await getPlaceAttributes(placeId);
+	const place: DetailedPlace = await getDetailedPlace(placeId, imageSize);
 
-	if (!placeAttributes.attributes || !placeAttributes.attributes[attributeKey]) {
+	if (!place.detail.attributes || !place.detail.attributes[attributeKey]) {
 		throw new Error('Attribute not found');
 	}
 
 	return Dao.deletePlaceAttribute(
 		placeId,
 		languageId,
-		placeAttributes.attributes[attributeKey],
+		place.detail.attributes[attributeKey],
 		attributeKey,
 		note
 	);

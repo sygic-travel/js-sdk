@@ -4,25 +4,25 @@ import { PlacesFilter, PlacesFilterJSON, PlacesFilterQuery } from './Filter';
 export interface PlacesListFilterJSON extends PlacesFilterJSON {
 	mapSpread?: number;
 	limit?: number;
-	location?: Location;
+	preferredLocation?: Location;
 }
 
 export interface PlacesListFilterQuery extends PlacesFilterQuery {
 	map_spread?: number;
 	limit?: number;
-	location?: string;
+	preferred_location?: string;
 }
 
 export class PlacesQuery extends PlacesFilter {
 	protected _mapSpread?: number;
 	protected _limit?: number;
-	protected _location?: Location;
+	protected _preferredLocation?: Location;
 
 	constructor(placesFilter: PlacesListFilterJSON) {
 		super(placesFilter);
 		this._limit = placesFilter.limit;
 		this._mapSpread = placesFilter.mapSpread;
-		this._location = placesFilter.location;
+		this._preferredLocation = placesFilter.preferredLocation;
 		this.validate();
 	}
 
@@ -49,8 +49,8 @@ export class PlacesQuery extends PlacesFilter {
 		if (this._limit) {
 			queryObject.limit = this._limit;
 		}
-		if (this._location) {
-			queryObject.location = this._location.lat + ',' + this._location.lng;
+		if (this._preferredLocation) {
+			queryObject.preferred_location = this._preferredLocation.lat + ',' + this._preferredLocation.lng;
 		}
 		return queryObject;
 	}

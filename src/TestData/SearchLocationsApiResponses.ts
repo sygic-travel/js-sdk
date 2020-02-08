@@ -57,19 +57,24 @@ export const searchLocations = {
 				bounding_box: null,
 				name: "eiffel optic",
 				name_suffix: "Ostrava, Czech Republic",
-				original_name: "eiffel optic",
+				name_local: "eiffel optic",
+				name_translated: null,
+				name_en: "eiffel optic",
 				url: "https://travel.sygic.com/go/poi:203997",
 				gateway_url: null,
-				price: null,
-				marker: "shopping:optician",
+				marker: "shopping-optician",
+				class: {
+					slug: "shopping:optician",
+					name: "Optician"
+				},
 				categories: [
 					"shopping"
 				],
-				parent_ids: [],
+				parents: [],
 				perex: null,
 				customer_rating: null,
-				star_rating: null,
-				star_rating_unofficial: null,
+				hotel_star_rating: null,
+				hotel_star_rating_unofficial: null,
 				thumbnail_url: null,
 				meta: {
 					tier: 3,
@@ -82,12 +87,15 @@ export const searchLocations = {
 						name: "Optician"
 					}
 				],
+				tag_keys: [
+					"Optician"
+				],
 				address: null,
 				admission: null,
 				area: null,
-				duration: 3600,
+				duration_estimate: 3600,
 				email: null,
-				opening_hours: null,
+				opening_hours_note: null,
 				opening_hours_raw: null,
 				is_deleted: false,
 				phone: null,
@@ -96,7 +104,22 @@ export const searchLocations = {
 				main_media: null,
 				references: [],
 				media_count: 1,
-				satellite: null
+				satellite: null,
+				attributes: null,
+				timezone: null,
+				has_shape_geometry: false,
+				collection_count: 0,
+				address_details: {
+					country: "Czechia",
+					state: null,
+					province: null,
+					city: null,
+					postcode: null,
+					district: null,
+					street: null,
+					place: null,
+					number: null
+				}
 			}
 		}
 	]

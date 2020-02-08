@@ -2,8 +2,8 @@ import { camelizeKeys } from 'humps';
 
 import { Bounds, Location } from '../Geo';
 import { MainMedia, Medium } from '../Media';
-import { DetailedPlace, Place } from './Place';
-import { Detail, Reference, Tag } from './PlaceDetail';
+import { DetailedPlace, Place, Parent, PlaceClass } from './Place';
+import { AddressDetails, Detail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
 import { PlaceOpeningHours } from './PlaceOpeningHours';
 import {
@@ -38,17 +38,21 @@ export const mapPlace = (place, detail: Detail | null) => {
 		quadkey: place.quadkey,
 		name: place.name,
 		nameSuffix: place.name_suffix,
-		originalName: place.original_name,
+		nameLocal: place.name_local,
+		nameTranslated: place.name_translated,
+		nameEn: place.name_en,
 		boundingBox: place.bounding_box as Bounds,
 		perex: place.perex,
 		url: place.url,
 		thumbnailUrl: place.thumbnail_url,
 		marker: place.marker,
+		class: place.class as PlaceClass,
 		categories: place.categories,
-		parentIds: place.parent_ids,
-		starRating: place.star_rating,
-		starRatingUnofficial: place.star_rating_unofficial,
+		parents: place.parents as Parent[],
+		hotelStarRating: place.hotel_star_rating,
+		hotelStarRatingUnofficial: place.hotel_star_rating_unofficial,
 		customerRating: place.customer_rating,
+		tagKeys: place.tag_keys,
 		detail
 	} as DetailedPlace;
 };
@@ -66,11 +70,11 @@ const mapPlaceDetail = (place, photoSize): Detail => {
 			translationProvider: place.description.translation_provider,
 			text: place.description.text,
 			url: place.description.link,
-			isTranslated: place.description.is_translated
+			languageId: place.description.language_id
 		} : null,
 		email: place.email,
-		duration: place.duration,
-		openingHours: place.opening_hours,
+		durationEstimate: place.duration_estimate,
+		openingHoursNote: place.opening_hours_note,
 		openingHoursRaw: place.opening_hours_raw,
 		mediaCount: place.media_count,
 		phone: place.phone,
@@ -79,7 +83,12 @@ const mapPlaceDetail = (place, photoSize): Detail => {
 			imageUrl: place.satellite.image_url,
 			boundingBox: place.satellite.bounding_box as Bounds
 		} : null,
-		references
+		references,
+		attributes: place.attributes,
+		timezone: place.timezone,
+		hasShapeGeometry: place.has_shape_geometry,
+		collectionCount: place.collection_count,
+		addressDetails: place.address_details as AddressDetails
 	} as Detail;
 
 	if (place.owner_id) {
@@ -128,8 +137,7 @@ export const mapPlaceGeometryApiResponseToPlaceGeometry = (placeGeometry: any): 
 );
 
 export const mapPlaceOpeningHours = (placeOpeningHours: any): PlaceOpeningHours => ({
-		openingHours: placeOpeningHours.opening_hours,
-		isValid: placeOpeningHours.is_valid
+		openingHours: placeOpeningHours.opening_hours ? placeOpeningHours.opening_hours : null
 	} as PlaceOpeningHours
 );
 

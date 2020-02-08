@@ -12,15 +12,19 @@ export interface Place {
 	boundingBox: Bounds | null;
 	name: string;
 	nameSuffix: string | null;
-	originalName: string | null;
+	nameLocal: string | null;
+	nameTranslated: string | null;
+	nameEn: string | null;
 	perex: string | null;
 	url: string | null;
 	thumbnailUrl: string | null;
 	marker: string;
-	parentIds: string[];
-	starRating: number | null;
-	starRatingUnofficial: number | null;
+	class: PlaceClass;
+	parents: Parent[];
+	hotelStarRating: number | null;
+	hotelStarRatingUnofficial: number | null;
 	customerRating: number | null;
+	tagKeys: string[];
 	detail: Detail | null;
 }
 
@@ -35,8 +39,19 @@ export interface CustomPlaceFormData {
 	description?: string;
 	phone?: string;
 	email?: string;
-	opening_hours?: string;
+	opening_hours_note?: string;
 	admission?: string;
+}
+
+export interface Parent {
+	id: string;
+	name: string | null;
+	level: string | null;
+}
+
+export interface PlaceClass {
+	slug: string;
+	name: string | null;
 }
 
 export function isStickyByDefault(place: Place): boolean {

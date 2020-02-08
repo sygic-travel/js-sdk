@@ -14,22 +14,53 @@ export const placeDetailedEiffelTowerWithoutMedia = {
 		"bounding_box": null,
 		"name": "Eiffel Tower",
 		"name_suffix": "Paris, France",
-		"original_name": "Eiffel Tower",
+		"name_local": "Eiffel Tower",
+		"name_translated": null,
+		"name_en": "Eiffel Tower",
 		"url": "https://travel.sygic.com/go/poi:530",
-		"price": null,
 		"owner_id": "12345",
-		"marker": "sightseeing:tower:lookout:observation",
-		"star_rating": 4,
-		"star_rating_unofficial": null,
+		"marker": "sightseeing-tower-lookout-observation",
+		"class": {
+			"slug": "sightseeing:tower:lookout:observation",
+			"name": "Lookout Observation"
+		},
+		"hotel_star_rating": 4,
+		"hotel_star_rating_unofficial": null,
 		"customer_rating": 8.6,
 		"categories": [
 			"sightseeing"
 		],
-		"parent_ids": [
-			"city:14",
-			"region:303",
-			"country:14",
-			"continent:1"
+		"parents": [
+			{
+				"id": "poi:1294",
+				"name": "Champ de Mars",
+				"level": null
+			},
+			{
+				"id": "poi:28009821",
+				"name": "7th arrondissement of Paris",
+				"level": "neighbourhood"
+			},
+			{
+				"id": "city:14",
+				"name": "Paris",
+				"level": "city"
+			},
+			{
+				"id": "region:303",
+				"name": "Île-de-France",
+				"level": "state"
+			},
+			{
+				"id": "country:14",
+				"name": "France",
+				"level": "country"
+			},
+			{
+				"id": "continent:1",
+				"name": "Europe",
+				"level": "continent"
+			}
 		],
 		"perex": "Built by Gustave Eiffel for the 1889 World’s Fair, Eiffel Tower became the world's tallest man-made structure until the Chrysler Building…",
 		"thumbnail_url": "https://media-cdn.sygictraveldata.com/media/poi:530",
@@ -47,11 +78,22 @@ export const placeDetailedEiffelTowerWithoutMedia = {
 				"name": "Historical"
 			}
 		],
+		"tag_keys": [
+			"360° Content",
+			"Observation Tower",
+			"World's Fair Architecture",
+			"Scenic Lookout",
+			"Wheelchair Accessible",
+			"View Point",
+			"Regional Heritage",
+			"Heritage",
+			"Tower"
+		],
 		"address": "Champ de Mars, 5 Avenue Anatole France, 75007 Paris, France",
 		"admission": "Lift entrance ticket* / to the top / by stairs*\nAdults: €11 / €17 / €7 \nYouth (12 - 24): €8.50 / €14.50 / €5\nChildren (4 - 11), disabled: €4 / €8 / €3\n*valid to 2nd floor\n\nThe access waiting time to the monument is likely to be over 2 hours unless you book online.\n\nAn extra ticket for the top floor may be purchased on the 2nd floor, depending on weather conditions.",
-		"duration": 3600,
+		"duration_estimate": 3600,
 		"email": null,
-		"opening_hours": "Open daily:\nMid-June - early Sep: 9 a.m. - 12:45 a.m. \nLast lift at midnight (11 p.m. to the top).\nStairs: 9 a.m. - 12:45 a.m. \n(Last admission at midnight.)\n\nRest of the year: 9:30 a.m. - 11:45 p.m. \nLast lift at 11 p.m. (10:30 p.m. to the top).\nStairs: 9:30 a.m. - 6:30 p.m. \n(Last admission at 6 p.m.)",
+		"opening_hours_note": "Open daily:\nMid-June - early Sep: 9 a.m. - 12:45 a.m. \nLast lift at midnight (11 p.m. to the top).\nStairs: 9 a.m. - 12:45 a.m. \n(Last admission at midnight.)\n\nRest of the year: 9:30 a.m. - 11:45 p.m. \nLast lift at 11 p.m. (10:30 p.m. to the top).\nStairs: 9:30 a.m. - 6:30 p.m. \n(Last admission at 6 p.m.)",
 		"opening_hours_raw": null,
 		"is_deleted": false,
 		"phone": "+33 892 70 12 39",
@@ -61,7 +103,7 @@ export const placeDetailedEiffelTowerWithoutMedia = {
 			"provider": null,
 			"translation_provider": null,
 			"link": 'www.travel.sygic.com',
-			"is_translated": true
+			"language_id": "en"
 		},
 		"main_media": null,
 		"satellite": null,
@@ -94,7 +136,29 @@ export const placeDetailedEiffelTowerWithoutMedia = {
 				"price": 182.88,
 				"flags": []
 			}
-		]
+		],
+		"attributes": {
+			"info:architect": "Stephen Sauvestre;Gustave Eiffel;Maurice Koechlin;Émile Nouguier",
+			"info:dimensions:height": "324",
+			"info:image": "http://upload.iorg/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg",
+			"info:start_date": "C19",
+			"name:operator": "Société d’Exploitation de la Tour Eiffel",
+			"usage:fee": "10-25€"
+		},
+		"timezone": "Europe/Paris",
+		"has_shape_geometry": false,
+		"collection_count": 0,
+		"address_details": {
+			"country": "Francie",
+			"state": "Île-de-France",
+			"province": null,
+			"city": "Paris",
+			"postcode": "75007",
+			"district": "7th arrondissement of Paris",
+			"street": "Avenue Anatole France",
+			"place": null,
+			"number": "5"
+		}
 	}
 };
 
@@ -226,21 +290,63 @@ export const places = {
 			"bounding_box": null,
 			"name": "Charles Bridge",
 			"name_suffix": "Prague, Czech Republic",
-			"original_name": "Charles Bridge",
+			"name_local": "Karlův most",
+			"name_translated": null,
+			"name_en": "Charles Bridge",
 			"url": "https://alpha.travel.sygic.com/go/poi:345430",
-			"marker": "sightseeing:art:artwork",
-			"star_rating" : 4,
-			"star_rating_unofficial": null,
+			"marker": "sightseeing-art-artwork",
+			"class": {
+				"slug": "sightseeing:art:artwork",
+				"name": "Artwork"
+			},
+			"hotel_star_rating" : 4,
+			"hotel_star_rating_unofficial": null,
 			"customer_rating": 8.6,
 			"categories": [
 				"sightseeing"
 			],
-			"parent_ids": [
-				"city:5",
-				"region:26009",
-				"region:26011",
-				"country:5",
-				"continent:1"
+			"parents": [
+				{
+					"id": "poi:1294",
+					"name": "Champ de Mars",
+					"level": null
+				},
+				{
+					"id": "poi:28009821",
+					"name": "7th arrondissement of Paris",
+					"level": "neighbourhood"
+				},
+				{
+					"id": "city:14",
+					"name": "Paris",
+					"level": "city"
+				},
+				{
+					"id": "region:303",
+					"name": "Île-de-France",
+					"level": "state"
+				},
+				{
+					"id": "country:14",
+					"name": "France",
+					"level": "country"
+				},
+				{
+					"id": "continent:1",
+					"name": "Europe",
+					"level": "continent"
+				}
+			],
+			"tag_keys": [
+				"360° Content",
+				"Observation Tower",
+				"World's Fair Architecture",
+				"Scenic Lookout",
+				"Wheelchair Accessible",
+				"View Point",
+				"Regional Heritage",
+				"Heritage",
+				"Tower"
 			],
 			"perex": "This 14-century bridge connects the Old Town with Lesser Town and the Prague Castle. With its length of 621 meters, solid Gothic stone…",
 			"thumbnail_url": "https://alpha-media-cdn.sygictraveldata.com/media/poi:345430"
@@ -383,35 +489,56 @@ export const customPlaceData = {
 		"bounding_box": null,
 		"name": "Antananarivo",
 		"name_suffix": null,
-		"original_name": null,
+		"name_local": null,
+		"name_translated": null,
+		"name_en": null,
 		"url": null,
-		"price": null,
 		"categories": [],
 		"customer_rating": null,
-		"star_rating": null,
-		"star_rating_unofficial": null,
+		"hotel_star_rating": null,
+		"hotel_star_rating_unofficial": null,
 		"tags": [],
+		"tag_keys": [],
 		"address": null,
 		"admission": null,
-		"duration": 3600,
+		"duration_estimate": 3600,
 		"email": null,
 		"is_deleted": false,
-		"opening_hours": null,
+		"opening_hours_note": null,
 		"opening_hours_raw": null,
 		"phone": null,
 		"main_media": null,
 		"references": [],
 		"tours": [],
 		"marker": "default",
+		"class": {
+			"slug": "default",
+			"name": null
+		},
 		"owner_id": "4d945cecbe65e",
 		"share": false,
 		"admin_message": null,
-		"parent_ids": [],
+		"parents": [],
 		"perex": "",
 		"description": null,
 		"thumbnail_url": null,
 		"media_count": 0,
-		"satellite": null
+		"satellite": null,
+		"attributes": null,
+		"timezone": null,
+		"has_shape_geometry": false,
+		"collection_count": 0,
+		"address_details": {
+			"country": null,
+			"state": null,
+			"province": null,
+			"city": null,
+			"postcode": null,
+			"district": null,
+			"street": null,
+			"place": null,
+			"number": null
+		}
 	}
 };
 /* tslint:enable */

@@ -19,7 +19,6 @@ import {
 	mapPlaceReviewsFromYelpData
 } from './Mapper';
 import { CustomPlaceFormData, DetailedPlace, Place } from './Place';
-import { PlaceAttributes } from './PlaceAttributes';
 import { PlaceAutoTranslation } from './PlaceAutoTranslation';
 import { PlaceGeometry } from './PlaceGeometry';
 import { PlaceOpeningHours } from './PlaceOpeningHours';
@@ -284,14 +283,6 @@ async function getPlacesWithMapSpread(filter: PlacesQuery): Promise<ApiResponse>
 		return 1;
 	});
 	return finalResponse;
-}
-
-export async function getPlaceAttributes(placeId: string): Promise<PlaceAttributes> {
-	const apiResponse = await StApi.get(`places/${placeId}/attributes`);
-	if (!apiResponse.data.hasOwnProperty('attributes')) {
-		throw new Error('Wrong API response');
-	}
-	return apiResponse.data as PlaceAttributes;
 }
 
 export async function getPlaceAutoTranslation(placeId: string): Promise<PlaceAutoTranslation> {

@@ -1,6 +1,6 @@
 import { ItineraryItem, Trip } from '.';
 import { EARTH_RADIUS, getDistance, Location } from '../Geo';
-import { isStickyByDefault, Place } from '../Places';
+import { isStickyByDefault, Place, Parent } from '../Places';
 import { UserSettings } from '../Session';
 
 export interface AddToTripInstructions {
@@ -83,8 +83,8 @@ export function getAddToTripInstructions(
 		};
 		const item: ItineraryItem = itinerary[position];
 
-		const matchedDestinations = item.place!.parentIds.filter(
-			(parentId: string) => acceptableDestinationsIds.includes(parentId)
+		const matchedDestinations = item.place!.parents.filter(
+			(parent: Parent) => acceptableDestinationsIds.includes(parent.id)
 		);
 
 		if (matchedDestinations.length === 0 && !previousDestinationMatch) {
