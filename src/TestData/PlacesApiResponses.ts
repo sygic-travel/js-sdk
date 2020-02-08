@@ -88,7 +88,7 @@ export const placeDetailedEiffelTowerWithoutMedia = {
 			"provider": null,
 			"translation_provider": null,
 			"link": 'www.travel.sygic.com',
-			"is_translated": true
+			"language_id": "en"
 		},
 		"main_media": null,
 		"satellite": null,

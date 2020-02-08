@@ -51,7 +51,7 @@ export interface Description {
 	provider: DescriptionProvider | null;
 	translationProvider: TranslationProvider | null;
 	url: string | null;
-	isTranslated: boolean;
+	languageId: string | null;
 }
 
 export enum DescriptionProvider {
