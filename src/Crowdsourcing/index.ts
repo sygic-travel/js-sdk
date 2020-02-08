@@ -105,7 +105,7 @@ export const updatePlaceName = async (
 	return Dao.updatePlaceName(
 		placeId,
 		languageId,
-		languageId ? place.name : place.originalName,
+		languageId ? place.name : place.nameLocal,
 		suggested,
 		note
 	);
@@ -124,10 +124,10 @@ export const deletePlaceName = async (
 		}
 		name = place.name;
 	} else {
-		if (!place.originalName) {
+		if (!place.nameLocal) {
 			throw new Error('Place doesn\'t have name');
 		}
-		name = place.originalName;
+		name = place.nameLocal;
 	}
 	return Dao.deletePlaceName(
 		placeId,
