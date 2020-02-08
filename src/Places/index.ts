@@ -3,7 +3,17 @@ import { Medium } from '../Media/Media';
 import { Day, Trip } from '../Trip/';
 import * as Dao from './DataAccess';
 import { PlacesListFilterJSON, PlacesQuery } from './ListFilter';
-import { Category, CustomPlaceFormData, DetailedPlace, hasTag, isStickyByDefault, Level, Place, Parent } from './Place';
+import {
+	Category,
+	CustomPlaceFormData,
+	DetailedPlace,
+	hasTag,
+	isStickyByDefault,
+	Level,
+	Place,
+	Parent,
+	PlaceClass,
+} from './Place';
 import { PlaceAutoTranslation } from './PlaceAutoTranslation';
 import { Description, Detail, Reference, Tag } from './PlaceDetail';
 import { PlaceGeometry } from './PlaceGeometry';
@@ -31,6 +41,7 @@ export {
 	Parent,
 	Place,
 	PlaceAutoTranslation,
+	PlaceClass,
 	PlaceGeometry,
 	PlaceOpeningHours,
 	PlaceReview,

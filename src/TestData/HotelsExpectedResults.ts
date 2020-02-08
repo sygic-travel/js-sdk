@@ -26,7 +26,11 @@ export const hotels = [{
 			' With its length of 621 meters, solid Gothic stone…',
 			url: 'https://alpha.travel.sygic.com/go/poi:345430',
 			thumbnailUrl: 'https://alpha-media-cdn.sygictraveldata.com/media/poi:345430',
-			marker: 'sightseeing:art:artwork',
+			marker: 'sleeping-hotel',
+			class: {
+				slug: 'sleeping:hotel:countryside',
+				name: 'Countryside Hotel'
+			},
 			categories: ['sightseeing'],
 			parents: [
 				{

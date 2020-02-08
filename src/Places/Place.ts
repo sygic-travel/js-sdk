@@ -19,6 +19,7 @@ export interface Place {
 	url: string | null;
 	thumbnailUrl: string | null;
 	marker: string;
+	class: PlaceClass;
 	parents: Parent[];
 	hotelStarRating: number | null;
 	hotelStarRatingUnofficial: number | null;
@@ -45,6 +46,11 @@ export interface Parent {
 	id: string;
 	name: string | null;
 	level: string | null;
+}
+
+export interface PlaceClass {
+	slug: string;
+	name: string | null;
 }
 
 export function isStickyByDefault(place: Place): boolean {

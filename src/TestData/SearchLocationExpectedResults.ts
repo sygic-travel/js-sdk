@@ -66,7 +66,11 @@ export const searchLocations = [{
 		perex: null,
 		url: 'https://travel.sygic.com/go/poi:203997',
 		thumbnailUrl: null,
-		marker: 'shopping:optician',
+		marker: 'shopping-optician',
+		class: {
+			slug: 'shopping:optician',
+			name: 'Optician'
+		},
 		hotelStarRating: null,
 		hotelStarRatingUnofficial: null,
 		customerRating: null,

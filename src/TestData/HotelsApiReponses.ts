@@ -19,7 +19,11 @@ export const hotels = {
 				"name_translated": null,
 				"name_en": null,
 				"url": "https://alpha.travel.sygic.com/go/poi:345430",
-				"marker": "sightseeing:art:artwork",
+				"marker": "sleeping-hotel",
+				"class": {
+					"slug": "sleeping:hotel:countryside",
+					"name": "Countryside Hotel"
+				},
 				"hotel_star_rating": 4,
 				"hotel_star_rating_unofficial": null,
 				"customer_rating": 8.6,

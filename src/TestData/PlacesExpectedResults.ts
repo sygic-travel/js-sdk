@@ -21,7 +21,11 @@ import { PlacesStats, SumStatistic } from '../Places/Stats';
 export const placeDetailedEiffelTowerWithoutMedia: Place = {
 	id: 'poi:530',
 	level: Level.POI,
-	marker: 'sightseeing:tower:lookout:observation',
+	marker: 'sightseeing-tower-lookout-observation',
+	class: {
+		slug: 'sightseeing:tower:lookout:observation',
+		name: 'Lookout Observation'
+	},
 	hotelStarRating: 4,
 	hotelStarRatingUnofficial: null,
 	customerRating: 8.6,
@@ -173,7 +177,11 @@ export const places = [{
 	perex: 'This 14-century bridge connects the Old Town with Lesser Town and the Prague Castle. With its length of 621 meters, solid Gothic stone…',
 	url: 'https://alpha.travel.sygic.com/go/poi:345430',
 	thumbnailUrl: 'https://alpha-media-cdn.sygictraveldata.com/media/poi:345430',
-	marker: 'sightseeing:art:artwork',
+	marker: 'sightseeing-art-artwork',
+	class: {
+		slug: 'sightseeing:art:artwork',
+		name: 'Artwork'
+	},
 	hotelStarRating: 4,
 	hotelStarRatingUnofficial: null,
 	customerRating: 8.6,
@@ -427,6 +435,10 @@ export const customPlace = {
 		url: null,
 		categories: [],
 		marker: 'default',
+		class: {
+			slug: 'default',
+			name: null
+		},
 		hotelStarRating: null,
 		hotelStarRatingUnofficial: null,
 		customerRating: null,

@@ -30,7 +30,11 @@ const place: Place = {
 	nameTranslated: null,
 	nameEn: null,
 	url: '',
-	marker: 'resataurant',
+	marker: 'restaurant',
+	class: {
+		slug: 'restaurant',
+		name: 'Restaurant'
+	},
 	categories: [],
 	parents: [],
 	perex: '',

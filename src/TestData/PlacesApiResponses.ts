@@ -19,7 +19,11 @@ export const placeDetailedEiffelTowerWithoutMedia = {
 		"name_en": "Eiffel Tower",
 		"url": "https://travel.sygic.com/go/poi:530",
 		"owner_id": "12345",
-		"marker": "sightseeing:tower:lookout:observation",
+		"marker": "sightseeing-tower-lookout-observation",
+		"class": {
+			"slug": "sightseeing:tower:lookout:observation",
+			"name": "Lookout Observation"
+		},
 		"hotel_star_rating": 4,
 		"hotel_star_rating_unofficial": null,
 		"customer_rating": 8.6,
@@ -268,7 +272,11 @@ export const places = {
 			"name_translated": null,
 			"name_en": "Charles Bridge",
 			"url": "https://alpha.travel.sygic.com/go/poi:345430",
-			"marker": "sightseeing:art:artwork",
+			"marker": "sightseeing-art-artwork",
+			"class": {
+				"slug": "sightseeing:art:artwork",
+				"name": "Artwork"
+			},
 			"hotel_star_rating" : 4,
 			"hotel_star_rating_unofficial": null,
 			"customer_rating": 8.6,
@@ -469,6 +477,10 @@ export const customPlaceData = {
 		"references": [],
 		"tours": [],
 		"marker": "default",
+		"class": {
+			"slug": "default",
+			"name": null
+		},
 		"owner_id": "4d945cecbe65e",
 		"share": false,
 		"admin_message": null,
