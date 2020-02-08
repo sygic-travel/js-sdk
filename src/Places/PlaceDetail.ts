@@ -23,6 +23,9 @@ export interface Detail {
 	attributes: {
 		[attribute: string]: string;
 	} | null;
+	timezone: string | null;
+	hasShapeGeometry: boolean;
+	collectionCount: number;
 }
 
 export interface Reference {

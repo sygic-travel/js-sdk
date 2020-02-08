@@ -82,7 +82,11 @@ const mapPlaceDetail = (place, photoSize): Detail => {
 			boundingBox: place.satellite.bounding_box as Bounds
 		} : null,
 		references,
-		attributes: place.attributes
+		attributes: place.attributes,
+		timezone: place.timezone,
+		hasShapeGeometry: place.has_shape_geometry,
+		collectionCount: place.collection_count
+
 	} as Detail;
 
 	if (place.owner_id) {

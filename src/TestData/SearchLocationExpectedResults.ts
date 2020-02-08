@@ -94,7 +94,10 @@ export const searchLocations = [{
 			references: [],
 			mediaCount: 1,
 			satellite: null,
-			attributes: null
+			attributes: null,
+			timezone: null,
+			hasShapeGeometry: false,
+			collectionCount: 0
 		} as Detail
 	} as Place
 } as SearchResult];

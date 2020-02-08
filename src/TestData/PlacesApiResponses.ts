@@ -129,7 +129,10 @@ export const placeDetailedEiffelTowerWithoutMedia = {
 			"info:start_date": "C19",
 			"name:operator": "Société d’Exploitation de la Tour Eiffel",
 			"usage:fee": "10-25€"
-		}
+		},
+		"timezone": "Europe/Paris",
+		"has_shape_geometry": false,
+		"collection_count": 0
 	}
 };
 
@@ -475,7 +478,10 @@ export const customPlaceData = {
 		"thumbnail_url": null,
 		"media_count": 0,
 		"satellite": null,
-		"attributes": null
+		"attributes": null,
+		"timezone": null,
+		"has_shape_geometry": false,
+		"collection_count": 0
 	}
 };
 /* tslint:enable */

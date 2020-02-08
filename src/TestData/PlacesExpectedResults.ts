@@ -147,6 +147,9 @@ export const placeDetailedEiffelTowerWithoutMedia: Place = {
 			'name:operator': 'Société d’Exploitation de la Tour Eiffel',
 			'usage:fee': '10-25€'
 		},
+		timezone: 'Europe/Paris',
+		hasShapeGeometry: false,
+		collectionCount: 0,
 		ownerId: '12345'
 	} as Detail
 };
@@ -451,7 +454,10 @@ export const customPlace = {
 			references: [],
 			ownerId: '4d945cecbe65e',
 			description: null,
-			attributes: null
+			attributes: null,
+			timezone: null,
+			hasShapeGeometry: false,
+			collectionCount: 0
 		}
 } as Place;
 /* tslint:enable */

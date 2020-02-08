@@ -400,6 +400,9 @@ export namespace Places {
 		ownerId?: string;
 		mediaCount: number;
 		satellite: SatelliteImage | null;
+		timezone: string | null;
+		hasShapeGeometry: boolean;
+		collectionCount: number;
 	}
 
 	export interface Reference {
