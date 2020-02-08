@@ -86,7 +86,7 @@ export const searchLocations = {
 				address: null,
 				admission: null,
 				area: null,
-				duration: 3600,
+				duration_estimate: 3600,
 				email: null,
 				opening_hours_note: null,
 				opening_hours_raw: null,

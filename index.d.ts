@@ -387,7 +387,7 @@ export namespace Places {
 		tags: Tag[];
 		address: string | null;
 		admission: string | null;
-		duration: number | null;
+		durationEstimate: number | null;
 		description: Description | null;
 		email: string | null;
 		openingHoursNote: string | null;

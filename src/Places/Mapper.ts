@@ -71,7 +71,7 @@ const mapPlaceDetail = (place, photoSize): Detail => {
 			isTranslated: place.description.is_translated
 		} : null,
 		email: place.email,
-		duration: place.duration,
+		durationEstimate: place.duration_estimate,
 		openingHoursNote: place.opening_hours_note,
 		openingHoursRaw: place.opening_hours_raw,
 		mediaCount: place.media_count,

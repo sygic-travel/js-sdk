@@ -6,7 +6,7 @@ export interface Detail {
 	address: string | null;
 	admission: string | null;
 	area: number | null;
-	duration: number | null;
+	durationEstimate: number | null;
 	description: Description | null;
 	email: string | null;
 	openingHoursNote: string | null;
