@@ -1,5 +1,9 @@
 
 
+# DEPRECATED
+
+This project is deprecated and no longer maintained. Please call API endpoints directly, see [Sygic Travel API](http://docs.sygictravelapi.com/).
+
 # Sygic Travel SDK for Javascript · [![CircleCI](https://circleci.com/gh/sygic-travel/js-sdk/tree/master.svg?style=shield&circle-token=ade273efccfc9edfabdc76b77acf8746ac45e94d)](https://circleci.com/gh/sygic-travel/js-sdk/tree/master) [![GitHub release](https://img.shields.io/github/release/sygic-travel/js-sdk.svg)](https://github.com/sygic-travel/js-sdk)
 
 A set of client-side functions for accessing and processing data provided by Sygic Travel APIs.
