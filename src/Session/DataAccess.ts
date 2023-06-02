@@ -101,6 +101,9 @@ export async function getSessionWithThirdPartyAuth(
 	};
 	if (accessToken) {
 		request.access_token = accessToken;
+		if (type === ThirdPartyAuthType.google) {
+			request.id_token = accessToken;
+		}
 	}
 	if (devicePlatform) {
 		request.device_platform = devicePlatform;
