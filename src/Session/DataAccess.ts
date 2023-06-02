@@ -100,9 +100,10 @@ export async function getSessionWithThirdPartyAuth(
 		grant_type: type
 	};
 	if (accessToken) {
-		request.access_token = accessToken;
 		if (type === ThirdPartyAuthType.google) {
 			request.id_token = accessToken;
+		} else {
+			request.access_token = accessToken;
 		}
 	}
 	if (devicePlatform) {
