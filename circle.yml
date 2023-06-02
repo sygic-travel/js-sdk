@@ -6,7 +6,7 @@ jobs:
   build:
     working_directory: ~/js-sdk
     docker:
-      - image: circleci/node:10.16
+      - image: circleci/node:11.15
     steps:
       - checkout
       - restore_cache:
