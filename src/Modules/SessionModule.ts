@@ -17,6 +17,7 @@ import {
 	signInWithDeviceId,
 	signInWithFacebookAccessToken,
 	signInWithGoogleIdToken,
+	signInWithAppleIdToken,
 	signInWithJwtToken,
 	unsubscribeEmail,
 	updateUserSettings,
@@ -114,6 +115,17 @@ export default class SessionModule {
 		devicePlatform?: string
 	): Promise<AuthenticationResponseCode> {
 		return signInWithGoogleIdToken(token, deviceId, devicePlatform);
+	}
+
+	/**
+	 * @experimental
+	 */
+	public signInWithAppleIdToken(
+		token: string | null,
+		deviceId?: string,
+		devicePlatform?: string
+	): Promise<AuthenticationResponseCode> {
+		return signInWithAppleIdToken(token, deviceId, devicePlatform);
 	}
 
 	/**

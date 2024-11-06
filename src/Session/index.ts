@@ -105,6 +105,20 @@ export async function signInWithGoogleIdToken(
 	return authResponse.code;
 }
 
+export async function signInWithAppleIdToken(
+	accessToken: string | null,
+	deviceId?: string,
+	devicePlatform?: string
+): Promise<AuthenticationResponseCode> {
+	const authResponse: AuthResponse = await Dao.getSessionWithThirdPartyAuth(
+		ThirdPartyAuthType.apple, accessToken, deviceId, devicePlatform
+	);
+	if (authResponse.code === AuthenticationResponseCode.OK) {
+		await setSession(authResponse.session);
+	}
+	return authResponse.code;
+}
+
 export async function signInWithJwtToken(
 	jwt: string,
 	deviceId?: string,

@@ -181,6 +181,11 @@ declare class SessionModule {
 		deviceId?: string,
 		devicePlatform?: string
 	): Promise<Sessions.AuthenticationResponseCode>;
+	public signInWithAppleIdToken(
+		accessToken: string | null,
+		deviceId?: string,
+		devicePlatform?: string
+	): Promise<Sessions.AuthenticationResponseCode>;
 	public getUserInfo(): Promise<Sessions.UserInfo>;
 	public resetPassword(email: string): Promise<Sessions.ResetPasswordResponseCode>;
 	public unsubscribeEmail(hash?: string): Promise<void>;

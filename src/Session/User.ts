@@ -5,7 +5,8 @@ export interface UserSettings {
 
 export enum ThirdPartyAuthType {
 	facebook = 'facebook',
-	google = 'google'
+	google = 'google',
+	apple = 'apple'
 }
 
 export function isThirdPartyAuthType(authType: string): boolean {
