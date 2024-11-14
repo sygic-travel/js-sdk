@@ -67,7 +67,14 @@ export async function getTripDetailed(id: string): Promise<Trip> {
 		result = fromCache;
 	}
 
-	return mapTripDetailedApiResponseToTrip(result, await getUserSettings());
+	let userSettings: UserSettings | null = null;
+	try {
+		userSettings = await getUserSettings();
+	} catch (e) {
+		// Ignore error
+	}
+
+	return mapTripDetailedApiResponseToTrip(result, userSettings);
 }
 
 export async function createTrip(tripRequest: TripCreateRequest): Promise<Trip> {
