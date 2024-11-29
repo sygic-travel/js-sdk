@@ -51,7 +51,7 @@
   "dependencies": {
     "@mapbox/geojson-extent": "^0.3.2",
     "@mapbox/polyline": "^0.2.0",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "cookies-js": "^1.2.3",
     "humps": "^2.0.1",
     "is-url-superb": "^2.0.0",
