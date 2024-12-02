@@ -198,7 +198,11 @@ export function getPlaceDestination(place: Place, parentPlacesMap: Map<string, P
 		parentPlacesMap.get(parentPlace.id)!
 	).find((parentPlace: Place) => parentPlace.level === 'country');
 
-	return countryParent ? countryParent : parentPlacesMap.get(reversedPlaceParents[0].id)!;
+	if (countryParent) {
+		return countryParent;
+	}
+
+	return reversedPlaceParents.length ? parentPlacesMap.get(reversedPlaceParents[0].id)! : place;
 }
 
 export function isPlaceDestination(place: Place): boolean {
