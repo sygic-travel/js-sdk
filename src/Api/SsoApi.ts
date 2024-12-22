@@ -21,6 +21,9 @@ export async function post(url: string, requestData, session?: Session): Promise
 	if (requestData && !requestData.client_id) {
 		requestData.client_id = getSsoClientId();
 	}
+	if (requestData && !requestData.device_platform) {
+		requestData.device_platform = 'web';
+	}
 	try {
 		const response = await axiosInstance.post(url, requestData, buildRequestConfig(session));
 		return buildOkApiResponse(response);
