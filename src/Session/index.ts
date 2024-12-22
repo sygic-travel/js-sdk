@@ -136,9 +136,11 @@ export async function signInWithJwtToken(
 export async function register(
 	email: string,
 	password: string,
-	name: string
+	name: string,
+	deviceId?: string,
+	devicePlatform?: string
 ): Promise<RegistrationResponseCode> {
-	await Dao.registerUser(email, password, name);
+	await Dao.registerUser(email, password, name, deviceId, devicePlatform);
 	return RegistrationResponseCode.OK;
 }
 

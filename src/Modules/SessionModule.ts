@@ -134,9 +134,11 @@ export default class SessionModule {
 	public register(
 		email: string,
 		password: string,
-		name: string
+		name: string,
+		deviceId?: string,
+		devicePlatform?: string
 	): Promise<RegistrationResponseCode> {
-		return register(email, password, name);
+		return register(email, password, name, deviceId, devicePlatform);
 	}
 
 	/**

@@ -141,9 +141,11 @@ export async function getSessionWithPassword(
 export async function registerUser(
 	email: string,
 	password: string,
-	name: string
+	name: string,
+	deviceId?: string,
+	devicePlatform?: string
 ): Promise<RegistrationResponseCode> {
-	const clientSession: Session = await getClientSession();
+	const clientSession: Session = await getClientSession(deviceId, devicePlatform);
 	const request: any = {
 		username: email,
 		email_is_verified: false,
@@ -157,7 +159,7 @@ export async function registerUser(
 	}
 	if (response.statusCode === 401) {
 		// client session is expired, let's reinitialize it
-		await getClientSession();
+		await getClientSession(deviceId, devicePlatform);
 		return registerUser(email, password, name);
 	}
 	if (response.statusCode === 409) {
@@ -194,15 +196,19 @@ export async function deleteAccount(id: string, hash: string): Promise<void> {
 	await StApi.delete_('users', {id, hash});
 }
 
-export async function resetPassword(email: string): Promise<ResetPasswordResponseCode> {
-	const clientSession: Session = await getClientSession();
+export async function resetPassword(
+	email: string,
+	deviceId?: string,
+	devicePlatform?: string
+): Promise<ResetPasswordResponseCode> {
+	const clientSession: Session = await getClientSession(deviceId, devicePlatform);
 	const request: any = {
 		email,
 	};
 	const response: ApiResponse = await SsoApi.post('user/reset-password', request, clientSession);
 
 	if (response.statusCode === 401) {
-		await getClientSession();
+		await getClientSession(deviceId, devicePlatform);
 		return resetPassword(email);
 	}
 
@@ -249,10 +255,20 @@ async function getUserSettingsFromApi(): Promise<object> {
 	return result;
 }
 
-async function getClientSession(): Promise<Session> {
+async function getClientSession(
+	deviceId?: string,
+	devicePlatform?: string
+): Promise<Session> {
 	let clientSession: Session | null = await getFreshSessionFromCache(CLIENT_SESSION_KEY);
 	if (clientSession === null) {
-		const authResult: AuthResponse = await authOnSso({grant_type: 'client_credentials'});
+		const request: any = { grant_type: 'client_credentials' };
+		if (devicePlatform) {
+			request.device_platform = devicePlatform;
+		}
+		if (deviceId) {
+			request.device_code = deviceId;
+		}
+		const authResult: AuthResponse = await authOnSso(request);
 		if (!authResult.session) {
 			throw new Error('Unable to login client. Please check ssoClientId in settings.');
 		}

@@ -168,7 +168,13 @@ declare class SessionModule {
 		deviceId?: string,
 		devideCode?: string
 	): Promise<Sessions.AuthenticationResponseCode>;
-	public register(email: string, password: string, name: string): Promise<Sessions.RegistrationResponseCode>;
+	public register(
+		email: string,
+		password: string,
+		name: string,
+		deviceId?: string,
+		devicePlatform?: string
+	): Promise<Sessions.RegistrationResponseCode>;
 	public requestCancelAccount(): Promise<void>;
 	public deleteAccount(id: string, hash: string): Promise<void>;
 	public signInWithFacebookAccessToken(
